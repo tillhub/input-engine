@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="de.tillhub.inputengine">
+
+    <application>
+        <activity
+            android:name="de.tillhub.inputengine.ui.MoneyInputActivity"
+            android:exported="false" />
+    </application>
+</manifest>
