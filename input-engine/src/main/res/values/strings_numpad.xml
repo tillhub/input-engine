@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="numpad_button_clear">C</string>
+    <string name="numpad_button_delete">←</string>
+</resources>
