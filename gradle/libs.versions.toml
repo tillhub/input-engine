@@ -1,0 +1,87 @@
+[versions]
+# Define the dependency versions
+agp = "8.3.0"
+kotlin = "1.9.22"
+core = "1.12.0"
+lifecycle = "2.7.0"
+material3 = "1.2.1"
+
+activity-compose = "1.8.2"
+compose-bom = "2024.02.02"
+
+timber = "5.0.1"
+detekt = "1.23.3"
+
+junit = "4.13.2"
+mockk = "1.13.8"
+kotest = "5.8.0"
+junitVersion = "1.1.5"
+lifecycleRuntimeKtx = "2.7.0"
+
+
+[libraries]
+# Define the libraries
+androidx-core = { group = "androidx.core", name = "core-ktx", version.ref = "core" }
+androidx-lifecycle-common = { group = "androidx.lifecycle", name = "lifecycle-common", version.ref = "lifecycle" }
+androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime", version.ref = "lifecycle" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+
+androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+
+activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
+compose-ui = { group = "androidx.compose.ui", name = "ui" }
+compose-material3 = { group = "androidx.compose.material3", name = "material3",version.ref = "material3" }
+
+timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
+
+# Unit testing
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "mockk" }
+mockk-agent = { group = "io.mockk", name = "mockk-agent", version.ref = "mockk" }
+mockk-agent-jvm = { group = "io.mockk", name = "mockk-agent-jvm", version.ref = "mockk" }
+kotest-runner = { group = "io.kotest", name = "kotest-runner-junit5-jvm", version.ref = "kotest" }
+kotest-assertions = { group = "io.kotest", name = "kotest-assertions-core-jvm", version.ref = "kotest" }
+kotest-property = { group = "io.kotest", name = "kotest-property-jvm", version.ref = "kotest" }
+
+# Dependencies of the included build-logic
+detekt-formatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+androidLibrary = { id = "com.android.library", version.ref = "agp" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+
+[bundles]
+compose = [
+    "activity.compose",
+    "compose.bom",
+    "compose.ui",
+    "compose.material3",
+]
+ui = [
+    "androidx.core",
+    "androidx.ui.graphics",
+    "androidx.ui.tooling",
+    "androidx.ui.tooling.preview"
+]
+lifecycle = [
+    "androidx.lifecycle.common",
+    "androidx.lifecycle.runtime",
+    "androidx.lifecycle.runtime.ktx"
+]
+testing = [
+    "junit",
+    "mockk",
+    "mockk.agent.jvm",
+    "kotest.runner",
+    "kotest.assertions",
+    "kotest.property",
+]
