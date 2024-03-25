@@ -3,8 +3,10 @@ package de.tillhub.inputengine.contract
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.os.Parcelable
 import androidx.activity.result.contract.ActivityResultContract
+import androidx.annotation.StringRes
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.core.os.BundleCompat
 import de.tillhub.inputengine.ui.MoneyInputActivity
@@ -28,16 +30,34 @@ class MoneyInputContract : ActivityResultContract<MoneyInputRequest, BigDecimal>
 }
 
 @Parcelize
-data class MoneyInputRequest(
-    val title: String,
-    val money: BigDecimal,
-    val currency: String,
-    val isZeroAllowed: Boolean,
-    val toolbarTitle: String? = null,
-    val targetPriceText: String? = null,
-    val submitButtonText: String? = null,
-    val requestCode: String = "",
-    val amountMin: BigDecimal? = null,
-    val amountMax: BigDecimal? = null,
-    val amountPrevious: BigDecimal? = null,
-) : Parcelable
+sealed class MoneyInputRequest : Parcelable {
+    abstract val amount: BigDecimal
+    abstract val currency: String
+    abstract val isZeroAllowed: Boolean
+    abstract val amountMin: BigDecimal?
+    abstract val amountMax: BigDecimal?
+    abstract val hintAmount: BigDecimal?
+    abstract val extra: Bundle?
+
+    data class WithTitleStringRes(
+        override val amount: BigDecimal,
+        override val currency: String,
+        override val isZeroAllowed: Boolean,
+        override val amountMin: BigDecimal?,
+        override val amountMax: BigDecimal?,
+        override val hintAmount: BigDecimal? = null,
+        override val extra: Bundle? = null,
+        @StringRes val toolbarTitle: Int
+    ) : MoneyInputRequest()
+
+    data class WithTitleString(
+        override val amount: BigDecimal,
+        override val currency: String,
+        override val isZeroAllowed: Boolean,
+        override val amountMin: BigDecimal?,
+        override val amountMax: BigDecimal?,
+        override val hintAmount: BigDecimal?,
+        override val extra: Bundle?,
+        val toolbarTitle: String = ""
+    ) : MoneyInputRequest()
+}

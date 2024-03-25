@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">sample</string>
+    <string name="numpad_keyboard_title">Price</string>
 </resources>

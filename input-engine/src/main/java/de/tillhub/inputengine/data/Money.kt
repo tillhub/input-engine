@@ -35,8 +35,8 @@ data class Money(
     companion object {
         private const val ZERO = 0.0
 
-        // MAX_VALUE_NORMAL for the Money class is 1 000 000 currency
-        private const val MAX_VALUE_DECIMAL: Double = 1000000.0
+        // MAX_VALUE_NORMAL for the Money class is 10 000 000 currency
+        private const val MAX_VALUE_DECIMAL: Double = 10000000.0
 
         // MIN_VALUE_NORMAL for the Money class is 0 currency
         private const val MIN_VALUE_DECIMAL: Double = 0.0

@@ -44,7 +44,7 @@ class MoneyInputViewModel : ViewModel() {
         this.isZeroAllowed = request.isZeroAllowed
         request.amountMax?.let { this.maxValue = Money(it.toDouble()) }
         request.amountMin?.let { this.minValue = Money(it.toDouble()) }
-        _moneyInput.value = Money(request.money.toDouble())
+        _moneyInput.value = Money(request.amount.toDouble())
     }
 
     fun input(key: NumpadKey) {
@@ -56,7 +56,9 @@ class MoneyInputViewModel : ViewModel() {
                     Money.append(Money.zero(), key.digit).also {
                         isInitValue = false
                     }
-                } else Money.append(_moneyInput.value, key.digit)
+                } else {
+                    Money.append(_moneyInput.value, key.digit)
+                }
 
                 _moneyInput.value = maxValue?.let { max ->
                     if (newValue > max) {

@@ -2,4 +2,5 @@
 <resources>
     <string name="numpad_button_clear">C</string>
     <string name="numpad_button_delete">←</string>
+    <string name="numpad_button_submit">SUBMIT</string>
 </resources>
