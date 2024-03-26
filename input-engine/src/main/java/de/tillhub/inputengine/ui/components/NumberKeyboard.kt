@@ -13,9 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -27,33 +25,37 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.tillhub.inputengine.R
+import de.tillhub.inputengine.data.AmountParam
 import de.tillhub.inputengine.data.Digit
 import de.tillhub.inputengine.data.NumpadKey
 import de.tillhub.inputengine.ui.MoneyInputData
 import de.tillhub.inputengine.ui.theme.ExtraButtonTint
 import de.tillhub.inputengine.ui.theme.GalacticBlue
 import de.tillhub.inputengine.ui.theme.LunarGray
+import de.tillhub.inputengine.ui.theme.MagneticGrey
 import de.tillhub.inputengine.ui.theme.OrbitalBlue
 import de.tillhub.inputengine.ui.theme.SoyuzGrey
 import de.tillhub.inputengine.ui.theme.Tint
-import java.math.BigDecimal
 
 @ExperimentalMaterial3Api
 @Composable
 @Suppress("LongParameterList")
 fun NumberKeyboard(
     padding: PaddingValues,
-    money: MoneyInputData,
-    amountMin: BigDecimal?,
-    amountMax: BigDecimal?,
-    hint: BigDecimal?,
+    amount: MoneyInputData,
+    amountMin: AmountParam,
+    amountMax: AmountParam,
+    amountHint: AmountParam,
     onClick: (NumpadKey) -> Unit
 ) {
-    val scrollState = rememberScrollState()
+    val (amountString, amountColor) = if (amountHint is AmountParam.Enable && amount.price.isZero()) {
+        Pair(amountHint.amount.toPlainString(), MagneticGrey)
+    } else {
+        Pair(amount.text, OrbitalBlue)
+    }
     Box(
         modifier = Modifier
             .padding(padding)
@@ -70,42 +72,29 @@ fun NumberKeyboard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                amountMin?.let {
+                if (amountMin is AmountParam.Enable) {
                     Text(
                         style = MaterialTheme.typography.bodyMedium,
                         maxLines = 2,
-                        text = "min.\n$it",
+                        text = "min.\n${amountMin.amount}",
                         color = SoyuzGrey
                     )
                 }
                 Text(
                     style = MaterialTheme.typography.displaySmall,
                     maxLines = 1,
-                    text = money.text,
-                    color = OrbitalBlue,
+                    text = amountString,
+                    color = amountColor,
                 )
-                amountMax?.let {
+                if (amountMax is AmountParam.Enable) {
                     Text(
                         style = MaterialTheme.typography.bodyMedium,
                         maxLines = 2,
-                        text = "max.\n$it",
+                        text = "max.\n${amountMax.amount}",
                         color = SoyuzGrey
                     )
                 }
             }
-            hint?.let {
-                Text(
-                    text = "Previous: $it",
-                    fontSize = 14.sp,
-                    color = OrbitalBlue,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .verticalScroll(scrollState)
-                        .padding(4.dp),
-                    textAlign = TextAlign.Center
-                )
-            }
-
             Spacer(modifier = Modifier.height(64.dp))
             Numpad(onClick)
         }

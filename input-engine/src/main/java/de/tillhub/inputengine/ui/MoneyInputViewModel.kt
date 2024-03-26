@@ -1,27 +1,28 @@
 package de.tillhub.inputengine.ui
 
+import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.tillhub.inputengine.contract.MoneyInputRequest
+import de.tillhub.inputengine.data.AmountParam
+import de.tillhub.inputengine.data.BundleParam
 import de.tillhub.inputengine.data.Money
 import de.tillhub.inputengine.data.NumpadKey
 import de.tillhub.inputengine.extensions.format
-import de.tillhub.inputengine.extensions.orTrue
 import de.tillhub.inputengine.ui.MoneyInputData.Companion.EMPTY
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.parcelize.Parcelize
+import java.math.BigDecimal
 import java.util.Locale
 
 class MoneyInputViewModel : ViewModel() {
 
     private var isInitValue = false
-    private var isZeroAllowed = true
-    private var maxValue: Money? = null
-    private var minValue: Money? = null
-    private var currency: String? = null
+    private lateinit var request: MoneyInputRequest
 
     private val locale = Locale.getDefault(Locale.Category.FORMAT)
     private val _moneyInput = MutableStateFlow(Money.zero())
@@ -29,7 +30,7 @@ class MoneyInputViewModel : ViewModel() {
     val moneyInput: StateFlow<MoneyInputData> = _moneyInput.map {
         MoneyInputData(
             price = it,
-            text = "$currency${it.value.format(2, locale)}",
+            text = "${request.currency}${it.value.format(2, locale)}",
             isValid = isValid(it)
         )
     }.stateIn(
@@ -40,10 +41,7 @@ class MoneyInputViewModel : ViewModel() {
 
     fun init(request: MoneyInputRequest) {
         this.isInitValue = true
-        this.currency = request.currency
-        this.isZeroAllowed = request.isZeroAllowed
-        request.amountMax?.let { this.maxValue = Money(it.toDouble()) }
-        request.amountMin?.let { this.minValue = Money(it.toDouble()) }
+        this.request = request
         _moneyInput.value = Money(request.amount.toDouble())
     }
 
@@ -52,21 +50,17 @@ class MoneyInputViewModel : ViewModel() {
             NumpadKey.Clear -> clear()
             NumpadKey.Delete -> delete()
             is NumpadKey.SingleDigit -> {
-                val newValue = if (isInitValue) {
-                    Money.append(Money.zero(), key.digit).also {
-                        isInitValue = false
-                    }
-                } else {
-                    Money.append(_moneyInput.value, key.digit)
-                }
+                val baseValue = if (isInitValue) Money.zero() else _moneyInput.value
+                val newValue = Money.append(baseValue, key.digit)
+                isInitValue = false
 
-                _moneyInput.value = maxValue?.let { max ->
-                    if (newValue > max) {
-                        max
-                    } else {
-                        newValue
-                    }
-                } ?: newValue
+                _moneyInput.value = if (request.amountMax is AmountParam.Enable) {
+                    val amountMax =
+                        Money((request.amountMax as AmountParam.Enable).amount.toDouble())
+                    minOf(newValue, amountMax)
+                } else {
+                    newValue
+                }
             }
         }
     }
@@ -81,14 +75,17 @@ class MoneyInputViewModel : ViewModel() {
 
     private fun isValid(money: Money): Boolean {
         return when {
-            isZeroAllowed -> isValueBetweenMinMax(money)
+            request.isZeroAllowed -> isValueBetweenMinMax(money)
             else -> money.isNotZero() && isValueBetweenMinMax(money)
         }
     }
 
-    private fun isValueBetweenMinMax(money: Money) =
-        minValue?.let { money >= it }.orTrue() &&
-                maxValue?.let { money <= it }.orTrue()
+    private fun isValueBetweenMinMax(money: Money): Boolean {
+        val amountMin = request.amountMin as? AmountParam.Enable
+        val amountMax = request.amountMax as? AmountParam.Enable
+        return (amountMin == null || money.value >= amountMin.amount.toDouble()) &&
+                (amountMax == null || money.value <= amountMax.amount.toDouble())
+    }
 }
 
 data class MoneyInputData(
@@ -103,4 +100,14 @@ data class MoneyInputData(
             isValid = false
         )
     }
+}
+
+@Parcelize
+sealed class InputResultStatus : Parcelable {
+    data class Success(
+        val amount: BigDecimal,
+        val extras: BundleParam
+    ) : InputResultStatus()
+
+    data object Cancel : InputResultStatus()
 }
