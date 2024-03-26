@@ -1,6 +1,7 @@
-package de.tillhub.inputengine.ui
+package de.tillhub.inputengine.ui.moneyinput
 
 import AppTheme
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -33,6 +34,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.tillhub.inputengine.R
 import de.tillhub.inputengine.contract.ExtraKeys
 import de.tillhub.inputengine.contract.MoneyInputRequest
+import de.tillhub.inputengine.data.StringParam
 import de.tillhub.inputengine.helper.parcelable
 import de.tillhub.inputengine.ui.components.NumberKeyboard
 import de.tillhub.inputengine.ui.theme.MagneticGrey
@@ -52,27 +54,29 @@ class MoneyInputActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         viewModel.init(request)
         setContent {
-            val title = (request as? MoneyInputRequest.WithTitleStringRes)?.let {
-                stringResource(id = it.toolbarTitle)
-            } ?: (request as MoneyInputRequest.WithTitleString).toolbarTitle
+            val title = when (val stringParam = request.toolbarTitle) {
+                is StringParam.String -> stringParam.value
+                is StringParam.StringResource -> stringResource(id = stringParam.resIdRes)
+            }
 
-            val moneyInput by viewModel.moneyInput.collectAsStateWithLifecycle()
-            val color = if (moneyInput.isValid) OrbitalBlue else MagneticGrey
+            val amount by viewModel.moneyInput.collectAsStateWithLifecycle()
+            val color = if (amount.isValid) OrbitalBlue else MagneticGrey
             AppTheme {
                 Scaffold(
                     topBar = {
                         Toolbar(title)
                     },
                     bottomBar = {
-                        SubmitButton(moneyInput, color)
+                        SubmitButton(amount, color)
                     }
                 ) {
                     NumberKeyboard(
                         padding = it,
-                        money = moneyInput,
+                        amount = amount,
+                        currency = request.currency,
                         amountMin = request.amountMin,
                         amountMax = request.amountMax,
-                        hint = request.hintAmount,
+                        amountHint = request.hintAmount,
                         onClick = viewModel::input
                     )
                 }
@@ -82,7 +86,7 @@ class MoneyInputActivity : ComponentActivity() {
 
     @Composable
     private fun SubmitButton(
-        moneyInput: MoneyInputData,
+        amount: MoneyInputData,
         color: Color
     ) {
         Button(
@@ -90,9 +94,12 @@ class MoneyInputActivity : ComponentActivity() {
                 .fillMaxWidth(),
             shape = RectangleShape,
             onClick = {
-                val resultIntent = Intent()
-                resultIntent.putExtra("money", moneyInput.price)
-                setResult(MONEY_INPUT_RESULT, resultIntent)
+                setResult(Activity.RESULT_OK, Intent().apply {
+                    putExtra(
+                        ExtraKeys.EXTRAS_RESULT,
+                        InputResultStatus.Success(amount.price.value, request.extra)
+                    )
+                })
                 finish()
             },
             colors = ButtonDefaults.buttonColors(
@@ -136,6 +143,5 @@ class MoneyInputActivity : ComponentActivity() {
 
     companion object {
         private const val TAG = "MoneyInputActivity"
-        const val MONEY_INPUT_RESULT = 1000
     }
 }
