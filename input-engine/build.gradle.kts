@@ -58,6 +58,7 @@ dependencies {
     implementation(libs.bundles.lifecycle)
     implementation(libs.androidx.lifecycle.runtime.compose)
     detektPlugins(libs.detekt.formatting)
+    testImplementation(libs.bundles.testing)
 }
 
 afterEvaluate {
