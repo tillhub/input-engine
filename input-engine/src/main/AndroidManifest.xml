@@ -6,5 +6,8 @@
         <activity
             android:name="de.tillhub.inputengine.ui.moneyinput.MoneyInputActivity"
             android:exported="false" />
+        <activity
+            android:name="de.tillhub.inputengine.ui.pininput.PinInputActivity"
+            android:exported="false" />
     </application>
 </manifest>

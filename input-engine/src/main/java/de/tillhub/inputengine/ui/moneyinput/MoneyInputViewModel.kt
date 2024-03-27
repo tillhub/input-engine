@@ -1,7 +1,5 @@
 package de.tillhub.inputengine.ui.moneyinput
 
-import android.os.Bundle
-import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.tillhub.inputengine.contract.AmountResultStatus
