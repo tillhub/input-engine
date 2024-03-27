@@ -1,4 +1,4 @@
-package de.tillhub.inputengine.ui
+package de.tillhub.inputengine.ui.moneyinput
 
 import AppTheme
 import android.app.Activity
@@ -72,6 +72,7 @@ class MoneyInputActivity : ComponentActivity() {
                     NumberKeyboard(
                         padding = it,
                         amount = amount,
+                        currency = request.currency,
                         amountMin = request.amountMin,
                         amountMax = request.amountMax,
                         amountHint = request.hintAmount,
@@ -95,7 +96,7 @@ class MoneyInputActivity : ComponentActivity() {
                 setResult(Activity.RESULT_OK, Intent().apply {
                     putExtra(
                         ExtraKeys.EXTRAS_RESULT,
-                        InputResultStatus.Success(amount.price.value.toBigDecimal(), request.extra)
+                        InputResultStatus.Success(amount.price.value, request.extra)
                     )
                 })
                 finish()
@@ -107,7 +108,7 @@ class MoneyInputActivity : ComponentActivity() {
             Text(
                 style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier.padding(vertical = 8.dp),
-                text = stringResource(id = R.string.numpad_button_submit).uppercase()
+                text = stringResource(id = R.string.numpad_button_submit)
             )
         }
     }

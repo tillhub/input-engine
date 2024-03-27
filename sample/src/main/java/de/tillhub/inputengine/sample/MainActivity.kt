@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import de.tillhub.inputengine.contract.MoneyInputContract
 import de.tillhub.inputengine.contract.MoneyInputRequest
 import de.tillhub.inputengine.data.AmountParam
-import de.tillhub.inputengine.ui.InputResultStatus
+import de.tillhub.inputengine.ui.moneyinput.InputResultStatus
 
 @ExperimentalMaterial3Api
 class MainActivity : ComponentActivity() {
@@ -46,6 +46,7 @@ class MainActivity : ComponentActivity() {
                                     amountMin = AmountParam.Enable(11.toBigDecimal()),
                                     amountMax = AmountParam.Enable(20.toBigDecimal()),
                                     currency = "€",
+                                    amount = 10.toBigDecimal(),
                                     hintAmount = AmountParam.Enable(2.0.toBigDecimal())
                                 )
                             )

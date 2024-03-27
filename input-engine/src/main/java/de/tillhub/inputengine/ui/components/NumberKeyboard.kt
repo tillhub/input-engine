@@ -31,7 +31,7 @@ import de.tillhub.inputengine.R
 import de.tillhub.inputengine.data.AmountParam
 import de.tillhub.inputengine.data.Digit
 import de.tillhub.inputengine.data.NumpadKey
-import de.tillhub.inputengine.ui.MoneyInputData
+import de.tillhub.inputengine.ui.moneyinput.MoneyInputData
 import de.tillhub.inputengine.ui.theme.ExtraButtonTint
 import de.tillhub.inputengine.ui.theme.GalacticBlue
 import de.tillhub.inputengine.ui.theme.LunarGray
@@ -46,13 +46,14 @@ import de.tillhub.inputengine.ui.theme.Tint
 fun NumberKeyboard(
     padding: PaddingValues,
     amount: MoneyInputData,
+    currency: String,
     amountMin: AmountParam,
     amountMax: AmountParam,
     amountHint: AmountParam,
     onClick: (NumpadKey) -> Unit
 ) {
     val (amountString, amountColor) = if (amountHint is AmountParam.Enable && amount.price.isZero()) {
-        Pair(amountHint.amount.toPlainString(), MagneticGrey)
+        Pair("$currency${amountHint.amount.toPlainString()}", MagneticGrey)
     } else {
         Pair(amount.text, OrbitalBlue)
     }
@@ -76,7 +77,7 @@ fun NumberKeyboard(
                     Text(
                         style = MaterialTheme.typography.bodyMedium,
                         maxLines = 2,
-                        text = "min.\n${amountMin.amount}",
+                        text = "min.\n$currency${amountMin.amount}",
                         color = SoyuzGrey
                     )
                 }
@@ -90,7 +91,7 @@ fun NumberKeyboard(
                     Text(
                         style = MaterialTheme.typography.bodyMedium,
                         maxLines = 2,
-                        text = "max.\n${amountMax.amount}",
+                        text = "max.\n$currency${amountMax.amount}",
                         color = SoyuzGrey
                     )
                 }

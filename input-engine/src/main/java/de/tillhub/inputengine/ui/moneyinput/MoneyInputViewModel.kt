@@ -1,15 +1,14 @@
-package de.tillhub.inputengine.ui
+package de.tillhub.inputengine.ui.moneyinput
 
+import android.os.Bundle
 import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.tillhub.inputengine.contract.MoneyInputRequest
 import de.tillhub.inputengine.data.AmountParam
-import de.tillhub.inputengine.data.BundleParam
 import de.tillhub.inputengine.data.Money
 import de.tillhub.inputengine.data.NumpadKey
-import de.tillhub.inputengine.extensions.format
-import de.tillhub.inputengine.ui.MoneyInputData.Companion.EMPTY
+import de.tillhub.inputengine.ui.moneyinput.MoneyInputData.Companion.EMPTY
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -30,7 +29,7 @@ class MoneyInputViewModel : ViewModel() {
     val moneyInput: StateFlow<MoneyInputData> = _moneyInput.map {
         MoneyInputData(
             price = it,
-            text = "${request.currency}${it.value.format(2, locale)}",
+            text = "${request.currency}${"%,.2f".format(locale, it.value)}",
             isValid = isValid(it)
         )
     }.stateIn(
@@ -42,7 +41,7 @@ class MoneyInputViewModel : ViewModel() {
     fun init(request: MoneyInputRequest) {
         this.isInitValue = true
         this.request = request
-        _moneyInput.value = Money(request.amount.toDouble())
+        _moneyInput.value = Money(request.amount)
     }
 
     fun input(key: NumpadKey) {
@@ -56,7 +55,7 @@ class MoneyInputViewModel : ViewModel() {
 
                 _moneyInput.value = if (request.amountMax is AmountParam.Enable) {
                     val amountMax =
-                        Money((request.amountMax as AmountParam.Enable).amount.toDouble())
+                        Money((request.amountMax as AmountParam.Enable).amount)
                     minOf(newValue, amountMax)
                 } else {
                     newValue
@@ -83,8 +82,8 @@ class MoneyInputViewModel : ViewModel() {
     private fun isValueBetweenMinMax(money: Money): Boolean {
         val amountMin = request.amountMin as? AmountParam.Enable
         val amountMax = request.amountMax as? AmountParam.Enable
-        return (amountMin == null || money.value >= amountMin.amount.toDouble()) &&
-                (amountMax == null || money.value <= amountMax.amount.toDouble())
+        return (amountMin == null || money.value >= amountMin.amount) &&
+                (amountMax == null || money.value <= amountMax.amount)
     }
 }
 
@@ -106,7 +105,7 @@ data class MoneyInputData(
 sealed class InputResultStatus : Parcelable {
     data class Success(
         val amount: BigDecimal,
-        val extras: BundleParam
+        val extras: Bundle
     ) : InputResultStatus()
 
     data object Cancel : InputResultStatus()
