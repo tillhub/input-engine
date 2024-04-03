@@ -80,18 +80,12 @@ sealed class PinInputState {
     data object PinTooLong : PinInputState()
 }
 
-enum class FormatType {
-    ALPHANUMERIC,
-    NUMERIC,
-    ALPHABETIC
-}
-
 @Parcelize
-sealed class InputResultStatus : Parcelable {
+sealed class PinInputResultStatus : Parcelable {
     data class Success(
         val amount: BigDecimal,
         val extras: Bundle
-    ) : InputResultStatus()
+    ) : PinInputResultStatus()
 
-    data object Cancel : InputResultStatus()
+    data object Cancel : PinInputResultStatus()
 }

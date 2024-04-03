@@ -33,7 +33,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.tillhub.inputengine.contract.ExtraKeys
 import de.tillhub.inputengine.contract.AmountResultStatus
-import de.tillhub.inputengine.contract.MoneyInputResultStatus
 import de.tillhub.inputengine.data.MoneyParam
 import de.tillhub.inputengine.data.NumpadKey
 import de.tillhub.inputengine.data.StringParam
@@ -80,7 +79,7 @@ class MoneyInputActivity : ComponentActivity() {
                             setResult(Activity.RESULT_OK, Intent().apply {
                                 putExtra(
                                     ExtraKeys.EXTRAS_RESULT,
-                                    MoneyInputResultStatus.Success(
+                                    AmountInputResultStatus.Success(
                                         amount.money.value,
                                         request.extra
                                     )

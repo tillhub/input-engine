@@ -20,12 +20,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import de.tillhub.inputengine.contract.AmountInputContract
 import de.tillhub.inputengine.contract.AmountResultStatus
-import de.tillhub.inputengine.contract.MoneyInputResultStatus
 import de.tillhub.inputengine.contract.PinInputContract
 import de.tillhub.inputengine.contract.PinInputRequest
+import de.tillhub.inputengine.contract.PinInputResult
 import de.tillhub.inputengine.data.MoneyParam
 import de.tillhub.inputengine.sample.ui.theme.InputEngineTheme
-import de.tillhub.inputengine.ui.moneyinput.MoneyInputResultStatus
+import de.tillhub.inputengine.ui.moneyinput.AmountInputResultStatus
 import java.util.Currency
 
 @ExperimentalMaterial3Api
@@ -43,17 +43,16 @@ class MainActivity : ComponentActivity() {
             AmountInputContract(),
             activityResultRegistry
         ) {
-            if (it is MoneyInputResultStatus.Success) scanCode.value = it.amount.toPlainString()
+            if (it is AmountInputResultStatus.Success) scanCode.value = it.amount.toPlainString()
         }
 
         pinInputLauncher = registerForActivityResult(
             PinInputContract(),
             activityResultRegistry
         ) {
-            if (it == RESULT_OK) {
-                pinResult.value = getString(de.tillhub.inputengine.R.string.pin_correct)
-            } else {
-                pinResult.value = getString(de.tillhub.inputengine.R.string.pin_wrong)
+            pinResult.value = when (it) {
+                PinInputResult.Canceled -> getString(de.tillhub.inputengine.R.string.pin_wrong)
+                PinInputResult.Success -> getString(de.tillhub.inputengine.R.string.pin_correct)
             }
         }
         setContent {
@@ -95,7 +94,7 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier.fillMaxWidth(),
                                 onClick = {
                                     pinInputLauncher.launch(
-                                        PinInputRequest("12345")
+                                        PinInputRequest(pin = "12345", overridePinInput = true)
                                     )
                                 }
                             ) {

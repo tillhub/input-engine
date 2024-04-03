@@ -12,14 +12,14 @@ import androidx.core.os.bundleOf
 import de.tillhub.inputengine.R
 import de.tillhub.inputengine.data.MoneyParam
 import de.tillhub.inputengine.data.StringParam
-import de.tillhub.inputengine.ui.moneyinput.MoneyInputResultStatus
+import de.tillhub.inputengine.ui.moneyinput.AmountInputResultStatus
 import de.tillhub.inputengine.ui.moneyinput.MoneyInputActivity
 import kotlinx.parcelize.Parcelize
 import java.math.BigInteger
 import java.util.Currency
 
 @ExperimentalMaterial3Api
-class AmountInputContract : ActivityResultContract<AmountResultStatus, MoneyInputResultStatus>() {
+class AmountInputContract : ActivityResultContract<AmountResultStatus, AmountInputResultStatus>() {
 
     override fun createIntent(context: Context, input: AmountResultStatus): Intent {
         return Intent(context, MoneyInputActivity::class.java).apply {
@@ -27,14 +27,14 @@ class AmountInputContract : ActivityResultContract<AmountResultStatus, MoneyInpu
         }
     }
 
-    override fun parseResult(resultCode: Int, intent: Intent?): MoneyInputResultStatus {
+    override fun parseResult(resultCode: Int, intent: Intent?): AmountInputResultStatus {
         return intent.takeIf { resultCode == Activity.RESULT_OK }?.extras?.let {
             BundleCompat.getParcelable(
                 it,
                 ExtraKeys.EXTRAS_RESULT,
-                MoneyInputResultStatus.Success::class.java
+                AmountInputResultStatus.Success::class.java
             )
-        } ?: MoneyInputResultStatus.Canceled
+        } ?: AmountInputResultStatus.Canceled
     }
 }
 

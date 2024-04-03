@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,13 +17,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -48,6 +49,7 @@ import de.tillhub.inputengine.ui.components.Numpad
 import de.tillhub.inputengine.ui.components.Toolbar
 import de.tillhub.inputengine.ui.theme.HintGray
 import de.tillhub.inputengine.ui.theme.OrbitalBlue
+import de.tillhub.inputengine.ui.theme.TextFieldTransparentColors
 import kotlinx.coroutines.launch
 
 @ExperimentalMaterial3Api
@@ -110,7 +112,6 @@ class PinInputActivity : ComponentActivity() {
                 },
                 topBar = {
                     Toolbar(title) {
-                        setResult(Activity.RESULT_CANCELED)
                         finish()
                     }
                 }
@@ -118,6 +119,7 @@ class PinInputActivity : ComponentActivity() {
                 PinNumpad(
                     padding = it,
                     pin = enteredPin,
+                    overridePinInput = request.overridePinInput,
                     hint = PIN_HINT_CHARACTER.repeat(request.pin.length),
                     onClick = viewModel::input
                 )
@@ -125,11 +127,13 @@ class PinInputActivity : ComponentActivity() {
         }
     }
 
+    @Suppress("LongMethod")
     @ExperimentalMaterial3Api
     @Composable
     fun PinNumpad(
         padding: PaddingValues,
         pin: String,
+        overridePinInput: Boolean,
         hint: String,
         onClick: (NumpadKey) -> Unit
     ) {
@@ -171,13 +175,23 @@ class PinInputActivity : ComponentActivity() {
                         )
                     },
                     visualTransformation = PasswordVisualTransformation(),
-                    colors = TextFieldDefaults.colors(
-                        unfocusedContainerColor = Color.Transparent,
-                        focusedContainerColor = Color.Transparent,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                    ),
+                    colors = TextFieldTransparentColors(),
                 )
+                if (overridePinInput) {
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                setResult(Activity.RESULT_OK)
+                                finish()
+                            },
+                        textAlign = TextAlign.End,
+                        maxLines = 1,
+                        style = MaterialTheme.typography.bodyMedium,
+                        text = stringResource(R.string.enter_pin),
+                        color = OrbitalBlue
+                    )
+                }
                 Spacer(modifier = Modifier.height(64.dp))
                 Numpad(onClick)
             }
