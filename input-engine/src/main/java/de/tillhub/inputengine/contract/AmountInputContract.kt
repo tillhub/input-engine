@@ -14,6 +14,7 @@ import de.tillhub.inputengine.data.MoneyParam
 import de.tillhub.inputengine.data.StringParam
 import de.tillhub.inputengine.ui.moneyinput.AmountInputResultStatus
 import de.tillhub.inputengine.ui.moneyinput.MoneyInputActivity
+import de.tillhub.inputengine.ui.pininput.InputResultStatus
 import kotlinx.parcelize.Parcelize
 import java.math.BigInteger
 import java.util.Currency

@@ -25,7 +25,7 @@ import de.tillhub.inputengine.contract.PinInputRequest
 import de.tillhub.inputengine.contract.PinInputResult
 import de.tillhub.inputengine.data.MoneyParam
 import de.tillhub.inputengine.sample.ui.theme.InputEngineTheme
-import de.tillhub.inputengine.ui.moneyinput.AmountInputResultStatus
+import de.tillhub.inputengine.ui.pininput.AmountInputResultStatus
 import java.util.Currency
 
 @ExperimentalMaterial3Api
