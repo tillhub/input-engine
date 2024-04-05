@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import de.tillhub.inputengine.contract.AmountInputContract
 import de.tillhub.inputengine.contract.MoneyInputRequest
-import de.tillhub.inputengine.data.AmountParam
+import de.tillhub.inputengine.data.MoneyParam
 import de.tillhub.inputengine.sample.ui.theme.InputEngineTheme
 import de.tillhub.inputengine.ui.moneyinput.InputResultStatus
 import java.util.Currency
@@ -46,11 +46,11 @@ class MainActivity : ComponentActivity() {
                             onClick = {
                                 moneyInputLauncher.launch(
                                     MoneyInputRequest(
-                                        amountMin = AmountParam.Enable(11.toBigDecimal()),
-                                        amountMax = AmountParam.Enable(20.toBigDecimal()),
+                                        amountMin = MoneyParam.Enable(100.toBigInteger()),
+                                        amountMax = MoneyParam.Enable(2000.toBigInteger()),
                                         currency = Currency.getInstance("EUR"),
-                                        amount = 10.toBigDecimal(),
-                                        hintAmount = AmountParam.Enable(2.0.toBigDecimal())
+                                        amount = 200.toBigInteger(),
+                                        hintAmount = MoneyParam.Enable(200.toBigInteger())
                                     )
                                 )
                             }

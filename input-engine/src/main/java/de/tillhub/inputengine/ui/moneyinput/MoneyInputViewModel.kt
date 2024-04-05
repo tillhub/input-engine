@@ -5,10 +5,11 @@ import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.tillhub.inputengine.contract.MoneyInputRequest
-import de.tillhub.inputengine.data.AmountParam
-import de.tillhub.inputengine.data.Amount
+import de.tillhub.inputengine.data.MoneyParam
+import de.tillhub.inputengine.data.Money
 import de.tillhub.inputengine.data.NumpadKey
 import de.tillhub.inputengine.formatter.MoneyFormatter
+import de.tillhub.inputengine.ui.moneyinput.MoneyInputData.Companion.DEFAULT_CURRENCY
 import de.tillhub.inputengine.ui.moneyinput.MoneyInputData.Companion.EMPTY
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -23,16 +24,16 @@ class MoneyInputViewModel : ViewModel() {
 
     private var isInitValue = false
     private var isZeroAllowed = true
-    private var amountMax: Amount = Amount.max()
-    private var amountMin: Amount = Amount.min()
+    private lateinit var moneyMax: Money
+    private lateinit var moneyMin: Money
     private lateinit var currency: Currency
 
-    private val _inputCurrencyAmountInput = MutableStateFlow(Amount.zero())
+    private val _inputCurrencyMoneyInput = MutableStateFlow(Money.zero(DEFAULT_CURRENCY))
 
-    val moneyInput: StateFlow<MoneyInputData> = _inputCurrencyAmountInput.map {
+    val moneyInput: StateFlow<MoneyInputData> = _inputCurrencyMoneyInput.map {
         MoneyInputData(
-            price = it,
-            text = MoneyFormatter.format(it.value, currency),
+            money = it,
+            text = MoneyFormatter.format(it),
             isValid = isValid(it)
         )
     }.stateIn(
@@ -44,16 +45,18 @@ class MoneyInputViewModel : ViewModel() {
     fun init(request: MoneyInputRequest) {
         this.isInitValue = true
         this.currency = request.currency
+        this.moneyMax = Money.max(request.currency)
+        this.moneyMin = Money.min(request.currency)
         this.isZeroAllowed = request.isZeroAllowed
-        this.amountMax = when (request.amountMax) {
-            AmountParam.Disable -> Amount.max()
-            is AmountParam.Enable -> Amount.from(request.amountMax.amount)
+        this.moneyMax = when (request.amountMax) {
+            MoneyParam.Disable -> Money.max(request.currency)
+            is MoneyParam.Enable -> Money.from(request.amountMax.amount, request.currency)
         }
-        this.amountMin = when (request.amountMin) {
-            AmountParam.Disable -> Amount.min()
-            is AmountParam.Enable -> Amount.from(request.amountMin.amount)
+        this.moneyMin = when (request.amountMin) {
+            MoneyParam.Disable -> Money.min(request.currency)
+            is MoneyParam.Enable -> Money.from(request.amountMin.amount, request.currency)
         }
-        _inputCurrencyAmountInput.value = Amount.from(request.amount)
+        _inputCurrencyMoneyInput.value = Money.from(request.amount, request.currency)
     }
 
     fun input(key: NumpadKey) {
@@ -61,42 +64,43 @@ class MoneyInputViewModel : ViewModel() {
             NumpadKey.Clear -> clear()
             NumpadKey.Delete -> delete()
             is NumpadKey.SingleDigit -> {
-                val baseValue = if (isInitValue) Amount.zero() else _inputCurrencyAmountInput.value
-                val newValue = Amount.append(baseValue, key.digit)
+                val baseValue = if (isInitValue) Money.zero(currency) else _inputCurrencyMoneyInput.value
+                val newValue = Money.append(baseValue, key.digit)
                 isInitValue = false
-                _inputCurrencyAmountInput.value = minOf(newValue, amountMax)
+                _inputCurrencyMoneyInput.value = minOf(newValue, moneyMax)
             }
         }
     }
 
     private fun clear() {
-        _inputCurrencyAmountInput.value = Amount.zero()
+        _inputCurrencyMoneyInput.value = Money.zero(currency)
     }
 
     private fun delete() {
-        _inputCurrencyAmountInput.value = Amount.removeLastDigit(_inputCurrencyAmountInput.value)
+        _inputCurrencyMoneyInput.value = Money.removeLastDigit(_inputCurrencyMoneyInput.value)
     }
 
-    private fun isValid(amount: Amount): Boolean {
+    private fun isValid(money: Money): Boolean {
         return when {
-            isZeroAllowed -> isValueBetweenMinMax(amount)
-            else -> amount.isNotZero() && isValueBetweenMinMax(amount)
+            isZeroAllowed -> isValueBetweenMinMax(money)
+            else -> money.isNotZero() && isValueBetweenMinMax(money)
         }
     }
 
-    private fun isValueBetweenMinMax(amount: Amount): Boolean {
-        return amount in amountMin..amountMax
+    private fun isValueBetweenMinMax(money: Money): Boolean {
+        return money in moneyMin..moneyMax
     }
 }
 
 data class MoneyInputData(
-    val price: Amount,
+    val money: Money,
     val text: String,
     val isValid: Boolean
 ) {
     companion object {
+        internal val DEFAULT_CURRENCY = Currency.getInstance("EUR")
         val EMPTY = MoneyInputData(
-            price = Amount.zero(),
+            money = Money.zero(DEFAULT_CURRENCY),
             text = "",
             isValid = false
         )

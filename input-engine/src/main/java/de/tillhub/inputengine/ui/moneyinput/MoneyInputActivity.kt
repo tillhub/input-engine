@@ -33,9 +33,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.tillhub.inputengine.contract.ExtraKeys
 import de.tillhub.inputengine.contract.MoneyInputRequest
-import de.tillhub.inputengine.data.AmountParam
+import de.tillhub.inputengine.data.MoneyParam
 import de.tillhub.inputengine.data.NumpadKey
 import de.tillhub.inputengine.data.StringParam
+import de.tillhub.inputengine.formatter.MoneyFormatter
 import de.tillhub.inputengine.helper.parcelable
 import de.tillhub.inputengine.ui.components.InputButton
 import de.tillhub.inputengine.ui.components.Numpad
@@ -78,7 +79,7 @@ class MoneyInputActivity : ComponentActivity() {
                             setResult(Activity.RESULT_OK, Intent().apply {
                                 putExtra(
                                     ExtraKeys.EXTRAS_RESULT,
-                                    InputResultStatus.Success(amount.price.value, request.extra)
+                                    InputResultStatus.Success(amount.money.value, request.extra)
                                 )
                             })
                             finish()
@@ -106,13 +107,13 @@ class MoneyInputActivity : ComponentActivity() {
         padding: PaddingValues,
         amount: MoneyInputData,
         currency: Currency,
-        amountMin: AmountParam,
-        amountMax: AmountParam,
-        amountHint: AmountParam,
+        amountMin: MoneyParam,
+        amountMax: MoneyParam,
+        amountHint: MoneyParam,
         onClick: (NumpadKey) -> Unit
     ) {
-        val (amountString, amountColor) = if (amountHint is AmountParam.Enable && amount.price.isZero()) {
-            "${currency.symbol}${amountHint.amount.toPlainString()}" to MagneticGrey
+        val (amountString, amountColor) = if (amountHint is MoneyParam.Enable && amount.money.isZero()) {
+            MoneyFormatter.format(amountHint.amount, currency) to MagneticGrey
         } else {
             amount.text to OrbitalBlue
         }
@@ -132,12 +133,12 @@ class MoneyInputActivity : ComponentActivity() {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    if (amountMin is AmountParam.Enable) {
+                    if (amountMin is MoneyParam.Enable) {
                         Text(
                             modifier = Modifier.wrapContentWidth(Alignment.Start),
                             style = MaterialTheme.typography.bodyMedium,
                             maxLines = 2,
-                            text = "min.\n$currency${amountMin.amount}",
+                            text = "min.\n${MoneyFormatter.format(amountMin.amount, currency)}",
                             color = SoyuzGrey
                         )
                     }
@@ -150,12 +151,12 @@ class MoneyInputActivity : ComponentActivity() {
                         text = amountString,
                         color = amountColor,
                     )
-                    if (amountMax is AmountParam.Enable) {
+                    if (amountMax is MoneyParam.Enable) {
                         Text(
                             modifier = Modifier.wrapContentWidth(Alignment.End),
                             style = MaterialTheme.typography.bodyMedium,
                             maxLines = 2,
-                            text = "max.\n$currency${amountMax.amount}",
+                            text = "max.\n${MoneyFormatter.format(amountMax.amount, currency)}",
                             color = SoyuzGrey
                         )
                     }
