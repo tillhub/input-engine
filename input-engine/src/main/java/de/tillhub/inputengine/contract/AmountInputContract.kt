@@ -14,7 +14,7 @@ import de.tillhub.inputengine.data.MoneyParam
 import de.tillhub.inputengine.data.StringParam
 import de.tillhub.inputengine.ui.moneyinput.AmountInputResultStatus
 import de.tillhub.inputengine.ui.moneyinput.MoneyInputActivity
-import de.tillhub.inputengine.ui.pininput.InputResultStatus
+import de.tillhub.inputengine.ui.moneyinput.MoneyInputResultStatus
 import kotlinx.parcelize.Parcelize
 import java.math.BigInteger
 import java.util.Currency
@@ -44,7 +44,7 @@ data class AmountResultStatus(
     val amount: BigInteger = BigInteger.ZERO,
     val currency: Currency,
     val isZeroAllowed: Boolean = false,
-    val toolbarTitle: StringParam = StringParam.StringResource(R.string.numpad_title),
+    val toolbarTitle: StringParam = StringParam.StringResource(R.string.numpad_title_amount),
     val amountMin: MoneyParam = MoneyParam.Disable,
     val amountMax: MoneyParam = MoneyParam.Disable,
     val hintAmount: MoneyParam = MoneyParam.Disable,

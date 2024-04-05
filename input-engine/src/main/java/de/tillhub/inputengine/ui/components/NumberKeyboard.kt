@@ -23,9 +23,14 @@ import de.tillhub.inputengine.ui.theme.ExtraButtonTint
 import de.tillhub.inputengine.ui.theme.GalacticBlue
 import de.tillhub.inputengine.ui.theme.LunarGray
 import de.tillhub.inputengine.ui.theme.Tint
+import java.text.DecimalFormatSymbols
 
+@Suppress("LongMethod")
 @Composable
-internal fun Numpad(onClick: (NumpadKey) -> Unit) {
+internal fun Numpad(
+    onClick: (NumpadKey) -> Unit,
+    showDecimalSeparator: Boolean = false
+) {
     Row(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -52,16 +57,34 @@ internal fun Numpad(onClick: (NumpadKey) -> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth()
     ) {
-        ExtraButton(
-            onClick = { onClick(NumpadKey.Clear) },
-            modifier = Modifier.weight(1f)
-        ) {
-            Text(
-                text = stringResource(id = R.string.numpad_button_clear),
-                fontSize = 14.sp,
-                color = GalacticBlue,
-            )
+        if (showDecimalSeparator) {
+            val decimalSeparator = DecimalFormatSymbols.getInstance().decimalSeparator
+            ExtraButton(
+                onClick = { onClick(NumpadKey.DecimalSeparator) },
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = decimalSeparator.toString(),
+                    modifier = Modifier.padding(bottom = 16.dp),
+                    fontSize = 24.sp,
+                    color = GalacticBlue,
+                )
+            }
+        } else {
+            ExtraButton(
+                onClick = { onClick(NumpadKey.Clear) },
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = stringResource(
+                        id = R.string.numpad_button_clear
+                    ),
+                    fontSize = 14.sp,
+                    color = GalacticBlue,
+                )
+            }
         }
+
         NumberButton(number = 0, onClick = onClick, modifier = Modifier.weight(1f))
         ExtraButton(
             onClick = { onClick(NumpadKey.Delete) },

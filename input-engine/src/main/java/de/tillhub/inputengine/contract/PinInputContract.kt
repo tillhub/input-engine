@@ -33,7 +33,7 @@ data class PinInputRequest(
     val pin: String,
     val overridePinInput: Boolean = false,
     val toolbarTitle: StringParam = StringParam.StringResource(
-        R.string.pin_numpad_title
+        R.string.numpad_title_pin
     ),
 ) : Parcelable
 

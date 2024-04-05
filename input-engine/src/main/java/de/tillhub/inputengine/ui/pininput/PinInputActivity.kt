@@ -42,7 +42,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.tillhub.inputengine.R
 import de.tillhub.inputengine.contract.ExtraKeys
 import de.tillhub.inputengine.contract.PinInputRequest
-import de.tillhub.inputengine.data.Digit
 import de.tillhub.inputengine.data.NumpadKey
 import de.tillhub.inputengine.data.StringParam
 import de.tillhub.inputengine.helper.parcelable
@@ -127,7 +126,6 @@ class PinInputActivity : ComponentActivity() {
             }
         }
     }
-
     @Suppress("LongMethod")
     @ExperimentalMaterial3Api
     @Composable
@@ -189,7 +187,7 @@ class PinInputActivity : ComponentActivity() {
                         textAlign = TextAlign.End,
                         maxLines = 1,
                         style = MaterialTheme.typography.bodyMedium,
-                        text = stringResource(R.string.enter_pin),
+                        text = stringResource(R.string.pin_enter),
                         color = OrbitalBlue
                     )
                 }

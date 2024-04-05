@@ -24,6 +24,7 @@ import de.tillhub.inputengine.contract.PinInputContract
 import de.tillhub.inputengine.contract.PinInputRequest
 import de.tillhub.inputengine.contract.PinInputResult
 import de.tillhub.inputengine.data.MoneyParam
+import de.tillhub.inputengine.data.QuantityParam
 import de.tillhub.inputengine.sample.ui.theme.InputEngineTheme
 import de.tillhub.inputengine.ui.pininput.AmountInputResultStatus
 import java.util.Currency
@@ -33,6 +34,7 @@ class MainActivity : ComponentActivity() {
 
     private lateinit var moneyInputLauncher: ActivityResultLauncher<AmountResultStatus>
     private lateinit var pinInputLauncher: ActivityResultLauncher<PinInputRequest>
+    private lateinit var quantityInputLauncher: ActivityResultLauncher<QuantityInputRequest>
     private var scanCode = mutableStateOf("")
     private var pinResult = mutableStateOf("")
 
@@ -54,6 +56,11 @@ class MainActivity : ComponentActivity() {
                 PinInputResult.Canceled -> getString(de.tillhub.inputengine.R.string.pin_wrong)
                 PinInputResult.Success -> getString(de.tillhub.inputengine.R.string.pin_correct)
             }
+        }
+        quantityInputLauncher = registerForActivityResult(
+            QuantityInputContract(),
+            activityResultRegistry
+        ) {
         }
         setContent {
             InputEngineTheme {
@@ -100,6 +107,27 @@ class MainActivity : ComponentActivity() {
                             ) {
                                 Text(
                                     text = "Pin Input",
+                                )
+                            }
+                            Spacer(modifier = Modifier.padding(8.dp))
+                            Text(text = pinResult.value)
+                        }
+                        Spacer(modifier = Modifier.padding(16.dp))
+                        Column(verticalArrangement = Arrangement.SpaceBetween) {
+                            OutlinedButton(
+                                modifier = Modifier.fillMaxWidth(),
+                                onClick = {
+                                    quantityInputLauncher.launch(
+                                        QuantityInputRequest(
+                                            BigDecimal.ZERO,
+                                            maxQuantity = BigDecimal.ZERO,
+                                            quantityHint = QuantityParam.Disable
+                                        )
+                                    )
+                                }
+                            ) {
+                                Text(
+                                    text = "Quantity Input",
                                 )
                             }
                             Spacer(modifier = Modifier.padding(8.dp))

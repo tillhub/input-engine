@@ -9,5 +9,8 @@
         <activity
             android:name="de.tillhub.inputengine.ui.pininput.PinInputActivity"
             android:exported="false" />
+        <activity
+            android:name="de.tillhub.inputengine.ui.quantity.QuantityInputActivity"
+            android:exported="false" />
     </application>
 </manifest>

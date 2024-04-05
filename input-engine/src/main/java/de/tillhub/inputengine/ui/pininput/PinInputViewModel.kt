@@ -70,6 +70,8 @@ class PinInputViewModel : ViewModel() {
                 _pinInputChars.value = _pinInputChars.value.toMutableList()
                     .apply { add(key.digit.value.digitToChar()) }
             }
+
+            is NumpadKey.DecimalSeparator -> TODO()
         }
     }
 }
