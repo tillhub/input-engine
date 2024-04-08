@@ -32,7 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.tillhub.inputengine.contract.ExtraKeys
-import de.tillhub.inputengine.contract.MoneyInputRequest
+import de.tillhub.inputengine.contract.AmountResultStatus
 import de.tillhub.inputengine.data.MoneyParam
 import de.tillhub.inputengine.data.NumpadKey
 import de.tillhub.inputengine.data.StringParam
@@ -51,8 +51,8 @@ class MoneyInputActivity : ComponentActivity() {
 
     private val viewModel by viewModels<MoneyInputViewModel>()
 
-    private val request: MoneyInputRequest by lazy {
-        intent.extras?.parcelable<MoneyInputRequest>(ExtraKeys.EXTRA_REQUEST)
+    private val request: AmountResultStatus by lazy {
+        intent.extras?.parcelable<AmountResultStatus>(ExtraKeys.EXTRA_REQUEST)
             ?: throw IllegalArgumentException("$TAG: Argument MoneyInputRequest is missing")
     }
 
@@ -79,7 +79,7 @@ class MoneyInputActivity : ComponentActivity() {
                             setResult(Activity.RESULT_OK, Intent().apply {
                                 putExtra(
                                     ExtraKeys.EXTRAS_RESULT,
-                                    InputResultStatus.Success(amount.money.value, request.extra)
+                                    MoneyInputResultStatus.Success(amount.money.value, request.extra)
                                 )
                             })
                             finish()

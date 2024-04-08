@@ -18,16 +18,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import de.tillhub.inputengine.contract.AmountInputContract
-import de.tillhub.inputengine.contract.MoneyInputRequest
+import de.tillhub.inputengine.contract.AmountResultStatus
 import de.tillhub.inputengine.data.MoneyParam
 import de.tillhub.inputengine.sample.ui.theme.InputEngineTheme
-import de.tillhub.inputengine.ui.moneyinput.InputResultStatus
+import de.tillhub.inputengine.ui.moneyinput.MoneyInputResultStatus
 import java.util.Currency
 
 @ExperimentalMaterial3Api
 class MainActivity : ComponentActivity() {
 
-    private lateinit var moneyInputLauncher: ActivityResultLauncher<MoneyInputRequest>
+    private lateinit var moneyInputLauncher: ActivityResultLauncher<AmountResultStatus>
     private var scanCode = mutableStateOf("")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +35,7 @@ class MainActivity : ComponentActivity() {
             AmountInputContract(),
             activityResultRegistry
         ) {
-            if (it is InputResultStatus.Success) scanCode.value = it.amount.toPlainString()
+            if (it is MoneyInputResultStatus.Success) scanCode.value = it.amount.toPlainString()
         }
         setContent {
             InputEngineTheme {
@@ -45,7 +45,7 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier.wrapContentSize(),
                             onClick = {
                                 moneyInputLauncher.launch(
-                                    MoneyInputRequest(
+                                    AmountResultStatus(
                                         amountMin = MoneyParam.Enable(100.toBigInteger()),
                                         amountMax = MoneyParam.Enable(2000.toBigInteger()),
                                         currency = Currency.getInstance("EUR"),

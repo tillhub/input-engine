@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.tillhub.inputengine.contract.MoneyInputRequest
+import de.tillhub.inputengine.contract.AmountResultStatus
 import de.tillhub.inputengine.data.MoneyParam
 import de.tillhub.inputengine.data.Money
 import de.tillhub.inputengine.data.NumpadKey
@@ -42,7 +42,7 @@ class MoneyInputViewModel : ViewModel() {
         initialValue = EMPTY
     )
 
-    fun init(request: MoneyInputRequest) {
+    fun init(request: AmountResultStatus) {
         this.isInitValue = true
         this.currency = request.currency
         this.moneyMax = Money.max(request.currency)
@@ -108,11 +108,11 @@ data class MoneyInputData(
 }
 
 @Parcelize
-sealed class InputResultStatus : Parcelable {
+sealed class MoneyInputResultStatus : Parcelable {
     data class Success(
         val amount: BigDecimal,
         val extras: Bundle
-    ) : InputResultStatus()
+    ) : MoneyInputResultStatus()
 
-    data object Cancel : InputResultStatus()
+    data object Canceled : MoneyInputResultStatus()
 }
