@@ -34,7 +34,12 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.9"
+    }
     tasks.withType<Test> {
         useJUnitPlatform()
     }
@@ -47,11 +52,13 @@ android {
 }
 
 dependencies {
-
+    implementation(platform(libs.compose.bom))
     implementation(libs.bundles.ui)
     implementation(libs.bundles.compose)
     implementation(libs.bundles.lifecycle)
+    implementation(libs.androidx.lifecycle.runtime.compose)
     detektPlugins(libs.detekt.formatting)
+    testImplementation(libs.bundles.testing)
 }
 
 afterEvaluate {

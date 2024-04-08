@@ -4,7 +4,7 @@
 
     <application>
         <activity
-            android:name="de.tillhub.inputengine.ui.MoneyInputActivity"
+            android:name="de.tillhub.inputengine.ui.moneyinput.MoneyInputActivity"
             android:exported="false" />
     </application>
 </manifest>
