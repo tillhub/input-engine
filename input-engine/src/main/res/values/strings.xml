@@ -7,4 +7,7 @@
     <string name="pin_wrong">Wrong PIN</string>
     <string name="pin_correct">PIN entry successful</string>
     <string name="pin_enter">ENTER PIN</string>
+    <string name="incorrect_quantity">Wrong PIN</string>
+    <string name="min_value">min. \n%1$s</string>
+    <string name="max_value">max. \n%1$s</string>
 </resources>

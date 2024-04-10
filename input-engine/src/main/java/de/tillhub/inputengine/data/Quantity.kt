@@ -23,7 +23,6 @@ data class Quantity internal constructor(
 
     @IgnoredOnParcel
     val decimal: BigDecimal by lazy {
-        // TODO check rounding
         value.toBigDecimal().divide(FRACTIONS_FACTOR, PRECISION)
     }
 

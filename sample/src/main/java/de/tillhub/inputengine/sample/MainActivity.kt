@@ -23,10 +23,14 @@ import de.tillhub.inputengine.contract.AmountResultStatus
 import de.tillhub.inputengine.contract.PinInputContract
 import de.tillhub.inputengine.contract.PinInputRequest
 import de.tillhub.inputengine.contract.PinInputResult
+import de.tillhub.inputengine.contract.QuantityInputContract
+import de.tillhub.inputengine.contract.QuantityInputRequest
 import de.tillhub.inputengine.data.MoneyParam
 import de.tillhub.inputengine.data.QuantityParam
 import de.tillhub.inputengine.sample.ui.theme.InputEngineTheme
-import de.tillhub.inputengine.ui.pininput.AmountInputResultStatus
+import de.tillhub.inputengine.ui.moneyinput.AmountInputResultStatus
+import de.tillhub.inputengine.ui.quantity.QuantityInputResultStatus
+import java.math.BigDecimal
 import java.util.Currency
 
 @ExperimentalMaterial3Api
@@ -37,6 +41,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var quantityInputLauncher: ActivityResultLauncher<QuantityInputRequest>
     private var scanCode = mutableStateOf("")
     private var pinResult = mutableStateOf("")
+    private var quantityResult = mutableStateOf("")
 
     @Suppress("LongMethod")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,6 +66,10 @@ class MainActivity : ComponentActivity() {
             QuantityInputContract(),
             activityResultRegistry
         ) {
+            quantityResult.value = when (it) {
+                QuantityInputResultStatus.Canceled -> getString(de.tillhub.inputengine.R.string.incorrect_quantity)
+                is QuantityInputResultStatus.Success -> it.quantity.toString()
+            }
         }
         setContent {
             InputEngineTheme {
@@ -119,9 +128,10 @@ class MainActivity : ComponentActivity() {
                                 onClick = {
                                     quantityInputLauncher.launch(
                                         QuantityInputRequest(
-                                            BigDecimal.ZERO,
-                                            maxQuantity = BigDecimal.ZERO,
-                                            quantityHint = QuantityParam.Disable
+                                            quantity = BigDecimal.ZERO,
+                                            minQuantity = BigDecimal.ZERO,
+                                            maxQuantity = 100.0.toBigDecimal(),
+                                            quantityHint = QuantityParam.Enable(BigDecimal.TEN)
                                         )
                                     )
                                 }
@@ -131,7 +141,7 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                             Spacer(modifier = Modifier.padding(8.dp))
-                            Text(text = pinResult.value)
+                            Text(text = quantityResult.value)
                         }
                     }
                 }

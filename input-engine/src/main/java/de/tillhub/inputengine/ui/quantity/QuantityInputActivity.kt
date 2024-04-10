@@ -43,8 +43,10 @@ import de.tillhub.inputengine.R
 import de.tillhub.inputengine.contract.ExtraKeys
 import de.tillhub.inputengine.contract.QuantityInputRequest
 import de.tillhub.inputengine.data.NumpadKey
+import de.tillhub.inputengine.data.Quantity
 import de.tillhub.inputengine.data.QuantityParam
 import de.tillhub.inputengine.data.StringParam
+import de.tillhub.inputengine.formatter.QuantityFormatter
 import de.tillhub.inputengine.helper.parcelable
 import de.tillhub.inputengine.ui.components.InputButton
 import de.tillhub.inputengine.ui.components.Numpad
@@ -64,9 +66,16 @@ class QuantityInputActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel.setInitialValue(
+            initialValue = Quantity.of(request.quantity),
+            currentValue = Quantity.of(request.quantity),
+            minValue = request.minQuantity?.let { Quantity.of(it) },
+            maxValue = request.maxQuantity?.let { Quantity.of(it) }
+        )
         setContent { QuantityInputScreen() }
     }
 
+    @Suppress("LongMethod")
     @Composable
     fun QuantityInputScreen() {
         val snackbarHostState = remember { SnackbarHostState() }
@@ -93,13 +102,12 @@ class QuantityInputActivity : ComponentActivity() {
                 bottomBar = {
                     InputButton(displayData.currentValue.isValid) {
                         setResult(RESULT_OK, Intent().apply {
-//                            putExtra(
-//                                ExtraKeys.EXTRAS_RESULT,
-//                                InputResultStatus.Success(
-//                                    amount.money.value,
-//                                    request.extra
-//                                )
-//                            )
+                            putExtra(
+                                ExtraKeys.EXTRAS_RESULT,
+                                QuantityInputResultStatus.Success(
+                                    displayData.currentValue.data.decimal,
+                                )
+                            )
                         })
                         finish()
                     }
@@ -107,8 +115,24 @@ class QuantityInputActivity : ComponentActivity() {
             ) {
                 QuantityNumpad(
                     padding = it,
-                    quantity = displayData.currentValue.text,
+                    quantity = displayData.currentValue.data,
                     quantityHint = request.quantityHint,
+                    minQuantity = request.minQuantity?.let { qty ->
+                        stringResource(
+                            id = R.string.min_value,
+                            QuantityFormatter.format(
+                                Quantity.of(qty)
+                            )
+                        )
+                    },
+                    maxQuantity = request.maxQuantity?.let { qty ->
+                        stringResource(
+                            id = R.string.max_value,
+                            QuantityFormatter.format(
+                                Quantity.of(qty)
+                            )
+                        )
+                    },
                     decrease = { viewModel.decrease() },
                     increase = { viewModel.increase() },
                     onClick = viewModel::processKey
@@ -122,16 +146,18 @@ class QuantityInputActivity : ComponentActivity() {
     @Composable
     fun QuantityNumpad(
         padding: PaddingValues,
-        quantity: String,
+        quantity: Quantity,
         quantityHint: QuantityParam,
         decrease: () -> Unit,
         increase: () -> Unit,
+        maxQuantity: String?,
+        minQuantity: String?,
         onClick: (NumpadKey) -> Unit
     ) {
-        val (quantityString, quantityColor) = if (quantityHint is QuantityParam.Enable) {
-            quantity to MagneticGrey
+        val (quantityString, quantityColor) = if (quantityHint is QuantityParam.Enable && quantity.isZero()) {
+            QuantityFormatter.format(Quantity.of(quantityHint.value)) to MagneticGrey
         } else {
-            quantity to OrbitalBlue
+            QuantityFormatter.formatPlain(quantity) to OrbitalBlue
         }
         Box(
             modifier = Modifier
@@ -163,15 +189,36 @@ class QuantityInputActivity : ComponentActivity() {
                             contentDescription = "contentDescription"
                         )
                     }
+                    minQuantity?.let {
+                        Text(
+                            modifier = Modifier
+                                .wrapContentWidth(Alignment.CenterHorizontally),
+                            style = MaterialTheme.typography.bodyMedium,
+                            maxLines = 2,
+                            text = it,
+                            color = MagneticGrey,
+                        )
+                    }
+
                     Text(
                         modifier = Modifier
                             .weight(1f)
                             .wrapContentWidth(Alignment.CenterHorizontally),
                         style = MaterialTheme.typography.displaySmall,
-                        maxLines = 1,
+                        maxLines = 2,
                         text = quantityString,
                         color = quantityColor,
                     )
+                    maxQuantity?.let {
+                        Text(
+                            modifier = Modifier
+                                .wrapContentWidth(Alignment.CenterHorizontally),
+                            style = MaterialTheme.typography.bodyMedium,
+                            maxLines = 2,
+                            text = it,
+                            color = MagneticGrey,
+                        )
+                    }
                     IconButton(
                         modifier = Modifier.wrapContentWidth(Alignment.End),
                         onClick = increase

@@ -70,7 +70,7 @@ class MoneyInputViewModel : ViewModel() {
                 _inputCurrencyMoneyInput.value = minOf(newValue, moneyMax)
             }
 
-            is NumpadKey.DecimalSeparator -> TODO()
+            is NumpadKey.DecimalSeparator -> {}
         }
     }
 

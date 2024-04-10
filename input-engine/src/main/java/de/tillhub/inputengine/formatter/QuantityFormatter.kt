@@ -30,7 +30,7 @@ object QuantityFormatter {
     /**
      * Formats the given [count] in the form of "x8" for a given value of 8
      */
-    fun format(count: Quantity): String = formatPlain(count).let { "x$it" }
+    fun format(count: Quantity): String = formatPlain(count)
 
     /**
      * Formats the given [quantity] as a prefix with an optional suffix. The result is in the form of "8 x [suffix]"

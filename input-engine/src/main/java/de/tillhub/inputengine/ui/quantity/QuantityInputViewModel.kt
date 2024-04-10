@@ -1,13 +1,16 @@
 package de.tillhub.inputengine.ui.quantity
 
+import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import de.tillhub.inputengine.data.Digit
 import de.tillhub.inputengine.data.NumpadKey
 import de.tillhub.inputengine.data.Quantity
 import de.tillhub.inputengine.data.quantity.NumpadDisplayData
 import de.tillhub.inputengine.formatter.QuantityFormatter
+import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import java.math.BigDecimal
 
 class QuantityInputViewModel : ViewModel() {
 
@@ -29,7 +32,7 @@ class QuantityInputViewModel : ViewModel() {
 
     private var maxQuantity: Quantity = Quantity.MAX_VALUE
 
-    private var isZeroAllowed: Boolean = true
+    private var isZeroAllowed: Boolean = false
         set(value) {
             field = value
             updateDisplayData(displayDataFlow.value.currentValue.data)
@@ -208,4 +211,13 @@ class QuantityInputViewModel : ViewModel() {
         private const val MAX_DECIMAL_DIGIT_COUNT: Int = 4
         private val MAX_ALLOWED_DIGITS: Int = minOf(MAX_DECIMAL_DIGIT_COUNT, Quantity.FRACTIONS)
     }
+}
+
+@Parcelize
+sealed class QuantityInputResultStatus : Parcelable {
+    data class Success(
+        val quantity: BigDecimal,
+    ) : QuantityInputResultStatus()
+
+    data object Canceled : QuantityInputResultStatus()
 }
