@@ -8,24 +8,26 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.tillhub.inputengine.R
+import de.tillhub.inputengine.ui.theme.MagneticGrey
+import de.tillhub.inputengine.ui.theme.OrbitalBlue
 
 @Composable
 internal fun InputButton(
-    color: Color,
+    isEnable: Boolean,
     onClick: () -> Unit
 ) {
     Button(
+        enabled = isEnable,
         modifier = Modifier
             .fillMaxWidth(),
         shape = RectangleShape,
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
-            containerColor = color
+            containerColor = if (isEnable) OrbitalBlue else MagneticGrey
         )
     ) {
         Text(

@@ -43,7 +43,7 @@ data class AmountResultStatus(
     val amount: BigInteger = BigInteger.ZERO,
     val currency: Currency,
     val isZeroAllowed: Boolean = false,
-    val toolbarTitle: StringParam = StringParam.StringResource(R.string.numpad_title),
+    val toolbarTitle: StringParam = StringParam.StringResource(R.string.numpad_title_amount),
     val amountMin: MoneyParam = MoneyParam.Disable,
     val amountMax: MoneyParam = MoneyParam.Disable,
     val hintAmount: MoneyParam = MoneyParam.Disable,

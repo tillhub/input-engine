@@ -126,7 +126,6 @@ class PinInputActivity : ComponentActivity() {
             }
         }
     }
-
     @Suppress("LongMethod")
     @ExperimentalMaterial3Api
     @Composable
@@ -188,7 +187,7 @@ class PinInputActivity : ComponentActivity() {
                         textAlign = TextAlign.End,
                         maxLines = 1,
                         style = MaterialTheme.typography.bodyMedium,
-                        text = stringResource(R.string.enter_pin),
+                        text = stringResource(R.string.pin_enter),
                         color = OrbitalBlue
                     )
                 }

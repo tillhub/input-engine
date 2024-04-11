@@ -23,9 +23,14 @@ import de.tillhub.inputengine.contract.AmountResultStatus
 import de.tillhub.inputengine.contract.PinInputContract
 import de.tillhub.inputengine.contract.PinInputRequest
 import de.tillhub.inputengine.contract.PinInputResult
+import de.tillhub.inputengine.contract.QuantityInputContract
+import de.tillhub.inputengine.contract.QuantityInputRequest
 import de.tillhub.inputengine.data.MoneyParam
+import de.tillhub.inputengine.data.QuantityParam
 import de.tillhub.inputengine.sample.ui.theme.InputEngineTheme
 import de.tillhub.inputengine.ui.moneyinput.AmountInputResultStatus
+import de.tillhub.inputengine.ui.quantity.QuantityInputResultStatus
+import java.math.BigDecimal
 import java.util.Currency
 
 @ExperimentalMaterial3Api
@@ -33,8 +38,10 @@ class MainActivity : ComponentActivity() {
 
     private lateinit var moneyInputLauncher: ActivityResultLauncher<AmountResultStatus>
     private lateinit var pinInputLauncher: ActivityResultLauncher<PinInputRequest>
+    private lateinit var quantityInputLauncher: ActivityResultLauncher<QuantityInputRequest>
     private var scanCode = mutableStateOf("")
     private var pinResult = mutableStateOf("")
+    private var quantityResult = mutableStateOf("")
 
     @Suppress("LongMethod")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,6 +60,15 @@ class MainActivity : ComponentActivity() {
             pinResult.value = when (it) {
                 PinInputResult.Canceled -> getString(de.tillhub.inputengine.R.string.pin_wrong)
                 PinInputResult.Success -> getString(de.tillhub.inputengine.R.string.pin_correct)
+            }
+        }
+        quantityInputLauncher = registerForActivityResult(
+            QuantityInputContract(),
+            activityResultRegistry
+        ) {
+            quantityResult.value = when (it) {
+                QuantityInputResultStatus.Canceled -> getString(de.tillhub.inputengine.R.string.incorrect_quantity)
+                is QuantityInputResultStatus.Success -> it.quantity.toString()
             }
         }
         setContent {
@@ -104,6 +120,28 @@ class MainActivity : ComponentActivity() {
                             }
                             Spacer(modifier = Modifier.padding(8.dp))
                             Text(text = pinResult.value)
+                        }
+                        Spacer(modifier = Modifier.padding(16.dp))
+                        Column(verticalArrangement = Arrangement.SpaceBetween) {
+                            OutlinedButton(
+                                modifier = Modifier.fillMaxWidth(),
+                                onClick = {
+                                    quantityInputLauncher.launch(
+                                        QuantityInputRequest(
+                                            quantity = BigDecimal.ZERO,
+                                            minQuantity = BigDecimal.ZERO,
+                                            maxQuantity = 100.0.toBigDecimal(),
+                                            quantityHint = QuantityParam.Enable(BigDecimal.TEN)
+                                        )
+                                    )
+                                }
+                            ) {
+                                Text(
+                                    text = "Quantity Input",
+                                )
+                            }
+                            Spacer(modifier = Modifier.padding(8.dp))
+                            Text(text = quantityResult.value)
                         }
                     }
                 }

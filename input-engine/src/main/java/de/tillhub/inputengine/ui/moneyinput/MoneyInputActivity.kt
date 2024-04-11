@@ -66,7 +66,6 @@ class MoneyInputActivity : ComponentActivity() {
             }
 
             val amount by viewModel.moneyInput.collectAsStateWithLifecycle()
-            val color = if (amount.isValid) OrbitalBlue else MagneticGrey
             AppTheme {
                 Scaffold(
                     topBar = {
@@ -75,7 +74,7 @@ class MoneyInputActivity : ComponentActivity() {
                         }
                     },
                     bottomBar = {
-                        InputButton(color) {
+                        InputButton(amount.isValid) {
                             setResult(Activity.RESULT_OK, Intent().apply {
                                 putExtra(
                                     ExtraKeys.EXTRAS_RESULT,

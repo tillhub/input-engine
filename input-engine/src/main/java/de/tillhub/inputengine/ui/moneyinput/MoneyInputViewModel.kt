@@ -69,6 +69,8 @@ class MoneyInputViewModel : ViewModel() {
                 isInitValue = false
                 _inputCurrencyMoneyInput.value = minOf(newValue, moneyMax)
             }
+
+            is NumpadKey.DecimalSeparator -> {}
         }
     }
 
