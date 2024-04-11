@@ -19,24 +19,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import de.tillhub.inputengine.contract.AmountInputContract
-import de.tillhub.inputengine.contract.AmountResultStatus
+import de.tillhub.inputengine.contract.AmountInputRequest
+import de.tillhub.inputengine.contract.AmountInputResult
 import de.tillhub.inputengine.contract.PinInputContract
 import de.tillhub.inputengine.contract.PinInputRequest
 import de.tillhub.inputengine.contract.PinInputResult
 import de.tillhub.inputengine.contract.QuantityInputContract
 import de.tillhub.inputengine.contract.QuantityInputRequest
+import de.tillhub.inputengine.contract.QuantityInputResult
 import de.tillhub.inputengine.data.MoneyParam
 import de.tillhub.inputengine.data.QuantityParam
 import de.tillhub.inputengine.sample.ui.theme.InputEngineTheme
-import de.tillhub.inputengine.ui.moneyinput.AmountInputResultStatus
-import de.tillhub.inputengine.ui.quantity.QuantityInputResultStatus
 import java.math.BigDecimal
 import java.util.Currency
 
 @ExperimentalMaterial3Api
 class MainActivity : ComponentActivity() {
 
-    private lateinit var moneyInputLauncher: ActivityResultLauncher<AmountResultStatus>
+    private lateinit var moneyInputLauncher: ActivityResultLauncher<AmountInputRequest>
     private lateinit var pinInputLauncher: ActivityResultLauncher<PinInputRequest>
     private lateinit var quantityInputLauncher: ActivityResultLauncher<QuantityInputRequest>
     private var scanCode = mutableStateOf("")
@@ -50,7 +50,7 @@ class MainActivity : ComponentActivity() {
             AmountInputContract(),
             activityResultRegistry
         ) {
-            if (it is AmountInputResultStatus.Success) scanCode.value = it.amount.toPlainString()
+            if (it is AmountInputResult.Success) scanCode.value = it.amount.toPlainString()
         }
 
         pinInputLauncher = registerForActivityResult(
@@ -67,8 +67,8 @@ class MainActivity : ComponentActivity() {
             activityResultRegistry
         ) {
             quantityResult.value = when (it) {
-                QuantityInputResultStatus.Canceled -> getString(de.tillhub.inputengine.R.string.incorrect_quantity)
-                is QuantityInputResultStatus.Success -> it.quantity.toString()
+                QuantityInputResult.Canceled -> getString(de.tillhub.inputengine.R.string.incorrect_quantity)
+                is QuantityInputResult.Success -> it.quantity.toString()
             }
         }
         setContent {
@@ -87,9 +87,9 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier.fillMaxWidth(),
                                 onClick = {
                                     moneyInputLauncher.launch(
-                                        AmountResultStatus(
+                                        AmountInputRequest(
                                             amountMin = MoneyParam.Enable(100.toBigInteger()),
-                                            amountMax = MoneyParam.Enable(2000.toBigInteger()),
+                                            amountMax = MoneyParam.Enable(200000000.toBigInteger()),
                                             currency = Currency.getInstance("EUR"),
                                             amount = 200.toBigInteger(),
                                             hintAmount = MoneyParam.Enable(200.toBigInteger())
@@ -129,8 +129,8 @@ class MainActivity : ComponentActivity() {
                                     quantityInputLauncher.launch(
                                         QuantityInputRequest(
                                             quantity = BigDecimal.ZERO,
-                                            minQuantity = BigDecimal.ZERO,
-                                            maxQuantity = 100.0.toBigDecimal(),
+                                            minQuantity = QuantityParam.Enable(BigDecimal.ZERO),
+                                            maxQuantity = QuantityParam.Enable(10000.0.toBigDecimal()),
                                             quantityHint = QuantityParam.Enable(BigDecimal.TEN)
                                         )
                                     )

@@ -2,7 +2,6 @@ package de.tillhub.inputengine.data
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import org.jetbrains.annotations.VisibleForTesting
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.math.RoundingMode
@@ -26,19 +25,19 @@ data class Money(
     fun isValid(): Boolean = this <= Money(MAX_VALUE_DECIMAL, currency) &&
             this >= Money(MIN_VALUE_DECIMAL, currency)
 
-    override fun compareTo(other: Money): Int = calculatable(other) {
+    override fun compareTo(other: Money): Int = calculable(other) {
         value.compareTo(other.value)
     }
 
-    operator fun plus(other: Money) = calculatable(other) {
+    operator fun plus(other: Money) = calculable(other) {
         Money(value + other.value, currency)
     }
 
-    operator fun minus(other: Money) = calculatable(other) {
+    operator fun minus(other: Money) = calculable(other) {
         Money(value - other.value, currency)
     }
 
-    private fun <T> calculatable(other: Money, body: () -> T): T {
+    private fun <T> calculable(other: Money, body: () -> T): T {
         require(currency == other.currency) {
             "currency $currency differs from other currency: ${other.currency}"
         }
@@ -47,13 +46,11 @@ data class Money(
 
     companion object {
 
-        @VisibleForTesting
         // MAX_VALUE_NORMAL for the Money class is 10 000 000 currency
-        internal val MAX_VALUE_DECIMAL: BigDecimal = 10000000.0.toBigDecimal()
+        private val MAX_VALUE_DECIMAL: BigDecimal = 10000000.0.toBigDecimal()
 
-        @VisibleForTesting
         // MIN_VALUE_NORMAL for the Money class is 0 currency
-        internal val MIN_VALUE_DECIMAL: BigDecimal = BigDecimal.ZERO
+        private val MIN_VALUE_DECIMAL: BigDecimal = BigDecimal.ZERO
 
         // Constructors
         fun zero(currency: Currency) = Money(BigDecimal.ZERO, currency)

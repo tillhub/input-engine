@@ -1,28 +1,18 @@
 package de.tillhub.inputengine.ui.quantity
 
-import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import de.tillhub.inputengine.data.Digit
 import de.tillhub.inputengine.data.NumpadKey
 import de.tillhub.inputengine.data.Quantity
-import de.tillhub.inputengine.data.quantity.NumpadDisplayData
+import de.tillhub.inputengine.data.QuantityParam
 import de.tillhub.inputengine.formatter.QuantityFormatter
-import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import java.math.BigDecimal
 
 class QuantityInputViewModel : ViewModel() {
 
-    private val _mutableDisplayDataFlow = MutableStateFlow(
-        NumpadDisplayData.create(
-            data = Quantity.ZERO,
-            text = QuantityFormatter.format(Quantity.ZERO),
-            isValid = true
-        )
-    )
-
-    val displayDataFlow: StateFlow<NumpadDisplayData<Quantity>> = _mutableDisplayDataFlow
+    private val _mutableDisplayDataFlow = MutableStateFlow(QuantityInputData.EMPTY)
+    val displayDataFlow: StateFlow<QuantityInputData> = _mutableDisplayDataFlow
 
     private val majorDigits: MutableList<Digit> = mutableListOf()
     private val minorDigits: MutableList<Digit> = mutableListOf()
@@ -30,18 +20,19 @@ class QuantityInputViewModel : ViewModel() {
     private var isDecimalSeparatorEntered = false
     private var nextKeyResetsCurrentValue = false
 
+    private var minQuantity: Quantity = Quantity.MIN_VALUE
     private var maxQuantity: Quantity = Quantity.MAX_VALUE
 
     private var isZeroAllowed: Boolean = false
         set(value) {
             field = value
-            updateDisplayData(displayDataFlow.value.currentValue.data)
+            updateDisplayData(displayDataFlow.value.qty)
         }
 
     private var allowsNegatives: Boolean = true
         set(value) {
             field = value
-            updateDisplayData(displayDataFlow.value.currentValue.data)
+            updateDisplayData(displayDataFlow.value.qty)
         }
 
     init {
@@ -69,54 +60,47 @@ class QuantityInputViewModel : ViewModel() {
         nextKeyResetsCurrentValue = true
     }
 
-    fun setInitialValue(initialValue: Quantity, currentValue: Quantity) {
+    fun setInitialValue(
+        initialValue: Quantity,
+        currentValue: Quantity,
+        minValue: QuantityParam,
+        maxValue: QuantityParam
+    ) {
+        this.minQuantity = when (minValue) {
+            QuantityParam.Disable -> Quantity.MIN_VALUE
+            is QuantityParam.Enable -> Quantity.of(minValue.value)
+        }
+        this.maxQuantity = when (maxValue) {
+            QuantityParam.Disable -> Quantity.MAX_VALUE
+            is QuantityParam.Enable -> Quantity.of(maxValue.value)
+        }
         setValue(currentValue)
-        _mutableDisplayDataFlow.value = displayDataFlow.value.setInitialValue(
-            data = initialValue,
+        _mutableDisplayDataFlow.value = QuantityInputData(
+            qty = initialValue,
             text = QuantityFormatter.formatPlain(initialValue, minorDigits.size),
             isValid = isValid(initialValue)
         )
     }
 
-    fun setInitialValue(
-        initialValue: Quantity,
-        currentValue: Quantity,
-        minValue: Quantity?,
-        maxValue: Quantity?
-    ) {
-        setInitialValue(initialValue, currentValue)
-        this.maxQuantity = maxValue ?: Quantity.MAX_VALUE
-        setValue(currentValue)
-        _mutableDisplayDataFlow.value = displayDataFlow.value.setCurrentValueWithMinAndMaxValue(
-            data = initialValue,
-            text = QuantityFormatter.formatPlain(initialValue, minorDigits.size),
-            isValid = isValid(initialValue),
-            minValue = minValue?.let {
-                QuantityFormatter.formatPlain(it, minorDigits.size)
-            },
-            maxValue = maxValue?.let {
-                QuantityFormatter.formatPlain(it, minorDigits.size)
-            }
-        )
-    }
-
     fun decrease() {
-        setValue(
-            displayDataFlow.value.currentValue.data.nextSmaller(
-                allowsZero = isZeroAllowed,
-                allowsNegatives = allowsNegatives
-            )
+        val newValue = displayDataFlow.value.qty.nextSmaller(
+            allowsZero = isZeroAllowed,
+            allowsNegatives = allowsNegatives
         )
-        nextKeyResetsCurrentValue = false
+        if (isValid(newValue)) {
+            setValue(newValue)
+            nextKeyResetsCurrentValue = false
+        }
     }
 
     fun increase() {
-        val newValue = displayDataFlow.value.currentValue.data.nextLarger(
+        val newValue = displayDataFlow.value.qty.nextLarger(
             maxQuantity = maxQuantity,
         )
-        if (!newValue.isValid()) return
-        setValue(newValue)
-        nextKeyResetsCurrentValue = false
+        if (isValid(newValue)) {
+            setValue(newValue)
+            nextKeyResetsCurrentValue = false
+        }
     }
 
     private fun clearValueIfNeeded() {
@@ -177,23 +161,31 @@ class QuantityInputViewModel : ViewModel() {
         majorDigits.addAll(majorD)
 
         val tempQuantity = Quantity.of(majorDigits, minorDigits)
-        val quantity = if (tempQuantity <= maxQuantity) {
-            tempQuantity
-        } else {
-            reset()
-            maxQuantity
+
+        val quantity = when {
+            tempQuantity > maxQuantity -> {
+                reset()
+                maxQuantity
+            }
+
+            tempQuantity < minQuantity -> {
+                reset()
+                minQuantity
+            }
+
+            else -> tempQuantity
         }
         updateDisplayData(quantity)
     }
 
-    fun updateDisplayData(value: Quantity) {
+    private fun updateDisplayData(value: Quantity) {
         var text = QuantityFormatter.formatPlain(value, minorDigits.size)
         if (isDecimalSeparatorEntered && minorDigits.isEmpty()) {
             text += QuantityFormatter.getDecimalSeparator()
         }
 
-        _mutableDisplayDataFlow.value = displayDataFlow.value.setCurrentValue(
-            data = value,
+        _mutableDisplayDataFlow.value = QuantityInputData(
+            qty = value,
             text = text,
             isValid = isValid(value)
         )
@@ -201,10 +193,14 @@ class QuantityInputViewModel : ViewModel() {
 
     private fun isValid(quantity: Quantity): Boolean {
         return if (isZeroAllowed) {
-            true
+            isValueBetweenMinMax(quantity)
         } else {
-            !quantity.isZero()
+            !quantity.isZero() && isValueBetweenMinMax(quantity)
         }
+    }
+
+    private fun isValueBetweenMinMax(quantity: Quantity): Boolean {
+        return quantity in minQuantity..maxQuantity
     }
 
     companion object {
@@ -213,11 +209,16 @@ class QuantityInputViewModel : ViewModel() {
     }
 }
 
-@Parcelize
-sealed class QuantityInputResultStatus : Parcelable {
-    data class Success(
-        val quantity: BigDecimal,
-    ) : QuantityInputResultStatus()
-
-    data object Canceled : QuantityInputResultStatus()
+data class QuantityInputData(
+    val qty: Quantity,
+    val text: String,
+    val isValid: Boolean
+) {
+    companion object {
+        val EMPTY = QuantityInputData(
+            qty = Quantity.ZERO,
+            text = QuantityFormatter.format(Quantity.ZERO),
+            isValid = false
+        )
+    }
 }

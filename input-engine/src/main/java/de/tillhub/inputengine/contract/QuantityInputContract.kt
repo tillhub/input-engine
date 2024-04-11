@@ -11,12 +11,11 @@ import de.tillhub.inputengine.R
 import de.tillhub.inputengine.data.QuantityParam
 import de.tillhub.inputengine.data.StringParam
 import de.tillhub.inputengine.ui.quantity.QuantityInputActivity
-import de.tillhub.inputengine.ui.quantity.QuantityInputResultStatus
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
 @ExperimentalMaterial3Api
-class QuantityInputContract : ActivityResultContract<QuantityInputRequest, QuantityInputResultStatus>() {
+class QuantityInputContract : ActivityResultContract<QuantityInputRequest, QuantityInputResult>() {
 
     override fun createIntent(context: Context, input: QuantityInputRequest): Intent {
         return Intent(context, QuantityInputActivity::class.java).apply {
@@ -24,14 +23,10 @@ class QuantityInputContract : ActivityResultContract<QuantityInputRequest, Quant
         }
     }
 
-    override fun parseResult(resultCode: Int, intent: Intent?): QuantityInputResultStatus {
+    override fun parseResult(resultCode: Int, intent: Intent?): QuantityInputResult {
         return intent.takeIf { resultCode == Activity.RESULT_OK }?.extras?.let {
-            BundleCompat.getParcelable(
-                it,
-                ExtraKeys.EXTRAS_RESULT,
-                QuantityInputResultStatus.Success::class.java
-            )
-        } ?: QuantityInputResultStatus.Canceled
+            BundleCompat.getParcelable(it, ExtraKeys.EXTRAS_RESULT, QuantityInputResult.Success::class.java)
+        } ?: QuantityInputResult.Canceled
     }
 }
 
@@ -40,9 +35,13 @@ data class QuantityInputRequest(
     val quantity: BigDecimal,
     val quantityHint: QuantityParam,
     val allowsNegatives: Boolean = true,
-    val minQuantity: BigDecimal?,
-    val maxQuantity: BigDecimal?,
-    val toolbarTitle: StringParam = StringParam.StringResource(
-        R.string.numpad_title_quantity
-    ),
+    val minQuantity: QuantityParam,
+    val maxQuantity: QuantityParam,
+    val toolbarTitle: StringParam = StringParam.StringResource(R.string.numpad_title_quantity)
 ) : Parcelable
+
+@Parcelize
+sealed class QuantityInputResult : Parcelable {
+    data class Success(val quantity: BigDecimal) : QuantityInputResult()
+    data object Canceled : QuantityInputResult()
+}
