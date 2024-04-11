@@ -1,23 +1,19 @@
 package de.tillhub.inputengine.ui.moneyinput
 
-import android.os.Bundle
-import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.tillhub.inputengine.contract.AmountResultStatus
+import de.tillhub.inputengine.contract.AmountInputRequest
 import de.tillhub.inputengine.data.MoneyParam
 import de.tillhub.inputengine.data.Money
 import de.tillhub.inputengine.data.NumpadKey
 import de.tillhub.inputengine.formatter.MoneyFormatter
 import de.tillhub.inputengine.ui.moneyinput.MoneyInputData.Companion.DEFAULT_CURRENCY
 import de.tillhub.inputengine.ui.moneyinput.MoneyInputData.Companion.EMPTY
-import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import java.math.BigDecimal
 import java.util.Currency
 
 class MoneyInputViewModel : ViewModel() {
@@ -42,7 +38,7 @@ class MoneyInputViewModel : ViewModel() {
         initialValue = EMPTY
     )
 
-    fun init(request: AmountResultStatus) {
+    fun init(request: AmountInputRequest) {
         this.isInitValue = true
         this.currency = request.currency
         this.moneyMax = Money.max(request.currency)
@@ -107,14 +103,4 @@ data class MoneyInputData(
             isValid = false
         )
     }
-}
-
-@Parcelize
-sealed class AmountInputResultStatus : Parcelable {
-    data class Success(
-        val amount: BigDecimal,
-        val extras: Bundle
-    ) : AmountInputResultStatus()
-
-    data object Canceled : AmountInputResultStatus()
 }

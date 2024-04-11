@@ -2,12 +2,10 @@ package de.tillhub.inputengine.data
 
 import android.os.Parcelable
 import de.tillhub.inputengine.helper.BigIntegers
-import de.tillhub.inputengine.helper.isNegative
 import de.tillhub.inputengine.helper.isPositive
 import de.tillhub.inputengine.helper.isZero
 import de.tillhub.inputengine.helper.pow10
 import de.tillhub.inputengine.helper.pow10decimal
-import de.tillhub.inputengine.helper.roundToBigInteger
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
@@ -26,11 +24,10 @@ data class Quantity internal constructor(
         value.toBigDecimal().divide(FRACTIONS_FACTOR, PRECISION)
     }
 
-    fun add(other: Quantity): Quantity = Quantity(value.add(other.value))
-    fun subtract(other: Quantity): Quantity = Quantity(value.subtract(other.value))
-    fun round(roundingMode: RoundingMode = RoundingMode.HALF_UP): Quantity = Quantity(
-        decimal.roundToBigInteger(roundingMode).multiply(FRACTIONS_FACTOR_INT)
-    )
+    operator fun unaryMinus() = Quantity(-value)
+
+    operator fun plus(other: Quantity): Quantity = Quantity(value.add(other.value))
+    operator fun minus(other: Quantity): Quantity = Quantity(value.subtract(other.value))
 
     operator fun times(other: Quantity): Quantity =
         Quantity(value.multiply(other.value).divide(FRACTIONS_FACTOR_INT))
@@ -39,21 +36,19 @@ data class Quantity internal constructor(
         value.toBigDecimal().divide(other.value.toBigDecimal(), FRACTIONS, RoundingMode.HALF_UP)
     )
 
-    fun isNegative(includeZero: Boolean = false): Boolean = value.isNegative(includeZero)
-    fun isPositive(includeZero: Boolean = false): Boolean = value.isPositive(includeZero)
+    private fun isPositive(includeZero: Boolean = false): Boolean = value.isPositive(includeZero)
     fun isZero(): Boolean = value.isZero()
-    fun isMoreThenOne() = this > ONE
 
     @IgnoredOnParcel
     val majorValue: BigInteger = value.divide(FRACTIONS_FACTOR_INT)
 
     @IgnoredOnParcel
-    val majorDigits: List<Digit> by lazy { Digits.digits(majorValue) }
+    val majorDigits: List<Digit> by lazy { BigIntegers.digits(majorValue) }
 
     @IgnoredOnParcel
     val minorDigits: List<Digit> by lazy {
         val minorValue = value.mod(FRACTIONS_FACTOR_INT)
-        Digits.minorDigits(minorValue, FRACTIONS)
+        BigIntegers.minorDigits(minorValue, FRACTIONS)
     }
 
     /**
@@ -180,16 +175,9 @@ data class Quantity internal constructor(
     val hasFractions = value.mod(FRACTIONS_FACTOR_INT).isPositive(includeZero = false)
 
     /**
-     * Returns if the current Quantity is higher than the max value
+     * Returns if the current Quantity is in min & max boundaries
      */
-    fun isValid(): Boolean = this <= MAX_VALUE
-
-    operator fun unaryMinus() = Quantity(-value)
-
-    operator fun rem(other: Quantity): Quantity = subtract(other)
-
-    operator fun plus(other: Quantity): Quantity = add(other)
-    operator fun minus(other: Quantity): Quantity = subtract(other)
+    fun isValid(): Boolean = this in MIN_VALUE..MAX_VALUE
 
     override fun compareTo(other: Quantity): Int = value.compareTo(other.value)
 
@@ -203,15 +191,13 @@ data class Quantity internal constructor(
 
         // MAX_VALUE for the Quantity class is 10 000
         val MAX_VALUE: Quantity = Quantity(BigInteger.valueOf(10000).multiply(FRACTIONS_FACTOR_INT))
+        val MIN_VALUE: Quantity = MAX_VALUE.unaryMinus()
         val ZERO: Quantity = Quantity(BigInteger.ZERO)
-        val ONE: Quantity = Quantity(BigInteger.ONE.multiply(FRACTIONS_FACTOR_INT))
 
         fun of(value: BigDecimal): Quantity =
             Quantity(value.multiply(FRACTIONS_FACTOR, PRECISION).toBigInteger())
 
         fun of(majorDigits: List<Digit>, fractionDigits: List<Digit>): Quantity =
             Quantity(BigIntegers.of(majorDigits, fractionDigits, FRACTIONS))
-
-        fun sumAll(quantities: List<Quantity>): Quantity = Quantity(quantities.sumOf { it.value })
     }
 }

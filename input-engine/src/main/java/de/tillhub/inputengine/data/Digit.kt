@@ -17,7 +17,7 @@ enum class Digit(@IntRange(from = 0, to = 9) val value: Int) {
 
     companion object {
         fun from(@IntRange(from = 0, to = 9) value: Int): Digit =
-            values().find {
+            entries.find {
                 it.value == value
             } ?: throw IllegalArgumentException("Digit only supports from 0 to 9, but was: $value")
     }

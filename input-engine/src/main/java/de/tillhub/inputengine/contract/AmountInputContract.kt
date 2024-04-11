@@ -12,34 +12,30 @@ import androidx.core.os.bundleOf
 import de.tillhub.inputengine.R
 import de.tillhub.inputengine.data.MoneyParam
 import de.tillhub.inputengine.data.StringParam
-import de.tillhub.inputengine.ui.moneyinput.AmountInputResultStatus
 import de.tillhub.inputengine.ui.moneyinput.MoneyInputActivity
 import kotlinx.parcelize.Parcelize
+import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.Currency
 
 @ExperimentalMaterial3Api
-class AmountInputContract : ActivityResultContract<AmountResultStatus, AmountInputResultStatus>() {
+class AmountInputContract : ActivityResultContract<AmountInputRequest, AmountInputResult>() {
 
-    override fun createIntent(context: Context, input: AmountResultStatus): Intent {
+    override fun createIntent(context: Context, input: AmountInputRequest): Intent {
         return Intent(context, MoneyInputActivity::class.java).apply {
             putExtra(ExtraKeys.EXTRA_REQUEST, input)
         }
     }
 
-    override fun parseResult(resultCode: Int, intent: Intent?): AmountInputResultStatus {
+    override fun parseResult(resultCode: Int, intent: Intent?): AmountInputResult {
         return intent.takeIf { resultCode == Activity.RESULT_OK }?.extras?.let {
-            BundleCompat.getParcelable(
-                it,
-                ExtraKeys.EXTRAS_RESULT,
-                AmountInputResultStatus.Success::class.java
-            )
-        } ?: AmountInputResultStatus.Canceled
+            BundleCompat.getParcelable(it, ExtraKeys.EXTRAS_RESULT, AmountInputResult.Success::class.java)
+        } ?: AmountInputResult.Canceled
     }
 }
 
 @Parcelize
-data class AmountResultStatus(
+data class AmountInputRequest(
     val amount: BigInteger = BigInteger.ZERO,
     val currency: Currency,
     val isZeroAllowed: Boolean = false,
@@ -49,3 +45,13 @@ data class AmountResultStatus(
     val hintAmount: MoneyParam = MoneyParam.Disable,
     val extra: Bundle = bundleOf()
 ) : Parcelable
+
+@Parcelize
+sealed class AmountInputResult : Parcelable {
+    data class Success(
+        val amount: BigDecimal,
+        val extras: Bundle
+    ) : AmountInputResult()
+
+    data object Canceled : AmountInputResult()
+}

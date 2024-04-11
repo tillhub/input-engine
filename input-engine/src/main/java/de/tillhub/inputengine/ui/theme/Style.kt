@@ -7,7 +7,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ButtonElevation() = buttonElevation(
+fun buttonElevation() = buttonElevation(
     defaultElevation = 1.dp,
     pressedElevation = 1.dp,
     disabledElevation = 1.dp,
@@ -16,7 +16,7 @@ fun ButtonElevation() = buttonElevation(
 )
 
 @Composable
-fun TextFieldTransparentColors() = TextFieldDefaults.colors(
+fun textFieldTransparentColors() = TextFieldDefaults.colors(
     unfocusedContainerColor = Color.Transparent,
     focusedContainerColor = Color.Transparent,
     focusedIndicatorColor = Color.Transparent,

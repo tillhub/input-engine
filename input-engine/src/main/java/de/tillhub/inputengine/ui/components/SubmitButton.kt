@@ -10,15 +10,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.tillhub.inputengine.R
 import de.tillhub.inputengine.ui.theme.MagneticGrey
 import de.tillhub.inputengine.ui.theme.OrbitalBlue
 
 @Composable
-internal fun InputButton(
-    isEnable: Boolean,
-    onClick: () -> Unit
+@Preview
+internal fun SubmitButton(
+    isEnable: Boolean = true,
+    onClick: () -> Unit = {}
 ) {
     Button(
         enabled = isEnable,
