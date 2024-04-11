@@ -79,7 +79,10 @@ class MoneyInputActivity : ComponentActivity() {
                             setResult(Activity.RESULT_OK, Intent().apply {
                                 putExtra(
                                     ExtraKeys.EXTRAS_RESULT,
-                                    MoneyInputResultStatus.Success(amount.money.value, request.extra)
+                                    AmountInputResultStatus.Success(
+                                        amount.money.value,
+                                        request.extra
+                                    )
                                 )
                             })
                             finish()

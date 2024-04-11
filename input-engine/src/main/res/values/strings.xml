@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="numpad_title">Amount</string>
+    <string name="pin_numpad_title">Pin</string>
+    <string name="pin_hint">••••</string>
+    <string name="pin_wrong">Wrong PIN</string>
+    <string name="pin_correct">PIN entry successful</string>
+    <string name="enter_pin">ENTER PIN</string>
 </resources>

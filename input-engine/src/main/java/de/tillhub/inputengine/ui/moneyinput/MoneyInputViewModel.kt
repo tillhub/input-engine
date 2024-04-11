@@ -11,12 +11,12 @@ import de.tillhub.inputengine.data.NumpadKey
 import de.tillhub.inputengine.formatter.MoneyFormatter
 import de.tillhub.inputengine.ui.moneyinput.MoneyInputData.Companion.DEFAULT_CURRENCY
 import de.tillhub.inputengine.ui.moneyinput.MoneyInputData.Companion.EMPTY
+import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 import java.util.Currency
 
@@ -108,11 +108,11 @@ data class MoneyInputData(
 }
 
 @Parcelize
-sealed class MoneyInputResultStatus : Parcelable {
+sealed class AmountInputResultStatus : Parcelable {
     data class Success(
         val amount: BigDecimal,
         val extras: Bundle
-    ) : MoneyInputResultStatus()
+    ) : AmountInputResultStatus()
 
-    data object Canceled : MoneyInputResultStatus()
+    data object Canceled : AmountInputResultStatus()
 }
