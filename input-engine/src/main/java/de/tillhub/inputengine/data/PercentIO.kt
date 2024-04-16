@@ -7,9 +7,8 @@ import java.math.BigInteger
 
 /**
  * A percentage values which supports up to two decimal places. i.e. 15.12%
- * 560   -> 5.6%
- * 5000  -> 50%
- * 10000 -> 100%
+ * Int 56 -> 56%  Long(value=5600L)
+ * Double 5.6 -> 5,6%   Long(value=560L)
  */
 @Parcelize
 data class PercentIO internal constructor(

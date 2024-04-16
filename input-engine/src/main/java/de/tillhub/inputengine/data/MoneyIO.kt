@@ -10,7 +10,7 @@ import java.util.Currency
 /**
  * Money input/output which supports up to two decimal places
  * Int 100 -> 1,00 EUR
- * Double 1.0 -> 1,00 EUR
+ * Double 100.0 -> 1,00 EUR
  *
  */
 @Parcelize

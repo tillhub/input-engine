@@ -13,6 +13,11 @@ import java.math.BigInteger
 import java.math.MathContext
 import java.math.RoundingMode
 
+/**
+ * Quantity input/output which supports up to two decimal places
+ * Int 1 -> x1 BigInteger(value=100)
+ * Double 1.56 -> x1,56 BigInteger(value=156)
+ */
 @Parcelize
 data class QuantityIO internal constructor(
     val value: BigInteger
