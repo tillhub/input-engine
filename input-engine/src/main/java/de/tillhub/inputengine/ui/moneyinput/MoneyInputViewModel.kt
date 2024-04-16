@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.tillhub.inputengine.contract.AmountInputRequest
 import de.tillhub.inputengine.data.MoneyParam
-import de.tillhub.inputengine.data.Money
+import de.tillhub.inputengine.data.MoneyIO
 import de.tillhub.inputengine.data.NumpadKey
 import de.tillhub.inputengine.formatter.MoneyFormatter
 import de.tillhub.inputengine.ui.moneyinput.MoneyInputData.Companion.DEFAULT_CURRENCY
@@ -20,12 +20,11 @@ class MoneyInputViewModel : ViewModel() {
 
     private var isInitValue = false
     private var isZeroAllowed = true
-    private lateinit var moneyMax: Money
-    private lateinit var moneyMin: Money
-    private lateinit var currency: Currency
+    private lateinit var initAmount: MoneyIO
+    private lateinit var moneyMax: MoneyIO
+    private lateinit var moneyMin: MoneyIO
 
-    private val _inputCurrencyMoneyInput = MutableStateFlow(Money.zero(DEFAULT_CURRENCY))
-
+    private val _inputCurrencyMoneyInput = MutableStateFlow(MoneyIO.zero(DEFAULT_CURRENCY))
     val moneyInput: StateFlow<MoneyInputData> = _inputCurrencyMoneyInput.map {
         MoneyInputData(
             money = it,
@@ -40,19 +39,17 @@ class MoneyInputViewModel : ViewModel() {
 
     fun init(request: AmountInputRequest) {
         this.isInitValue = true
-        this.currency = request.currency
-        this.moneyMax = Money.max(request.currency)
-        this.moneyMin = Money.min(request.currency)
         this.isZeroAllowed = request.isZeroAllowed
+        this.initAmount = request.amount
         this.moneyMax = when (request.amountMax) {
-            MoneyParam.Disable -> Money.max(request.currency)
-            is MoneyParam.Enable -> Money.from(request.amountMax.amount, request.currency)
+            MoneyParam.Disable -> MoneyIO.max(request.amount.currency)
+            is MoneyParam.Enable -> request.amountMax.amount
         }
         this.moneyMin = when (request.amountMin) {
-            MoneyParam.Disable -> Money.min(request.currency)
-            is MoneyParam.Enable -> Money.from(request.amountMin.amount, request.currency)
+            MoneyParam.Disable -> MoneyIO.min(request.amount.currency)
+            is MoneyParam.Enable -> request.amountMin.amount
         }
-        _inputCurrencyMoneyInput.value = Money.from(request.amount, request.currency)
+        _inputCurrencyMoneyInput.value = request.amount
     }
 
     fun input(key: NumpadKey) {
@@ -60,45 +57,48 @@ class MoneyInputViewModel : ViewModel() {
             NumpadKey.Clear -> clear()
             NumpadKey.Delete -> delete()
             is NumpadKey.SingleDigit -> {
-                val baseValue = if (isInitValue) Money.zero(currency) else _inputCurrencyMoneyInput.value
-                val newValue = Money.append(baseValue, key.digit)
+                val baseValue = if (isInitValue) {
+                    MoneyIO.zero(initAmount.currency)
+                } else {
+                    _inputCurrencyMoneyInput.value
+                }
+                val newValue = MoneyIO.append(baseValue, key.digit)
                 isInitValue = false
                 _inputCurrencyMoneyInput.value = minOf(newValue, moneyMax)
             }
-
-            is NumpadKey.DecimalSeparator -> {}
+            is NumpadKey.DecimalSeparator -> Unit
         }
     }
 
     private fun clear() {
-        _inputCurrencyMoneyInput.value = Money.zero(currency)
+        _inputCurrencyMoneyInput.value = MoneyIO.zero(initAmount.currency)
     }
 
     private fun delete() {
-        _inputCurrencyMoneyInput.value = Money.removeLastDigit(_inputCurrencyMoneyInput.value)
+        _inputCurrencyMoneyInput.value = MoneyIO.removeLastDigit(_inputCurrencyMoneyInput.value)
     }
 
-    private fun isValid(money: Money): Boolean {
+    private fun isValid(money: MoneyIO): Boolean {
         return when {
             isZeroAllowed -> isValueBetweenMinMax(money)
             else -> money.isNotZero() && isValueBetweenMinMax(money)
         }
     }
 
-    private fun isValueBetweenMinMax(money: Money): Boolean {
+    private fun isValueBetweenMinMax(money: MoneyIO): Boolean {
         return money in moneyMin..moneyMax
     }
 }
 
 data class MoneyInputData(
-    val money: Money,
+    val money: MoneyIO,
     val text: String,
     val isValid: Boolean
 ) {
     companion object {
         internal val DEFAULT_CURRENCY = Currency.getInstance("EUR")
         val EMPTY = MoneyInputData(
-            money = Money.zero(DEFAULT_CURRENCY),
+            money = MoneyIO.zero(DEFAULT_CURRENCY),
             text = "",
             isValid = false
         )

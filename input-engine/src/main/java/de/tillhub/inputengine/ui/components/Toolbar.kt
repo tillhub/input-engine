@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package de.tillhub.inputengine.ui.components
 
 import androidx.compose.foundation.layout.Column
@@ -13,7 +15,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-@ExperimentalMaterial3Api
+import androidx.compose.ui.tooling.preview.Preview
+
 @Composable
 internal fun Toolbar(
     title: String,
@@ -40,4 +43,9 @@ internal fun Toolbar(
         )
         HorizontalDivider()
     }
+}
+
+@Preview
+@Composable fun ToolbarPreview() {
+    Toolbar("Title example") {}
 }

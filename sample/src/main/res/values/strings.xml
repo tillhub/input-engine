@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">sample</string>
+    <string name="pin_enter">ENTER PIN</string>
+    <string name="incorrect_quantity">Wrong PIN</string>
+    <string name="percent">Wrong PIN</string>
+
 </resources>

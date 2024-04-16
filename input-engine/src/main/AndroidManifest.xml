@@ -12,5 +12,8 @@
         <activity
             android:name="de.tillhub.inputengine.ui.quantity.QuantityInputActivity"
             android:exported="false" />
+        <activity
+            android:name="de.tillhub.inputengine.ui.percentage.PercentageInputActivity"
+            android:exported="false" />
     </application>
 </manifest>
