@@ -4,7 +4,7 @@ import de.tillhub.inputengine.ui.theme.typography
 
 @Composable
 fun AppTheme(
-    content: @Composable() () -> Unit
+    content: @Composable () -> Unit
 ) {
     MaterialTheme(
         typography = typography,

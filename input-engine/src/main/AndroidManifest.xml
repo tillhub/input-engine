@@ -5,15 +5,19 @@
     <application>
         <activity
             android:name="de.tillhub.inputengine.ui.moneyinput.MoneyInputActivity"
+            android:theme="@style/Theme.InputActivity"
             android:exported="false" />
         <activity
             android:name="de.tillhub.inputengine.ui.pininput.PinInputActivity"
+            android:theme="@style/Theme.InputActivity"
             android:exported="false" />
         <activity
             android:name="de.tillhub.inputengine.ui.quantity.QuantityInputActivity"
+            android:theme="@style/Theme.InputActivity"
             android:exported="false" />
         <activity
             android:name="de.tillhub.inputengine.ui.percentage.PercentageInputActivity"
+            android:theme="@style/Theme.InputActivity"
             android:exported="false" />
     </application>
 </manifest>

@@ -10,4 +10,9 @@
     <string name="pin_enter">ENTER PIN</string>
     <string name="min_value">min. \n%1$s</string>
     <string name="max_value">max. \n%1$s</string>
+
+    <!-- Numpad -->
+    <string name="numpad_button_clear">C</string>
+    <string name="numpad_button_delete">←</string>
+    <string name="numpad_button_submit">Submit</string>
 </resources>

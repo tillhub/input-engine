@@ -40,15 +40,16 @@ import de.tillhub.inputengine.R
 import de.tillhub.inputengine.contract.ExtraKeys
 import de.tillhub.inputengine.contract.QuantityInputRequest
 import de.tillhub.inputengine.contract.QuantityInputResult
-import de.tillhub.inputengine.data.QuantityIO
 import de.tillhub.inputengine.data.QuantityParam
 import de.tillhub.inputengine.data.StringParam
 import de.tillhub.inputengine.formatter.QuantityFormatter
 import de.tillhub.inputengine.ui.components.SubmitButton
 import de.tillhub.inputengine.ui.components.Numpad
 import de.tillhub.inputengine.ui.components.Toolbar
+import de.tillhub.inputengine.ui.components.getModifierBasedOnDeviceType
 import de.tillhub.inputengine.ui.theme.MagneticGrey
 import de.tillhub.inputengine.ui.theme.OrbitalBlue
+import de.tillhub.inputengine.ui.theme.TabletScaffoldModifier
 
 @ExperimentalMaterial3Api
 class QuantityInputActivity : ComponentActivity() {
@@ -85,6 +86,10 @@ class QuantityInputActivity : ComponentActivity() {
     ) {
         AppTheme {
             Scaffold(
+                modifier = getModifierBasedOnDeviceType(
+                    isTablet = TabletScaffoldModifier,
+                    isMobile = Modifier
+                ),
                 snackbarHost = {
                     SnackbarHost(
                         hostState = snackbarHostState,

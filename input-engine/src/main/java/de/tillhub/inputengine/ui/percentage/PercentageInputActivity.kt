@@ -35,8 +35,10 @@ import de.tillhub.inputengine.formatter.PercentageFormatter
 import de.tillhub.inputengine.ui.components.Numpad
 import de.tillhub.inputengine.ui.components.SubmitButton
 import de.tillhub.inputengine.ui.components.Toolbar
+import de.tillhub.inputengine.ui.components.getModifierBasedOnDeviceType
 import de.tillhub.inputengine.ui.theme.MagneticGrey
 import de.tillhub.inputengine.ui.theme.OrbitalBlue
+import de.tillhub.inputengine.ui.theme.TabletScaffoldModifier
 
 class PercentageInputActivity : ComponentActivity() {
 
@@ -72,6 +74,10 @@ class PercentageInputActivity : ComponentActivity() {
     ) {
         AppTheme {
             Scaffold(
+                modifier = getModifierBasedOnDeviceType(
+                    isTablet = TabletScaffoldModifier,
+                    isMobile = Modifier
+                ),
                 topBar = {
                     Toolbar(title = title) {
                         finish()

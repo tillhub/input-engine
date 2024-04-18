@@ -2,7 +2,6 @@ package de.tillhub.inputengine.formatter
 
 import de.tillhub.inputengine.data.MoneyIO
 import de.tillhub.inputengine.helper.EUR
-import de.tillhub.inputengine.helper.eur
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import java.util.Locale

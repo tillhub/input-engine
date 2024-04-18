@@ -126,15 +126,10 @@ private fun NumberButton(
             onClick(NumpadKey.SingleDigit(Digit.from(number)))
         },
         shape = RoundedCornerShape(2.dp),
-        border = BorderStroke(
-            width = 1.0.dp,
-            color = LunarGray,
-        ),
+        border = BorderStroke(width = 1.0.dp, color = LunarGray),
         elevation = buttonElevation(),
-        modifier = modifier
-            .aspectRatio(BUTTON_ASPECT_RATIO)
-            .padding(6.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = Tint),
+        modifier = modifier.aspectRatio(BUTTON_ASPECT_RATIO).padding(6.dp),
+        colors = ButtonDefaults.outlinedButtonColors(containerColor = Tint),
     ) {
         Text(
             text = number.toString(),
@@ -151,19 +146,12 @@ private fun ExtraButton(
     buttonText: @Composable () -> Unit
 ) {
     OutlinedButton(
-        onClick = {
-            onClick()
-        },
+        onClick = onClick,
         shape = RoundedCornerShape(2.dp),
-        border = BorderStroke(
-            width = 1.0.dp,
-            color = LunarGray,
-        ),
+        border = BorderStroke(width = 1.0.dp, color = LunarGray),
         elevation = buttonElevation(),
-        modifier = modifier
-            .aspectRatio(BUTTON_ASPECT_RATIO)
-            .padding(6.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = ExtraButtonTint),
+        modifier = modifier.aspectRatio(BUTTON_ASPECT_RATIO).padding(6.dp),
+        colors = ButtonDefaults.outlinedButtonColors(containerColor = ExtraButtonTint)
     ) {
         buttonText()
     }
