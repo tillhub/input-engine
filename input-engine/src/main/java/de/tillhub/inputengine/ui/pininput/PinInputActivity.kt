@@ -43,8 +43,10 @@ import de.tillhub.inputengine.data.NumpadKey
 import de.tillhub.inputengine.data.StringParam
 import de.tillhub.inputengine.ui.components.Numpad
 import de.tillhub.inputengine.ui.components.Toolbar
+import de.tillhub.inputengine.ui.components.getModifierBasedOnDeviceType
 import de.tillhub.inputengine.ui.theme.HintGray
 import de.tillhub.inputengine.ui.theme.OrbitalBlue
+import de.tillhub.inputengine.ui.theme.TabletScaffoldModifier
 import de.tillhub.inputengine.ui.theme.textFieldTransparentColors
 import kotlinx.coroutines.launch
 
@@ -102,6 +104,10 @@ class PinInputActivity : ComponentActivity() {
 
         AppTheme {
             Scaffold(
+                modifier = getModifierBasedOnDeviceType(
+                    isTablet = TabletScaffoldModifier,
+                    isMobile = Modifier
+                ),
                 topBar = {
                     Toolbar(title) {
                         finish()

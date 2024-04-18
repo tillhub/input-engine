@@ -34,9 +34,11 @@ import de.tillhub.inputengine.formatter.MoneyFormatter
 import de.tillhub.inputengine.ui.components.SubmitButton
 import de.tillhub.inputengine.ui.components.Numpad
 import de.tillhub.inputengine.ui.components.Toolbar
+import de.tillhub.inputengine.ui.components.getModifierBasedOnDeviceType
 import de.tillhub.inputengine.ui.theme.MagneticGrey
 import de.tillhub.inputengine.ui.theme.OrbitalBlue
 import de.tillhub.inputengine.ui.theme.SoyuzGrey
+import de.tillhub.inputengine.ui.theme.TabletScaffoldModifier
 
 @ExperimentalMaterial3Api
 class MoneyInputActivity : ComponentActivity() {
@@ -61,6 +63,10 @@ class MoneyInputActivity : ComponentActivity() {
             val amount by viewModel.moneyInput.collectAsStateWithLifecycle()
             AppTheme {
                 Scaffold(
+                    modifier = getModifierBasedOnDeviceType(
+                        isTablet = TabletScaffoldModifier,
+                        isMobile = Modifier
+                    ),
                     topBar = {
                         Toolbar(title) {
                             finish()
