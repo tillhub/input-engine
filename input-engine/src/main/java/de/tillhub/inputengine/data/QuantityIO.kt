@@ -13,43 +13,64 @@ import java.math.BigInteger
 import java.math.MathContext
 import java.math.RoundingMode
 
-@Suppress("TooManyFunctions")
+/**
+ * Quantity input/output which supports up to two decimal places
+ * Int 1 -> x1 BigInteger(value=100)
+ * Double 1.56 -> x1,56 BigInteger(value=156)
+ */
 @Parcelize
-data class Quantity internal constructor(
+data class QuantityIO internal constructor(
     val value: BigInteger
-) : Parcelable, Comparable<Quantity> {
+) : Parcelable, Comparable<QuantityIO>, Number() {
 
     @IgnoredOnParcel
     val decimal: BigDecimal by lazy {
         value.toBigDecimal().divide(FRACTIONS_FACTOR, PRECISION)
     }
 
-    operator fun unaryMinus() = Quantity(-value)
-
-    operator fun plus(other: Quantity): Quantity = Quantity(value.add(other.value))
-    operator fun minus(other: Quantity): Quantity = Quantity(value.subtract(other.value))
-
-    operator fun times(other: Quantity): Quantity =
-        Quantity(value.multiply(other.value).divide(FRACTIONS_FACTOR_INT))
-
-    operator fun div(other: Quantity): Quantity = of(
-        value.toBigDecimal().divide(other.value.toBigDecimal(), FRACTIONS, RoundingMode.HALF_UP)
-    )
-
-    private fun isPositive(includeZero: Boolean = false): Boolean = value.isPositive(includeZero)
-    fun isZero(): Boolean = value.isZero()
-
     @IgnoredOnParcel
     val majorValue: BigInteger = value.divide(FRACTIONS_FACTOR_INT)
 
     @IgnoredOnParcel
-    val majorDigits: List<Digit> by lazy { BigIntegers.digits(majorValue) }
+    internal val majorDigits: List<Digit> by lazy { BigIntegers.digits(majorValue) }
 
     @IgnoredOnParcel
-    val minorDigits: List<Digit> by lazy {
+    internal val minorDigits: List<Digit> by lazy {
         val minorValue = value.mod(FRACTIONS_FACTOR_INT)
         BigIntegers.minorDigits(minorValue, FRACTIONS)
     }
+
+    @IgnoredOnParcel
+    val hasFractions = value.mod(FRACTIONS_FACTOR_INT).isPositive(includeZero = false)
+
+    operator fun unaryMinus() = QuantityIO(-value)
+
+    operator fun plus(other: QuantityIO): QuantityIO = QuantityIO(value.add(other.value))
+    operator fun minus(other: QuantityIO): QuantityIO = QuantityIO(value.subtract(other.value))
+
+    operator fun times(other: QuantityIO): QuantityIO =
+        QuantityIO(value.multiply(other.value).divide(FRACTIONS_FACTOR_INT))
+
+    operator fun div(other: QuantityIO): QuantityIO = of(
+        value.toBigDecimal().divide(other.value.toBigDecimal(), FRACTIONS, RoundingMode.HALF_UP)
+    )
+
+    override fun compareTo(other: QuantityIO): Int = value.compareTo(other.value)
+
+    override fun toByte(): Byte = value.toByte()
+
+    override fun toDouble(): Double = decimal.toDouble()
+
+    override fun toFloat(): Float = decimal.toFloat()
+
+    override fun toInt(): Int = value.divide(FRACTIONS_FACTOR_INT).toInt()
+
+    override fun toLong(): Long = value.divide(FRACTIONS_FACTOR_INT).toLong()
+
+    override fun toShort(): Short = value.divide(FRACTIONS_FACTOR_INT).toShort()
+
+    private fun isPositive(includeZero: Boolean = false): Boolean = value.isPositive(includeZero)
+    fun isZero(): Boolean = value.isZero()
 
     /**
      * Returns the next smaller quantity amount. In case the current quantity has fraction values the result is
@@ -63,7 +84,7 @@ data class Quantity internal constructor(
      * - 1.0 returns 1.0
      */
     @Suppress("ComplexMethod", "NestedBlockDepth")
-    fun nextSmaller(allowsZero: Boolean = false, allowsNegatives: Boolean = false): Quantity =
+    internal fun nextSmaller(allowsZero: Boolean = false, allowsNegatives: Boolean = false): QuantityIO =
         when (hasFractions) {
             true -> when (isPositive(includeZero = false) && majorValue != BigInteger.ZERO) {
                 true -> majorValue.multiply(FRACTIONS_FACTOR_INT)
@@ -95,7 +116,7 @@ data class Quantity internal constructor(
                     }
                 }
             }
-        }.let { Quantity(it) }
+        }.let { QuantityIO(it) }
 
     /**
      * Returns the next larger quantity amount. In case the current quantity has fraction values the result is
@@ -106,23 +127,23 @@ data class Quantity internal constructor(
      * - 4.0 returns 5.0
      * - 1.001 returns 2.0
      */
-    @Suppress("NestedBlockDepth")
-    fun nextLarger(allowsZero: Boolean = false, maxQuantity: Quantity = MAX_VALUE): Quantity =
+    @Suppress("NestedBlockDepth", "LongMethod")
+    internal fun nextLarger(allowsZero: Boolean = false, maxQuantity: QuantityIO = MAX_VALUE): QuantityIO =
         when (hasFractions) {
             true -> when (allowsZero) {
                 true -> {
                     val nextValue =
-                        Quantity(majorValue.add(BigInteger.ONE).multiply(FRACTIONS_FACTOR_INT))
+                        QuantityIO(majorValue.add(BigInteger.ONE).multiply(FRACTIONS_FACTOR_INT))
                     if (nextValue <= maxQuantity) {
                         nextValue
                     } else {
-                        Quantity(majorValue.multiply(FRACTIONS_FACTOR_INT))
+                        QuantityIO(majorValue.multiply(FRACTIONS_FACTOR_INT))
                     }
                 }
 
                 false -> {
                     val nextValue =
-                        Quantity(majorValue.add(BigInteger.ONE).multiply(FRACTIONS_FACTOR_INT))
+                        QuantityIO(majorValue.add(BigInteger.ONE).multiply(FRACTIONS_FACTOR_INT))
                     val tempValue =
                         if (isPositive()) {
                             if (nextValue <= maxQuantity) {
@@ -131,10 +152,12 @@ data class Quantity internal constructor(
                                 this
                             }
                         } else {
-                            Quantity(majorValue.multiply(FRACTIONS_FACTOR_INT))
+                            QuantityIO(majorValue.multiply(FRACTIONS_FACTOR_INT))
                         }
                     if (tempValue.value == BigInteger.ZERO) {
-                        Quantity(tempValue.value.add(BigInteger.ONE).multiply(FRACTIONS_FACTOR_INT))
+                        QuantityIO(
+                            tempValue.value.add(BigInteger.ONE).multiply(FRACTIONS_FACTOR_INT)
+                        )
                     } else {
                         tempValue
                     }
@@ -144,24 +167,24 @@ data class Quantity internal constructor(
             false -> when (allowsZero) {
                 true -> {
                     val nextValue =
-                        Quantity(majorValue.add(BigInteger.ONE).multiply(FRACTIONS_FACTOR_INT))
+                        QuantityIO(majorValue.add(BigInteger.ONE).multiply(FRACTIONS_FACTOR_INT))
                     if (nextValue <= maxQuantity) {
                         nextValue
                     } else {
-                        Quantity(majorValue.multiply(FRACTIONS_FACTOR_INT))
+                        QuantityIO(majorValue.multiply(FRACTIONS_FACTOR_INT))
                     }
                 }
 
                 false -> {
                     val nextValue =
-                        Quantity(majorValue.add(BigInteger.ONE).multiply(FRACTIONS_FACTOR_INT))
+                        QuantityIO(majorValue.add(BigInteger.ONE).multiply(FRACTIONS_FACTOR_INT))
                     val tempValue = if (nextValue <= maxQuantity) {
                         nextValue
                     } else {
-                        Quantity(majorValue.multiply(FRACTIONS_FACTOR_INT))
+                        QuantityIO(majorValue.multiply(FRACTIONS_FACTOR_INT))
                     }
                     if (tempValue.value == BigInteger.ZERO) {
-                        Quantity(
+                        QuantityIO(
                             tempValue.value.add(BigInteger.ONE).multiply(FRACTIONS_FACTOR_INT)
                         )
                     } else {
@@ -171,33 +194,28 @@ data class Quantity internal constructor(
             }
         }
 
-    @IgnoredOnParcel
-    val hasFractions = value.mod(FRACTIONS_FACTOR_INT).isPositive(includeZero = false)
-
-    /**
-     * Returns if the current Quantity is in min & max boundaries
-     */
-    fun isValid(): Boolean = this in MIN_VALUE..MAX_VALUE
-
-    override fun compareTo(other: Quantity): Int = value.compareTo(other.value)
-
     companion object {
 
         private val PRECISION: MathContext = MathContext.DECIMAL128
-        const val FRACTIONS = 6
+        internal const val FRACTIONS = 2
 
         private val FRACTIONS_FACTOR: BigDecimal = pow10decimal(FRACTIONS)
         private val FRACTIONS_FACTOR_INT: BigInteger = pow10(FRACTIONS)
 
         // MAX_VALUE for the Quantity class is 10 000
-        val MAX_VALUE: Quantity = Quantity(BigInteger.valueOf(10000).multiply(FRACTIONS_FACTOR_INT))
-        val MIN_VALUE: Quantity = MAX_VALUE.unaryMinus()
-        val ZERO: Quantity = Quantity(BigInteger.ZERO)
+        val MAX_VALUE: QuantityIO =
+            QuantityIO(BigInteger.valueOf(10000).multiply(FRACTIONS_FACTOR_INT))
+        val MIN_VALUE: QuantityIO = MAX_VALUE.unaryMinus()
+        val ZERO: QuantityIO = QuantityIO(BigInteger.ZERO)
 
-        fun of(value: BigDecimal): Quantity =
-            Quantity(value.multiply(FRACTIONS_FACTOR, PRECISION).toBigInteger())
-
-        fun of(majorDigits: List<Digit>, fractionDigits: List<Digit>): Quantity =
-            Quantity(BigIntegers.of(majorDigits, fractionDigits, FRACTIONS))
+        fun of(number: Number): QuantityIO = QuantityIO(when (number) {
+            is Int -> number.toBigInteger().multiply(FRACTIONS_FACTOR_INT)
+            is Long -> number.toBigInteger().multiply(FRACTIONS_FACTOR_INT)
+            is Double -> number.toBigDecimal().multiply(FRACTIONS_FACTOR, PRECISION).toBigInteger()
+            is Float -> number.toBigDecimal().multiply(FRACTIONS_FACTOR, PRECISION).toBigInteger()
+            is BigDecimal -> number.multiply(FRACTIONS_FACTOR, PRECISION).toBigInteger()
+            is BigInteger -> number.multiply(FRACTIONS_FACTOR_INT)
+            else -> throw IllegalArgumentException("Not supported number for quantity")
+        })
     }
 }

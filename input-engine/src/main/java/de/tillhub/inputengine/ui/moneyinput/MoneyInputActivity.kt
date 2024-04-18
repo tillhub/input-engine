@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.os.BundleCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.tillhub.inputengine.contract.AmountInputRequest
 import de.tillhub.inputengine.contract.AmountInputResult
@@ -30,14 +31,12 @@ import de.tillhub.inputengine.contract.ExtraKeys
 import de.tillhub.inputengine.data.MoneyParam
 import de.tillhub.inputengine.data.StringParam
 import de.tillhub.inputengine.formatter.MoneyFormatter
-import de.tillhub.inputengine.helper.parcelable
 import de.tillhub.inputengine.ui.components.SubmitButton
 import de.tillhub.inputengine.ui.components.Numpad
 import de.tillhub.inputengine.ui.components.Toolbar
 import de.tillhub.inputengine.ui.theme.MagneticGrey
 import de.tillhub.inputengine.ui.theme.OrbitalBlue
 import de.tillhub.inputengine.ui.theme.SoyuzGrey
-import java.util.Currency
 
 @ExperimentalMaterial3Api
 class MoneyInputActivity : ComponentActivity() {
@@ -45,8 +44,9 @@ class MoneyInputActivity : ComponentActivity() {
     private val viewModel by viewModels<MoneyInputViewModel>()
 
     private val request: AmountInputRequest by lazy {
-        intent.extras?.parcelable<AmountInputRequest>(ExtraKeys.EXTRA_REQUEST)
-            ?: throw IllegalArgumentException("$TAG: Argument MoneyInputRequest is missing")
+        intent.extras?.let {
+            BundleCompat.getParcelable(it, ExtraKeys.EXTRA_REQUEST, AmountInputRequest::class.java)
+        } ?: throw IllegalArgumentException("Argument MoneyInputRequest is missing")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,7 +76,6 @@ class MoneyInputActivity : ComponentActivity() {
                     ) {
                         InputPreview(
                             amount = amount,
-                            currency = request.currency,
                             amountMin = request.amountMin,
                             amountMax = request.amountMax,
                             amountHint = request.hintAmount
@@ -86,7 +85,7 @@ class MoneyInputActivity : ComponentActivity() {
                             setResult(Activity.RESULT_OK, Intent().apply {
                                 putExtra(
                                     ExtraKeys.EXTRAS_RESULT,
-                                    AmountInputResult.Success(amount.money.value, request.extra)
+                                    AmountInputResult.Success(amount.money, request.extras)
                                 )
                             })
                             finish()
@@ -102,13 +101,12 @@ class MoneyInputActivity : ComponentActivity() {
     @Composable
     fun InputPreview(
         amount: MoneyInputData,
-        currency: Currency,
         amountMin: MoneyParam,
         amountMax: MoneyParam,
         amountHint: MoneyParam
     ) {
         val (amountString, amountColor) = if (amountHint is MoneyParam.Enable && amount.money.isZero()) {
-            MoneyFormatter.format(amountHint.amount, currency) to MagneticGrey
+            MoneyFormatter.format(amountHint.amount) to MagneticGrey
         } else {
             amount.text to OrbitalBlue
         }
@@ -120,7 +118,7 @@ class MoneyInputActivity : ComponentActivity() {
                     .wrapContentWidth(Alignment.CenterHorizontally),
                 style = MaterialTheme.typography.bodyMedium,
                 maxLines = 1,
-                text = "max. ${MoneyFormatter.format(amountMax.amount, currency)}",
+                text = "max. ${MoneyFormatter.format(amountMax.amount)}",
                 color = SoyuzGrey
             )
         }
@@ -140,13 +138,9 @@ class MoneyInputActivity : ComponentActivity() {
                     .wrapContentWidth(Alignment.CenterHorizontally),
                 style = MaterialTheme.typography.bodyMedium,
                 maxLines = 1,
-                text = "min. ${MoneyFormatter.format(amountMin.amount, currency)}",
+                text = "min. ${MoneyFormatter.format(amountMin.amount)}",
                 color = SoyuzGrey
             )
         }
-    }
-
-    companion object {
-        private const val TAG = "MoneyInputActivity"
     }
 }

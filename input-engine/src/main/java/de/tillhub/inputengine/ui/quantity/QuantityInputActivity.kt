@@ -30,19 +30,20 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.os.BundleCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.tillhub.inputengine.R
 import de.tillhub.inputengine.contract.ExtraKeys
 import de.tillhub.inputengine.contract.QuantityInputRequest
 import de.tillhub.inputengine.contract.QuantityInputResult
-import de.tillhub.inputengine.data.Quantity
+import de.tillhub.inputengine.data.QuantityIO
 import de.tillhub.inputengine.data.QuantityParam
 import de.tillhub.inputengine.data.StringParam
 import de.tillhub.inputengine.formatter.QuantityFormatter
-import de.tillhub.inputengine.helper.parcelable
 import de.tillhub.inputengine.ui.components.SubmitButton
 import de.tillhub.inputengine.ui.components.Numpad
 import de.tillhub.inputengine.ui.components.Toolbar
@@ -55,18 +56,14 @@ class QuantityInputActivity : ComponentActivity() {
     private val viewModel by viewModels<QuantityInputViewModel>()
 
     private val request: QuantityInputRequest by lazy {
-        intent.extras?.parcelable<QuantityInputRequest>(ExtraKeys.EXTRA_REQUEST)
-            ?: throw IllegalArgumentException("$TAG: Argument QuantityInputRequest is missing")
+        intent.extras?.let {
+            BundleCompat.getParcelable(it, ExtraKeys.EXTRA_REQUEST, QuantityInputRequest::class.java)
+        } ?: throw IllegalArgumentException("Argument QuantityInputRequest is missing")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.setInitialValue(
-            initialValue = Quantity.of(request.quantity),
-            currentValue = Quantity.of(request.quantity),
-            minValue = request.minQuantity,
-            maxValue = request.maxQuantity
-        )
+        viewModel.setInitialValue(request)
 
         val title = when (val stringParam = request.toolbarTitle) {
             is StringParam.String -> stringParam.value
@@ -108,8 +105,8 @@ class QuantityInputActivity : ComponentActivity() {
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
                     QuantityPreview(
-                        quantity = displayData.qty,
-                        quantityHint = request.quantityHint,
+                        quantityText = displayData.text,
+                        quantityColor = displayData.color,
                         minQuantity = request.minQuantity,
                         maxQuantity = request.maxQuantity,
                         decrease = { viewModel.decrease() },
@@ -139,18 +136,13 @@ class QuantityInputActivity : ComponentActivity() {
     @ExperimentalMaterial3Api
     @Composable
     fun QuantityPreview(
-        quantity: Quantity,
-        quantityHint: QuantityParam,
+        quantityText: String,
+        quantityColor: Color,
         decrease: () -> Unit,
         increase: () -> Unit,
         maxQuantity: QuantityParam,
         minQuantity: QuantityParam
     ) {
-        val (quantityString, quantityColor) = if (quantityHint is QuantityParam.Enable && quantity.isZero()) {
-            QuantityFormatter.format(Quantity.of(quantityHint.value)) to MagneticGrey
-        } else {
-            QuantityFormatter.formatPlain(quantity) to OrbitalBlue
-        }
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
@@ -182,9 +174,7 @@ class QuantityInputActivity : ComponentActivity() {
                         maxLines = 2,
                         text = stringResource(
                             id = R.string.min_value,
-                            QuantityFormatter.format(
-                                Quantity.of(minQuantity.value)
-                            )
+                            QuantityFormatter.format(minQuantity.value)
                         ),
                         color = MagneticGrey,
                     )
@@ -196,7 +186,7 @@ class QuantityInputActivity : ComponentActivity() {
                         .wrapContentWidth(Alignment.CenterHorizontally),
                     style = MaterialTheme.typography.displaySmall,
                     maxLines = 2,
-                    text = quantityString,
+                    text = quantityText,
                     color = quantityColor,
                 )
                 if (maxQuantity is QuantityParam.Enable) {
@@ -207,9 +197,7 @@ class QuantityInputActivity : ComponentActivity() {
                         maxLines = 2,
                         text = stringResource(
                             id = R.string.max_value,
-                            QuantityFormatter.format(
-                                Quantity.of(maxQuantity.value)
-                            )
+                            QuantityFormatter.format(maxQuantity.value)
                         ),
                         color = MagneticGrey,
                     )
@@ -230,9 +218,5 @@ class QuantityInputActivity : ComponentActivity() {
                 }
             }
         }
-    }
-
-    companion object {
-        private const val TAG = "QuantityInputActivity"
     }
 }

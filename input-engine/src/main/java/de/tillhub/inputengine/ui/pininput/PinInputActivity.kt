@@ -34,13 +34,13 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.os.BundleCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.tillhub.inputengine.R
 import de.tillhub.inputengine.contract.ExtraKeys
 import de.tillhub.inputengine.contract.PinInputRequest
 import de.tillhub.inputengine.data.NumpadKey
 import de.tillhub.inputengine.data.StringParam
-import de.tillhub.inputengine.helper.parcelable
 import de.tillhub.inputengine.ui.components.Numpad
 import de.tillhub.inputengine.ui.components.Toolbar
 import de.tillhub.inputengine.ui.theme.HintGray
@@ -54,8 +54,9 @@ class PinInputActivity : ComponentActivity() {
     private val viewModel by viewModels<PinInputViewModel>()
 
     private val request: PinInputRequest by lazy {
-        intent.extras?.parcelable<PinInputRequest>(ExtraKeys.EXTRA_REQUEST)
-            ?: throw IllegalArgumentException("$TAG: Argument PinInputRequest is missing")
+        intent.extras?.let {
+            BundleCompat.getParcelable(it, ExtraKeys.EXTRA_REQUEST, PinInputRequest::class.java)
+        } ?: throw IllegalArgumentException("Argument PinInputRequest is missing")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -184,7 +185,6 @@ class PinInputActivity : ComponentActivity() {
     }
 
     companion object {
-        private const val TAG = "PinInputActivity"
         private const val PIN_HINT_CHARACTER: String = "•"
     }
 }

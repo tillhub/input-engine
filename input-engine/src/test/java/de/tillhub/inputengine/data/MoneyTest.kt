@@ -14,13 +14,33 @@ import java.math.BigInteger
 
 class MoneyTest : DescribeSpec({
 
+    describe("constructors") {
+        it("Int") {
+            MoneyIO.of(1_56, EUR).amount shouldBe 1.56.toBigDecimal()
+            MoneyIO.of(78_94, EUR).amount shouldBe 78.94.toBigDecimal()
+            MoneyIO.of(100, EUR).toInt() shouldBe 100
+            MoneyIO.of(100, EUR).toLong() shouldBe 100L
+            MoneyIO.of(100, EUR).toDouble() shouldBe 100.0
+            MoneyIO.of(100, EUR).toFloat() shouldBe 100.0f
+        }
+        it("Double") {
+            MoneyIO.of(178.56, EUR).amount shouldBe 1.7856.toBigDecimal()
+            MoneyIO.of(178.56, EUR).toDouble() shouldBe 178.56
+            MoneyIO.of(178.56, EUR).toInt() shouldBe 178
+        }
+        it("BigDecimal") {
+            MoneyIO.of(178.56.toBigDecimal(), EUR).amount shouldBe 1.7856.toBigDecimal()
+            MoneyIO.of(178.56.toBigDecimal(), EUR).toDouble() shouldBe 178.56
+        }
+    }
+
     describe("Money is zero") {
         it("should check correctly") {
-            Money.zero(EUR).isZero().shouldBeTrue()
-            Money.zero(EUR).isNotZero().shouldBeFalse()
+            MoneyIO.zero(EUR).isZero().shouldBeTrue()
+            MoneyIO.zero(EUR).isNotZero().shouldBeFalse()
 
-            Money.from(BigInteger.ZERO, EUR).isZero().shouldBeTrue()
-            Money.from(BigInteger.ZERO, EUR).isNotZero().shouldBeFalse()
+            MoneyIO.of(BigInteger.ZERO, EUR).isZero().shouldBeTrue()
+            MoneyIO.of(BigInteger.ZERO, EUR).isNotZero().shouldBeFalse()
         }
     }
     describe("isNegative") {
@@ -80,10 +100,10 @@ class MoneyTest : DescribeSpec({
     }
     describe("Money append") {
         it("should check correctly") {
-            Money.append(1.toBigInteger().eur, Digit.ONE) shouldBe 0.11.toBigDecimal().eur
-            Money.append((-1).toBigInteger().eur, Digit.ONE) shouldBe (-0.01).toBigDecimal().eur
-            Money.append(1.toBigDecimal().eur, Digit.ONE) shouldBe 10.01.toBigDecimal().eur
-            Money.append(
+            MoneyIO.append(1.toBigInteger().eur, Digit.ONE) shouldBe 0.11.toBigDecimal().eur
+            MoneyIO.append((-1).toBigInteger().eur, Digit.ONE) shouldBe (-0.01).toBigDecimal().eur
+            MoneyIO.append(1.toBigDecimal().eur, Digit.ONE) shouldBe 10.01.toBigDecimal().eur
+            MoneyIO.append(
                 1000000001.toBigInteger().eur,
                 Digit.ONE
             ) shouldBe 1000000001.toBigInteger().eur
@@ -128,8 +148,8 @@ class MoneyTest : DescribeSpec({
     }
     describe("removeLastMinorDigit") {
         it("should remove last minor digit") {
-            Money.removeLastDigit(0.01.toBigDecimal().eur) shouldBe 0.toBigInteger().eur
-            Money.removeLastDigit(11.toBigInteger().eur) shouldBe 1.toBigInteger().eur
+            MoneyIO.removeLastDigit(0.01.toBigDecimal().eur) shouldBe 0.toBigInteger().eur
+            MoneyIO.removeLastDigit(11.toBigInteger().eur) shouldBe 1.toBigInteger().eur
         }
     }
 })

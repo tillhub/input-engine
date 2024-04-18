@@ -10,13 +10,13 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.core.os.BundleCompat
 import androidx.core.os.bundleOf
 import de.tillhub.inputengine.R
+import de.tillhub.inputengine.data.MoneyIO
 import de.tillhub.inputengine.data.MoneyParam
 import de.tillhub.inputengine.data.StringParam
 import de.tillhub.inputengine.ui.moneyinput.MoneyInputActivity
 import kotlinx.parcelize.Parcelize
-import java.math.BigDecimal
-import java.math.BigInteger
 import java.util.Currency
+import java.util.Locale
 
 @ExperimentalMaterial3Api
 class AmountInputContract : ActivityResultContract<AmountInputRequest, AmountInputResult>() {
@@ -36,20 +36,19 @@ class AmountInputContract : ActivityResultContract<AmountInputRequest, AmountInp
 
 @Parcelize
 data class AmountInputRequest(
-    val amount: BigInteger = BigInteger.ZERO,
-    val currency: Currency,
+    val amount: MoneyIO = MoneyIO.zero(Currency.getInstance(Locale.getDefault())),
     val isZeroAllowed: Boolean = false,
     val toolbarTitle: StringParam = StringParam.StringResource(R.string.numpad_title_amount),
     val amountMin: MoneyParam = MoneyParam.Disable,
     val amountMax: MoneyParam = MoneyParam.Disable,
     val hintAmount: MoneyParam = MoneyParam.Disable,
-    val extra: Bundle = bundleOf()
+    val extras: Bundle = bundleOf()
 ) : Parcelable
 
 @Parcelize
 sealed class AmountInputResult : Parcelable {
     data class Success(
-        val amount: BigDecimal,
+        val amount: MoneyIO,
         val extras: Bundle
     ) : AmountInputResult()
 

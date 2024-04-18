@@ -21,13 +21,20 @@ import androidx.compose.ui.unit.dp
 import de.tillhub.inputengine.contract.AmountInputContract
 import de.tillhub.inputengine.contract.AmountInputRequest
 import de.tillhub.inputengine.contract.AmountInputResult
+import de.tillhub.inputengine.contract.PercentageInputContract
+import de.tillhub.inputengine.contract.PercentageInputRequest
+import de.tillhub.inputengine.contract.PercentageInputResult
 import de.tillhub.inputengine.contract.PinInputContract
 import de.tillhub.inputengine.contract.PinInputRequest
 import de.tillhub.inputengine.contract.PinInputResult
 import de.tillhub.inputengine.contract.QuantityInputContract
 import de.tillhub.inputengine.contract.QuantityInputRequest
 import de.tillhub.inputengine.contract.QuantityInputResult
+import de.tillhub.inputengine.data.MoneyIO
 import de.tillhub.inputengine.data.MoneyParam
+import de.tillhub.inputengine.data.PercentIO
+import de.tillhub.inputengine.data.PercentageParam
+import de.tillhub.inputengine.data.QuantityIO
 import de.tillhub.inputengine.data.QuantityParam
 import de.tillhub.inputengine.sample.ui.theme.InputEngineTheme
 import java.math.BigDecimal
@@ -39,9 +46,11 @@ class MainActivity : ComponentActivity() {
     private lateinit var moneyInputLauncher: ActivityResultLauncher<AmountInputRequest>
     private lateinit var pinInputLauncher: ActivityResultLauncher<PinInputRequest>
     private lateinit var quantityInputLauncher: ActivityResultLauncher<QuantityInputRequest>
+    private lateinit var percentageInputLauncher: ActivityResultLauncher<PercentageInputRequest>
     private var scanCode = mutableStateOf("")
     private var pinResult = mutableStateOf("")
     private var quantityResult = mutableStateOf("")
+    private var percentResult = mutableStateOf("")
 
     @Suppress("LongMethod")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +59,7 @@ class MainActivity : ComponentActivity() {
             AmountInputContract(),
             activityResultRegistry
         ) {
-            if (it is AmountInputResult.Success) scanCode.value = it.amount.toPlainString()
+            if (it is AmountInputResult.Success) scanCode.value = it.amount.amount.toPlainString()
         }
 
         pinInputLauncher = registerForActivityResult(
@@ -67,8 +76,16 @@ class MainActivity : ComponentActivity() {
             activityResultRegistry
         ) {
             quantityResult.value = when (it) {
-                QuantityInputResult.Canceled -> getString(de.tillhub.inputengine.R.string.incorrect_quantity)
+                QuantityInputResult.Canceled -> getString(R.string.incorrect_quantity)
                 is QuantityInputResult.Success -> it.quantity.toString()
+            }
+        }
+        percentageInputLauncher = registerForActivityResult(
+            PercentageInputContract(), activityResultRegistry
+        ) {
+            percentResult.value = when (it) {
+                PercentageInputResult.Canceled -> "Percent action canceled"
+                is PercentageInputResult.Success -> it.percent.value.toString()
             }
         }
         setContent {
@@ -88,11 +105,28 @@ class MainActivity : ComponentActivity() {
                                 onClick = {
                                     moneyInputLauncher.launch(
                                         AmountInputRequest(
-                                            amountMin = MoneyParam.Enable(100.toBigInteger()),
-                                            amountMax = MoneyParam.Enable(200000000.toBigInteger()),
-                                            currency = Currency.getInstance("EUR"),
-                                            amount = 200.toBigInteger(),
-                                            hintAmount = MoneyParam.Enable(200.toBigInteger())
+                                            amount = MoneyIO.of(
+                                                200.toBigInteger(),
+                                                Currency.getInstance("EUR")
+                                            ),
+                                            amountMin = MoneyParam.Enable(
+                                                MoneyIO.of(
+                                                    100.toBigInteger(),
+                                                    Currency.getInstance("EUR")
+                                                )
+                                            ),
+                                            amountMax = MoneyParam.Enable(
+                                                MoneyIO.of(
+                                                    200000000.toBigInteger(),
+                                                    Currency.getInstance("EUR")
+                                                )
+                                            ),
+                                            hintAmount = MoneyParam.Enable(
+                                                MoneyIO.of(
+                                                    200.toBigInteger(),
+                                                    Currency.getInstance("EUR")
+                                                )
+                                            )
                                         )
                                     )
                                 }
@@ -128,10 +162,10 @@ class MainActivity : ComponentActivity() {
                                 onClick = {
                                     quantityInputLauncher.launch(
                                         QuantityInputRequest(
-                                            quantity = BigDecimal.ZERO,
-                                            minQuantity = QuantityParam.Enable(BigDecimal.ZERO),
-                                            maxQuantity = QuantityParam.Enable(10000.0.toBigDecimal()),
-                                            quantityHint = QuantityParam.Enable(BigDecimal.TEN)
+                                            quantity = QuantityIO.ZERO,
+                                            minQuantity = QuantityParam.Enable(QuantityIO.ZERO),
+                                            maxQuantity = QuantityParam.Enable(QuantityIO.of(10000.toBigDecimal())),
+                                            quantityHint = QuantityParam.Enable(QuantityIO.of(BigDecimal.TEN))
                                         )
                                     )
                                 }
@@ -142,6 +176,27 @@ class MainActivity : ComponentActivity() {
                             }
                             Spacer(modifier = Modifier.padding(8.dp))
                             Text(text = quantityResult.value)
+                        }
+                        Spacer(modifier = Modifier.padding(16.dp))
+                        Column(verticalArrangement = Arrangement.SpaceBetween) {
+                            OutlinedButton(
+                                modifier = Modifier.fillMaxWidth(),
+                                onClick = {
+                                    percentageInputLauncher.launch(
+                                        PercentageInputRequest(
+                                            percent = PercentIO.ZERO,
+                                            percentageMin = PercentageParam.Enable(PercentIO.ZERO),
+                                            percentageMax = PercentageParam.Enable(PercentIO.WHOLE)
+                                        )
+                                    )
+                                }
+                            ) {
+                                Text(
+                                    text = "Percentage Input",
+                                )
+                            }
+                            Spacer(modifier = Modifier.padding(8.dp))
+                            Text(text = percentResult.value)
                         }
                     }
                 }

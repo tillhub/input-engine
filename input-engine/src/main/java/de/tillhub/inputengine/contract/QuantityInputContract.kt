@@ -8,6 +8,7 @@ import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.core.os.BundleCompat
 import de.tillhub.inputengine.R
+import de.tillhub.inputengine.data.QuantityIO
 import de.tillhub.inputengine.data.QuantityParam
 import de.tillhub.inputengine.data.StringParam
 import de.tillhub.inputengine.ui.quantity.QuantityInputActivity
@@ -32,8 +33,8 @@ class QuantityInputContract : ActivityResultContract<QuantityInputRequest, Quant
 
 @Parcelize
 data class QuantityInputRequest(
-    val quantity: BigDecimal,
-    val quantityHint: QuantityParam,
+    val quantity: QuantityIO,
+    val quantityHint: QuantityParam = QuantityParam.Disable,
     val allowsNegatives: Boolean = true,
     val minQuantity: QuantityParam,
     val maxQuantity: QuantityParam,
