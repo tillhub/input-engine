@@ -127,6 +127,7 @@ class QuantityInputActivity : ComponentActivity() {
                                 ExtraKeys.EXTRAS_RESULT,
                                 QuantityInputResult.Success(
                                     displayData.qty.decimal,
+                                    request.extras
                                 )
                             )
                         })

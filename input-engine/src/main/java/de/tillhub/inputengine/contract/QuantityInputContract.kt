@@ -3,10 +3,12 @@ package de.tillhub.inputengine.contract
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.os.Parcelable
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.core.os.BundleCompat
+import androidx.core.os.bundleOf
 import de.tillhub.inputengine.R
 import de.tillhub.inputengine.data.QuantityIO
 import de.tillhub.inputengine.data.QuantityParam
@@ -36,13 +38,14 @@ data class QuantityInputRequest(
     val quantity: QuantityIO,
     val quantityHint: QuantityParam = QuantityParam.Disable,
     val allowsNegatives: Boolean = true,
-    val minQuantity: QuantityParam,
-    val maxQuantity: QuantityParam,
-    val toolbarTitle: StringParam = StringParam.StringResource(R.string.numpad_title_quantity)
+    val minQuantity: QuantityParam = QuantityParam.Disable,
+    val maxQuantity: QuantityParam = QuantityParam.Disable,
+    val toolbarTitle: StringParam = StringParam.StringResource(R.string.numpad_title_quantity),
+    val extras: Bundle = bundleOf()
 ) : Parcelable
 
 @Parcelize
 sealed class QuantityInputResult : Parcelable {
-    data class Success(val quantity: BigDecimal) : QuantityInputResult()
+    data class Success(val quantity: BigDecimal, val extras: Bundle) : QuantityInputResult()
     data object Canceled : QuantityInputResult()
 }

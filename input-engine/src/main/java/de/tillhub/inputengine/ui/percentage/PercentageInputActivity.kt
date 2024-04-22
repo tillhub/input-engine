@@ -155,7 +155,7 @@ class PercentageInputActivity : ComponentActivity() {
                     style = MaterialTheme.typography.bodyMedium,
                     maxLines = 2,
                     text = stringResource(
-                        R.string.min_value, PercentageFormatter.format(percentageMax.percent)
+                        R.string.max_value, PercentageFormatter.format(percentageMax.percent)
                     ),
                     color = MagneticGrey,
                 )

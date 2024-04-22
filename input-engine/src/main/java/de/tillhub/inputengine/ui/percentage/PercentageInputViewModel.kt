@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 class PercentageInputViewModel : ViewModel() {
 
+    private var isInitValue = false
     private var maxPercent: PercentIO = PercentIO.WHOLE
     private var minPercent: PercentIO = PercentIO.ZERO
     private val inputController = NumberInputController(maxMajorDigits = 3)
@@ -20,6 +21,7 @@ class PercentageInputViewModel : ViewModel() {
     val percentageInput: StateFlow<PercentageInputData> = _inputPercentIO
 
     fun init(request: PercentageInputRequest) {
+        this.isInitValue = true
         minPercent = when (request.percentageMin) {
             PercentageParam.Disable -> PercentIO.ZERO
             is PercentageParam.Enable -> request.percentageMin.percent
@@ -37,7 +39,13 @@ class PercentageInputViewModel : ViewModel() {
             NumpadKey.Clear -> inputController.clear()
             NumpadKey.DecimalSeparator -> inputController.switchToMinor(true)
             NumpadKey.Delete -> inputController.deleteLast()
-            is NumpadKey.SingleDigit -> inputController.addDigit(key.digit)
+            is NumpadKey.SingleDigit -> {
+                if (isInitValue) {
+                    inputController.clear()
+                    isInitValue = false
+                }
+                inputController.addDigit(key.digit)
+            }
         }
 
         val tempPercentage = PercentIO.of(inputController.value())
