@@ -46,6 +46,6 @@ data class QuantityInputRequest(
 
 @Parcelize
 sealed class QuantityInputResult : Parcelable {
-    data class Success(val quantity: BigDecimal, val extras: Bundle) : QuantityInputResult()
+    data class Success(val quantity: QuantityIO, val extras: Bundle) : QuantityInputResult()
     data object Canceled : QuantityInputResult()
 }
