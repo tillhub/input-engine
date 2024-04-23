@@ -147,7 +147,7 @@ class MainActivity : ComponentActivity() {
                                     pinInputLauncher.launch(
                                         PinInputRequest(
                                             pin = "0000",
-                                            extras = bundleOf("test" to 1)
+                                            extras = bundleOf("test" to 6)
                                         )
                                     )
                                 }

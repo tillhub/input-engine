@@ -67,7 +67,7 @@ afterEvaluate {
             create<MavenPublication>("input-engine") {
                 groupId = "de.tillhub.inputengine"
                 artifactId = "input-engine"
-                version = "0.9.4"
+                version = "0.9.5"
 
                 from(components.getByName("release"))
             }

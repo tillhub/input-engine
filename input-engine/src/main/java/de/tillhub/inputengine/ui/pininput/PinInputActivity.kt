@@ -98,7 +98,7 @@ class PinInputActivity : ComponentActivity() {
                         snackbarHostState.showSnackbar(correctPin)
                     }
                     setResult(RESULT_OK, Intent().apply {
-                        putExtra(ExtraKeys.EXTRAS_RESULT, request.extras)
+                        putExtras(request.extras)
                     })
                     finish()
                 }
@@ -186,7 +186,7 @@ class PinInputActivity : ComponentActivity() {
                         .align(Alignment.BottomCenter)
                         .clickable {
                             setResult(Activity.RESULT_OK, Intent().apply {
-                                putExtra(ExtraKeys.EXTRAS_RESULT, request.extras)
+                                putExtras(request.extras)
                             })
                             finish()
                         },
