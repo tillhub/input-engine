@@ -2,6 +2,7 @@ package de.tillhub.inputengine.ui.pininput
 
 import AppTheme
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -177,7 +178,9 @@ class PinInputActivity : ComponentActivity() {
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .clickable {
-                            setResult(Activity.RESULT_OK)
+                            setResult(Activity.RESULT_OK, Intent().apply {
+                                putExtra(ExtraKeys.EXTRAS_RESULT, request.extras)
+                            })
                             finish()
                         },
                     textAlign = TextAlign.End,

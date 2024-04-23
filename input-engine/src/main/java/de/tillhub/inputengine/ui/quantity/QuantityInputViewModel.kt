@@ -42,14 +42,9 @@ class QuantityInputViewModel : ViewModel() {
         setValue(QuantityIO.ZERO)
     }
 
-    fun setValue(currentValue: QuantityIO) {
-        inputController.setValue(currentValue.majorDigits, currentValue.minorDigits)
-        updateDisplayData(currentValue)
-
-        nextKeyResetsCurrentValue = true
-    }
-
     fun setInitialValue(request: QuantityInputRequest) {
+        this.isZeroAllowed = request.allowsZero
+        this.allowsNegatives = request.allowsNegatives
         this.quantityHint = request.quantityHint
         this.minQuantity = when (request.minQuantity) {
             QuantityParam.Disable -> QuantityIO.MIN_VALUE
@@ -60,6 +55,13 @@ class QuantityInputViewModel : ViewModel() {
             is QuantityParam.Enable -> request.maxQuantity.value
         }
         setValue(request.quantity)
+    }
+
+    fun setValue(currentValue: QuantityIO) {
+        inputController.setValue(currentValue.majorDigits, currentValue.minorDigits)
+        updateDisplayData(currentValue)
+
+        nextKeyResetsCurrentValue = true
     }
 
     fun decrease() {

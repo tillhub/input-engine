@@ -68,7 +68,7 @@ class MainActivity : ComponentActivity() {
         ) {
             pinResult.value = when (it) {
                 PinInputResult.Canceled -> getString(de.tillhub.inputengine.R.string.pin_wrong)
-                PinInputResult.Success -> getString(de.tillhub.inputengine.R.string.pin_correct)
+                is PinInputResult.Success -> getString(de.tillhub.inputengine.R.string.pin_correct)
             }
         }
         quantityInputLauncher = registerForActivityResult(

@@ -15,7 +15,6 @@ import de.tillhub.inputengine.data.QuantityParam
 import de.tillhub.inputengine.data.StringParam
 import de.tillhub.inputengine.ui.quantity.QuantityInputActivity
 import kotlinx.parcelize.Parcelize
-import java.math.BigDecimal
 
 @ExperimentalMaterial3Api
 class QuantityInputContract : ActivityResultContract<QuantityInputRequest, QuantityInputResult>() {
@@ -38,6 +37,7 @@ data class QuantityInputRequest(
     val quantity: QuantityIO,
     val quantityHint: QuantityParam = QuantityParam.Disable,
     val allowsNegatives: Boolean = true,
+    val allowsZero: Boolean = false,
     val minQuantity: QuantityParam = QuantityParam.Disable,
     val maxQuantity: QuantityParam = QuantityParam.Disable,
     val toolbarTitle: StringParam = StringParam.StringResource(R.string.numpad_title_quantity),

@@ -3,9 +3,11 @@ package de.tillhub.inputengine.contract
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.os.Parcelable
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.core.os.bundleOf
 import de.tillhub.inputengine.R
 import de.tillhub.inputengine.data.StringParam
 import de.tillhub.inputengine.ui.pininput.PinInputActivity
@@ -21,10 +23,9 @@ class PinInputContract : ActivityResultContract<PinInputRequest, PinInputResult>
     }
 
     override fun parseResult(resultCode: Int, intent: Intent?): PinInputResult {
-        return when (resultCode) {
-            Activity.RESULT_OK -> PinInputResult.Success
-            else -> PinInputResult.Canceled
-        }
+        return intent.takeIf { resultCode == Activity.RESULT_OK }?.extras?.let {
+            PinInputResult.Success(it)
+        } ?: PinInputResult.Canceled
     }
 }
 
@@ -35,9 +36,10 @@ data class PinInputRequest(
     val toolbarTitle: StringParam = StringParam.StringResource(
         R.string.numpad_title_pin
     ),
+    val extras: Bundle = bundleOf()
 ) : Parcelable
 
 sealed class PinInputResult {
-    data object Success : PinInputResult()
+    data class Success(val extras: Bundle) : PinInputResult()
     data object Canceled : PinInputResult()
 }
