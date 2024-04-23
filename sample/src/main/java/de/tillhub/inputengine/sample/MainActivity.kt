@@ -18,6 +18,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.core.os.bundleOf
 import de.tillhub.inputengine.contract.AmountInputContract
 import de.tillhub.inputengine.contract.AmountInputRequest
 import de.tillhub.inputengine.contract.AmountInputResult
@@ -144,7 +145,10 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier.fillMaxWidth(),
                                 onClick = {
                                     pinInputLauncher.launch(
-                                        PinInputRequest(pin = "12345", overridePinInput = true)
+                                        PinInputRequest(
+                                            pin = "0000",
+                                            extras = bundleOf("test" to 1)
+                                        )
                                     )
                                 }
                             ) {

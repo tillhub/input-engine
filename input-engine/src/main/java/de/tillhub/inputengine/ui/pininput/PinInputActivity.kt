@@ -86,7 +86,7 @@ class PinInputActivity : ComponentActivity() {
         LaunchedEffect(pinInputState) {
             when (pinInputState) {
                 PinInputState.AwaitingInput -> Unit
-                PinInputState.PinTooLong -> {
+                PinInputState.PinInvalid -> {
                     scope.launch {
                         snackbarHostState.showSnackbar(errorMessage)
                     }
@@ -97,7 +97,14 @@ class PinInputActivity : ComponentActivity() {
                     scope.launch {
                         snackbarHostState.showSnackbar(correctPin)
                     }
-                    setResult(Activity.RESULT_OK)
+                    setResult(RESULT_OK, Intent().apply {
+                        putExtra(ExtraKeys.EXTRAS_RESULT, request.extras)
+                    })
+                    finish()
+                }
+
+                PinInputState.InvalidPinFormat -> {
+                    setResult(RESULT_CANCELED)
                     finish()
                 }
             }

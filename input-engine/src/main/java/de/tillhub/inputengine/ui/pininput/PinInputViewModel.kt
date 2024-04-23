@@ -2,6 +2,7 @@ package de.tillhub.inputengine.ui.pininput
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import de.tillhub.inputengine.data.Digit
 import de.tillhub.inputengine.data.NumpadKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -30,26 +31,9 @@ class PinInputViewModel : ViewModel() {
 
     fun init(pin: String) {
         this.pin = pin
-    }
-
-    private fun validateStringInput(pinInput: CharSequence) {
-        when {
-            isPinValid(pinInput) -> {
-                _pinInputState.value = PinInputState.PinValid
-            }
-
-            pinInput.length > pin.length -> {
-                _pinInputState.value = PinInputState.PinTooLong
-            }
-
-            else -> {
-                _pinInputState.value = PinInputState.AwaitingInput
-            }
+        if (!isPinFormatValid(pin)) {
+            _pinInputState.value = PinInputState.InvalidPinFormat
         }
-    }
-
-    private fun isPinValid(pinInput: CharSequence): Boolean {
-        return this.pin == pinInput
     }
 
     fun input(key: NumpadKey) {
@@ -70,10 +54,35 @@ class PinInputViewModel : ViewModel() {
             is NumpadKey.DecimalSeparator -> {}
         }
     }
+
+    private fun validateStringInput(pinInput: CharSequence) {
+        when {
+            isPinValid(pinInput) -> {
+                _pinInputState.value = PinInputState.PinValid
+            }
+
+            pinInput.length >= pin.length -> {
+                _pinInputState.value = PinInputState.PinInvalid
+            }
+
+            else -> {
+                _pinInputState.value = PinInputState.AwaitingInput
+            }
+        }
+    }
+
+    private fun isPinValid(pinInput: CharSequence): Boolean {
+        return this.pin == pinInput
+    }
+
+    private fun isPinFormatValid(pin: String): Boolean {
+        return pin.isNotEmpty() && pin.all { it.isDigit() }
+    }
 }
 
 sealed class PinInputState {
     data object AwaitingInput : PinInputState()
+    data object InvalidPinFormat : PinInputState()
     data object PinValid : PinInputState()
-    data object PinTooLong : PinInputState()
+    data object PinInvalid : PinInputState()
 }
