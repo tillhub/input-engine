@@ -22,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.os.BundleCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -35,6 +36,7 @@ import de.tillhub.inputengine.ui.components.SubmitButton
 import de.tillhub.inputengine.ui.components.Numpad
 import de.tillhub.inputengine.ui.components.Toolbar
 import de.tillhub.inputengine.ui.components.getModifierBasedOnDeviceType
+import de.tillhub.inputengine.ui.moneyinput.MoneyInputData.Companion.EMPTY
 import de.tillhub.inputengine.ui.theme.MagneticGrey
 import de.tillhub.inputengine.ui.theme.OrbitalBlue
 import de.tillhub.inputengine.ui.theme.SoyuzGrey
@@ -102,14 +104,13 @@ class MoneyInputActivity : ComponentActivity() {
         }
     }
 
-    @Suppress("LongParameterList")
-    @ExperimentalMaterial3Api
+    @Preview
     @Composable
     fun InputPreview(
-        amount: MoneyInputData,
-        amountMin: MoneyParam,
-        amountMax: MoneyParam,
-        amountHint: MoneyParam
+        amount: MoneyInputData = EMPTY,
+        amountMin: MoneyParam = MoneyParam.Disable,
+        amountMax: MoneyParam = MoneyParam.Disable,
+        amountHint: MoneyParam = MoneyParam.Disable
     ) {
         val (amountString, amountColor) = if (amountHint is MoneyParam.Enable && amount.money.isZero()) {
             MoneyFormatter.format(amountHint.amount) to MagneticGrey

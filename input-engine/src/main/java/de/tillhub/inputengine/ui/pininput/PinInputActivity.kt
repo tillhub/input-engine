@@ -147,7 +147,6 @@ class PinInputActivity : ComponentActivity() {
     }
 
     @Suppress("LongMethod")
-    @ExperimentalMaterial3Api
     @Composable
     fun PinPreview(
         pin: String,
@@ -156,6 +155,7 @@ class PinInputActivity : ComponentActivity() {
     ) {
         Box {
             OutlinedTextField(
+                readOnly = true,
                 modifier = Modifier.align(Alignment.Center),
                 value = pin,
                 onValueChange = { },

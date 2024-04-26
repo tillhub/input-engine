@@ -1,1 +1,13 @@
-<resources />
+<resources>
+    <string name="numpad_title_amount">Betrag</string>
+    <string name="numpad_title_quantity">Menge</string>
+    <string name="numpad_title_pin">Kassierer-Pin</string>
+    <string name="numpad_title_percentage">Prozent</string>
+    <string name="pin_wrong">Falsche Pin</string>
+    <string name="pin_correct">PIN-Eingabe erfolgreich</string>
+    <string name="min_value">min. %1$s</string>
+    <string name="max_value">max. %1$s</string>
+
+    <!-- Numpad -->
+    <string name="numpad_button_submit">Weiter</string>
+</resources>

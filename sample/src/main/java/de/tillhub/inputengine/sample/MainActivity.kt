@@ -18,7 +18,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import de.tillhub.inputengine.contract.AmountInputContract
 import de.tillhub.inputengine.contract.AmountInputRequest
 import de.tillhub.inputengine.contract.AmountInputResult
@@ -146,8 +145,7 @@ class MainActivity : ComponentActivity() {
                                 onClick = {
                                     pinInputLauncher.launch(
                                         PinInputRequest(
-                                            pin = "0000",
-                                            extras = bundleOf("test" to 6)
+                                            pin = "0000"
                                         )
                                     )
                                 }

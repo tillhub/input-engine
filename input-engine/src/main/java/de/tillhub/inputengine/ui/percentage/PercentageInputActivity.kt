@@ -8,7 +8,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -87,6 +86,7 @@ class PercentageInputActivity : ComponentActivity() {
                 Column(
                     modifier = Modifier
                         .padding(innerPadding)
+                        .padding(top = 16.dp)
                         .fillMaxHeight(),
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
@@ -122,44 +122,40 @@ class PercentageInputActivity : ComponentActivity() {
         percentageMin: PercentageParam = PercentageParam.Disable,
         percentageMax: PercentageParam = PercentageParam.Disable
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(top = 16.dp, start = 24.dp, end = 24.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            if (percentageMin is PercentageParam.Enable) {
-                Text(
-                    modifier = Modifier
-                        .wrapContentWidth(Alignment.CenterHorizontally),
-                    style = MaterialTheme.typography.bodyMedium,
-                    maxLines = 2,
-                    text = stringResource(
-                        R.string.min_value, PercentageFormatter.format(percentageMin.percent)
-                    ),
-                    color = MagneticGrey,
-                )
-            }
+        if (percentageMax is PercentageParam.Enable) {
             Text(
                 modifier = Modifier
-                    .weight(1f)
+                    .fillMaxWidth()
                     .wrapContentWidth(Alignment.CenterHorizontally),
-                style = MaterialTheme.typography.displaySmall,
-                maxLines = 2,
-                text = percentText,
-                color = OrbitalBlue,
+                style = MaterialTheme.typography.bodyMedium,
+                maxLines = 1,
+                text = stringResource(
+                    R.string.max_value, PercentageFormatter.format(percentageMax.percent)
+                ),
+                color = MagneticGrey,
             )
-            if (percentageMax is PercentageParam.Enable) {
-                Text(
-                    modifier = Modifier
-                        .wrapContentWidth(Alignment.CenterHorizontally),
-                    style = MaterialTheme.typography.bodyMedium,
-                    maxLines = 2,
-                    text = stringResource(
-                        R.string.max_value, PercentageFormatter.format(percentageMax.percent)
-                    ),
-                    color = MagneticGrey,
-                )
-            }
+        }
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentWidth(Alignment.CenterHorizontally),
+            style = MaterialTheme.typography.displaySmall,
+            maxLines = 1,
+            text = percentText,
+            color = OrbitalBlue,
+        )
+        if (percentageMin is PercentageParam.Enable) {
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentWidth(Alignment.CenterHorizontally),
+                style = MaterialTheme.typography.bodyMedium,
+                maxLines = 1,
+                text = stringResource(
+                    R.string.min_value, PercentageFormatter.format(percentageMin.percent)
+                ),
+                color = MagneticGrey,
+            )
         }
     }
 }

@@ -2,7 +2,6 @@ package de.tillhub.inputengine.ui.pininput
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.tillhub.inputengine.data.Digit
 import de.tillhub.inputengine.data.NumpadKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted

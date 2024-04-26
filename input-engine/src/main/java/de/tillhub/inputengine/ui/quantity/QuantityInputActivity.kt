@@ -139,7 +139,6 @@ class QuantityInputActivity : ComponentActivity() {
     }
 
     @Suppress("LongParameterList", "LongMethod")
-    @ExperimentalMaterial3Api
     @Composable
     fun QuantityPreview(
         quantityText: String,
@@ -150,7 +149,7 @@ class QuantityInputActivity : ComponentActivity() {
         minQuantity: QuantityParam
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
         ) {
             Row(
                 modifier = Modifier
@@ -165,48 +164,45 @@ class QuantityInputActivity : ComponentActivity() {
                     Icon(
                         modifier = Modifier
                             .width(42.dp)
-                            .height(42.dp)
-                            .padding(3.dp),
+                            .height(42.dp),
                         painter = painterResource(id = R.drawable.ic_minus),
                         tint = OrbitalBlue,
                         contentDescription = "contentDescription"
                     )
                 }
-                if (minQuantity is QuantityParam.Enable) {
-                    Text(
-                        modifier = Modifier
-                            .wrapContentWidth(Alignment.CenterHorizontally),
-                        style = MaterialTheme.typography.bodyMedium,
-                        maxLines = 2,
-                        text = stringResource(
-                            id = R.string.min_value,
-                            QuantityFormatter.format(minQuantity.value)
-                        ),
-                        color = MagneticGrey,
-                    )
-                }
-
-                Text(
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .weight(1f)
-                        .wrapContentWidth(Alignment.CenterHorizontally),
-                    style = MaterialTheme.typography.displaySmall,
-                    maxLines = 2,
-                    text = quantityText,
-                    color = quantityColor,
-                )
-                if (maxQuantity is QuantityParam.Enable) {
+                ) {
+                    if (maxQuantity is QuantityParam.Enable) {
+                        Text(
+                            style = MaterialTheme.typography.bodyMedium,
+                            maxLines = 1,
+                            text = stringResource(
+                                id = R.string.max_value,
+                                QuantityFormatter.format(maxQuantity.value)
+                            ),
+                            color = MagneticGrey,
+                        )
+                    }
                     Text(
-                        modifier = Modifier
-                            .wrapContentWidth(Alignment.CenterHorizontally),
-                        style = MaterialTheme.typography.bodyMedium,
-                        maxLines = 2,
-                        text = stringResource(
-                            id = R.string.max_value,
-                            QuantityFormatter.format(maxQuantity.value)
-                        ),
-                        color = MagneticGrey,
+                        style = MaterialTheme.typography.displaySmall,
+                        maxLines = 1,
+                        text = quantityText,
+                        color = quantityColor,
                     )
+                    if (minQuantity is QuantityParam.Enable) {
+                        Text(
+                            style = MaterialTheme.typography.bodyMedium,
+                            maxLines = 1,
+                            text = stringResource(
+                                id = R.string.min_value,
+                                QuantityFormatter.format(minQuantity.value)
+                            ),
+                            color = MagneticGrey,
+                        )
+                    }
                 }
                 IconButton(
                     modifier = Modifier.wrapContentWidth(Alignment.End),
@@ -215,8 +211,7 @@ class QuantityInputActivity : ComponentActivity() {
                     Icon(
                         modifier = Modifier
                             .width(42.dp)
-                            .height(42.dp)
-                            .padding(3.dp),
+                            .height(42.dp),
                         painter = painterResource(id = R.drawable.ic_plus),
                         tint = OrbitalBlue,
                         contentDescription = "contentDescription"
