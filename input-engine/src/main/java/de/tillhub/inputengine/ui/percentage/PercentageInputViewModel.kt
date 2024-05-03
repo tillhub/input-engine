@@ -46,6 +46,8 @@ class PercentageInputViewModel : ViewModel() {
                 }
                 inputController.addDigit(key.digit)
             }
+
+            NumpadKey.Negate -> Unit
         }
 
         val tempPercentage = PercentIO.of(inputController.value())

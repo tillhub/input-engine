@@ -88,7 +88,10 @@ class MoneyInputActivity : ComponentActivity() {
                             amountMax = request.amountMax,
                             amountHint = request.hintAmount
                         )
-                        Numpad(viewModel::input)
+                        Numpad(
+                            onClick = viewModel::input,
+                            showNegative = true
+                        )
                         SubmitButton(amount.isValid) {
                             setResult(Activity.RESULT_OK, Intent().apply {
                                 putExtra(

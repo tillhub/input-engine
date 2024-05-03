@@ -21,15 +21,17 @@ data class MoneyIO internal constructor(
 
     fun isZero() = amount.signum() == 0
     fun isNotZero() = !isZero()
-    fun isNegative() = amount.signum() < 0
+    fun isNegative() = amount.signum() == -1
     fun isPositive(includingZero: Boolean = false) = if (includingZero) {
-        amount.signum() >= 0
+        amount.signum().let { it == 0 || it == 1 }
     } else {
-        amount.signum() > 0
+        amount.signum() == 1
     }
 
     fun isValid(): Boolean = this <= MoneyIO(MAX_VALUE_DECIMAL, currency) &&
             this >= MoneyIO(MIN_VALUE_DECIMAL, currency)
+
+    fun negate(): MoneyIO = MoneyIO(amount.negate(), currency)
 
     override fun compareTo(other: MoneyIO): Int = calculable(other) {
         amount.compareTo(other.amount)
@@ -42,6 +44,8 @@ data class MoneyIO internal constructor(
     operator fun minus(other: MoneyIO) = calculable(other) {
         MoneyIO(amount - other.amount, currency)
     }
+
+    operator fun unaryMinus() = MoneyIO(-amount, currency)
 
     private fun <T> calculable(other: MoneyIO, body: () -> T): T {
         require(currency == other.currency) {
@@ -68,7 +72,7 @@ data class MoneyIO internal constructor(
         private val MAX_VALUE_DECIMAL: BigDecimal = 10000000.0.toBigDecimal()
 
         // MIN_VALUE_NORMAL for the Money class is 0 currency
-        private val MIN_VALUE_DECIMAL: BigDecimal = BigDecimal.ZERO
+        private val MIN_VALUE_DECIMAL: BigDecimal = -MAX_VALUE_DECIMAL
 
         // Constructors
         fun zero(currency: Currency) = MoneyIO(BigDecimal.ZERO, currency)
@@ -91,7 +95,7 @@ data class MoneyIO internal constructor(
             val base = it.amount.movePointRight(1)
             val digitMinorValue =
                 digit.value.toBigDecimal().movePointLeft(it.currency.defaultFractionDigits)
-            val result = (base + digitMinorValue)
+            val result = (base + if (it.isNegative()) digitMinorValue.negate() else digitMinorValue)
             val newValue = MoneyIO(result, it.currency)
             return if (newValue.isValid()) {
                 newValue

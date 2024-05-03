@@ -100,6 +100,7 @@ class QuantityInputViewModel : ViewModel() {
             NumpadKey.Clear -> inputController.clear()
             NumpadKey.Delete -> inputController.deleteLast()
             NumpadKey.DecimalSeparator -> inputController.switchToMinor(true)
+            NumpadKey.Negate -> Unit
         }
 
         val tempQuantity = QuantityIO.of(inputController.value())

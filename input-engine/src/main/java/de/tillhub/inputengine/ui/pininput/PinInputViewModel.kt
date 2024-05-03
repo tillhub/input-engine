@@ -51,6 +51,7 @@ class PinInputViewModel : ViewModel() {
             }
 
             is NumpadKey.DecimalSeparator -> {}
+            NumpadKey.Negate -> Unit
         }
     }
 

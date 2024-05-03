@@ -13,6 +13,7 @@
 
     <!-- Numpad -->
     <string name="numpad_button_clear" translatable="false">C</string>
+    <string name="numpad_button_negative" translatable="false">-</string>
     <string name="numpad_button_delete" translatable="false">←</string>
     <string name="numpad_button_submit">Submit</string>
 </resources>

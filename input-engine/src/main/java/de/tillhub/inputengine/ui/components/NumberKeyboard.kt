@@ -33,7 +33,8 @@ import java.text.DecimalFormatSymbols
 @Composable
 internal fun Numpad(
     onClick: (NumpadKey) -> Unit = {},
-    showDecimalSeparator: Boolean = false
+    showDecimalSeparator: Boolean = false,
+    showNegative: Boolean = false
 ) {
     Column(
         verticalArrangement = Arrangement.SpaceAround,
@@ -71,38 +72,34 @@ internal fun Numpad(
                 .padding(start = 24.dp, end = 24.dp)
                 .fillMaxWidth()
         ) {
-            if (showDecimalSeparator) {
-                val decimalSeparator = DecimalFormatSymbols.getInstance().decimalSeparator
-                ExtraButton(
-                    onClick = { onClick(NumpadKey.DecimalSeparator) },
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text(
-                        text = decimalSeparator.toString(),
-                        modifier = Modifier.padding(bottom = 16.dp),
-                        fontSize = 24.sp,
-                        color = GalacticBlue,
-                    )
-                }
-            } else {
-                ExtraButton(
-                    onClick = { onClick(NumpadKey.Clear) },
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text(
-                        text = stringResource(
-                            id = R.string.numpad_button_clear
-                        ),
-                        fontSize = 14.sp,
-                        color = GalacticBlue,
-                    )
-                }
-            }
-
-            NumberButton(number = 0, onClick = onClick, modifier = Modifier.weight(1f))
             ExtraButton(
-                onClick = { onClick(NumpadKey.Delete) },
+                onClick = {
+                    when {
+                        showDecimalSeparator -> onClick(NumpadKey.DecimalSeparator)
+                        showNegative -> onClick(NumpadKey.Negate)
+                        else -> onClick(NumpadKey.Clear)
+                    }
+                },
                 modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = when {
+                        showDecimalSeparator -> DecimalFormatSymbols.getInstance().decimalSeparator.toString()
+                        showNegative -> stringResource(R.string.numpad_button_negative)
+                        else -> stringResource(R.string.numpad_button_clear)
+                    },
+                    fontSize = 14.sp,
+                    color = GalacticBlue,
+                )
+            }
+            NumberButton(number = 0, onClick = onClick, modifier = Modifier.weight(1f))
+            DoubleActionButton(
+                onClick = { onClick(NumpadKey.Delete) },
+                onLongClick = { onClick(NumpadKey.Clear) },
+                modifier = Modifier
+                    .weight(1f)
+                    .aspectRatio(BUTTON_ASPECT_RATIO)
+                    .padding(6.dp)
             ) {
                 Text(
                     text = stringResource(id = R.string.numpad_button_delete),
@@ -125,10 +122,12 @@ private fun NumberButton(
         onClick = {
             onClick(NumpadKey.SingleDigit(Digit.from(number)))
         },
+        modifier = modifier
+            .aspectRatio(BUTTON_ASPECT_RATIO)
+            .padding(6.dp),
         shape = RoundedCornerShape(2.dp),
         border = BorderStroke(width = 1.0.dp, color = LunarGray),
         elevation = buttonElevation(),
-        modifier = modifier.aspectRatio(BUTTON_ASPECT_RATIO).padding(6.dp),
         colors = ButtonDefaults.outlinedButtonColors(containerColor = Tint),
     ) {
         Text(
@@ -150,7 +149,9 @@ private fun ExtraButton(
         shape = RoundedCornerShape(2.dp),
         border = BorderStroke(width = 1.0.dp, color = LunarGray),
         elevation = buttonElevation(),
-        modifier = modifier.aspectRatio(BUTTON_ASPECT_RATIO).padding(6.dp),
+        modifier = modifier
+            .aspectRatio(BUTTON_ASPECT_RATIO)
+            .padding(6.dp),
         colors = ButtonDefaults.outlinedButtonColors(containerColor = ExtraButtonTint)
     ) {
         buttonText()

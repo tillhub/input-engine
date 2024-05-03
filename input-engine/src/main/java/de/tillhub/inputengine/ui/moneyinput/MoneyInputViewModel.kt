@@ -67,7 +67,12 @@ class MoneyInputViewModel : ViewModel() {
                 _inputCurrencyMoneyInput.value = minOf(newValue, moneyMax)
             }
             is NumpadKey.DecimalSeparator -> Unit
+            NumpadKey.Negate -> negate()
         }
+    }
+
+    private fun negate() {
+        _inputCurrencyMoneyInput.value = _inputCurrencyMoneyInput.value.negate()
     }
 
     private fun clear() {
