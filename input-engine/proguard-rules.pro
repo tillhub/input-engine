@@ -24,21 +24,15 @@
 -keep class de.tillhub.inputengine.contract.** { *; }
 
 # Data Inputs
--keep class de.tillhub.inputengine.data.MoneyIO {
-#    public static de.tillhub.inputengine.data.MoneyIO of(java.lang.Number, java.util.Currency);
-}
--keep class de.tillhub.inputengine.data.PercentIO {
-    *;
-}
--keep class de.tillhub.inputengine.data.QuantityIO {
-    *;
-}
+-keep class de.tillhub.inputengine.data.MoneyIO { *; }
+-keep class de.tillhub.inputengine.data.PercentIO { *; }
+-keep class de.tillhub.inputengine.data.QuantityIO { *; }
 
 # Params
--keepclassmembers class de.tillhub.inputengine.data.MoneyParam { *; }
--keepclassmembers class de.tillhub.inputengine.data.PercentageParam { *; }
--keepclassmembers class de.tillhub.inputengine.data.QuantityParam { *; }
--keepclassmembers class de.tillhub.inputengine.data.StringParam { *; }
+-keepclasseswithmembers class de.tillhub.inputengine.data.MoneyParam { *; }
+-keepclasseswithmembers class de.tillhub.inputengine.data.PercentageParam { *; }
+-keepclasseswithmembers class de.tillhub.inputengine.data.QuantityParam { *; }
+-keepclasseswithmembers class de.tillhub.inputengine.data.StringParam { *; }
 
 # Breaking changes with AGP 8.0
 # R8 upgrade documentation
