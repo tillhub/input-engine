@@ -1,6 +1,7 @@
 package de.tillhub.inputengine.data
 
 import android.os.Parcelable
+import androidx.annotation.Keep
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -44,6 +45,7 @@ data class PercentIO internal constructor(
          */
         val ZERO: PercentIO = PercentIO(ZERO_VALUE)
 
+        @Keep
         fun of(number: Number): PercentIO {
             return PercentIO(when (number) {
                 is Int -> number * I_100

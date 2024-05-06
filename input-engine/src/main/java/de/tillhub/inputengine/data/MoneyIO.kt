@@ -1,6 +1,7 @@
 package de.tillhub.inputengine.data
 
 import android.os.Parcelable
+import androidx.annotation.Keep
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -79,6 +80,7 @@ data class MoneyIO internal constructor(
         fun max(currency: Currency) = MoneyIO(MAX_VALUE_DECIMAL, currency)
         fun min(currency: Currency) = MoneyIO(MIN_VALUE_DECIMAL, currency)
 
+        @Keep
         fun of(amount: Number, currency: Currency): MoneyIO {
             return MoneyIO(when (amount) {
                 is Int -> amount.toBigDecimal().movePointLeft(currency.defaultFractionDigits)

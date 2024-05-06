@@ -1,6 +1,7 @@
 package de.tillhub.inputengine.data
 
 import android.os.Parcelable
+import androidx.annotation.Keep
 import de.tillhub.inputengine.helper.BigIntegers
 import de.tillhub.inputengine.helper.isPositive
 import de.tillhub.inputengine.helper.isZero
@@ -209,6 +210,7 @@ data class QuantityIO internal constructor(
         val MIN_VALUE: QuantityIO = MAX_VALUE.unaryMinus()
         val ZERO: QuantityIO = QuantityIO(BigInteger.ZERO)
 
+        @Keep
         fun of(number: Number): QuantityIO = QuantityIO(when (number) {
             is Int -> number.toBigInteger().multiply(FRACTIONS_FACTOR_INT)
             is Long -> number.toBigInteger().multiply(FRACTIONS_FACTOR_INT)
