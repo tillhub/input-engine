@@ -21,7 +21,6 @@ class QuantityInputViewModel : ViewModel() {
     private val inputController = NumberInputController(maxMajorDigits = 5)
 
     private var nextKeyResetsCurrentValue = false
-
     private var quantityHint: QuantityParam = QuantityParam.Disable
     private var minQuantity: QuantityIO = QuantityIO.MIN_VALUE
     private var maxQuantity: QuantityIO = QuantityIO.MAX_VALUE
@@ -43,22 +42,30 @@ class QuantityInputViewModel : ViewModel() {
     }
 
     fun setInitialValue(request: QuantityInputRequest) {
-        this.isZeroAllowed = request.allowsZero
-        this.allowsNegatives = request.allowsNegatives
-        this.quantityHint = request.quantityHint
-        this.minQuantity = when (request.minQuantity) {
+        isZeroAllowed = request.allowsZero
+        allowsNegatives = request.allowsNegatives
+        quantityHint = request.quantityHint
+        minQuantity = when (request.minQuantity) {
             QuantityParam.Disable -> QuantityIO.MIN_VALUE
             is QuantityParam.Enable -> request.minQuantity.value
         }
-        this.maxQuantity = when (request.maxQuantity) {
+        maxQuantity = when (request.maxQuantity) {
             QuantityParam.Disable -> QuantityIO.MAX_VALUE
             is QuantityParam.Enable -> request.maxQuantity.value
+        }
+        if (minQuantity >= maxQuantity) {
+            minQuantity = QuantityIO.MIN_VALUE
+            maxQuantity = QuantityIO.MAX_VALUE
         }
         setValue(request.quantity)
     }
 
     fun setValue(currentValue: QuantityIO) {
-        inputController.setValue(currentValue.majorDigits, currentValue.minorDigits)
+        inputController.setValue(
+            majorDigits = currentValue.majorDigits,
+            minorDigits = currentValue.minorDigits,
+            isNegative = currentValue.isNegative()
+        )
         updateDisplayData(currentValue)
 
         nextKeyResetsCurrentValue = true
@@ -92,7 +99,7 @@ class QuantityInputViewModel : ViewModel() {
         }
     }
 
-    fun processKey(key: NumpadKey) {
+    internal fun processKey(key: NumpadKey) {
         clearValueIfNeeded()
 
         when (key) {
@@ -100,7 +107,7 @@ class QuantityInputViewModel : ViewModel() {
             NumpadKey.Clear -> inputController.clear()
             NumpadKey.Delete -> inputController.deleteLast()
             NumpadKey.DecimalSeparator -> inputController.switchToMinor(true)
-            NumpadKey.Negate -> Unit
+            NumpadKey.Negate -> inputController.switchNegate()
         }
 
         val tempQuantity = QuantityIO.of(inputController.value())

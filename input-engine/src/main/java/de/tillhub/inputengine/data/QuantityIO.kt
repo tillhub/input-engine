@@ -70,6 +70,7 @@ data class QuantityIO internal constructor(
     override fun toShort(): Short = value.divide(FRACTIONS_FACTOR_INT).toShort()
 
     private fun isPositive(includeZero: Boolean = false): Boolean = value.isPositive(includeZero)
+    fun isNegative() = value.signum() == -1
     fun isZero(): Boolean = value.isZero()
 
     /**

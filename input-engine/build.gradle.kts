@@ -22,8 +22,11 @@ android {
     }
 
     buildTypes {
-        release {
+        debug {
             isMinifyEnabled = false
+        }
+        release {
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -67,7 +70,7 @@ afterEvaluate {
             create<MavenPublication>("input-engine") {
                 groupId = "de.tillhub.inputengine"
                 artifactId = "input-engine"
-                version = "0.9.7"
+                version = "0.9.8"
 
                 from(components.getByName("release"))
             }

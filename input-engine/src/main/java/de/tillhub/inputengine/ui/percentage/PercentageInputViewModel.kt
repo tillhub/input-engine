@@ -34,7 +34,7 @@ class PercentageInputViewModel : ViewModel() {
         setValue(request.percent)
     }
 
-    fun input(key: NumpadKey) {
+    internal fun input(key: NumpadKey) {
         when (key) {
             NumpadKey.Clear -> inputController.clear()
             NumpadKey.DecimalSeparator -> inputController.switchToMinor(true)

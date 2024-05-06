@@ -22,7 +22,6 @@ import de.tillhub.inputengine.R
 import de.tillhub.inputengine.data.Digit
 import de.tillhub.inputengine.data.NumpadKey
 import de.tillhub.inputengine.ui.theme.buttonElevation
-import de.tillhub.inputengine.ui.theme.ExtraButtonTint
 import de.tillhub.inputengine.ui.theme.GalacticBlue
 import de.tillhub.inputengine.ui.theme.LunarGray
 import de.tillhub.inputengine.ui.theme.Tint
@@ -72,7 +71,7 @@ internal fun Numpad(
                 .padding(start = 24.dp, end = 24.dp)
                 .fillMaxWidth()
         ) {
-            ExtraButton(
+            DoubleActionButton(
                 onClick = {
                     when {
                         showDecimalSeparator -> onClick(NumpadKey.DecimalSeparator)
@@ -80,11 +79,32 @@ internal fun Numpad(
                         else -> onClick(NumpadKey.Clear)
                     }
                 },
-                modifier = Modifier.weight(1f)
+                onLongClick = {
+                    when {
+                        showNegative -> onClick(NumpadKey.Negate)
+                        showDecimalSeparator -> onClick(NumpadKey.DecimalSeparator)
+                        else -> onClick(NumpadKey.Clear)
+                    }
+                },
+                modifier = Modifier
+                    .weight(1f)
+                    .aspectRatio(BUTTON_ASPECT_RATIO)
+                    .padding(6.dp)
             ) {
                 Text(
                     text = when {
-                        showDecimalSeparator -> DecimalFormatSymbols.getInstance().decimalSeparator.toString()
+                        showDecimalSeparator && showNegative -> {
+                            "${DecimalFormatSymbols.getInstance().decimalSeparator}\n${
+                                stringResource(
+                                    R.string.numpad_button_negative
+                                )
+                            }"
+                        }
+
+                        showDecimalSeparator -> {
+                            DecimalFormatSymbols.getInstance().decimalSeparator.toString()
+                        }
+
                         showNegative -> stringResource(R.string.numpad_button_negative)
                         else -> stringResource(R.string.numpad_button_clear)
                     },
@@ -135,26 +155,6 @@ private fun NumberButton(
             fontSize = 14.sp,
             color = GalacticBlue
         )
-    }
-}
-
-@Composable
-private fun ExtraButton(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    buttonText: @Composable () -> Unit
-) {
-    OutlinedButton(
-        onClick = onClick,
-        shape = RoundedCornerShape(2.dp),
-        border = BorderStroke(width = 1.0.dp, color = LunarGray),
-        elevation = buttonElevation(),
-        modifier = modifier
-            .aspectRatio(BUTTON_ASPECT_RATIO)
-            .padding(6.dp),
-        colors = ButtonDefaults.outlinedButtonColors(containerColor = ExtraButtonTint)
-    ) {
-        buttonText()
     }
 }
 
