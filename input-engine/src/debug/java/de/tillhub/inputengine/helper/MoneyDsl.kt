@@ -4,6 +4,7 @@ import de.tillhub.inputengine.data.MoneyIO
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.Currency
+
 val BigDecimal.eur: MoneyIO get() = MoneyIO(this, EUR)
 val BigDecimal.usd: MoneyIO get() = MoneyIO(this, USD)
 val BigDecimal.gbp: MoneyIO get() = MoneyIO(this, GBP)

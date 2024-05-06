@@ -1,6 +1,6 @@
-package de.tillhub.inputengine.contract
+package de.tillhub.inputengine.data
 
-object ExtraKeys {
+internal object ExtraKeys {
     const val EXTRA_REQUEST = "money_input_request"
     const val EXTRAS_RESULT = "money_input_result"
 }

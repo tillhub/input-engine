@@ -20,6 +20,7 @@ class MoneyInputViewModel : ViewModel() {
 
     private var isInitValue = false
     private var isZeroAllowed = true
+    private var negateNextDigit = false
     private lateinit var initAmount: MoneyIO
     private lateinit var moneyMax: MoneyIO
     private lateinit var moneyMin: MoneyIO
@@ -38,21 +39,28 @@ class MoneyInputViewModel : ViewModel() {
     )
 
     fun init(request: AmountInputRequest) {
-        this.isInitValue = true
-        this.isZeroAllowed = request.isZeroAllowed
-        this.initAmount = request.amount
-        this.moneyMax = when (request.amountMax) {
+        isInitValue = true
+        isZeroAllowed = request.isZeroAllowed
+        initAmount = request.amount
+        moneyMax = when (request.amountMax) {
             MoneyParam.Disable -> MoneyIO.max(request.amount.currency)
             is MoneyParam.Enable -> request.amountMax.amount
         }
-        this.moneyMin = when (request.amountMin) {
+        moneyMin = when (request.amountMin) {
             MoneyParam.Disable -> MoneyIO.min(request.amount.currency)
             is MoneyParam.Enable -> request.amountMin.amount
+        }
+        if (moneyMin >= moneyMax) {
+            moneyMin = MoneyIO.min(request.amount.currency)
+            moneyMax = MoneyIO.max(request.amount.currency)
+        }
+        if (moneyMax.isZero() && moneyMin.isNegative()) {
+            negateNextDigit = true
         }
         _inputCurrencyMoneyInput.value = request.amount
     }
 
-    fun input(key: NumpadKey) {
+    internal fun input(key: NumpadKey) {
         when (key) {
             NumpadKey.Clear -> clear()
             NumpadKey.Delete -> delete()
@@ -62,9 +70,15 @@ class MoneyInputViewModel : ViewModel() {
                 } else {
                     _inputCurrencyMoneyInput.value
                 }
-                val newValue = MoneyIO.append(baseValue, key.digit)
+                val newValue = if (negateNextDigit) {
+                    MoneyIO.append(baseValue, key.digit).negate().also {
+                        negateNextDigit = false
+                    }
+                } else {
+                    MoneyIO.append(baseValue, key.digit)
+                }
                 isInitValue = false
-                _inputCurrencyMoneyInput.value = minOf(newValue, moneyMax)
+                _inputCurrencyMoneyInput.value = maxOf(minOf(newValue, moneyMax), moneyMin)
             }
             is NumpadKey.DecimalSeparator -> Unit
             NumpadKey.Negate -> negate()
@@ -72,6 +86,9 @@ class MoneyInputViewModel : ViewModel() {
     }
 
     private fun negate() {
+        if (_inputCurrencyMoneyInput.value.isZero()) {
+            negateNextDigit = true
+        }
         _inputCurrencyMoneyInput.value = _inputCurrencyMoneyInput.value.negate()
     }
 

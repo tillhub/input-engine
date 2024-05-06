@@ -5,19 +5,21 @@ import java.math.BigDecimal
 import java.math.BigInteger
 import java.math.RoundingMode
 
-class NumberInputController(
+internal class NumberInputController(
     private val maxMajorDigits: Int = 8,
     private val maxMinorDigits: Int = 2
 ) {
     private var switchToMinorDigits = false
+    private var switchToNegate = false
     private val _majorDigits: MutableList<Digit> = mutableListOf(Digit.ZERO)
     private val _minorDigits: MutableList<Digit> = mutableListOf()
 
-    val majorDigits: List<Digit> get() = _majorDigits
-    val minorDigits: List<Digit> get() = _minorDigits
+    internal val majorDigits: List<Digit> get() = _majorDigits
+    internal val minorDigits: List<Digit> get() = _minorDigits
 
-    fun setValue(majorDigits: List<Digit>, minorDigits: List<Digit>) {
+    internal fun setValue(majorDigits: List<Digit>, minorDigits: List<Digit>, isNegative: Boolean) {
         this.switchToMinorDigits = minorDigits.isNotEmpty()
+        this.switchToNegate = isNegative
         this._majorDigits.clear()
         this._majorDigits.addAll(majorDigits)
         this._minorDigits.clear()
@@ -55,9 +57,10 @@ class NumberInputController(
             }
         }
         switchToMinorDigits = _minorDigits.isNotEmpty()
+        switchToNegate = number.toDouble() < 0.0
     }
 
-    fun addDigit(digit: Digit) {
+    internal fun addDigit(digit: Digit) {
         if (switchToMinorDigits) {
             if (_minorDigits.size < maxMinorDigits) {
                 _minorDigits.add(digit)
@@ -93,16 +96,20 @@ class NumberInputController(
         }
     }
 
+    fun switchNegate() {
+        switchToNegate = !switchToNegate
+    }
+
     fun value(): Number {
         return if (_minorDigits.isEmpty()) {
             _majorDigits.fold(BigInteger.ZERO) { acc, digit ->
                 acc.multiply(BigInteger.TEN).add(digit.value.toBigInteger())
-            }
+            }.let { if (switchToNegate) it.negate() else it }
         } else {
             (_majorDigits + _minorDigits).fold(BigDecimal.ZERO) { acc, digit ->
                 acc.multiply(BigDecimal.TEN)
                     .add(digit.value.toBigDecimal().movePointLeft(_minorDigits.size))
-            }
+            }.let { if (switchToNegate) it.negate() else it }
         }
     }
 
@@ -111,5 +118,6 @@ class NumberInputController(
         _majorDigits.add(Digit.ZERO)
         _minorDigits.clear()
         switchToMinorDigits = false
+        switchToNegate = false
     }
 }

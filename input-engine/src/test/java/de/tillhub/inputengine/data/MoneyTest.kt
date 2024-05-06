@@ -1,5 +1,6 @@
 package de.tillhub.inputengine.data
 
+
 import de.tillhub.inputengine.helper.EUR
 import de.tillhub.inputengine.helper.eur
 import de.tillhub.inputengine.helper.jpy
@@ -89,11 +90,11 @@ class MoneyTest : DescribeSpec({
     }
     describe("Money is isValid") {
         it("should check correctly") {
-            (-10).toBigInteger().eur.isValid().shouldBeFalse()
+            (-10).toBigInteger().eur.isValid().shouldBeTrue()
             10.toBigInteger().eur.isValid().shouldBeTrue()
             1000000001.toBigInteger().eur.isValid().shouldBeFalse()
 
-            (-10.0).toBigDecimal().eur.isValid().shouldBeFalse()
+            (-1000000001.0).toBigDecimal().eur.isValid().shouldBeFalse()
             10.0.toBigDecimal().eur.isValid().shouldBeTrue()
             10000001.toBigDecimal().eur.isValid().shouldBeFalse()
         }
@@ -101,7 +102,7 @@ class MoneyTest : DescribeSpec({
     describe("Money append") {
         it("should check correctly") {
             MoneyIO.append(1.toBigInteger().eur, Digit.ONE) shouldBe 0.11.toBigDecimal().eur
-            MoneyIO.append((-1).toBigInteger().eur, Digit.ONE) shouldBe (-0.01).toBigDecimal().eur
+            MoneyIO.append((-1).toBigInteger().eur, Digit.ONE) shouldBe (-0.11).toBigDecimal().eur
             MoneyIO.append(1.toBigDecimal().eur, Digit.ONE) shouldBe 10.01.toBigDecimal().eur
             MoneyIO.append(
                 1000000001.toBigInteger().eur,

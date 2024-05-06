@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.os.BundleCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.tillhub.inputengine.R
-import de.tillhub.inputengine.contract.ExtraKeys
+import de.tillhub.inputengine.data.ExtraKeys
 import de.tillhub.inputengine.contract.QuantityInputRequest
 import de.tillhub.inputengine.contract.QuantityInputResult
 import de.tillhub.inputengine.data.QuantityParam
@@ -119,7 +119,8 @@ class QuantityInputActivity : ComponentActivity() {
                     )
                     Numpad(
                         onClick = viewModel::processKey,
-                        showDecimalSeparator = true
+                        showDecimalSeparator = true,
+                        showNegative = true
                     )
                     SubmitButton(displayData.isValid) {
                         setResult(RESULT_OK, Intent().apply {

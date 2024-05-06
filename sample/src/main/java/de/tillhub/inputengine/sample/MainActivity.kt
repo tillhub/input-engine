@@ -106,18 +106,18 @@ class MainActivity : ComponentActivity() {
                                     moneyInputLauncher.launch(
                                         AmountInputRequest(
                                             amount = MoneyIO.of(
-                                                200.toBigInteger(),
+                                                0.toBigInteger(),
                                                 Currency.getInstance("EUR")
                                             ),
                                             amountMin = MoneyParam.Enable(
-                                                MoneyIO.of(
-                                                    100.toBigInteger(),
+                                                -MoneyIO.of(
+                                                    5000.toBigInteger(),
                                                     Currency.getInstance("EUR")
                                                 )
                                             ),
                                             amountMax = MoneyParam.Enable(
                                                 MoneyIO.of(
-                                                    200000000.toBigInteger(),
+                                                    5000.toBigInteger(),
                                                     Currency.getInstance("EUR")
                                                 )
                                             ),
@@ -165,8 +165,8 @@ class MainActivity : ComponentActivity() {
                                     quantityInputLauncher.launch(
                                         QuantityInputRequest(
                                             quantity = QuantityIO.ZERO,
-                                            minQuantity = QuantityParam.Enable(QuantityIO.ZERO),
-                                            maxQuantity = QuantityParam.Enable(QuantityIO.of(10000.toBigDecimal())),
+                                            minQuantity = QuantityParam.Enable(-QuantityIO.of(50.toBigDecimal())),
+                                            maxQuantity = QuantityParam.Enable(QuantityIO.of(50.toBigDecimal())),
                                             quantityHint = QuantityParam.Enable(QuantityIO.of(BigDecimal.TEN))
                                         )
                                     )

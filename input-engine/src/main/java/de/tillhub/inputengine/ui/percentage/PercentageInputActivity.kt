@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.os.BundleCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.tillhub.inputengine.R
-import de.tillhub.inputengine.contract.ExtraKeys
+import de.tillhub.inputengine.data.ExtraKeys
 import de.tillhub.inputengine.contract.PercentageInputRequest
 import de.tillhub.inputengine.contract.PercentageInputResult
 import de.tillhub.inputengine.data.PercentageParam

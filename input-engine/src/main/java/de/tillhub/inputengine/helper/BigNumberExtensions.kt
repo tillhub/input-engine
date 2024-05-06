@@ -6,21 +6,21 @@ import java.math.BigDecimal
 import java.math.BigInteger
 
 // BigDecimal
-fun pow10decimal(exp: Int): BigDecimal = BigDecimal.TEN.pow(exp)
+internal fun pow10decimal(exp: Int): BigDecimal = BigDecimal.TEN.pow(exp)
 
 // BigInteger
-fun pow10(exp: Int): BigInteger = BigInteger.TEN.pow(exp)
+internal fun pow10(exp: Int): BigInteger = BigInteger.TEN.pow(exp)
 
-fun BigInteger.isPositive(includeZero: Boolean = false): Boolean {
+internal fun BigInteger.isPositive(includeZero: Boolean = false): Boolean {
     return when (includeZero) {
         true -> signum().let { it == 0 || it == 1 }
         false -> signum() == 1
     }
 }
 
-fun BigInteger.isZero(): Boolean = signum() == 0
+internal fun BigInteger.isZero(): Boolean = signum() == 0
 
-object BigIntegers {
+internal object BigIntegers {
 
     /**
      * Builds a [BigInteger] which represent a floating point value defined by the given [majorDigits] and
@@ -33,7 +33,7 @@ object BigIntegers {
      * - [fractions]=4 will result in BigInteger(1234567)
      * - [fractions]=6 will result in BigInteger(123456700)
      */
-    fun of(majorDigits: List<Digit>, fractionDigits: List<Digit>, fractions: Int = 6): BigInteger {
+    internal fun of(majorDigits: List<Digit>, fractionDigits: List<Digit>, fractions: Int = 6): BigInteger {
         val majorValue = majorDigits.fold(BigInteger.ZERO) { acc, item ->
             acc.multiply(BigInteger.TEN).add(item.value.toBigInteger())
         }
@@ -56,7 +56,7 @@ object BigIntegers {
      * zero digit as well.
      * i.e. 0 will result in [0]; 1234 will result in [1,2,3,4]; 1200 will result in [1,2,0,0]
      */
-    fun digits(value: BigInteger): List<Digit> =
+    internal fun digits(value: BigInteger): List<Digit> =
         mutableListOf<Digit>().also {
             var currentValue = value
             while (currentValue.isPositive(includeZero = false)) {
@@ -78,7 +78,7 @@ object BigIntegers {
      * then defined by [fractionCount] the resulting list will contain leading 0 digits.
      * i.e. a value of 0.001234 ([minorValue] of 1234 and [fractionCount] of 6) will result in [0,0,1,2,3,4]
      */
-    fun minorDigits(minorValue: BigInteger, @IntRange(from = 1) fractionCount: Int): List<Digit> =
+    internal fun minorDigits(minorValue: BigInteger, @IntRange(from = 1) fractionCount: Int): List<Digit> =
         mutableListOf<Digit>().also { list ->
             var currentValue = minorValue
             var zerosAtEnd = 0

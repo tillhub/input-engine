@@ -3,7 +3,7 @@ package de.tillhub.inputengine.data
 import androidx.annotation.IntRange
 
 @Suppress("MagicNumber")
-enum class Digit(@IntRange(from = 0, to = 9) val value: Int) {
+internal enum class Digit(@IntRange(from = 0, to = 9) val value: Int) {
     ZERO(0),
     ONE(1),
     TWO(2),

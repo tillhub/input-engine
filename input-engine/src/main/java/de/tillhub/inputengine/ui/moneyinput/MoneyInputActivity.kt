@@ -28,7 +28,7 @@ import androidx.core.os.BundleCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.tillhub.inputengine.contract.AmountInputRequest
 import de.tillhub.inputengine.contract.AmountInputResult
-import de.tillhub.inputengine.contract.ExtraKeys
+import de.tillhub.inputengine.data.ExtraKeys
 import de.tillhub.inputengine.data.MoneyParam
 import de.tillhub.inputengine.data.StringParam
 import de.tillhub.inputengine.formatter.MoneyFormatter
