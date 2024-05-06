@@ -20,6 +20,8 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+-keeppackagenames de.tillhub.inputengine
+
 # Contracts
 -keep class de.tillhub.inputengine.contract.** { *; }
 
