@@ -29,10 +29,17 @@
 -keep class de.tillhub.inputengine.data.QuantityIO { *; }
 
 # Params
--keepclasseswithmembers class de.tillhub.inputengine.data.MoneyParam { *; }
--keepclasseswithmembers class de.tillhub.inputengine.data.PercentageParam { *; }
--keepclasseswithmembers class de.tillhub.inputengine.data.QuantityParam { *; }
--keepclasseswithmembers class de.tillhub.inputengine.data.StringParam { *; }
+-keep class de.tillhub.inputengine.data.MoneyParam { *; }
+-keep class de.tillhub.inputengine.data.MoneyParam$* { *; }
+
+-keep class de.tillhub.inputengine.data.PercentageParam { *; }
+-keep class de.tillhub.inputengine.data.PercentageParam$* { *; }
+
+-keep class de.tillhub.inputengine.data.QuantityParam { *; }
+-keep class de.tillhub.inputengine.data.QuantityParam$* { *; }
+
+-keep class de.tillhub.inputengine.data.StringParam { *; }
+-keep class de.tillhub.inputengine.data.StringParam$* { *; }
 
 # Breaking changes with AGP 8.0
 # R8 upgrade documentation
