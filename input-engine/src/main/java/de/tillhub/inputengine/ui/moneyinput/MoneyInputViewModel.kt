@@ -21,7 +21,8 @@ class MoneyInputViewModel : ViewModel() {
     private var isInitValue = false
     private var isZeroAllowed = true
     private var negateNextDigit = false
-    private var negateModeEnabled = false
+    var amountInputMode: AmountInputMode = AmountInputMode.BOTH
+        private set
     private lateinit var initAmount: MoneyIO
     private lateinit var moneyMax: MoneyIO
     private lateinit var moneyMin: MoneyIO
@@ -29,7 +30,11 @@ class MoneyInputViewModel : ViewModel() {
     private val _inputCurrencyMoneyInput = MutableStateFlow(MoneyIO.zero(DEFAULT_CURRENCY))
     val moneyInput: StateFlow<MoneyInputData> = _inputCurrencyMoneyInput.map {
         MoneyInputData(
-            money = if (negateModeEnabled && it.isPositive()) it.negate() else it,
+            money = when (amountInputMode) {
+                AmountInputMode.POSITIVE -> if (it.isNegative()) -it else it
+                AmountInputMode.NEGATIVE -> if (it.isPositive()) it.negate() else it
+                AmountInputMode.BOTH -> it
+            },
             text = MoneyFormatter.format(it),
             isValid = isValid(it)
         )
@@ -44,8 +49,6 @@ class MoneyInputViewModel : ViewModel() {
 
     private val _uiMaxValue: MutableStateFlow<MoneyParam> = MutableStateFlow(MoneyParam.Disable)
     val uiMaxValue: StateFlow<MoneyParam> = _uiMaxValue
-
-    fun isNegateModeEnabled() = negateModeEnabled
 
     fun init(request: AmountInputRequest) {
         isInitValue = true
@@ -65,26 +68,34 @@ class MoneyInputViewModel : ViewModel() {
                 request.amountMax.amount
             }
         }
-        if (moneyMin >= moneyMax) {
-            moneyMin = MoneyIO.min(request.amount.currency)
-            moneyMax = MoneyIO.max(request.amount.currency)
-            _uiMinValue.value = MoneyParam.Disable
-            _uiMaxValue.value = MoneyParam.Disable
-        }
 
-        if (moneyMax.isZero() && moneyMin.isNegative()) {
-            /**
-                In this case we will present the amount as positive with negative outcome
-                and the whole input switches to negative input mode
-             */
-            negateModeEnabled = true
-            moneyMax = -moneyMin
-            moneyMin = MoneyIO.zero(moneyMin.currency)
-            _uiMinValue.value = MoneyParam.Enable(moneyMin)
-            _uiMaxValue.value = MoneyParam.Enable(moneyMax)
-            _inputCurrencyMoneyInput.value = request.amount.abs()
-        } else {
-            _inputCurrencyMoneyInput.value = request.amount
+        when {
+            moneyMin >= moneyMax -> {
+                moneyMin = MoneyIO.min(request.amount.currency)
+                moneyMax = MoneyIO.max(request.amount.currency)
+                _uiMinValue.value = MoneyParam.Disable
+                _uiMaxValue.value = MoneyParam.Disable
+                _inputCurrencyMoneyInput.value = request.amount
+            }
+
+            moneyMax.isZero() && moneyMin.isNegative() -> {
+                amountInputMode = AmountInputMode.NEGATIVE
+                moneyMax = -moneyMin
+                moneyMin = MoneyIO.zero(moneyMin.currency)
+                _uiMinValue.value = MoneyParam.Disable
+                _uiMaxValue.value = MoneyParam.Enable(moneyMax)
+                _inputCurrencyMoneyInput.value = request.amount.abs()
+            }
+
+            moneyMin.isZero() && moneyMax.isPositive() -> {
+                amountInputMode = AmountInputMode.POSITIVE
+                _uiMinValue.value = MoneyParam.Disable
+                _inputCurrencyMoneyInput.value = request.amount.abs()
+            }
+
+            else -> {
+                _inputCurrencyMoneyInput.value = request.amount
+            }
         }
     }
 
@@ -108,6 +119,7 @@ class MoneyInputViewModel : ViewModel() {
                 isInitValue = false
                 _inputCurrencyMoneyInput.value = maxOf(minOf(newValue, moneyMax), moneyMin)
             }
+
             is NumpadKey.DecimalSeparator -> Unit
             NumpadKey.Negate -> negate()
         }
@@ -138,6 +150,12 @@ class MoneyInputViewModel : ViewModel() {
     private fun isValueBetweenMinMax(money: MoneyIO): Boolean {
         return money in moneyMin..moneyMax
     }
+}
+
+enum class AmountInputMode {
+    POSITIVE,
+    NEGATIVE,
+    BOTH
 }
 
 data class MoneyInputData(

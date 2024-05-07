@@ -38,12 +38,12 @@ data class PercentIO internal constructor(
         /**
          * Represents 100%
          */
-        val WHOLE: PercentIO = PercentIO(WHOLE_VALUE)
+        @Keep val WHOLE: PercentIO = PercentIO(WHOLE_VALUE)
 
         /**
          * Represents 0%
          */
-        val ZERO: PercentIO = PercentIO(ZERO_VALUE)
+        @Keep val ZERO: PercentIO = PercentIO(ZERO_VALUE)
 
         @Keep
         fun of(number: Number): PercentIO {
