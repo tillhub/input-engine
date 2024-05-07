@@ -82,8 +82,10 @@ class MoneyInputViewModel : ViewModel() {
             moneyMin = MoneyIO.zero(moneyMin.currency)
             _uiMinValue.value = MoneyParam.Enable(moneyMin)
             _uiMaxValue.value = MoneyParam.Enable(moneyMax)
+            _inputCurrencyMoneyInput.value = request.amount.abs()
+        } else {
+            _inputCurrencyMoneyInput.value = request.amount
         }
-        _inputCurrencyMoneyInput.value = request.amount
     }
 
     internal fun input(key: NumpadKey) {

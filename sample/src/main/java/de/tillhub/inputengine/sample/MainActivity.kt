@@ -105,8 +105,8 @@ class MainActivity : ComponentActivity() {
                                 onClick = {
                                     moneyInputLauncher.launch(
                                         AmountInputRequest(
-                                            amount = MoneyIO.of(
-                                                0.toBigInteger(),
+                                            amount = -MoneyIO.of(
+                                                300.toBigInteger(),
                                                 Currency.getInstance("EUR")
                                             ),
                                             amountMin = MoneyParam.Enable(
@@ -117,7 +117,7 @@ class MainActivity : ComponentActivity() {
                                             ),
                                             amountMax = MoneyParam.Enable(
                                                 MoneyIO.of(
-                                                    5000.toBigInteger(),
+                                                    0.toBigInteger(),
                                                     Currency.getInstance("EUR")
                                                 )
                                             ),

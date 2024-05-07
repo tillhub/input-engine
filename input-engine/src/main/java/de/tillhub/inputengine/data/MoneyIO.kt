@@ -12,7 +12,6 @@ import java.util.Currency
  * Money input/output which supports up to two decimal places
  * Int 100 -> 1,00 EUR
  * Double 100.0 -> 1,00 EUR
- *
  */
 @Parcelize
 data class MoneyIO internal constructor(
@@ -33,6 +32,8 @@ data class MoneyIO internal constructor(
             this >= MoneyIO(MIN_VALUE_DECIMAL, currency)
 
     fun negate(): MoneyIO = MoneyIO(amount.negate(), currency)
+
+    fun abs(): MoneyIO = MoneyIO(amount.abs(), currency)
 
     override fun compareTo(other: MoneyIO): Int = calculable(other) {
         amount.compareTo(other.amount)
