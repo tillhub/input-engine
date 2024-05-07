@@ -205,12 +205,11 @@ data class QuantityIO internal constructor(
         private val FRACTIONS_FACTOR_INT: BigInteger = pow10(FRACTIONS)
 
         // MAX_VALUE for the Quantity class is 10 000
-        @Keep val MAX_VALUE: QuantityIO =
+        val MAX_VALUE: QuantityIO =
             QuantityIO(BigInteger.valueOf(10000).multiply(FRACTIONS_FACTOR_INT))
-        @Keep val MIN_VALUE: QuantityIO = MAX_VALUE.unaryMinus()
-        @Keep val ZERO: QuantityIO = QuantityIO(BigInteger.ZERO)
+        val MIN_VALUE: QuantityIO = MAX_VALUE.unaryMinus()
+        val ZERO: QuantityIO = QuantityIO(BigInteger.ZERO)
 
-        @Keep
         fun of(number: Number): QuantityIO = QuantityIO(when (number) {
             is Int -> number.toBigInteger().multiply(FRACTIONS_FACTOR_INT)
             is Long -> number.toBigInteger().multiply(FRACTIONS_FACTOR_INT)

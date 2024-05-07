@@ -77,11 +77,10 @@ data class MoneyIO internal constructor(
         private val MIN_VALUE_DECIMAL: BigDecimal = -MAX_VALUE_DECIMAL
 
         // Constructors
-        @Keep fun zero(currency: Currency) = MoneyIO(BigDecimal.ZERO, currency)
-        @Keep fun max(currency: Currency) = MoneyIO(MAX_VALUE_DECIMAL, currency)
-        @Keep fun min(currency: Currency) = MoneyIO(MIN_VALUE_DECIMAL, currency)
+        fun zero(currency: Currency) = MoneyIO(BigDecimal.ZERO, currency)
+        fun max(currency: Currency) = MoneyIO(MAX_VALUE_DECIMAL, currency)
+        fun min(currency: Currency) = MoneyIO(MIN_VALUE_DECIMAL, currency)
 
-        @Keep
         fun of(amount: Number, currency: Currency): MoneyIO {
             return MoneyIO(when (amount) {
                 is Int -> amount.toBigDecimal().movePointLeft(currency.defaultFractionDigits)

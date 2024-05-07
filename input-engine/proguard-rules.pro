@@ -27,8 +27,11 @@
 
 # Data Inputs
 -keep class de.tillhub.inputengine.data.MoneyIO { *; }
+-keep class de.tillhub.inputengine.data.MoneyIO$Companion { *; }
 -keep class de.tillhub.inputengine.data.PercentIO { *; }
+-keep class de.tillhub.inputengine.data.PercentIO$Companion { *; }
 -keep class de.tillhub.inputengine.data.QuantityIO { *; }
+-keep class de.tillhub.inputengine.data.QuantityIO$Companion { *; }
 
 # Params
 -keep class de.tillhub.inputengine.data.MoneyParam { *; }
