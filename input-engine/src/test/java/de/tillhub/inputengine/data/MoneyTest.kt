@@ -1,6 +1,5 @@
 package de.tillhub.inputengine.data
 
-
 import de.tillhub.inputengine.helper.EUR
 import de.tillhub.inputengine.helper.eur
 import de.tillhub.inputengine.helper.jpy

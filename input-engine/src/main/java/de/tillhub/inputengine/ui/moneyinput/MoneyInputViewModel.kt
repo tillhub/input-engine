@@ -38,24 +38,40 @@ class MoneyInputViewModel : ViewModel() {
         initialValue = EMPTY
     )
 
+    private val _uiMinValue: MutableStateFlow<MoneyParam> = MutableStateFlow(MoneyParam.Disable)
+    val uiMinValue: StateFlow<MoneyParam> = _uiMinValue
+
+    private val _uiMaxValue: MutableStateFlow<MoneyParam> = MutableStateFlow(MoneyParam.Disable)
+    val uiMaxValue: StateFlow<MoneyParam> = _uiMaxValue
+
     fun init(request: AmountInputRequest) {
         isInitValue = true
         isZeroAllowed = request.isZeroAllowed
         initAmount = request.amount
-        moneyMax = when (request.amountMax) {
-            MoneyParam.Disable -> MoneyIO.max(request.amount.currency)
-            is MoneyParam.Enable -> request.amountMax.amount
-        }
         moneyMin = when (request.amountMin) {
             MoneyParam.Disable -> MoneyIO.min(request.amount.currency)
-            is MoneyParam.Enable -> request.amountMin.amount
+            is MoneyParam.Enable -> {
+                _uiMinValue.value = request.amountMin
+                request.amountMin.amount
+            }
+        }
+        moneyMax = when (request.amountMax) {
+            MoneyParam.Disable -> MoneyIO.max(request.amount.currency)
+            is MoneyParam.Enable -> {
+                _uiMaxValue.value = request.amountMax
+                request.amountMax.amount
+            }
         }
         if (moneyMin >= moneyMax) {
+            _uiMinValue.value = MoneyParam.Disable
+            _uiMaxValue.value = MoneyParam.Disable
             moneyMin = MoneyIO.min(request.amount.currency)
             moneyMax = MoneyIO.max(request.amount.currency)
         }
         if (moneyMax.isZero() && moneyMin.isNegative()) {
             negateNextDigit = true
+            _uiMinValue.value = request.amountMax
+            _uiMaxValue.value = request.amountMin
         }
         _inputCurrencyMoneyInput.value = request.amount
     }

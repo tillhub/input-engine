@@ -1,7 +1,6 @@
 package de.tillhub.inputengine.ui.moneyinput
 
 import AppTheme
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -62,6 +61,8 @@ class MoneyInputActivity : ComponentActivity() {
                 is StringParam.StringResource -> stringResource(id = stringParam.resIdRes)
             }
 
+            val amountMin by viewModel.uiMinValue.collectAsStateWithLifecycle()
+            val amountMax by viewModel.uiMaxValue.collectAsStateWithLifecycle()
             val amount by viewModel.moneyInput.collectAsStateWithLifecycle()
             AppTheme {
                 Scaffold(
@@ -84,8 +85,8 @@ class MoneyInputActivity : ComponentActivity() {
                     ) {
                         InputPreview(
                             amount = amount,
-                            amountMin = request.amountMin,
-                            amountMax = request.amountMax,
+                            amountMin = amountMin,
+                            amountMax = amountMax,
                             amountHint = request.hintAmount
                         )
                         Numpad(
@@ -93,7 +94,7 @@ class MoneyInputActivity : ComponentActivity() {
                             showNegative = true
                         )
                         SubmitButton(amount.isValid) {
-                            setResult(Activity.RESULT_OK, Intent().apply {
+                            setResult(RESULT_OK, Intent().apply {
                                 putExtra(
                                     ExtraKeys.EXTRAS_RESULT,
                                     AmountInputResult.Success(amount.money, request.extras)
