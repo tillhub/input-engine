@@ -91,7 +91,7 @@ class MoneyInputActivity : ComponentActivity() {
                         )
                         Numpad(
                             onClick = viewModel::input,
-                            showNegative = true
+                            showNegative = viewModel.isNegateModeEnabled().not()
                         )
                         SubmitButton(amount.isValid) {
                             setResult(RESULT_OK, Intent().apply {

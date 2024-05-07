@@ -21,6 +21,7 @@ class MoneyInputViewModel : ViewModel() {
     private var isInitValue = false
     private var isZeroAllowed = true
     private var negateNextDigit = false
+    private var negateModeEnabled = false
     private lateinit var initAmount: MoneyIO
     private lateinit var moneyMax: MoneyIO
     private lateinit var moneyMin: MoneyIO
@@ -28,7 +29,7 @@ class MoneyInputViewModel : ViewModel() {
     private val _inputCurrencyMoneyInput = MutableStateFlow(MoneyIO.zero(DEFAULT_CURRENCY))
     val moneyInput: StateFlow<MoneyInputData> = _inputCurrencyMoneyInput.map {
         MoneyInputData(
-            money = it,
+            money = if (negateModeEnabled && it.isPositive()) it.negate() else it,
             text = MoneyFormatter.format(it),
             isValid = isValid(it)
         )
@@ -43,6 +44,8 @@ class MoneyInputViewModel : ViewModel() {
 
     private val _uiMaxValue: MutableStateFlow<MoneyParam> = MutableStateFlow(MoneyParam.Disable)
     val uiMaxValue: StateFlow<MoneyParam> = _uiMaxValue
+
+    fun isNegateModeEnabled() = negateModeEnabled
 
     fun init(request: AmountInputRequest) {
         isInitValue = true
@@ -63,15 +66,22 @@ class MoneyInputViewModel : ViewModel() {
             }
         }
         if (moneyMin >= moneyMax) {
-            _uiMinValue.value = MoneyParam.Disable
-            _uiMaxValue.value = MoneyParam.Disable
             moneyMin = MoneyIO.min(request.amount.currency)
             moneyMax = MoneyIO.max(request.amount.currency)
+            _uiMinValue.value = MoneyParam.Disable
+            _uiMaxValue.value = MoneyParam.Disable
         }
+
         if (moneyMax.isZero() && moneyMin.isNegative()) {
-            negateNextDigit = true
-            _uiMinValue.value = request.amountMax
-            _uiMaxValue.value = request.amountMin
+            /**
+                In this case we will present the amount as positive with negative outcome
+                and the whole input switches to negative input mode
+             */
+            negateModeEnabled = true
+            moneyMax = -moneyMin
+            moneyMin = MoneyIO.zero(moneyMin.currency)
+            _uiMinValue.value = MoneyParam.Enable(moneyMin)
+            _uiMaxValue.value = MoneyParam.Enable(moneyMax)
         }
         _inputCurrencyMoneyInput.value = request.amount
     }
