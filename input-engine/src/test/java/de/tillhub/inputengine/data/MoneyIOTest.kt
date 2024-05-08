@@ -3,16 +3,14 @@ package de.tillhub.inputengine.data
 import de.tillhub.inputengine.helper.EUR
 import de.tillhub.inputengine.helper.eur
 import de.tillhub.inputengine.helper.jpy
-import de.tillhub.inputengine.helper.usd
 import io.kotest.assertions.throwables.shouldThrow
-import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.shouldBe
 import java.math.BigInteger
 
-class MoneyTest : DescribeSpec({
+class MoneyIOTest : DescribeSpec({
 
     describe("constructors") {
         it("Int") {
@@ -31,6 +29,11 @@ class MoneyTest : DescribeSpec({
         it("BigDecimal") {
             MoneyIO.of(178.56.toBigDecimal(), EUR).amount shouldBe 1.7856.toBigDecimal()
             MoneyIO.of(178.56.toBigDecimal(), EUR).toDouble() shouldBe 178.56
+            MoneyIO.of(178.56.toBigDecimal(), EUR).toInt() shouldBe 178
+        }
+        it("BigInteger") {
+            MoneyIO.of(1_56.toBigInteger(), EUR).amount shouldBe 1.56.toBigDecimal()
+            MoneyIO.of(78_94.toBigInteger(), EUR).toInt() shouldBe 7894
         }
     }
 
@@ -63,30 +66,7 @@ class MoneyTest : DescribeSpec({
             0.toBigDecimal().eur.isPositive().shouldBeFalse()
         }
     }
-    describe("plus operator") {
-        it("should not work on different currencies") {
-            shouldThrowExactly<IllegalArgumentException> { 1.0.toBigDecimal().eur + 1.0.toBigDecimal().usd }
-            shouldThrowExactly<IllegalArgumentException> { 100.toBigInteger().eur + 100.toBigInteger().usd }
-        }
 
-        it("should add correctly") {
-            1.00.toBigDecimal().eur + 0.00.toBigDecimal().eur shouldBe 1.00.toBigDecimal().eur
-            (-1.00).toBigDecimal().eur + 10.00.toBigDecimal().eur shouldBe 9.0.toBigDecimal().eur
-            1.00.toBigDecimal().eur + 12.34.toBigDecimal().eur shouldBe 1334.toBigInteger().eur
-        }
-    }
-    describe("minus operator") {
-        it("should not work on different currencies") {
-            shouldThrowExactly<IllegalArgumentException> { 1.0.toBigDecimal().eur - 1.0.toBigDecimal().usd }
-            shouldThrowExactly<IllegalArgumentException> { 1.0.toBigDecimal().usd - 1.0.toBigDecimal().eur }
-        }
-
-        it("should subtract correctly") {
-            1.23456789.toBigDecimal().eur - 1.00.toBigDecimal().eur shouldBe 0.23456789.toBigDecimal().eur
-            (-1.00).toBigDecimal().eur - 10.00.toBigDecimal().eur shouldBe (-11.0).toBigDecimal().eur
-            1.00.toBigDecimal().eur - 0.00.toBigDecimal().eur shouldBe 1.00.toBigDecimal().eur
-        }
-    }
     describe("Money is isValid") {
         it("should check correctly") {
             (-10).toBigInteger().eur.isValid().shouldBeTrue()
@@ -98,6 +78,21 @@ class MoneyTest : DescribeSpec({
             10000001.toBigDecimal().eur.isValid().shouldBeFalse()
         }
     }
+
+    describe("negate") {
+        it("should negate amount") {
+            10.eur.negate() shouldBe (-10).eur
+            (-6).eur.negate() shouldBe 6.eur
+        }
+    }
+
+    describe("abs") {
+        it("should return absolute amount") {
+            (-6).eur.abs() shouldBe 6.eur
+            6.eur.abs() shouldBe 6.eur
+        }
+    }
+
     describe("Money append") {
         it("should check correctly") {
             MoneyIO.append(1.toBigInteger().eur, Digit.ONE) shouldBe 0.11.toBigDecimal().eur

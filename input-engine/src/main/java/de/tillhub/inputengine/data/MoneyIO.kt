@@ -1,7 +1,6 @@
 package de.tillhub.inputengine.data
 
 import android.os.Parcelable
-import androidx.annotation.Keep
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -37,14 +36,6 @@ data class MoneyIO internal constructor(
 
     override fun compareTo(other: MoneyIO): Int = calculable(other) {
         amount.compareTo(other.amount)
-    }
-
-    operator fun plus(other: MoneyIO) = calculable(other) {
-        MoneyIO(amount + other.amount, currency)
-    }
-
-    operator fun minus(other: MoneyIO) = calculable(other) {
-        MoneyIO(amount - other.amount, currency)
     }
 
     operator fun unaryMinus() = MoneyIO(-amount, currency)

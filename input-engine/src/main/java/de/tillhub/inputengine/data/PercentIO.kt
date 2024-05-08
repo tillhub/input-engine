@@ -1,7 +1,6 @@
 package de.tillhub.inputengine.data
 
 import android.os.Parcelable
-import androidx.annotation.Keep
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -20,15 +19,17 @@ data class PercentIO internal constructor(
 
     override fun toByte(): Byte = value.toByte()
 
-    override fun toDouble(): Double = value.toDouble() / WHOLE_VALUE.toDouble()
+    override fun toDouble(): Double = value.toDouble() / I_100.toDouble()
 
-    override fun toFloat(): Float = value.toFloat() / WHOLE_VALUE
+    override fun toFloat(): Float = value.toFloat() / I_100
 
     override fun toInt(): Int = (value / I_100).toInt()
 
     override fun toLong(): Long = value / I_100
 
     override fun toShort(): Short = (value / I_100).toShort()
+
+    fun toRatio(): Double = value.toDouble() / WHOLE_VALUE.toDouble()
 
     companion object {
         private const val ZERO_VALUE = 0L

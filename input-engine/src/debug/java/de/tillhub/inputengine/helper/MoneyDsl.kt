@@ -14,6 +14,8 @@ val BigInteger.usd: MoneyIO get() = MoneyIO.of(this, USD)
 val BigInteger.gbp: MoneyIO get() = MoneyIO.of(this, GBP)
 val BigInteger.jpy: MoneyIO get() = MoneyIO.of(this, JPY)
 
+val Int.eur: MoneyIO get() = MoneyIO.of(this, EUR)
+
 val EUR: Currency get() = Currency.getInstance("EUR")
 val USD: Currency get() = Currency.getInstance("USD")
 val GBP: Currency get() = Currency.getInstance("GBP")

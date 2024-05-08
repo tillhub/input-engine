@@ -1,7 +1,6 @@
 package de.tillhub.inputengine.data
 
 import android.os.Parcelable
-import androidx.annotation.Keep
 import de.tillhub.inputengine.helper.BigIntegers
 import de.tillhub.inputengine.helper.isPositive
 import de.tillhub.inputengine.helper.isZero
@@ -12,7 +11,6 @@ import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.math.MathContext
-import java.math.RoundingMode
 
 /**
  * Quantity input/output which supports up to two decimal places
@@ -30,7 +28,7 @@ data class QuantityIO internal constructor(
     }
 
     @IgnoredOnParcel
-    val majorValue: BigInteger = value.divide(FRACTIONS_FACTOR_INT)
+    private val majorValue: BigInteger = value.divide(FRACTIONS_FACTOR_INT)
 
     @IgnoredOnParcel
     internal val majorDigits: List<Digit> by lazy { BigIntegers.digits(majorValue) }
@@ -46,16 +44,6 @@ data class QuantityIO internal constructor(
 
     operator fun unaryMinus() = QuantityIO(-value)
 
-    operator fun plus(other: QuantityIO): QuantityIO = QuantityIO(value.add(other.value))
-    operator fun minus(other: QuantityIO): QuantityIO = QuantityIO(value.subtract(other.value))
-
-    operator fun times(other: QuantityIO): QuantityIO =
-        QuantityIO(value.multiply(other.value).divide(FRACTIONS_FACTOR_INT))
-
-    operator fun div(other: QuantityIO): QuantityIO = of(
-        value.toBigDecimal().divide(other.value.toBigDecimal(), FRACTIONS, RoundingMode.HALF_UP)
-    )
-
     override fun compareTo(other: QuantityIO): Int = value.compareTo(other.value)
 
     override fun toByte(): Byte = value.toByte()
@@ -70,7 +58,7 @@ data class QuantityIO internal constructor(
 
     override fun toShort(): Short = value.divide(FRACTIONS_FACTOR_INT).toShort()
 
-    private fun isPositive(includeZero: Boolean = false): Boolean = value.isPositive(includeZero)
+    fun isPositive(includeZero: Boolean = false): Boolean = value.isPositive(includeZero)
     fun isNegative() = value.signum() == -1
     fun isZero(): Boolean = value.isZero()
 
