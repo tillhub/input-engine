@@ -12,12 +12,12 @@ import androidx.compose.ui.platform.LocalConfiguration
 private const val TABLET_SCREEN_SIZE = 600
 
 @Composable
-fun isTablet(): Boolean {
+internal fun isTablet(): Boolean {
     return LocalConfiguration.current.screenWidthDp >= TABLET_SCREEN_SIZE
 }
 
 @Composable
 @SuppressLint("ModifierFactoryExtensionFunction")
-fun getModifierBasedOnDeviceType(isTablet: Modifier, isMobile: Modifier): Modifier {
+internal fun getModifierBasedOnDeviceType(isTablet: Modifier, isMobile: Modifier): Modifier {
     return if (isTablet()) isTablet else isMobile
 }

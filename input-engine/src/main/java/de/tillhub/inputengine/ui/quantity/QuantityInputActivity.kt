@@ -52,7 +52,7 @@ import de.tillhub.inputengine.ui.theme.OrbitalBlue
 import de.tillhub.inputengine.ui.theme.TabletScaffoldModifier
 
 @ExperimentalMaterial3Api
-class QuantityInputActivity : ComponentActivity() {
+internal class QuantityInputActivity : ComponentActivity() {
 
     private val viewModel by viewModels<QuantityInputViewModel>()
 
@@ -123,15 +123,18 @@ class QuantityInputActivity : ComponentActivity() {
                         showNegative = true
                     )
                     SubmitButton(displayData.isValid) {
-                        setResult(RESULT_OK, Intent().apply {
-                            putExtra(
-                                ExtraKeys.EXTRAS_RESULT,
-                                QuantityInputResult.Success(
-                                    displayData.qty,
-                                    request.extras
+                        setResult(
+                            RESULT_OK,
+                            Intent().apply {
+                                putExtra(
+                                    ExtraKeys.EXTRAS_RESULT,
+                                    QuantityInputResult.Success(
+                                        displayData.qty,
+                                        request.extras
+                                    )
                                 )
-                            )
-                        })
+                            }
+                        )
                         finish()
                     }
                 }

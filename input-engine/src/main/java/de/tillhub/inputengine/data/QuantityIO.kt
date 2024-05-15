@@ -1,7 +1,6 @@
 package de.tillhub.inputengine.data
 
 import android.os.Parcelable
-import androidx.annotation.Keep
 import de.tillhub.inputengine.helper.BigIntegers
 import de.tillhub.inputengine.helper.isPositive
 import de.tillhub.inputengine.helper.isZero
@@ -12,7 +11,6 @@ import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.math.MathContext
-import java.math.RoundingMode
 
 /**
  * Quantity input/output which supports up to two decimal places
@@ -20,7 +18,7 @@ import java.math.RoundingMode
  * Double 1.56 -> x1,56 BigInteger(value=156)
  */
 @Parcelize
-data class QuantityIO internal constructor(
+class QuantityIO private constructor(
     val value: BigInteger
 ) : Parcelable, Comparable<QuantityIO>, Number() {
 
@@ -30,7 +28,7 @@ data class QuantityIO internal constructor(
     }
 
     @IgnoredOnParcel
-    val majorValue: BigInteger = value.divide(FRACTIONS_FACTOR_INT)
+    private val majorValue: BigInteger = value.divide(FRACTIONS_FACTOR_INT)
 
     @IgnoredOnParcel
     internal val majorDigits: List<Digit> by lazy { BigIntegers.digits(majorValue) }
@@ -46,16 +44,6 @@ data class QuantityIO internal constructor(
 
     operator fun unaryMinus() = QuantityIO(-value)
 
-    operator fun plus(other: QuantityIO): QuantityIO = QuantityIO(value.add(other.value))
-    operator fun minus(other: QuantityIO): QuantityIO = QuantityIO(value.subtract(other.value))
-
-    operator fun times(other: QuantityIO): QuantityIO =
-        QuantityIO(value.multiply(other.value).divide(FRACTIONS_FACTOR_INT))
-
-    operator fun div(other: QuantityIO): QuantityIO = of(
-        value.toBigDecimal().divide(other.value.toBigDecimal(), FRACTIONS, RoundingMode.HALF_UP)
-    )
-
     override fun compareTo(other: QuantityIO): Int = value.compareTo(other.value)
 
     override fun toByte(): Byte = value.toByte()
@@ -70,7 +58,7 @@ data class QuantityIO internal constructor(
 
     override fun toShort(): Short = value.divide(FRACTIONS_FACTOR_INT).toShort()
 
-    private fun isPositive(includeZero: Boolean = false): Boolean = value.isPositive(includeZero)
+    fun isPositive(includeZero: Boolean = false): Boolean = value.isPositive(includeZero)
     fun isNegative() = value.signum() == -1
     fun isZero(): Boolean = value.isZero()
 
@@ -196,6 +184,10 @@ data class QuantityIO internal constructor(
             }
         }
 
+    override fun toString() = "QuantityIO(value=$value)"
+    override fun equals(other: Any?) = other is QuantityIO && value == other.value
+    override fun hashCode() = value.hashCode()
+
     companion object {
 
         private val PRECISION: MathContext = MathContext.DECIMAL128
@@ -210,14 +202,16 @@ data class QuantityIO internal constructor(
         val MIN_VALUE: QuantityIO = MAX_VALUE.unaryMinus()
         val ZERO: QuantityIO = QuantityIO(BigInteger.ZERO)
 
-        fun of(number: Number): QuantityIO = QuantityIO(when (number) {
-            is Int -> number.toBigInteger().multiply(FRACTIONS_FACTOR_INT)
-            is Long -> number.toBigInteger().multiply(FRACTIONS_FACTOR_INT)
-            is Double -> number.toBigDecimal().multiply(FRACTIONS_FACTOR, PRECISION).toBigInteger()
-            is Float -> number.toBigDecimal().multiply(FRACTIONS_FACTOR, PRECISION).toBigInteger()
-            is BigDecimal -> number.multiply(FRACTIONS_FACTOR, PRECISION).toBigInteger()
-            is BigInteger -> number.multiply(FRACTIONS_FACTOR_INT)
-            else -> throw IllegalArgumentException("Not supported number for quantity")
-        })
+        fun of(number: Number): QuantityIO = QuantityIO(
+            when (number) {
+                is Int -> number.toBigInteger().multiply(FRACTIONS_FACTOR_INT)
+                is Long -> number.toBigInteger().multiply(FRACTIONS_FACTOR_INT)
+                is Double -> number.toBigDecimal().multiply(FRACTIONS_FACTOR, PRECISION).toBigInteger()
+                is Float -> number.toBigDecimal().multiply(FRACTIONS_FACTOR, PRECISION).toBigInteger()
+                is BigDecimal -> number.multiply(FRACTIONS_FACTOR, PRECISION).toBigInteger()
+                is BigInteger -> number.multiply(FRACTIONS_FACTOR_INT)
+                else -> throw IllegalArgumentException("Not supported number for quantity")
+            }
+        )
     }
 }

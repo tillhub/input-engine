@@ -6,6 +6,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 sealed class StringParam : Parcelable {
-    data class StringResource(@StringRes val resIdRes: Int) : StringParam()
-    data class String(val value: kotlin.String) : StringParam()
+    class StringResource(@StringRes val resIdRes: Int) : StringParam()
+    class String(val value: kotlin.String) : StringParam()
 }

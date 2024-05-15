@@ -42,7 +42,7 @@ import de.tillhub.inputengine.ui.theme.SoyuzGrey
 import de.tillhub.inputengine.ui.theme.TabletScaffoldModifier
 
 @ExperimentalMaterial3Api
-class MoneyInputActivity : ComponentActivity() {
+internal class MoneyInputActivity : ComponentActivity() {
 
     private val viewModel by viewModels<MoneyInputViewModel>()
 
@@ -94,12 +94,15 @@ class MoneyInputActivity : ComponentActivity() {
                             showNegative = viewModel.amountInputMode == AmountInputMode.BOTH
                         )
                         SubmitButton(amount.isValid) {
-                            setResult(RESULT_OK, Intent().apply {
-                                putExtra(
-                                    ExtraKeys.EXTRAS_RESULT,
-                                    AmountInputResult.Success(amount.money, request.extras)
-                                )
-                            })
+                            setResult(
+                                RESULT_OK,
+                                Intent().apply {
+                                    putExtra(
+                                        ExtraKeys.EXTRAS_RESULT,
+                                        AmountInputResult.Success(amount.money, request.extras)
+                                    )
+                                }
+                            )
                             finish()
                         }
                     }

@@ -31,7 +31,7 @@ class PinInputContract : ActivityResultContract<PinInputRequest, PinInputResult>
 }
 
 @Parcelize
-data class PinInputRequest(
+class PinInputRequest(
     val pin: String,
     val overridePinInput: Boolean = false,
     val toolbarTitle: StringParam = StringParam.StringResource(
@@ -41,6 +41,6 @@ data class PinInputRequest(
 ) : Parcelable
 
 sealed class PinInputResult {
-    data class Success(val extras: Bundle) : PinInputResult()
+    class Success(val extras: Bundle) : PinInputResult()
     data object Canceled : PinInputResult()
 }

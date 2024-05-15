@@ -16,6 +16,6 @@ internal object PercentageFormatter {
             this.maximumFractionDigits = 2
         }
 
-        return format.format(percent.toDouble())
+        return format.format(percent.toRatio())
     }
 }

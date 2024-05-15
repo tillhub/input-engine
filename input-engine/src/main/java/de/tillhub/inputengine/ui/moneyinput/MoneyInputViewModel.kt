@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import java.util.Currency
 
-class MoneyInputViewModel : ViewModel() {
+internal class MoneyInputViewModel : ViewModel() {
 
     private var isInitValue = false
     private var isZeroAllowed = true
@@ -152,13 +152,13 @@ class MoneyInputViewModel : ViewModel() {
     }
 }
 
-enum class AmountInputMode {
+internal enum class AmountInputMode {
     POSITIVE,
     NEGATIVE,
     BOTH
 }
 
-data class MoneyInputData(
+internal data class MoneyInputData(
     val money: MoneyIO,
     val text: String,
     val isValid: Boolean

@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
-class PinInputViewModel : ViewModel() {
+internal class PinInputViewModel : ViewModel() {
 
     private lateinit var pin: String
 
@@ -80,7 +80,7 @@ class PinInputViewModel : ViewModel() {
     }
 }
 
-sealed class PinInputState {
+internal sealed class PinInputState {
     data object AwaitingInput : PinInputState()
     data object InvalidPinFormat : PinInputState()
     data object PinValid : PinInputState()
