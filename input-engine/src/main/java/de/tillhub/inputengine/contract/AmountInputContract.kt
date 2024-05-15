@@ -36,7 +36,7 @@ class AmountInputContract : ActivityResultContract<AmountInputRequest, AmountInp
 }
 
 @Parcelize
-data class AmountInputRequest(
+class AmountInputRequest(
     val amount: MoneyIO = MoneyIO.zero(Currency.getInstance(Locale.getDefault())),
     val isZeroAllowed: Boolean = false,
     val toolbarTitle: StringParam = StringParam.StringResource(R.string.numpad_title_amount),
@@ -48,7 +48,7 @@ data class AmountInputRequest(
 
 @Parcelize
 sealed class AmountInputResult : Parcelable {
-    data class Success(
+    class Success(
         val amount: MoneyIO,
         val extras: Bundle
     ) : AmountInputResult()

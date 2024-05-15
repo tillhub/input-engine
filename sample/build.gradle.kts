@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
-    alias(libs.plugins.detekt)
 }
 
 android {
@@ -45,5 +44,4 @@ dependencies {
     implementation(libs.bundles.ui)
     implementation(libs.bundles.compose)
     implementation(libs.bundles.lifecycle)
-    detektPlugins(libs.detekt.formatting)
 }

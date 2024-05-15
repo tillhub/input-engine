@@ -39,7 +39,7 @@ import de.tillhub.inputengine.ui.theme.MagneticGrey
 import de.tillhub.inputengine.ui.theme.OrbitalBlue
 import de.tillhub.inputengine.ui.theme.TabletScaffoldModifier
 
-class PercentageInputActivity : ComponentActivity() {
+internal class PercentageInputActivity : ComponentActivity() {
 
     private val viewModel by viewModels<PercentageInputViewModel>()
 
@@ -100,14 +100,17 @@ class PercentageInputActivity : ComponentActivity() {
                         showDecimalSeparator = true
                     )
                     SubmitButton(data.isValid) {
-                        setResult(RESULT_OK, Intent().apply {
-                            putExtra(
-                                ExtraKeys.EXTRAS_RESULT,
-                                PercentageInputResult.Success(
-                                    data.percent, request.extras
+                        setResult(
+                            RESULT_OK,
+                            Intent().apply {
+                                putExtra(
+                                    ExtraKeys.EXTRAS_RESULT,
+                                    PercentageInputResult.Success(
+                                        data.percent, request.extras
+                                    )
                                 )
-                            )
-                        })
+                            }
+                        )
                         finish()
                     }
                 }

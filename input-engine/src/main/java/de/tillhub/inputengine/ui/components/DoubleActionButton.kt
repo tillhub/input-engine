@@ -31,7 +31,7 @@ import de.tillhub.inputengine.ui.theme.LunarGray
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun DoubleActionButton(
+internal fun DoubleActionButton(
     onClick: () -> Unit,
     onLongClick: () -> Unit,
     modifier: Modifier = Modifier,

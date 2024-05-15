@@ -34,7 +34,7 @@ class QuantityInputContract : ActivityResultContract<QuantityInputRequest, Quant
 }
 
 @Parcelize
-data class QuantityInputRequest(
+class QuantityInputRequest(
     val quantity: QuantityIO,
     val quantityHint: QuantityParam = QuantityParam.Disable,
     val allowsNegatives: Boolean = true,
@@ -47,6 +47,6 @@ data class QuantityInputRequest(
 
 @Parcelize
 sealed class QuantityInputResult : Parcelable {
-    data class Success(val quantity: QuantityIO, val extras: Bundle) : QuantityInputResult()
+    class Success(val quantity: QuantityIO, val extras: Bundle) : QuantityInputResult()
     data object Canceled : QuantityInputResult()
 }

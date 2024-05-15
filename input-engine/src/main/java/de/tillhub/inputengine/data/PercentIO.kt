@@ -11,7 +11,7 @@ import java.math.BigInteger
  * Double 5.6 -> 5,6%   Long(value=560L)
  */
 @Parcelize
-data class PercentIO internal constructor(
+class PercentIO private constructor(
     val value: Long
 ) : Parcelable, Comparable<PercentIO>, Number() {
 
@@ -31,6 +31,10 @@ data class PercentIO internal constructor(
 
     fun toRatio(): Double = value.toDouble() / WHOLE_VALUE.toDouble()
 
+    override fun toString() = "PercentIO(value=$value)"
+    override fun equals(other: Any?) = other is PercentIO && value == other.value
+    override fun hashCode() = value.hashCode()
+
     companion object {
         private const val ZERO_VALUE = 0L
         private const val I_100 = 100L
@@ -47,14 +51,16 @@ data class PercentIO internal constructor(
         val ZERO: PercentIO = PercentIO(ZERO_VALUE)
 
         fun of(number: Number): PercentIO {
-            return PercentIO(when (number) {
-                is Int -> number * I_100
-                is Long -> number * I_100
-                is Double -> (number * I_100).toLong()
-                is BigInteger -> number.toLong() * I_100
-                is BigDecimal -> number.multiply(I_100.toBigDecimal()).toLong()
-                else -> throw IllegalArgumentException("Percentage not supported number type")
-            })
+            return PercentIO(
+                when (number) {
+                    is Int -> number * I_100
+                    is Long -> number * I_100
+                    is Double -> (number * I_100).toLong()
+                    is BigInteger -> number.toLong() * I_100
+                    is BigDecimal -> number.multiply(I_100.toBigDecimal()).toLong()
+                    else -> throw IllegalArgumentException("Percentage not supported number type")
+                }
+            )
         }
     }
 }

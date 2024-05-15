@@ -13,7 +13,7 @@ import de.tillhub.inputengine.ui.theme.OrbitalBlue
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class QuantityInputViewModel : ViewModel() {
+internal class QuantityInputViewModel : ViewModel() {
 
     private val _mutableDisplayDataFlow = MutableStateFlow(QuantityInputData.EMPTY)
     val displayDataFlow: StateFlow<QuantityInputData> = _mutableDisplayDataFlow
@@ -156,7 +156,7 @@ class QuantityInputViewModel : ViewModel() {
     }
 }
 
-data class QuantityInputData(
+internal data class QuantityInputData(
     val qty: QuantityIO,
     val text: String,
     val color: Color,

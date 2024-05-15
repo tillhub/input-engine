@@ -18,7 +18,7 @@ import java.math.MathContext
  * Double 1.56 -> x1,56 BigInteger(value=156)
  */
 @Parcelize
-data class QuantityIO internal constructor(
+class QuantityIO private constructor(
     val value: BigInteger
 ) : Parcelable, Comparable<QuantityIO>, Number() {
 
@@ -184,6 +184,10 @@ data class QuantityIO internal constructor(
             }
         }
 
+    override fun toString() = "QuantityIO(value=$value)"
+    override fun equals(other: Any?) = other is QuantityIO && value == other.value
+    override fun hashCode() = value.hashCode()
+
     companion object {
 
         private val PRECISION: MathContext = MathContext.DECIMAL128
@@ -198,14 +202,16 @@ data class QuantityIO internal constructor(
         val MIN_VALUE: QuantityIO = MAX_VALUE.unaryMinus()
         val ZERO: QuantityIO = QuantityIO(BigInteger.ZERO)
 
-        fun of(number: Number): QuantityIO = QuantityIO(when (number) {
-            is Int -> number.toBigInteger().multiply(FRACTIONS_FACTOR_INT)
-            is Long -> number.toBigInteger().multiply(FRACTIONS_FACTOR_INT)
-            is Double -> number.toBigDecimal().multiply(FRACTIONS_FACTOR, PRECISION).toBigInteger()
-            is Float -> number.toBigDecimal().multiply(FRACTIONS_FACTOR, PRECISION).toBigInteger()
-            is BigDecimal -> number.multiply(FRACTIONS_FACTOR, PRECISION).toBigInteger()
-            is BigInteger -> number.multiply(FRACTIONS_FACTOR_INT)
-            else -> throw IllegalArgumentException("Not supported number for quantity")
-        })
+        fun of(number: Number): QuantityIO = QuantityIO(
+            when (number) {
+                is Int -> number.toBigInteger().multiply(FRACTIONS_FACTOR_INT)
+                is Long -> number.toBigInteger().multiply(FRACTIONS_FACTOR_INT)
+                is Double -> number.toBigDecimal().multiply(FRACTIONS_FACTOR, PRECISION).toBigInteger()
+                is Float -> number.toBigDecimal().multiply(FRACTIONS_FACTOR, PRECISION).toBigInteger()
+                is BigDecimal -> number.multiply(FRACTIONS_FACTOR, PRECISION).toBigInteger()
+                is BigInteger -> number.multiply(FRACTIONS_FACTOR_INT)
+                else -> throw IllegalArgumentException("Not supported number for quantity")
+            }
+        )
     }
 }

@@ -3,7 +3,7 @@ import androidx.compose.runtime.Composable
 import de.tillhub.inputengine.ui.theme.typography
 
 @Composable
-fun AppTheme(
+internal fun AppTheme(
     content: @Composable () -> Unit
 ) {
     MaterialTheme(

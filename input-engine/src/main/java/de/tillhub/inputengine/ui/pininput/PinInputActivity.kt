@@ -1,7 +1,6 @@
 package de.tillhub.inputengine.ui.pininput
 
 import AppTheme
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -52,7 +51,7 @@ import de.tillhub.inputengine.ui.theme.textFieldTransparentColors
 import kotlinx.coroutines.launch
 
 @ExperimentalMaterial3Api
-class PinInputActivity : ComponentActivity() {
+internal class PinInputActivity : ComponentActivity() {
 
     private val viewModel by viewModels<PinInputViewModel>()
 
@@ -97,9 +96,12 @@ class PinInputActivity : ComponentActivity() {
                     scope.launch {
                         snackbarHostState.showSnackbar(correctPin)
                     }
-                    setResult(RESULT_OK, Intent().apply {
-                        putExtras(request.extras)
-                    })
+                    setResult(
+                        RESULT_OK,
+                        Intent().apply {
+                            putExtras(request.extras)
+                        }
+                    )
                     finish()
                 }
 
@@ -185,9 +187,12 @@ class PinInputActivity : ComponentActivity() {
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .clickable {
-                            setResult(Activity.RESULT_OK, Intent().apply {
-                                putExtras(request.extras)
-                            })
+                            setResult(
+                                RESULT_OK,
+                                Intent().apply {
+                                    putExtras(request.extras)
+                                }
+                            )
                             finish()
                         },
                     textAlign = TextAlign.End,

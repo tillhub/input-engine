@@ -9,7 +9,7 @@ activity-compose = "1.9.0"
 compose-bom = "2024.05.00"
 
 timber = "5.0.1"
-detekt = "1.23.3"
+detekt = "1.23.6"
 
 junit = "4.13.2"
 mockk = "1.13.8"
@@ -48,6 +48,7 @@ kotest-property = { group = "io.kotest", name = "kotest-property-jvm", version.r
 
 # Dependencies of the included build-logic
 detekt-formatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt" }
+detekt-libraries = { group = "io.gitlab.arturbosch.detekt", name = "detekt-rules-libraries", version.ref = "detekt" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleRuntimeCompose" }

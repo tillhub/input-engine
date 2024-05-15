@@ -6,6 +6,7 @@ import java.math.BigDecimal
 import java.math.BigInteger
 import java.math.RoundingMode
 import java.util.Currency
+import java.util.Objects
 
 /**
  * Money input/output which supports up to two decimal places
@@ -13,7 +14,7 @@ import java.util.Currency
  * Double 100.0 -> 1,00 EUR
  */
 @Parcelize
-data class MoneyIO internal constructor(
+class MoneyIO private constructor(
     val amount: BigDecimal,
     val currency: Currency
 ) : Comparable<MoneyIO>, Parcelable, Number() {
@@ -59,6 +60,12 @@ data class MoneyIO internal constructor(
 
     override fun toShort() = amount.movePointRight(currency.defaultFractionDigits).toShort()
 
+    override fun toString() = "MoneyIO(amount=$amount, currency=$currency)"
+    override fun equals(other: Any?) = other is MoneyIO &&
+            amount == other.amount &&
+            currency == other.currency
+    override fun hashCode() = Objects.hash(amount, currency)
+
     companion object {
 
         // MAX_VALUE_NORMAL for the Money class is 10 000 000 currency
@@ -73,14 +80,17 @@ data class MoneyIO internal constructor(
         fun min(currency: Currency) = MoneyIO(MIN_VALUE_DECIMAL, currency)
 
         fun of(amount: Number, currency: Currency): MoneyIO {
-            return MoneyIO(when (amount) {
-                is Int -> amount.toBigDecimal().movePointLeft(currency.defaultFractionDigits)
-                is Long -> amount.toBigDecimal().movePointLeft(currency.defaultFractionDigits)
-                is Double -> amount.toBigDecimal().movePointLeft(currency.defaultFractionDigits)
-                is BigInteger -> amount.toBigDecimal().movePointLeft(currency.defaultFractionDigits)
-                is BigDecimal -> amount.movePointLeft(currency.defaultFractionDigits)
-                else -> throw IllegalArgumentException("Money $amount is not supported type.")
-            }, currency)
+            return MoneyIO(
+                when (amount) {
+                    is Int -> amount.toBigDecimal().movePointLeft(currency.defaultFractionDigits)
+                    is Long -> amount.toBigDecimal().movePointLeft(currency.defaultFractionDigits)
+                    is Double -> amount.toBigDecimal().movePointLeft(currency.defaultFractionDigits)
+                    is BigInteger -> amount.toBigDecimal().movePointLeft(currency.defaultFractionDigits)
+                    is BigDecimal -> amount.movePointLeft(currency.defaultFractionDigits)
+                    else -> throw IllegalArgumentException("Money $amount is not supported type.")
+                },
+                currency
+            )
         }
 
         // Functions

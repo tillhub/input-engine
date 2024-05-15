@@ -12,7 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun buttonElevation() = buttonElevation(
+internal fun buttonElevation() = buttonElevation(
     defaultElevation = 3.dp,
     pressedElevation = 1.dp,
     disabledElevation = 1.dp,
@@ -21,14 +21,14 @@ fun buttonElevation() = buttonElevation(
 )
 
 @Composable
-fun textFieldTransparentColors() = TextFieldDefaults.colors(
+internal fun textFieldTransparentColors() = TextFieldDefaults.colors(
     unfocusedContainerColor = Color.Transparent,
     focusedContainerColor = Color.Transparent,
     focusedIndicatorColor = Color.Transparent,
     unfocusedIndicatorColor = Color.Transparent,
 )
 
-val TabletScaffoldModifier = Modifier
+internal val TabletScaffoldModifier = Modifier
     .width(380.dp)
     .height(600.dp)
     .clip(RoundedCornerShape(8.dp))

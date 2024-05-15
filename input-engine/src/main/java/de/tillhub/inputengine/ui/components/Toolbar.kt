@@ -46,6 +46,6 @@ internal fun Toolbar(
 }
 
 @Preview
-@Composable fun ToolbarPreview() {
+@Composable internal fun ToolbarPreview() {
     Toolbar("Title example") {}
 }

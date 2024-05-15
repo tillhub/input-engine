@@ -32,7 +32,7 @@ class PercentageInputContract : ActivityResultContract<PercentageInputRequest, P
 }
 
 @Parcelize
-data class PercentageInputRequest(
+class PercentageInputRequest(
     val percent: PercentIO = PercentIO.ZERO,
     val toolbarTitle: StringParam = StringParam.StringResource(R.string.numpad_title_percentage),
     val percentageMin: PercentageParam = PercentageParam.Disable,
@@ -42,6 +42,6 @@ data class PercentageInputRequest(
 
 @Parcelize
 sealed class PercentageInputResult : Parcelable {
-    data class Success(val percent: PercentIO, val extras: Bundle) : PercentageInputResult()
+    class Success(val percent: PercentIO, val extras: Bundle) : PercentageInputResult()
     data object Canceled : PercentageInputResult()
 }

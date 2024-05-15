@@ -1,3 +1,6 @@
+import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
+
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
@@ -52,6 +55,18 @@ android {
             jvmTarget = JavaVersion.VERSION_17.toString()
         }
     }
+    tasks.withType<Detekt>().configureEach {
+        jvmTarget = JavaVersion.VERSION_17.toString()
+    }
+    tasks.withType<DetektCreateBaselineTask>().configureEach {
+        jvmTarget = JavaVersion.VERSION_17.toString()
+    }
+}
+
+detekt {
+    buildUponDefaultConfig = true // preconfigure defaults
+    allRules = false // activate all available (even unstable) rules.
+    config.setFrom("$projectDir/config/detekt.yml")
 }
 
 dependencies {
@@ -60,7 +75,10 @@ dependencies {
     implementation(libs.bundles.compose)
     implementation(libs.bundles.lifecycle)
     implementation(libs.androidx.lifecycle.runtime.compose)
+
     detektPlugins(libs.detekt.formatting)
+    detektPlugins(libs.detekt.libraries)
+
     testImplementation(libs.bundles.testing)
 }
 

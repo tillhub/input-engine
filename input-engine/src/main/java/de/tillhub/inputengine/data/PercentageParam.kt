@@ -5,6 +5,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 sealed class PercentageParam : Parcelable {
-    data class Enable(val percent: PercentIO) : PercentageParam()
+    class Enable(val percent: PercentIO) : PercentageParam()
     data object Disable : PercentageParam()
 }
