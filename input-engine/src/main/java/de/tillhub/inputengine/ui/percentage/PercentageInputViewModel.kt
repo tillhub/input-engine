@@ -10,12 +10,13 @@ import de.tillhub.inputengine.helper.NumberInputController
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-internal class PercentageInputViewModel : ViewModel() {
+internal class PercentageInputViewModel(
+    private val inputController: NumberInputController = NumberInputController(maxMajorDigits = 3)
+) : ViewModel() {
 
     private var isInitValue = false
     private var maxPercent: PercentIO = PercentIO.WHOLE
     private var minPercent: PercentIO = PercentIO.ZERO
-    private val inputController = NumberInputController(maxMajorDigits = 3)
 
     private val _inputPercentIO = MutableStateFlow(PercentageInputData.EMPTY)
     val percentageInput: StateFlow<PercentageInputData> = _inputPercentIO

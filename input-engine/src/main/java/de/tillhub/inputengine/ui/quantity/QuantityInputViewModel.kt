@@ -13,12 +13,12 @@ import de.tillhub.inputengine.ui.theme.OrbitalBlue
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-internal class QuantityInputViewModel : ViewModel() {
+internal class QuantityInputViewModel(
+    private val inputController: NumberInputController = NumberInputController(maxMajorDigits = 5)
+) : ViewModel() {
 
     private val _mutableDisplayDataFlow = MutableStateFlow(QuantityInputData.EMPTY)
     val displayDataFlow: StateFlow<QuantityInputData> = _mutableDisplayDataFlow
-
-    private val inputController = NumberInputController(maxMajorDigits = 5)
 
     private var nextKeyResetsCurrentValue = false
     private var quantityHint: QuantityParam = QuantityParam.Disable
@@ -37,10 +37,6 @@ internal class QuantityInputViewModel : ViewModel() {
             updateDisplayData(displayDataFlow.value.qty)
         }
 
-    init {
-        setValue(QuantityIO.ZERO)
-    }
-
     fun setInitialValue(request: QuantityInputRequest) {
         isZeroAllowed = request.allowsZero
         allowsNegatives = request.allowsNegatives
@@ -58,17 +54,6 @@ internal class QuantityInputViewModel : ViewModel() {
             maxQuantity = QuantityIO.MAX_VALUE
         }
         setValue(request.quantity)
-    }
-
-    fun setValue(currentValue: QuantityIO) {
-        inputController.setValue(
-            majorDigits = currentValue.majorDigits,
-            minorDigits = currentValue.minorDigits,
-            isNegative = currentValue.isNegative()
-        )
-        updateDisplayData(currentValue)
-
-        nextKeyResetsCurrentValue = true
     }
 
     fun decrease() {
@@ -92,14 +77,7 @@ internal class QuantityInputViewModel : ViewModel() {
         }
     }
 
-    private fun clearValueIfNeeded() {
-        if (nextKeyResetsCurrentValue) {
-            nextKeyResetsCurrentValue = false
-            inputController.clear()
-        }
-    }
-
-    internal fun processKey(key: NumpadKey) {
+    fun processKey(key: NumpadKey) {
         clearValueIfNeeded()
 
         when (key) {
@@ -128,8 +106,28 @@ internal class QuantityInputViewModel : ViewModel() {
         updateDisplayData(quantity)
     }
 
+    private fun setValue(currentValue: QuantityIO) {
+        inputController.setValue(
+            majorDigits = currentValue.majorDigits,
+            minorDigits = currentValue.minorDigits,
+            isNegative = currentValue.isNegative()
+        )
+        updateDisplayData(currentValue)
+
+        nextKeyResetsCurrentValue = true
+    }
+
+    private fun clearValueIfNeeded() {
+        if (nextKeyResetsCurrentValue) {
+            nextKeyResetsCurrentValue = false
+            inputController.clear()
+        }
+    }
+
     private fun updateDisplayData(quantity: QuantityIO) {
-        val (quantityText, quantityColor) = if (quantityHint is QuantityParam.Enable && quantity.isZero()) {
+        val (quantityText, quantityColor) = if (quantityHint is QuantityParam.Enable &&
+            quantity.isZero() && !isZeroAllowed
+        ) {
             QuantityFormatter.format((quantityHint as QuantityParam.Enable).value) to MagneticGrey
         } else {
             QuantityFormatter.format(quantity, inputController.minorDigits.size) to OrbitalBlue

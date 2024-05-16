@@ -50,7 +50,7 @@ internal class PinInputViewModel : ViewModel() {
                     .apply { add(key.digit.value.digitToChar()) }
             }
 
-            is NumpadKey.DecimalSeparator -> {}
+            is NumpadKey.DecimalSeparator -> Unit
             NumpadKey.Negate -> Unit
         }
     }
