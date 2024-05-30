@@ -29,7 +29,7 @@ internal object BigIntegers {
      */
     internal fun digits(value: BigInteger): List<Digit> =
         mutableListOf<Digit>().also {
-            var currentValue = value
+            var currentValue = value.abs()
             while (currentValue.isPositive(includeZero = false)) {
                 val digitValue = currentValue.mod(BigInteger.TEN).toInt()
                 it.add(Digit.from(digitValue))

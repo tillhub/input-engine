@@ -117,7 +117,11 @@ internal class MoneyInputViewModel : ViewModel() {
                     MoneyIO.append(baseValue, key.digit)
                 }
                 isInitValue = false
-                _inputCurrencyMoneyInput.value = maxOf(minOf(newValue, moneyMax), moneyMin)
+                _inputCurrencyMoneyInput.value = if (moneyMin.isPositive()) {
+                    minOf(newValue, moneyMax)
+                } else {
+                    maxOf(minOf(newValue, moneyMax), moneyMin)
+                }
             }
 
             is NumpadKey.DecimalSeparator -> Unit

@@ -5,7 +5,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
-val typography = Typography(
+internal val typography = Typography(
     displayLarge = TextStyle(
         fontWeight = FontWeight.Light,
         fontSize = 57.sp,
