@@ -30,7 +30,9 @@ class AmountInputContract : ActivityResultContract<AmountInputRequest, AmountInp
 
     override fun parseResult(resultCode: Int, intent: Intent?): AmountInputResult {
         return intent.takeIf { resultCode == Activity.RESULT_OK }?.extras?.let {
-            BundleCompat.getParcelable(it, ExtraKeys.EXTRAS_RESULT, AmountInputResult.Success::class.java)
+            val amount = BundleCompat.getSerializable(it, ExtraKeys.EXTRAS_RESULT, MoneyIO::class.java)
+            val extras = it.getBundle(ExtraKeys.EXTRAS_ARGS)
+            AmountInputResult.Success(checkNotNull(amount), checkNotNull(extras))
         } ?: AmountInputResult.Canceled
     }
 }
@@ -46,12 +48,7 @@ class AmountInputRequest(
     val extras: Bundle = bundleOf()
 ) : Parcelable
 
-@Parcelize
-sealed class AmountInputResult : Parcelable {
-    class Success(
-        val amount: MoneyIO,
-        val extras: Bundle
-    ) : AmountInputResult()
-
+sealed class AmountInputResult {
+    class Success(val amount: MoneyIO, val extras: Bundle) : AmountInputResult()
     data object Canceled : AmountInputResult()
 }

@@ -15,8 +15,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import java.util.Currency
+import java.util.Locale
 
-internal class MoneyInputViewModel : ViewModel() {
+internal class MoneyInputViewModel(
+    private val locale: Locale = Locale.getDefault(Locale.Category.FORMAT)
+) : ViewModel() {
 
     private var isInitValue = false
     private var isZeroAllowed = true
@@ -35,7 +38,7 @@ internal class MoneyInputViewModel : ViewModel() {
                 AmountInputMode.NEGATIVE -> if (it.isPositive()) it.negate() else it
                 AmountInputMode.BOTH -> it
             },
-            text = MoneyFormatter.format(it),
+            text = MoneyFormatter.format(it, locale),
             isValid = isValid(it)
         )
     }.stateIn(

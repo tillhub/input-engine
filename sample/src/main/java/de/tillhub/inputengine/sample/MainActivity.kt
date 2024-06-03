@@ -18,6 +18,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.core.os.bundleOf
 import de.tillhub.inputengine.contract.AmountInputContract
 import de.tillhub.inputengine.contract.AmountInputRequest
 import de.tillhub.inputengine.contract.AmountInputResult
@@ -36,6 +37,7 @@ import de.tillhub.inputengine.data.PercentIO
 import de.tillhub.inputengine.data.PercentageParam
 import de.tillhub.inputengine.data.QuantityIO
 import de.tillhub.inputengine.data.QuantityParam
+import de.tillhub.inputengine.data.StringParam
 import de.tillhub.inputengine.sample.ui.theme.InputEngineTheme
 import java.math.BigDecimal
 import java.util.Currency
@@ -145,7 +147,9 @@ class MainActivity : ComponentActivity() {
                                 onClick = {
                                     pinInputLauncher.launch(
                                         PinInputRequest(
-                                            pin = "0000"
+                                            pin = "9876",
+                                            toolbarTitle = StringParam.String("PIN title"),
+                                            extras = bundleOf("argPin" to "hint for pin")
                                         )
                                     )
                                 }
@@ -188,7 +192,8 @@ class MainActivity : ComponentActivity() {
                                         PercentageInputRequest(
                                             percent = PercentIO.ZERO,
                                             percentageMin = PercentageParam.Enable(PercentIO.ZERO),
-                                            percentageMax = PercentageParam.Enable(PercentIO.WHOLE)
+                                            percentageMax = PercentageParam.Enable(PercentIO.WHOLE),
+                                            allowsZero = false
                                         )
                                     )
                                 }

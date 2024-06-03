@@ -1,7 +1,5 @@
 package de.tillhub.inputengine.data
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 import java.math.BigInteger
 
@@ -10,10 +8,9 @@ import java.math.BigInteger
  * Int 56 -> 56%  Long(value=5600L)
  * Double 5.6 -> 5,6%   Long(value=560L)
  */
-@Parcelize
 class PercentIO private constructor(
     val value: Long
-) : Parcelable, Comparable<PercentIO>, Number() {
+) : Comparable<PercentIO>, Number() {
 
     override fun compareTo(other: PercentIO): Int = value.compareTo(other.value)
 
@@ -30,6 +27,8 @@ class PercentIO private constructor(
     override fun toShort(): Short = (value / I_100).toShort()
 
     fun toRatio(): Double = value.toDouble() / WHOLE_VALUE.toDouble()
+
+    fun isNotZero() = value != ZERO_VALUE
 
     override fun toString() = "PercentIO(value=$value)"
     override fun equals(other: Any?) = other is PercentIO && value == other.value

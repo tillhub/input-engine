@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,7 +28,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.tillhub.inputengine.R
 import de.tillhub.inputengine.data.ExtraKeys
 import de.tillhub.inputengine.contract.PercentageInputRequest
-import de.tillhub.inputengine.contract.PercentageInputResult
 import de.tillhub.inputengine.data.PercentageParam
 import de.tillhub.inputengine.data.StringParam
 import de.tillhub.inputengine.formatter.PercentageFormatter
@@ -35,11 +35,12 @@ import de.tillhub.inputengine.ui.components.Numpad
 import de.tillhub.inputengine.ui.components.SubmitButton
 import de.tillhub.inputengine.ui.components.Toolbar
 import de.tillhub.inputengine.ui.components.getModifierBasedOnDeviceType
+import de.tillhub.inputengine.ui.percentage.PercentageInputData.Companion.EMPTY
 import de.tillhub.inputengine.ui.theme.MagneticGrey
 import de.tillhub.inputengine.ui.theme.OrbitalBlue
 import de.tillhub.inputengine.ui.theme.TabletScaffoldModifier
 
-internal class PercentageInputActivity : ComponentActivity() {
+class PercentageInputActivity : ComponentActivity() {
 
     private val viewModel by viewModels<PercentageInputViewModel>()
 
@@ -67,9 +68,9 @@ internal class PercentageInputActivity : ComponentActivity() {
 
     @Preview
     @Composable
-    fun PercentageScreen(
+    internal fun PercentageScreen(
         title: String = "",
-        data: PercentageInputData = PercentageInputData.EMPTY
+        data: PercentageInputData = EMPTY
     ) {
         AppTheme {
             Scaffold(
@@ -100,17 +101,11 @@ internal class PercentageInputActivity : ComponentActivity() {
                         showDecimalSeparator = true
                     )
                     SubmitButton(data.isValid) {
-                        setResult(
-                            RESULT_OK,
-                            Intent().apply {
-                                putExtra(
-                                    ExtraKeys.EXTRAS_RESULT,
-                                    PercentageInputResult.Success(
-                                        data.percent, request.extras
-                                    )
-                                )
-                            }
-                        )
+                        val resultIntent = Intent().apply {
+                            putExtra(ExtraKeys.EXTRAS_RESULT, data.percent)
+                            putExtra(ExtraKeys.EXTRAS_ARGS, request.extras)
+                        }
+                        setResult(RESULT_OK, resultIntent)
                         finish()
                     }
                 }
@@ -141,7 +136,8 @@ internal class PercentageInputActivity : ComponentActivity() {
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .wrapContentWidth(Alignment.CenterHorizontally),
+                .wrapContentWidth(Alignment.CenterHorizontally)
+                .testTag("percentValue"),
             style = MaterialTheme.typography.displaySmall,
             maxLines = 1,
             text = percentText,

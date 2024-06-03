@@ -35,7 +35,7 @@ internal class PinInputViewModel : ViewModel() {
         }
     }
 
-    internal fun input(key: NumpadKey) {
+    fun input(key: NumpadKey) {
         when (key) {
             NumpadKey.Clear -> {
                 _pinInputChars.value = emptyList()

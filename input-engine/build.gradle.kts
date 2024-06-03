@@ -50,6 +50,13 @@ android {
         useJUnitPlatform()
     }
 
+    packaging {
+        resources {
+            excludes.add("META-INF/*")
+            excludes.add("MANIFEST.MF")
+        }
+    }
+
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions {
             jvmTarget = JavaVersion.VERSION_17.toString()
@@ -80,6 +87,8 @@ dependencies {
     detektPlugins(libs.detekt.libraries)
 
     testImplementation(libs.bundles.testing)
+    androidTestImplementation(libs.bundles.testing.android)
+    debugImplementation(libs.androidx.ui.test.manifest)
 }
 
 afterEvaluate {
@@ -88,7 +97,7 @@ afterEvaluate {
             create<MavenPublication>("input-engine") {
                 groupId = "de.tillhub.inputengine"
                 artifactId = "input-engine"
-                version = "0.9.9"
+                version = "1.0.0"
 
                 from(components.getByName("release"))
             }

@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -26,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.os.BundleCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.tillhub.inputengine.contract.AmountInputRequest
-import de.tillhub.inputengine.contract.AmountInputResult
 import de.tillhub.inputengine.data.ExtraKeys
 import de.tillhub.inputengine.data.MoneyParam
 import de.tillhub.inputengine.data.StringParam
@@ -41,8 +39,7 @@ import de.tillhub.inputengine.ui.theme.OrbitalBlue
 import de.tillhub.inputengine.ui.theme.SoyuzGrey
 import de.tillhub.inputengine.ui.theme.TabletScaffoldModifier
 
-@ExperimentalMaterial3Api
-internal class MoneyInputActivity : ComponentActivity() {
+class MoneyInputActivity : ComponentActivity() {
 
     private val viewModel by viewModels<MoneyInputViewModel>()
 
@@ -94,15 +91,11 @@ internal class MoneyInputActivity : ComponentActivity() {
                             showNegative = viewModel.amountInputMode == AmountInputMode.BOTH
                         )
                         SubmitButton(amount.isValid) {
-                            setResult(
-                                RESULT_OK,
-                                Intent().apply {
-                                    putExtra(
-                                        ExtraKeys.EXTRAS_RESULT,
-                                        AmountInputResult.Success(amount.money, request.extras)
-                                    )
-                                }
-                            )
+                            val resultIntent = Intent().apply {
+                                putExtra(ExtraKeys.EXTRAS_RESULT, amount.money)
+                                putExtra(ExtraKeys.EXTRAS_ARGS, request.extras)
+                            }
+                            setResult(RESULT_OK, resultIntent)
                             finish()
                         }
                     }
@@ -113,7 +106,7 @@ internal class MoneyInputActivity : ComponentActivity() {
 
     @Preview
     @Composable
-    fun InputPreview(
+    internal fun InputPreview(
         amount: MoneyInputData = EMPTY,
         amountMin: MoneyParam = MoneyParam.Disable,
         amountMax: MoneyParam = MoneyParam.Disable,

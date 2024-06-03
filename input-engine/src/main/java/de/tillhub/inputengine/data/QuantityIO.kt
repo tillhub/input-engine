@@ -1,13 +1,11 @@
 package de.tillhub.inputengine.data
 
-import android.os.Parcelable
 import de.tillhub.inputengine.helper.BigIntegers
 import de.tillhub.inputengine.helper.isPositive
 import de.tillhub.inputengine.helper.isZero
 import de.tillhub.inputengine.helper.pow10
 import de.tillhub.inputengine.helper.pow10decimal
 import kotlinx.parcelize.IgnoredOnParcel
-import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.math.MathContext
@@ -17,10 +15,9 @@ import java.math.MathContext
  * Int 1 -> x1 BigInteger(value=100)
  * Double 1.56 -> x1,56 BigInteger(value=156)
  */
-@Parcelize
 class QuantityIO private constructor(
     val value: BigInteger
-) : Parcelable, Comparable<QuantityIO>, Number() {
+) : Comparable<QuantityIO>, Number() {
 
     @IgnoredOnParcel
     val decimal: BigDecimal by lazy {
