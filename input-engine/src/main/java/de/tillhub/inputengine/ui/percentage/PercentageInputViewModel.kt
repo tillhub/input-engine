@@ -9,20 +9,29 @@ import de.tillhub.inputengine.formatter.PercentageFormatter
 import de.tillhub.inputengine.helper.NumberInputController
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import java.util.Locale
 
 internal class PercentageInputViewModel(
-    private val inputController: NumberInputController = NumberInputController(maxMajorDigits = 3)
+    private val inputController: NumberInputController = NumberInputController(maxMajorDigits = 3),
+    private val locale: Locale = Locale.getDefault(Locale.Category.FORMAT)
 ) : ViewModel() {
+
+    private val _inputPercentIO = MutableStateFlow(PercentageInputData.EMPTY)
+    val percentageInput: StateFlow<PercentageInputData> = _inputPercentIO
 
     private var isInitValue = false
     private var maxPercent: PercentIO = PercentIO.WHOLE
     private var minPercent: PercentIO = PercentIO.ZERO
 
-    private val _inputPercentIO = MutableStateFlow(PercentageInputData.EMPTY)
-    val percentageInput: StateFlow<PercentageInputData> = _inputPercentIO
+    private var isZeroAllowed: Boolean = false
+        set(value) {
+            field = value
+            setValue(percentageInput.value.percent)
+        }
 
     fun init(request: PercentageInputRequest) {
         this.isInitValue = true
+        this.isZeroAllowed = request.allowsZero
         minPercent = when (request.percentageMin) {
             PercentageParam.Disable -> PercentIO.ZERO
             is PercentageParam.Enable -> request.percentageMin.percent
@@ -65,13 +74,17 @@ internal class PercentageInputViewModel(
     private fun setValue(percent: PercentIO) {
         _inputPercentIO.value = PercentageInputData(
             percent = percent,
-            text = PercentageFormatter.format(percent, inputController.minorDigits.size),
+            text = PercentageFormatter.format(percent, inputController.minorDigits.size, locale),
             isValid = isValid(percent)
         )
     }
 
     private fun isValid(percentIO: PercentIO): Boolean {
-        return isValueBetweenMinMax(percentIO)
+        return if (isZeroAllowed) {
+            isValueBetweenMinMax(percentIO)
+        } else {
+            percentIO.isNotZero() && isValueBetweenMinMax(percentIO)
+        }
     }
 
     private fun isValueBetweenMinMax(percent: PercentIO): Boolean {

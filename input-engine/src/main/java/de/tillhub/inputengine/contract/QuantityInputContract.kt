@@ -28,7 +28,9 @@ class QuantityInputContract : ActivityResultContract<QuantityInputRequest, Quant
 
     override fun parseResult(resultCode: Int, intent: Intent?): QuantityInputResult {
         return intent.takeIf { resultCode == Activity.RESULT_OK }?.extras?.let {
-            BundleCompat.getParcelable(it, ExtraKeys.EXTRAS_RESULT, QuantityInputResult.Success::class.java)
+            val qty = BundleCompat.getSerializable(it, ExtraKeys.EXTRAS_RESULT, QuantityIO::class.java)
+            val extras = it.getBundle(ExtraKeys.EXTRAS_ARGS)
+            QuantityInputResult.Success(checkNotNull(qty), checkNotNull(extras))
         } ?: QuantityInputResult.Canceled
     }
 }
@@ -45,8 +47,7 @@ class QuantityInputRequest(
     val extras: Bundle = bundleOf()
 ) : Parcelable
 
-@Parcelize
-sealed class QuantityInputResult : Parcelable {
+sealed class QuantityInputResult {
     class Success(val quantity: QuantityIO, val extras: Bundle) : QuantityInputResult()
     data object Canceled : QuantityInputResult()
 }

@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -50,8 +49,7 @@ import de.tillhub.inputengine.ui.theme.TabletScaffoldModifier
 import de.tillhub.inputengine.ui.theme.textFieldTransparentColors
 import kotlinx.coroutines.launch
 
-@ExperimentalMaterial3Api
-internal class PinInputActivity : ComponentActivity() {
+class PinInputActivity : ComponentActivity() {
 
     private val viewModel by viewModels<PinInputViewModel>()
 
@@ -96,12 +94,10 @@ internal class PinInputActivity : ComponentActivity() {
                     scope.launch {
                         snackbarHostState.showSnackbar(correctPin)
                     }
-                    setResult(
-                        RESULT_OK,
-                        Intent().apply {
-                            putExtras(request.extras)
-                        }
-                    )
+                    val intentResult = Intent().apply {
+                        putExtras(request.extras)
+                    }
+                    setResult(RESULT_OK, intentResult)
                     finish()
                 }
 

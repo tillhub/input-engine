@@ -13,6 +13,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
+import java.util.Locale
 
 @ExperimentalCoroutinesApi
 class PercentageInputViewModelTest : ViewModelFunSpec({
@@ -24,7 +25,7 @@ class PercentageInputViewModelTest : ViewModelFunSpec({
         inputController = mockk(relaxed = true) {
             every { value() } returns 25
         }
-        viewModel = PercentageInputViewModel(inputController)
+        viewModel = PercentageInputViewModel(inputController, Locale.GERMANY)
     }
 
     test("percentageInput") {
@@ -44,6 +45,23 @@ class PercentageInputViewModelTest : ViewModelFunSpec({
             percent = PercentIO.of(20),
             text = "20 %",
             isValid = true
+        )
+    }
+
+    test("init: zero not allowed") {
+        viewModel.init(
+            PercentageInputRequest(
+                percent = PercentIO.ZERO,
+                percentageMin = PercentageParam.Enable(PercentIO.of(10)),
+                percentageMax = PercentageParam.Enable(PercentIO.of(90)),
+                allowsZero = false
+            )
+        )
+
+        viewModel.percentageInput.first() shouldBe PercentageInputData(
+            percent = PercentIO.ZERO,
+            text = "0 %",
+            isValid = false
         )
     }
 

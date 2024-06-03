@@ -10,6 +10,7 @@ import de.tillhub.inputengine.helper.EUR
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
+import java.util.Locale
 
 @ExperimentalCoroutinesApi
 class MoneyInputViewModelTest : ViewModelFunSpec({
@@ -17,7 +18,7 @@ class MoneyInputViewModelTest : ViewModelFunSpec({
     lateinit var viewModel: MoneyInputViewModel
 
     beforeTest {
-        viewModel = MoneyInputViewModel()
+        viewModel = MoneyInputViewModel(Locale.GERMANY)
     }
 
     test("amountInputMode") {

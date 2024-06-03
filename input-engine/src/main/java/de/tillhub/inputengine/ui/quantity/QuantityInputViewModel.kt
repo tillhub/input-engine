@@ -12,9 +12,11 @@ import de.tillhub.inputengine.ui.theme.MagneticGrey
 import de.tillhub.inputengine.ui.theme.OrbitalBlue
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import java.util.Locale
 
 internal class QuantityInputViewModel(
-    private val inputController: NumberInputController = NumberInputController(maxMajorDigits = 5)
+    private val inputController: NumberInputController = NumberInputController(maxMajorDigits = 5),
+    private val locale: Locale = Locale.getDefault(Locale.Category.FORMAT)
 ) : ViewModel() {
 
     private val _mutableDisplayDataFlow = MutableStateFlow(QuantityInputData.EMPTY)
@@ -128,9 +130,16 @@ internal class QuantityInputViewModel(
         val (quantityText, quantityColor) = if (quantityHint is QuantityParam.Enable &&
             quantity.isZero() && !isZeroAllowed
         ) {
-            QuantityFormatter.format((quantityHint as QuantityParam.Enable).value) to MagneticGrey
+            QuantityFormatter.format(
+                quantity = (quantityHint as QuantityParam.Enable).value,
+                locale = locale
+            ) to MagneticGrey
         } else {
-            QuantityFormatter.format(quantity, inputController.minorDigits.size) to OrbitalBlue
+            QuantityFormatter.format(
+                quantity = quantity,
+                minFractionDigits = inputController.minorDigits.size,
+                locale = locale
+            ) to OrbitalBlue
         }
 
         _mutableDisplayDataFlow.value = QuantityInputData(

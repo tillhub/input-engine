@@ -1,23 +1,19 @@
 package de.tillhub.inputengine.data
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.math.RoundingMode
 import java.util.Currency
 import java.util.Objects
-
 /**
  * Money input/output which supports up to two decimal places
  * Int 100 -> 1,00 EUR
  * Double 100.0 -> 1,00 EUR
  */
-@Parcelize
 class MoneyIO private constructor(
     val amount: BigDecimal,
     val currency: Currency
-) : Comparable<MoneyIO>, Parcelable, Number() {
+) : Comparable<MoneyIO>, Number() {
 
     fun isZero() = amount.signum() == 0
     fun isNotZero() = !isZero()

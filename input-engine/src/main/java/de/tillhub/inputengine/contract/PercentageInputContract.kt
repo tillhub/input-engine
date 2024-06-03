@@ -26,7 +26,9 @@ class PercentageInputContract : ActivityResultContract<PercentageInputRequest, P
 
     override fun parseResult(resultCode: Int, intent: Intent?): PercentageInputResult {
         return intent.takeIf { resultCode == Activity.RESULT_OK }?.extras?.let {
-            BundleCompat.getParcelable(it, ExtraKeys.EXTRAS_RESULT, PercentageInputResult.Success::class.java)
+            val percent = BundleCompat.getSerializable(it, ExtraKeys.EXTRAS_RESULT, PercentIO::class.java)
+            val extras = it.getBundle(ExtraKeys.EXTRAS_ARGS)
+            PercentageInputResult.Success(checkNotNull(percent), checkNotNull(extras))
         } ?: PercentageInputResult.Canceled
     }
 }
@@ -37,11 +39,11 @@ class PercentageInputRequest(
     val toolbarTitle: StringParam = StringParam.StringResource(R.string.numpad_title_percentage),
     val percentageMin: PercentageParam = PercentageParam.Disable,
     val percentageMax: PercentageParam = PercentageParam.Disable,
+    val allowsZero: Boolean = true,
     val extras: Bundle = bundleOf()
 ) : Parcelable
 
-@Parcelize
-sealed class PercentageInputResult : Parcelable {
+sealed class PercentageInputResult {
     class Success(val percent: PercentIO, val extras: Bundle) : PercentageInputResult()
     data object Canceled : PercentageInputResult()
 }

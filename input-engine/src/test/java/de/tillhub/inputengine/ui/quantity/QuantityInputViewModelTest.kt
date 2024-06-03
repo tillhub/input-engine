@@ -16,6 +16,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.first
+import java.util.Locale
 
 class QuantityInputViewModelTest : FunSpec({
 
@@ -27,7 +28,7 @@ class QuantityInputViewModelTest : FunSpec({
             every { setValue(any(), any(), any()) } just Runs
             every { value() } returns 5
         }
-        viewModel = QuantityInputViewModel(inputController)
+        viewModel = QuantityInputViewModel(inputController, Locale.GERMANY)
     }
 
     test("displayDataFlow") {

@@ -770,3 +770,7 @@ libraries:
             - '**/main/java/de/tillhub/inputengine/data/QuantityIO.kt'
             - '**/main/java/de/tillhub/inputengine/data/QuantityParam.kt'
             - '**/main/java/de/tillhub/inputengine/data/StringParam.kt'
+            - '**/main/java/de/tillhub/inputengine/ui/pininput/PinInputActivity.kt'
+            - '**/main/java/de/tillhub/inputengine/ui/quantity/QuantityInputActivity.kt'
+            - '**/main/java/de/tillhub/inputengine/ui/moneyinput/MoneyInputActivity.kt'
+            - '**/main/java/de/tillhub/inputengine/ui/percentage/PercentageInputActivity.kt'

@@ -1,7 +1,6 @@
 package de.tillhub.inputengine.ui.quantity
 
 import AppTheme
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -16,7 +15,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -31,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -39,7 +38,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.tillhub.inputengine.R
 import de.tillhub.inputengine.data.ExtraKeys
 import de.tillhub.inputengine.contract.QuantityInputRequest
-import de.tillhub.inputengine.contract.QuantityInputResult
 import de.tillhub.inputengine.data.QuantityParam
 import de.tillhub.inputengine.data.StringParam
 import de.tillhub.inputengine.formatter.QuantityFormatter
@@ -51,8 +49,7 @@ import de.tillhub.inputengine.ui.theme.MagneticGrey
 import de.tillhub.inputengine.ui.theme.OrbitalBlue
 import de.tillhub.inputengine.ui.theme.TabletScaffoldModifier
 
-@ExperimentalMaterial3Api
-internal class QuantityInputActivity : ComponentActivity() {
+class QuantityInputActivity : ComponentActivity() {
 
     private val viewModel by viewModels<QuantityInputViewModel>()
 
@@ -79,7 +76,7 @@ internal class QuantityInputActivity : ComponentActivity() {
     }
 
     @Composable
-    fun QuantityScreen(
+    internal fun QuantityScreen(
         title: String,
         snackbarHostState: SnackbarHostState,
         displayData: QuantityInputData
@@ -98,7 +95,7 @@ internal class QuantityInputActivity : ComponentActivity() {
                 },
                 topBar = {
                     Toolbar(title) {
-                        setResult(Activity.RESULT_CANCELED)
+                        setResult(RESULT_CANCELED)
                         finish()
                     }
                 }
@@ -123,18 +120,11 @@ internal class QuantityInputActivity : ComponentActivity() {
                         showNegative = true
                     )
                     SubmitButton(displayData.isValid) {
-                        setResult(
-                            RESULT_OK,
-                            Intent().apply {
-                                putExtra(
-                                    ExtraKeys.EXTRAS_RESULT,
-                                    QuantityInputResult.Success(
-                                        displayData.qty,
-                                        request.extras
-                                    )
-                                )
-                            }
-                        )
+                        val resultIntent = Intent().apply {
+                            putExtra(ExtraKeys.EXTRAS_RESULT, displayData.qty)
+                            putExtra(ExtraKeys.EXTRAS_ARGS, request.extras)
+                        }
+                        setResult(RESULT_OK, resultIntent)
                         finish()
                     }
                 }
@@ -192,6 +182,7 @@ internal class QuantityInputActivity : ComponentActivity() {
                     }
                     Text(
                         style = MaterialTheme.typography.displaySmall,
+                        modifier = Modifier.testTag("qtyValue"),
                         maxLines = 1,
                         text = quantityText,
                         color = quantityColor,

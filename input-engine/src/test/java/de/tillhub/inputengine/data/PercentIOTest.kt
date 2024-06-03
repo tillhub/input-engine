@@ -1,6 +1,8 @@
 package de.tillhub.inputengine.data
 
 import io.kotest.core.spec.style.FunSpec
+import io.kotest.matchers.booleans.shouldBeFalse
+import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.shouldBe
 
 class PercentIOTest : FunSpec({
@@ -43,5 +45,10 @@ class PercentIOTest : FunSpec({
         PercentIO.of(5.6.toBigDecimal()).value shouldBe 560L
         PercentIO.of(56.07.toBigDecimal()).value shouldBe 5607L
         PercentIO.of(100.0.toBigDecimal()).value shouldBe 10000L
+    }
+
+    test("isNotZero") {
+        PercentIO.ZERO.isNotZero().shouldBeFalse()
+        PercentIO.WHOLE.isNotZero().shouldBeTrue()
     }
 })
