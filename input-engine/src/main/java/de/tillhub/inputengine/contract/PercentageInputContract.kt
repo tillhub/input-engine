@@ -16,7 +16,8 @@ import de.tillhub.inputengine.data.StringParam
 import de.tillhub.inputengine.ui.percentage.PercentageInputActivity
 import kotlinx.parcelize.Parcelize
 
-class PercentageInputContract : ActivityResultContract<PercentageInputRequest, PercentageInputResult>() {
+class PercentageInputContract :
+    ActivityResultContract<PercentageInputRequest, PercentageInputResult>() {
 
     override fun createIntent(context: Context, input: PercentageInputRequest): Intent {
         return Intent(context, PercentageInputActivity::class.java).apply {
@@ -26,7 +27,8 @@ class PercentageInputContract : ActivityResultContract<PercentageInputRequest, P
 
     override fun parseResult(resultCode: Int, intent: Intent?): PercentageInputResult {
         return intent.takeIf { resultCode == Activity.RESULT_OK }?.extras?.let {
-            val percent = BundleCompat.getSerializable(it, ExtraKeys.EXTRAS_RESULT, PercentIO::class.java)
+            val percent =
+                BundleCompat.getSerializable(it, ExtraKeys.EXTRAS_RESULT, PercentIO::class.java)
             val extras = it.getBundle(ExtraKeys.EXTRAS_ARGS)
             PercentageInputResult.Success(checkNotNull(percent), checkNotNull(extras))
         } ?: PercentageInputResult.Canceled
@@ -40,6 +42,7 @@ class PercentageInputRequest(
     val percentageMin: PercentageParam = PercentageParam.Disable,
     val percentageMax: PercentageParam = PercentageParam.Disable,
     val allowsZero: Boolean = true,
+    val allowDecimal: Boolean = true,
     val extras: Bundle = bundleOf()
 ) : Parcelable
 
