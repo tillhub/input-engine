@@ -116,7 +116,7 @@ class QuantityInputActivity : ComponentActivity() {
                     )
                     Numpad(
                         onClick = viewModel::processKey,
-                        showDecimalSeparator = true,
+                        showDecimalSeparator = request.allowDecimal,
                         showNegative = true
                     )
                     SubmitButton(displayData.isValid) {

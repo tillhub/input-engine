@@ -98,7 +98,7 @@ class PercentageInputActivity : ComponentActivity() {
                     )
                     Numpad(
                         onClick = viewModel::input,
-                        showDecimalSeparator = true
+                        showDecimalSeparator = request.allowDecimal
                     )
                     SubmitButton(data.isValid) {
                         val resultIntent = Intent().apply {

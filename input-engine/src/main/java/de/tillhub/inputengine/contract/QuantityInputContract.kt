@@ -41,6 +41,7 @@ class QuantityInputRequest(
     val quantityHint: QuantityParam = QuantityParam.Disable,
     val allowsNegatives: Boolean = true,
     val allowsZero: Boolean = false,
+    val allowDecimal: Boolean = true,
     val minQuantity: QuantityParam = QuantityParam.Disable,
     val maxQuantity: QuantityParam = QuantityParam.Disable,
     val toolbarTitle: StringParam = StringParam.StringResource(R.string.numpad_title_quantity),
