@@ -110,8 +110,8 @@ internal class QuantityInputViewModel(
 
     private fun setValue(currentValue: QuantityIO) {
         inputController.setValue(
-            majorDigits = currentValue.majorDigits,
-            minorDigits = currentValue.minorDigits,
+            majorDigits = currentValue.getMajorDigits(),
+            minorDigits = currentValue.getMinorDigits(),
             isNegative = currentValue.isNegative()
         )
         updateDisplayData(currentValue)
