@@ -12,7 +12,7 @@ class QuantityIOTest : DescribeSpec({
     describe("constructors") {
         it("Int") {
             QuantityIO.of(1).value shouldBe 100.toBigInteger()
-            QuantityIO.of(1).decimal shouldBe 1.toBigDecimal()
+            QuantityIO.of(1).getDecimal() shouldBe 1.toBigDecimal()
             QuantityIO.of(25).value shouldBe 2500.toBigInteger()
             QuantityIO.of(10000).value shouldBe 1000000.toBigInteger()
             QuantityIO.of(1).toInt() shouldBe 1
@@ -41,21 +41,21 @@ class QuantityIOTest : DescribeSpec({
 
     describe("digits") {
         it("majorDigits") {
-            QuantityIO.of(123).majorDigits shouldBe listOf(Digit.ONE, Digit.TWO, Digit.THREE)
-            QuantityIO.of(98).majorDigits shouldBe listOf(Digit.NINE, Digit.EIGHT)
+            QuantityIO.of(123).getMajorDigits() shouldBe listOf(Digit.ONE, Digit.TWO, Digit.THREE)
+            QuantityIO.of(98).getMajorDigits() shouldBe listOf(Digit.NINE, Digit.EIGHT)
         }
         it("minorDigits") {
-            QuantityIO.of(98).minorDigits shouldBe emptyList()
-            QuantityIO.of(98.45).minorDigits shouldBe listOf(Digit.FOUR, Digit.FIVE)
-            QuantityIO.of(0.369).minorDigits shouldBe listOf(Digit.THREE, Digit.SIX)
+            QuantityIO.of(98).getMinorDigits() shouldBe emptyList()
+            QuantityIO.of(98.45).getMinorDigits() shouldBe listOf(Digit.FOUR, Digit.FIVE)
+            QuantityIO.of(0.369).getMinorDigits() shouldBe listOf(Digit.THREE, Digit.SIX)
         }
     }
 
     describe("operations") {
         it("hasFractions") {
-            QuantityIO.of(45).hasFractions.shouldBeFalse()
-            QuantityIO.of(45.56).hasFractions.shouldBeTrue()
-            QuantityIO.of(0.1).hasFractions.shouldBeTrue()
+            QuantityIO.of(45).hasFractions().shouldBeFalse()
+            QuantityIO.of(45.56).hasFractions().shouldBeTrue()
+            QuantityIO.of(0.1).hasFractions().shouldBeTrue()
         }
         it("isPositive") {
             QuantityIO.ZERO.isPositive(false).shouldBeFalse()

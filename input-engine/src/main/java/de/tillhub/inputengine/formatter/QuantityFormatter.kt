@@ -19,6 +19,6 @@ internal object QuantityFormatter {
             maximumFractionDigits = QuantityIO.FRACTIONS
         }
 
-        return format.format(quantity.decimal)
+        return format.format(quantity.getDecimal())
     }
 }
