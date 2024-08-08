@@ -42,7 +42,6 @@ class QuantityInputViewModelTest : FunSpec({
                 quantityHint = QuantityParam.Enable(QuantityIO.of(1)),
                 minQuantity = QuantityParam.Enable(QuantityIO.of(-20)),
                 maxQuantity = QuantityParam.Enable(QuantityIO.of(20)),
-                allowsNegatives = true,
                 allowsZero = false,
             )
         )
@@ -95,7 +94,6 @@ class QuantityInputViewModelTest : FunSpec({
                 quantityHint = QuantityParam.Enable(QuantityIO.of(1)),
                 minQuantity = QuantityParam.Enable(QuantityIO.of(-20)),
                 maxQuantity = QuantityParam.Enable(QuantityIO.of(20)),
-                allowsNegatives = true,
                 allowsZero = false,
             )
         )
@@ -149,7 +147,6 @@ class QuantityInputViewModelTest : FunSpec({
                 quantityHint = QuantityParam.Enable(QuantityIO.of(1)),
                 minQuantity = QuantityParam.Enable(QuantityIO.of(-20)),
                 maxQuantity = QuantityParam.Enable(QuantityIO.of(20)),
-                allowsNegatives = true,
                 allowsZero = false,
             )
         )

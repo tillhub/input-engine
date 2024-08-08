@@ -117,7 +117,10 @@ class QuantityInputActivity : ComponentActivity() {
                     Numpad(
                         onClick = viewModel::processKey,
                         showDecimalSeparator = request.allowDecimal,
-                        showNegative = true
+                        showNegative = when (val minQty = request.minQuantity) {
+                            QuantityParam.Disable -> true
+                            is QuantityParam.Enable -> minQty.value.isNegative()
+                        }
                     )
                     SubmitButton(displayData.isValid) {
                         val resultIntent = Intent().apply {
