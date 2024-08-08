@@ -33,15 +33,8 @@ internal class QuantityInputViewModel(
             updateDisplayData(displayDataFlow.value.qty)
         }
 
-    private var allowsNegatives: Boolean = true
-        set(value) {
-            field = value
-            updateDisplayData(displayDataFlow.value.qty)
-        }
-
     fun setInitialValue(request: QuantityInputRequest) {
         isZeroAllowed = request.allowsZero
-        allowsNegatives = request.allowsNegatives
         quantityHint = request.quantityHint
         minQuantity = when (request.minQuantity) {
             QuantityParam.Disable -> QuantityIO.MIN_VALUE
@@ -61,7 +54,7 @@ internal class QuantityInputViewModel(
     fun decrease() {
         val newValue = displayDataFlow.value.qty.nextSmaller(
             allowsZero = isZeroAllowed,
-            allowsNegatives = allowsNegatives
+            allowsNegatives = minQuantity.isNegative()
         )
         if (isValid(newValue)) {
             setValue(newValue)

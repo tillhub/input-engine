@@ -37,14 +37,13 @@ class QuantityInputContract : ActivityResultContract<QuantityInputRequest, Quant
 
 @Parcelize
 class QuantityInputRequest(
-    val quantity: QuantityIO,
+    val quantity: QuantityIO = QuantityIO.ZERO,
+    val toolbarTitle: StringParam = StringParam.StringResource(R.string.numpad_title_quantity),
     val quantityHint: QuantityParam = QuantityParam.Disable,
-    val allowsNegatives: Boolean = true,
-    val allowsZero: Boolean = false,
-    val allowDecimal: Boolean = true,
     val minQuantity: QuantityParam = QuantityParam.Disable,
     val maxQuantity: QuantityParam = QuantityParam.Disable,
-    val toolbarTitle: StringParam = StringParam.StringResource(R.string.numpad_title_quantity),
+    val allowsZero: Boolean = false,
+    val allowDecimal: Boolean = true,
     val extras: Bundle = bundleOf()
 ) : Parcelable
 
