@@ -11,30 +11,30 @@ class QuantityIOTest : DescribeSpec({
 
     describe("constructors") {
         it("Int") {
-            QuantityIO.of(1).value shouldBe 100.toBigInteger()
+            QuantityIO.of(1).value shouldBe 10000.toBigInteger()
             QuantityIO.of(1).getDecimal() shouldBe 1.toBigDecimal()
-            QuantityIO.of(25).value shouldBe 2500.toBigInteger()
-            QuantityIO.of(10000).value shouldBe 1000000.toBigInteger()
+            QuantityIO.of(25).value shouldBe 250000.toBigInteger()
+            QuantityIO.of(10000).value shouldBe 100000000.toBigInteger()
             QuantityIO.of(1).toInt() shouldBe 1
             QuantityIO.of(1).toDouble() shouldBe 1.0
         }
         it("Double") {
-            QuantityIO.of(1.00).value shouldBe 100.toBigInteger()
-            QuantityIO.of(25.78).value shouldBe 2578.toBigInteger()
-            QuantityIO.of(328.98).value shouldBe 32898.toBigInteger()
+            QuantityIO.of(1.00).value shouldBe 10000.toBigInteger()
+            QuantityIO.of(25.78).value shouldBe 257800.toBigInteger()
+            QuantityIO.of(328.98).value shouldBe 3289800.toBigInteger()
             QuantityIO.of(328.98).toDouble() shouldBe 328.98
             QuantityIO.of(328.98).toInt() shouldBe 328
         }
         it("BigInteger") {
-            QuantityIO.of(BigInteger.ONE).value shouldBe 100.toBigInteger()
+            QuantityIO.of(BigInteger.ONE).value shouldBe 10000.toBigInteger()
             QuantityIO.of(BigInteger.ONE).toInt() shouldBe 1
-            QuantityIO.of(BigInteger.TEN).value shouldBe 1000.toBigInteger()
+            QuantityIO.of(BigInteger.TEN).value shouldBe 100000.toBigInteger()
             QuantityIO.of(BigInteger.TEN).toDouble() shouldBe 10.0
         }
         it("BigDecimal") {
-            QuantityIO.of(BigDecimal.ONE).value shouldBe 100.toBigInteger()
+            QuantityIO.of(BigDecimal.ONE).value shouldBe 10000.toBigInteger()
             QuantityIO.of(BigDecimal.ONE).toInt() shouldBe 1
-            QuantityIO.of(BigDecimal.TEN).value shouldBe 1000.toBigInteger()
+            QuantityIO.of(BigDecimal.TEN).value shouldBe 100000.toBigInteger()
             QuantityIO.of(BigDecimal.TEN).toDouble() shouldBe 10.0
         }
     }
@@ -47,7 +47,9 @@ class QuantityIOTest : DescribeSpec({
         it("minorDigits") {
             QuantityIO.of(98).getMinorDigits() shouldBe emptyList()
             QuantityIO.of(98.45).getMinorDigits() shouldBe listOf(Digit.FOUR, Digit.FIVE)
-            QuantityIO.of(0.369).getMinorDigits() shouldBe listOf(Digit.THREE, Digit.SIX)
+            QuantityIO.of(0.369).getMinorDigits() shouldBe listOf(Digit.THREE, Digit.SIX, Digit.NINE)
+            QuantityIO.of(0.3692).getMinorDigits() shouldBe listOf(Digit.THREE, Digit.SIX, Digit.NINE, Digit.TWO)
+            QuantityIO.of(0.36921).getMinorDigits() shouldBe listOf(Digit.THREE, Digit.SIX, Digit.NINE, Digit.TWO)
         }
     }
 
