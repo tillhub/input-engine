@@ -7,7 +7,7 @@ import java.math.RoundingMode
 
 internal class NumberInputController(
     private val maxMajorDigits: Int = 8,
-    private val maxMinorDigits: Int = 2
+    private val maxMinorDigits: Int = 4
 ) {
     private var switchToMinorDigits = false
     private var switchToNegate = false

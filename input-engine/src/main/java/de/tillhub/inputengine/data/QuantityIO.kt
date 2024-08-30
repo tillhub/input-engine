@@ -11,8 +11,9 @@ import java.math.MathContext
 
 /**
  * Quantity input/output which supports up to two decimal places
- * Int 1 -> x1 BigInteger(value=100)
- * Double 1.56 -> x1,56 BigInteger(value=156)
+ * Int 1 -> x1 BigInteger(value=10000)
+ * Double 1.56 -> x1,56 BigInteger(value=15600)
+ * Float 1.2345F -> x1,2345 BigInteger(value=12345)
  */
 class QuantityIO private constructor(
     val value: BigInteger
@@ -191,7 +192,7 @@ class QuantityIO private constructor(
     companion object {
 
         private val PRECISION: MathContext = MathContext.DECIMAL128
-        internal const val FRACTIONS = 2
+        internal const val FRACTIONS = 4
 
         private val FRACTIONS_FACTOR: BigDecimal = pow10decimal(FRACTIONS)
         private val FRACTIONS_FACTOR_INT: BigInteger = pow10(FRACTIONS)

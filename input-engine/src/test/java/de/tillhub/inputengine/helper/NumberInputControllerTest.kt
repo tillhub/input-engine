@@ -25,7 +25,13 @@ class NumberInputControllerTest : FunSpec({
         target.value() shouldBe 9876.toBigInteger()
 
         target.setValue(567.126.toBigDecimal())
-        target.value() shouldBe 567.13.toBigDecimal()
+        target.value() shouldBe 567.126.toBigDecimal()
+
+        target.setValue(567.1267.toBigDecimal())
+        target.value() shouldBe 567.1267.toBigDecimal()
+
+        target.setValue(567.12671.toBigDecimal())
+        target.value() shouldBe 567.1267.toBigDecimal()
 
         target.setValue(367.12)
         target.value() shouldBe 367.12.toBigDecimal()
