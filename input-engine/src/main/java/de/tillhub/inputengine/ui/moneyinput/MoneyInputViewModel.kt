@@ -81,6 +81,17 @@ internal class MoneyInputViewModel(
                 _inputCurrencyMoneyInput.value = request.amount
             }
 
+            moneyMin.isZero() && moneyMax.isPositive() -> {
+                amountInputMode = AmountInputMode.POSITIVE
+                _uiMinValue.value = MoneyParam.Disable
+                _inputCurrencyMoneyInput.value = request.amount.abs()
+            }
+
+            moneyMin.isPositive() && moneyMax.isPositive() -> {
+                amountInputMode = AmountInputMode.POSITIVE
+                _inputCurrencyMoneyInput.value = request.amount.abs()
+            }
+
             moneyMax.isZero() && moneyMin.isNegative() -> {
                 amountInputMode = AmountInputMode.NEGATIVE
                 moneyMax = -moneyMin
@@ -90,9 +101,13 @@ internal class MoneyInputViewModel(
                 _inputCurrencyMoneyInput.value = request.amount.abs()
             }
 
-            moneyMin.isZero() && moneyMax.isPositive() -> {
-                amountInputMode = AmountInputMode.POSITIVE
-                _uiMinValue.value = MoneyParam.Disable
+            moneyMin.isNegative() && moneyMax.isNegative() -> {
+                amountInputMode = AmountInputMode.NEGATIVE
+                val temp = moneyMax.amount
+                moneyMax = -moneyMin
+                moneyMin = MoneyIO.of(temp, moneyMin.currency).abs()
+                _uiMinValue.value = MoneyParam.Enable(moneyMin)
+                _uiMaxValue.value = MoneyParam.Enable(moneyMax)
                 _inputCurrencyMoneyInput.value = request.amount.abs()
             }
 
