@@ -16,8 +16,6 @@ import de.tillhub.inputengine.data.MoneyParam
 import de.tillhub.inputengine.data.StringParam
 import de.tillhub.inputengine.ui.moneyinput.MoneyInputActivity
 import kotlinx.parcelize.Parcelize
-import java.util.Currency
-import java.util.Locale
 
 @ExperimentalMaterial3Api
 class AmountInputContract : ActivityResultContract<AmountInputRequest, AmountInputResult>() {
@@ -39,7 +37,7 @@ class AmountInputContract : ActivityResultContract<AmountInputRequest, AmountInp
 
 @Parcelize
 class AmountInputRequest(
-    val amount: MoneyIO = MoneyIO.zero(Currency.getInstance(Locale.getDefault())),
+    val amount: MoneyIO,
     val isZeroAllowed: Boolean = false,
     val toolbarTitle: StringParam = StringParam.StringResource(R.string.numpad_title_amount),
     val amountMin: MoneyParam = MoneyParam.Disable,

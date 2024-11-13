@@ -108,7 +108,7 @@ class MainActivity : ComponentActivity() {
                                     moneyInputLauncher.launch(
                                         AmountInputRequest(
                                             amount = MoneyIO.of(
-                                                300.toBigInteger(),
+                                                0.toBigInteger(),
                                                 Currency.getInstance("EUR")
                                             ),
                                             amountMin = MoneyParam.Enable(
@@ -118,14 +118,8 @@ class MainActivity : ComponentActivity() {
                                                 )
                                             ),
                                             amountMax = MoneyParam.Enable(
-                                                MoneyIO.of(
-                                                    2000.toBigInteger(),
-                                                    Currency.getInstance("EUR")
-                                                )
-                                            ),
-                                            hintAmount = MoneyParam.Enable(
-                                                MoneyIO.of(
-                                                    200.toBigInteger(),
+                                                -MoneyIO.of(
+                                                    1000.toBigInteger(),
                                                     Currency.getInstance("EUR")
                                                 )
                                             )
