@@ -72,6 +72,10 @@ internal class MoneyInputViewModel(
             }
         }
 
+        setupAmountConstraints(request)
+    }
+
+    private fun setupAmountConstraints(request: AmountInputRequest) {
         when {
             moneyMin >= moneyMax -> {
                 moneyMin = MoneyIO.min(request.amount.currency)
@@ -103,9 +107,9 @@ internal class MoneyInputViewModel(
 
             moneyMin.isNegative() && moneyMax.isNegative() -> {
                 amountInputMode = AmountInputMode.NEGATIVE
-                val temp = moneyMax.amount
+                val temp = moneyMax
                 moneyMax = -moneyMin
-                moneyMin = MoneyIO.of(temp, moneyMin.currency).abs()
+                moneyMin = temp.abs()
                 _uiMinValue.value = MoneyParam.Enable(moneyMin)
                 _uiMaxValue.value = MoneyParam.Enable(moneyMax)
                 _inputCurrencyMoneyInput.value = request.amount.abs()

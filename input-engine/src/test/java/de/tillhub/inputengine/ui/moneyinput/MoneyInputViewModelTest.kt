@@ -115,6 +115,108 @@ class MoneyInputViewModelTest : ViewModelFunSpec({
         viewModel.uiMaxValue.value shouldBe MoneyParam.Enable(MoneyIO.of(900, EUR))
     }
 
+    test("init: Zero amount not allowed") {
+        viewModel.init(
+            AmountInputRequest(
+                amount = MoneyIO.zero(EUR),
+                isZeroAllowed = false,
+                amountMin = MoneyParam.Enable(MoneyIO.of(-2000, EUR)),
+                amountMax = MoneyParam.Enable(MoneyIO.of(2000, EUR))
+            )
+        )
+
+        viewModel.amountInputMode shouldBe AmountInputMode.BOTH
+        viewModel.moneyInput.first() shouldBe MoneyInputData(
+            money = MoneyIO.zero(EUR),
+            text = "0,00 €",
+            isValid = false
+        )
+        viewModel.uiMinValue.value shouldBe MoneyParam.Enable(MoneyIO.of(-2000, EUR))
+        viewModel.uiMaxValue.value shouldBe MoneyParam.Enable(MoneyIO.of(2000, EUR))
+    }
+
+    test("init: No min and max values") {
+        viewModel.init(
+            AmountInputRequest(
+                amount = MoneyIO.of(400, EUR),
+                isZeroAllowed = true,
+                amountMin = MoneyParam.Disable,
+                amountMax = MoneyParam.Disable
+            )
+        )
+
+        viewModel.amountInputMode shouldBe AmountInputMode.BOTH
+        viewModel.moneyInput.first() shouldBe MoneyInputData(
+            money = MoneyIO.of(400, EUR),
+            text = "4,00 €",
+            isValid = true
+        )
+        viewModel.uiMinValue.value shouldBe MoneyParam.Disable
+        viewModel.uiMaxValue.value shouldBe MoneyParam.Disable
+    }
+
+    test("init: min is zero and max is positive") {
+        viewModel.init(
+            AmountInputRequest(
+                amount = MoneyIO.of(-500, EUR),
+                isZeroAllowed = true,
+                amountMin = MoneyParam.Enable(MoneyIO.zero(EUR)),
+                amountMax = MoneyParam.Enable(MoneyIO.of(1000, EUR))
+            )
+        )
+
+        viewModel.amountInputMode shouldBe AmountInputMode.POSITIVE
+
+        viewModel.uiMinValue.value shouldBe MoneyParam.Disable
+
+        viewModel.moneyInput.first() shouldBe MoneyInputData(
+            money = MoneyIO.of(500, EUR),
+            text = "5,00 €",
+            isValid = true
+        )
+    }
+
+    test("init: both min and max are positive") {
+        viewModel.init(
+            AmountInputRequest(
+                amount = MoneyIO.of(300, EUR),
+                isZeroAllowed = true,
+                amountMin = MoneyParam.Enable(MoneyIO.of(100, EUR)),
+                amountMax = MoneyParam.Enable(MoneyIO.of(1000, EUR))
+            )
+        )
+
+        viewModel.amountInputMode shouldBe AmountInputMode.POSITIVE
+
+        viewModel.moneyInput.first() shouldBe MoneyInputData(
+            money = MoneyIO.of(300, EUR),
+            text = "3,00 €",
+            isValid = true
+        )
+    }
+
+    test("init: both min and max are negative") {
+        viewModel.init(
+            AmountInputRequest(
+                amount = MoneyIO.of(-500, EUR),
+                isZeroAllowed = true,
+                amountMin = MoneyParam.Enable(MoneyIO.of(-1000, EUR)),
+                amountMax = MoneyParam.Enable(MoneyIO.of(-200, EUR))
+            )
+        )
+
+        viewModel.amountInputMode shouldBe AmountInputMode.NEGATIVE
+
+        viewModel.uiMinValue.value shouldBe MoneyParam.Enable(MoneyIO.of(200, EUR))
+        viewModel.uiMaxValue.value shouldBe MoneyParam.Enable(MoneyIO.of(1000, EUR))
+
+        viewModel.moneyInput.first() shouldBe MoneyInputData(
+            money = MoneyIO.of(-500, EUR),
+            text = "5,00 €",
+            isValid = true
+        )
+    }
+
     test("input") {
         viewModel.init(
             AmountInputRequest(
