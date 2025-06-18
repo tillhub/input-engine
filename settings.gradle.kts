@@ -1,24 +1,23 @@
-import java.net.URI
-
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 pluginManagement {
     repositories {
         google()
-        mavenCentral()
         gradlePluginPortal()
+        mavenCentral()
     }
 }
 
-@Suppress("UnstableApiUsage")
 dependencyResolutionManagement {
+    // @Incubating API, safe in Gradle 8.1+
     repositories {
         google()
         mavenCentral()
-        maven {
-            url = URI.create("https://jitpack.io")
-        }
     }
 }
 
+rootProject.name = "input-engine"
+include(":sample")
+include(":input-engine")
+include(":input-engine:formatter")
+include(":input-engine:financial")
 
-rootProject.name = "Tillhub Input Engine"
-include(":input-engine",":sample")

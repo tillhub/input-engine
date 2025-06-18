@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <activity
+                android:name="de.tillhub.inputengine.ui.amountinput.AmountInputActivity"
+                android:exported="false" />
+<!--        <activity-->
+<!--                android:name="de.tillhub.inputengine.ui.pininput.PinInputActivity"-->
+<!--                android:theme="@style/Theme.InputActivity"-->
+<!--                android:exported="false" />-->
+<!--        <activity-->
+<!--                android:name="de.tillhub.inputengine.ui.quantity.QuantityInputActivity"-->
+<!--                android:theme="@style/Theme.InputActivity"-->
+<!--                android:exported="false" />-->
+<!--        <activity-->
+<!--                android:name="de.tillhub.inputengine.ui.percentage.PercentageInputActivity"-->
+<!--                android:theme="@style/Theme.InputActivity"-->
+<!--                android:exported="false" />-->
+    </application>
+</manifest>

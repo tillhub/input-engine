@@ -1,63 +1,90 @@
-# Windows thumbnail db
+# ============================
+# Platform-specific junk files
+# ============================
+# Windows
 Thumbs.db
-
-# OSX files
-.DS_Store
-.AppleDouble
-.LSOverride
-Icon
-
-#Windows
 *.bat
 !gradlew.bat
 !scripts/*.bat
 !scripts/post-build/*.bat
 
-# Built application files
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+
+# ============================
+# Build / Generated artifacts
+# ============================
 *.apk
 *.aar
 *.ap_
 *.aab
-
-# Generated files
-bin/
-gen/
-out/
-#  Uncomment the following line in case you need and you don't have the release build type files in your app
-# release/
-
-# Gradle files
-.gradle/
-/build
-/input-engine/build
-/buildSrc/build
-
-# Local configuration file (sdk path, etc)
-/local.properties
-
-# Log Files
+*.klib
+*.hprof
 *.log
 
-# Android Studio captures folder
-/captures
+/build/
+/input-engine/build/
+/buildSrc/build/
+/sample/build/
+/.gradle/
+/.cxx/
+/externalNativeBuild/
+/bin/
+/gen/
+/out/
+/.kotlinc/
+/.kotlin/
+/local.properties
 
-# IntelliJ
+# ============================
+# IDE-specific
+# ============================
+# IntelliJ / Android Studio
 *.iml
 *.ipr
 *.iws
-*.idea
-*.DS_Store
-/.idea/workspace.xml
-/.idea/tasks.xml
-/.idea/gradle.xml
-/.idea/assetWizardSettings.xml
-/.idea/dictionaries
-/.idea/libraries
-# Android Studio 3 in .gitignore file.
+.idea/
 /.idea/caches
-/.idea/modules.xml
-# Comment next line if keeping position of elements in Navigation Editor is relevant for you
-/.idea/navEditor.xml
-.externalNativeBuild
-.cxx
+.idea/libraries
+.idea/dictionaries
+.idea/modules.xml
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/gradle.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
 
+
+# Android Studio captures
+/captures/
+
+# ============================
+# Kotlin Multiplatform Native
+# ============================
+*.kexe
+*.knm
+*.konan/
+*.klib
+*.dbg
+
+# Kotlin Native intermediate metadata
+/.kotlin/metadata/
+
+# ============================
+# Xcode / iOS
+# ============================
+iosApp/Pods/
+/iosApp/iosApp.xcodeproj/xcuserdata/
+/iosApp/iosApp.xcodeproj/project.xcworkspace/xcuserdata/
+**/xcuserdata/
+
+# ============================
+# Other
+# ============================
+*.orig
+*.rej
+*.swp
+*.swo

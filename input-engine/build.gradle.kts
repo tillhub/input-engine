@@ -1,105 +1,61 @@
-import io.gitlab.arturbosch.detekt.Detekt
-import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
-
 plugins {
-    alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.kotlinAndroid)
-    alias(libs.plugins.detekt)
-    id("kotlin-parcelize")
-    id("maven-publish")
+    alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.androidKotlinMultiplatformLibrary)
+    alias(libs.plugins.composeMultiplatform)
+    alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.kotlinSerialization)
 }
 
-android {
-    namespace = "de.tillhub.inputengine"
-    compileSdk = 34
-
-    defaultConfig {
-        minSdk = 24
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
+kotlin {
+    // Enable expect/actual class support
+    compilerOptions {
+        freeCompilerArgs.add("-Xexpect-actual-classes")
     }
 
-    buildFeatures {
-        viewBinding = true
+    // Android target setup
+    androidLibrary {
+        namespace = Configs.APPLICATION_ID
+        compileSdk = Configs.COMPILE_SDK
+        minSdk = Configs.MIN_SDK
+        experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
     }
 
-    buildTypes {
-        debug {
-            isMinifyEnabled = false
+    val xcfName = "input-engineKit"
+    iosX64 { binaries.framework { baseName = xcfName } }
+    iosArm64 { binaries.framework { baseName = xcfName } }
+    iosSimulatorArm64 { binaries.framework { baseName = xcfName } }
+
+    sourceSets {
+        commonMain {
+            dependencies {
+                api(project(":input-engine:formatter"))
+                implementation(libs.kotlin.stdlib)
+                implementation(libs.kotlinx.serialization.json)
+
+                // Compose Multiplatform
+                implementation(compose.runtime)
+                implementation(compose.foundation)
+                implementation(compose.material3)
+                implementation(compose.ui)
+                implementation(compose.components.resources)
+                implementation(compose.components.uiToolingPreview)
+                implementation(compose.materialIconsExtended)
+                implementation(libs.androidx.lifecycle.viewmodel)
+                implementation(libs.androidx.lifecycle.runtimeCompose)
+
+                // Lifecycle
+                implementation(libs.androidx.lifecycle.viewmodel)
+                implementation(libs.androidx.lifecycle.runtimeCompose)
+
+                // Math
+                implementation(libs.kotlin.bignum)
+            }
         }
-        release {
-            isMinifyEnabled = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.9"
-    }
-    tasks.withType<Test> {
-        useJUnitPlatform()
-    }
-
-    packaging {
-        resources {
-            excludes.add("META-INF/*")
-            excludes.add("MANIFEST.MF")
-        }
-    }
-
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions {
-            jvmTarget = JavaVersion.VERSION_17.toString()
-        }
-    }
-    tasks.withType<Detekt>().configureEach {
-        jvmTarget = JavaVersion.VERSION_17.toString()
-    }
-    tasks.withType<DetektCreateBaselineTask>().configureEach {
-        jvmTarget = JavaVersion.VERSION_17.toString()
-    }
-}
-
-detekt {
-    buildUponDefaultConfig = true // preconfigure defaults
-    allRules = false // activate all available (even unstable) rules.
-    config.setFrom("$projectDir/config/detekt.yml")
-}
-
-dependencies {
-    implementation(platform(libs.compose.bom))
-    implementation(libs.bundles.ui)
-    implementation(libs.bundles.compose)
-    implementation(libs.bundles.lifecycle)
-    implementation(libs.androidx.lifecycle.runtime.compose)
-
-    detektPlugins(libs.detekt.formatting)
-    detektPlugins(libs.detekt.libraries)
-
-    testImplementation(libs.bundles.testing)
-    androidTestImplementation(libs.bundles.testing.android)
-    debugImplementation(libs.androidx.ui.test.manifest)
-}
-
-afterEvaluate {
-    publishing {
-        publications {
-            create<MavenPublication>("input-engine") {
-                groupId = "de.tillhub.inputengine"
-                artifactId = "input-engine"
-                version = "1.0.4"
-
-                from(components.getByName("release"))
+        androidMain {
+            dependencies {
+                implementation(libs.androidx.activity.compose)
+                implementation(libs.androidx.activity.ktx)
+                implementation(libs.kotlinx.serialization.json)
             }
         }
     }

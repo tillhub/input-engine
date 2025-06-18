@@ -1,0 +1,11 @@
+package de.tillhub.inputengine.formatter
+
+import de.tillhub.inputengine.financial.data.PercentIO
+
+expect object PercentageFormatter {
+    fun format(
+        percent: PercentIO,
+        minimumFractionDigits: Int = 0,
+        locale: String
+    ): String
+}
