@@ -80,7 +80,7 @@ kotlin {
     }
 }
 compose.resources {
-    packageOfResClass = "de.tillhub.inputengine.resources"
+    packageOfResClass = "de.tillhub.inputengine.resources.sample"
     generateResClass = auto
 }
 dependencies {
