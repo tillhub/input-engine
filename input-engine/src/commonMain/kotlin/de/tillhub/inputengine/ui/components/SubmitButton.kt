@@ -13,8 +13,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import de.tillhub.inputengine.ui.theme.MagneticGrey
 import de.tillhub.inputengine.ui.theme.OrbitalBlue
-import input_engine.input_engine.generated.resources.Res
-import input_engine.input_engine.generated.resources.numpad_button_submit
+import de.tillhub.inputengine.resources.Res
+import de.tillhub.inputengine.resources.numpad_button_submit
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 

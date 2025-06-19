@@ -79,7 +79,10 @@ kotlin {
         }
     }
 }
-
+compose.resources {
+    packageOfResClass = "de.tillhub.inputengine.resources"
+    generateResClass = auto
+}
 dependencies {
     debugImplementation(compose.uiTooling)
 }

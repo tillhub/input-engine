@@ -25,10 +25,10 @@ import de.tillhub.inputengine.ui.theme.LunarGray
 import de.tillhub.inputengine.ui.theme.Tint
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import input_engine.input_engine.generated.resources.Res
-import input_engine.input_engine.generated.resources.numpad_button_clear
-import input_engine.input_engine.generated.resources.numpad_button_delete
-import input_engine.input_engine.generated.resources.numpad_button_negative
+import de.tillhub.inputengine.resources.Res
+import de.tillhub.inputengine.resources.numpad_button_clear
+import de.tillhub.inputengine.resources.numpad_button_delete
+import de.tillhub.inputengine.resources.numpad_button_negative
 
 @Suppress("LongMethod")
 @Preview

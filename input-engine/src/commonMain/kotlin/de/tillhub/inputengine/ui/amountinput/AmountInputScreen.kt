@@ -21,6 +21,7 @@ import de.tillhub.inputengine.financial.data.MoneyIO
 import de.tillhub.inputengine.financial.helper.serializer.MoneyIOSerializer
 import de.tillhub.inputengine.financial.param.MoneyParam
 import de.tillhub.inputengine.formatter.MoneyFormatter
+import de.tillhub.inputengine.resources.Res
 import de.tillhub.inputengine.ui.components.Numpad
 import de.tillhub.inputengine.ui.components.SubmitButton
 import de.tillhub.inputengine.ui.components.Toolbar
@@ -31,8 +32,7 @@ import de.tillhub.inputengine.ui.theme.MagneticGrey
 import de.tillhub.inputengine.ui.theme.OrbitalBlue
 import de.tillhub.inputengine.ui.theme.SoyuzGrey
 import de.tillhub.inputengine.ui.theme.TabletScaffoldModifier
-import input_engine.input_engine.generated.resources.Res
-import input_engine.input_engine.generated.resources.numpad_title_amount
+import de.tillhub.inputengine.resources.numpad_title_amount
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview

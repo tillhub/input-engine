@@ -15,7 +15,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "input-engine"
+rootProject.name = "Tillhub_Input_Engine"
 include(":sample")
 include(":input-engine")
 include(":input-engine:formatter")

@@ -1,6 +1,6 @@
 TEAM_ID=
 
-PRODUCT_NAME=input-engine
+PRODUCT_NAME=Tillhub_Input_Engine
 PRODUCT_BUNDLE_IDENTIFIER=de.tillhub.inputengine.sample.input-engine$(TEAM_ID)
 
 CURRENT_PROJECT_VERSION=1
