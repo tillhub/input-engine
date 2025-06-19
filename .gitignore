@@ -28,6 +28,7 @@ Icon
 /build/
 /input-engine/build/
 /buildSrc/build/
+/buildSrc/.gradle/
 /sample/build/
 /.gradle/
 /.cxx/
