@@ -8,10 +8,9 @@
         <activity
             android:name="de.tillhub.inputengine.ui.pin.PinInputActivity"
             android:exported="false" />
-        <!--        <activity-->
-        <!--                android:name="de.tillhub.inputengine.ui.quantity.QuantityInputActivity"-->
-        <!--                android:theme="@style/Theme.InputActivity"-->
-        <!--                android:exported="false" />-->
+        <activity
+            android:name="de.tillhub.inputengine.ui.quantity.QuantityInputActivity"
+            android:exported="false" />
         <activity
             android:name="de.tillhub.inputengine.ui.percentage.PercentageInputActivity"
             android:exported="false" />

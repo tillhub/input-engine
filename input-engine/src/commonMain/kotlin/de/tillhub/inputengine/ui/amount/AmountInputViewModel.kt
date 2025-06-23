@@ -2,6 +2,8 @@ package de.tillhub.inputengine.ui.amount
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import de.tillhub.inputengine.contract.AmountInputRequest
 import de.tillhub.inputengine.financial.data.CurrencyIO
 import de.tillhub.inputengine.financial.data.MoneyIO
@@ -193,5 +195,13 @@ internal data class MoneyInputData(
             text = "",
             isValid = false
         )
+    }
+}
+
+fun provideAmountInputViewModelFactory(request: AmountInputRequest) = viewModelFactory {
+    initializer {
+        AmountInputViewModel().apply {
+            init(request)
+        }
     }
 }

@@ -9,7 +9,6 @@ import de.tillhub.inputengine.contract.PinInputRequest
 import de.tillhub.inputengine.contract.PinInputResult
 import de.tillhub.inputengine.helper.ExtraKeys
 import de.tillhub.inputengine.ui.pininput.PinInputScreen
-import de.tillhub.inputengine.ui.theme.AppTheme
 import kotlinx.serialization.json.Json
 
 class PinInputActivity : ComponentActivity() {
@@ -24,33 +23,31 @@ class PinInputActivity : ComponentActivity() {
         request = Json.decodeFromString(json)
 
         setContent {
-            AppTheme {
-                PinInputScreen(
-                    request = request,
-                    onResult = { result ->
-                        when (result) {
-                            is PinInputResult.Success -> {
-                                val resultIntent = Intent().apply {
-                                    putExtra(
-                                        ExtraKeys.EXTRAS_ARGS,
-                                        AndroidBundle().apply {
-                                            result.extras.forEach { (key, value) ->
-                                                putString(key, value)
-                                            }
+            PinInputScreen(
+                request = request,
+                onResult = { result ->
+                    when (result) {
+                        is PinInputResult.Success -> {
+                            val resultIntent = Intent().apply {
+                                putExtra(
+                                    ExtraKeys.EXTRAS_ARGS,
+                                    AndroidBundle().apply {
+                                        result.extras.forEach { (key, value) ->
+                                            putString(key, value)
                                         }
-                                    )
-                                }
-                                setResult(RESULT_OK, resultIntent)
+                                    }
+                                )
                             }
-
-                            PinInputResult.Canceled -> {
-                                setResult(RESULT_CANCELED)
-                            }
+                            setResult(RESULT_OK, resultIntent)
                         }
-                        finish()
+
+                        PinInputResult.Canceled -> {
+                            setResult(RESULT_CANCELED)
+                        }
                     }
-                )
-            }
+                    finish()
+                }
+            )
         }
     }
 }

@@ -3,7 +3,6 @@ package de.tillhub.inputengine.helper
 import com.ionspin.kotlin.bignum.decimal.BigDecimal
 import com.ionspin.kotlin.bignum.decimal.RoundingMode
 import com.ionspin.kotlin.bignum.decimal.toBigDecimal
-import com.ionspin.kotlin.bignum.integer.BigInteger
 import com.ionspin.kotlin.bignum.integer.toBigInteger
 
 class NumberInputController(
@@ -91,22 +90,29 @@ class NumberInputController(
 
     fun value(): Number {
         return if (_minorDigits.isEmpty()) {
-            _majorDigits.fold(BigInteger.ZERO) { acc, digit ->
-                acc.multiply(BigInteger.TEN).add(digit.value.toBigInteger())
-            }.let {
-                val result: BigInteger = if (switchToNegate) it.negate() else it
-                result.longValue()
-            }
+            val major = _majorDigits.fold(com.ionspin.kotlin.bignum.integer.BigInteger.ZERO) { acc, digit ->
+                acc * com.ionspin.kotlin.bignum.integer.BigInteger.TEN +
+                        com.ionspin.kotlin.bignum.integer.BigInteger.fromInt(digit.value)
+            }.let { if (switchToNegate) it.negate() else it }
+
+            major.longValue(false)
         } else {
-            (_majorDigits + _minorDigits).fold(BigDecimal.ZERO) { acc, digit ->
-                acc.multiply(BigDecimal.TEN)
-                    .add(digit.value.toBigDecimal().moveDecimalPoint(-_minorDigits.size))
+            val totalDigits = _majorDigits + _minorDigits
+            val scale = _minorDigits.size
+
+            val decimal = totalDigits.fold(BigDecimal.ZERO) { acc, digit ->
+                acc * BigDecimal.TEN +
+                        BigDecimal.fromInt(digit.value)
             }.let {
-               val result: BigDecimal = if (switchToNegate) it.negate() else it
-                result.longValue()
+                val divisor = BigDecimal.TEN.pow(scale)
+                val scaled = it.divide(divisor, com.ionspin.kotlin.bignum.decimal.DecimalMode(34))
+                if (switchToNegate) scaled.negate() else scaled
             }
+
+            decimal.doubleValue(false)
         }
     }
+
 
     fun clear() {
         _majorDigits.clear()

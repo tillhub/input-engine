@@ -16,6 +16,18 @@ actual object QuantityFormatter {
             minimumFractionDigits = minFractionDigits
             maximumFractionDigits = QuantityIO.FRACTIONS
         }
-        return format.format(quantity.getDecimal())
+        val decimal = quantity.getDecimal()
+
+        // Define epsilon to round small scientific values like 0.0E-39 to zero
+        val epsilon = com.ionspin.kotlin.bignum.decimal.BigDecimal.parseString("1E-6")
+
+        // Normalize value to 0 if below epsilon threshold
+        val normalized = if (decimal.abs() < epsilon) {
+            com.ionspin.kotlin.bignum.decimal.BigDecimal.ZERO
+        } else {
+            decimal
+        }
+
+        return format.format(normalized.doubleValue(false))
     }
 }

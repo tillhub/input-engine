@@ -12,22 +12,22 @@ actual fun rememberPinInputLauncher(
     onResult: (PinInputResult) -> Unit
 ): PinInputContract = remember {
     object : PinInputContract {
-        private var controller: UIViewController? = null
+        private var viewController: UIViewController? = null
 
         override fun launchPinInput(request: PinInputRequest) {
             val root = UIApplication.sharedApplication.keyWindow?.rootViewController ?: return
 
-            controller = ComposeUIViewController {
+            viewController = ComposeUIViewController {
                 PinInputScreen(
                     request = request,
                     onResult = {
                         onResult(it)
-                        controller?.dismissViewControllerAnimated(true, null)
+                        viewController?.dismissViewControllerAnimated(true, null)
                     }
                 )
             }
 
-            controller?.let { root.presentViewController(it, animated = true, completion = null) }
+            viewController?.let { root.presentViewController(it, animated = true, completion = null) }
         }
     }
 }

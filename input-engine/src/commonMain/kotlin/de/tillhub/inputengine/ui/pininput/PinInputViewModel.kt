@@ -2,6 +2,8 @@ package de.tillhub.inputengine.ui.pininput
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import de.tillhub.inputengine.helper.NumpadKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -57,3 +59,12 @@ sealed class PinInputState {
     data object PinValid : PinInputState()
     data object PinInvalid : PinInputState()
 }
+
+fun providePinInputViewModelFactory(pin: String) = viewModelFactory {
+    initializer {
+        PinInputViewModel().apply {
+            init(pin)
+        }
+    }
+}
+

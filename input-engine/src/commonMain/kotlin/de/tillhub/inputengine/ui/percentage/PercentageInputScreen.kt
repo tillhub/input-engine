@@ -15,14 +15,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import de.tillhub.inputengine.contract.PercentageInputRequest
 import de.tillhub.inputengine.contract.PercentageInputResult
 import de.tillhub.inputengine.financial.param.PercentageParam
 import de.tillhub.inputengine.formatter.PercentageFormatter
 import de.tillhub.inputengine.resources.Res
+import de.tillhub.inputengine.resources.max_value
+import de.tillhub.inputengine.resources.min_value
 import de.tillhub.inputengine.resources.numpad_title_percentage
 import de.tillhub.inputengine.ui.components.Numpad
 import de.tillhub.inputengine.ui.components.SubmitButton
@@ -37,15 +38,14 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun PercentageInputScreen(
     request: PercentageInputRequest,
-    viewModel: PercentageInputViewModel = remember { PercentageInputViewModel() },
     onResult: (PercentageInputResult.Success) -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    viewModel: PercentageInputViewModel = viewModel(
+        factory = remember {
+            providePercentageInputViewModelFactory(request)
+        }
+    ),
 ) {
-    LifecycleEventEffect(Lifecycle.Event.ON_START) {
-        viewModel.init(request)
-    }
-
-    val title = stringResource(Res.string.numpad_title_percentage)
     val displayData by viewModel.percentageInput.collectAsStateWithLifecycle()
 
     AppTheme {
@@ -54,7 +54,7 @@ fun PercentageInputScreen(
                 isTablet = TabletScaffoldModifier,
                 isMobile = Modifier
             ),
-            topBar = { Toolbar(title) { onDismiss() } }
+            topBar = { Toolbar(stringResource(Res.string.numpad_title_percentage)) { onDismiss() } }
         ) { innerPadding ->
             Column(
                 modifier = Modifier
@@ -84,7 +84,7 @@ fun PercentageInputScreen(
 
 @Composable
 fun InputPreview(
-    percentText: String = "",
+    percentText: String,
     percentageMin: PercentageParam = PercentageParam.Disable,
     percentageMax: PercentageParam = PercentageParam.Disable
 ) {
@@ -93,7 +93,7 @@ fun InputPreview(
             modifier = Modifier.fillMaxWidth().wrapContentWidth(Alignment.CenterHorizontally),
             style = MaterialTheme.typography.bodyMedium,
             maxLines = 1,
-            text = "max. ${PercentageFormatter.format(percentageMax.percent)}",
+            text = stringResource(Res.string.max_value, PercentageFormatter.format(percentageMax.percent)),
             color = MagneticGrey,
         )
     }
@@ -111,7 +111,7 @@ fun InputPreview(
             modifier = Modifier.fillMaxWidth().wrapContentWidth(Alignment.CenterHorizontally),
             style = MaterialTheme.typography.bodyMedium,
             maxLines = 1,
-            text = "min. ${PercentageFormatter.format(percentageMin.percent)}",
+            text =stringResource(Res.string.min_value, PercentageFormatter.format(percentageMin.percent)),
             color = MagneticGrey,
         )
     }

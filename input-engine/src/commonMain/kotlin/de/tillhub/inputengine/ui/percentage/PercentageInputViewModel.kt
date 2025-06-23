@@ -1,6 +1,8 @@
 package de.tillhub.inputengine.ui.percentage
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import de.tillhub.inputengine.contract.PercentageInputRequest
 import de.tillhub.inputengine.financial.data.PercentIO
 import de.tillhub.inputengine.financial.param.PercentageParam
@@ -92,5 +94,13 @@ data class PercentageInputData(
 ) {
     companion object {
         val EMPTY = PercentageInputData(PercentIO.ZERO, "", false)
+    }
+}
+
+fun providePercentageInputViewModelFactory(request: PercentageInputRequest) = viewModelFactory {
+    initializer {
+        PercentageInputViewModel().apply {
+            init(request)
+        }
     }
 }

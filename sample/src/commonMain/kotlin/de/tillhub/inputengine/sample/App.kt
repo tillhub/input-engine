@@ -26,20 +26,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.ionspin.kotlin.bignum.decimal.BigDecimal
 import de.tillhub.inputengine.contract.AmountInputRequest
 import de.tillhub.inputengine.contract.AmountInputResult
 import de.tillhub.inputengine.contract.PercentageInputRequest
 import de.tillhub.inputengine.contract.PercentageInputResult
 import de.tillhub.inputengine.contract.PinInputRequest
 import de.tillhub.inputengine.contract.PinInputResult
+import de.tillhub.inputengine.contract.QuantityInputRequest
+import de.tillhub.inputengine.contract.QuantityInputResult
 import de.tillhub.inputengine.contract.rememberAmountInputLauncher
 import de.tillhub.inputengine.contract.rememberPercentageInputLauncher
 import de.tillhub.inputengine.contract.rememberPinInputLauncher
+import de.tillhub.inputengine.contract.rememberQuantityInputLauncher
 import de.tillhub.inputengine.financial.data.CurrencyIO
 import de.tillhub.inputengine.financial.data.MoneyIO
 import de.tillhub.inputengine.financial.data.PercentIO
+import de.tillhub.inputengine.financial.data.QuantityIO
 import de.tillhub.inputengine.financial.param.MoneyParam
 import de.tillhub.inputengine.financial.param.PercentageParam
+import de.tillhub.inputengine.financial.param.QuantityParam
 import de.tillhub.inputengine.sample.theme.InputEngineTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -56,14 +62,15 @@ fun App() {
                 is AmountInputResult.Success -> {
                     result.value = it.amount.amount.toPlainString()
                 }
+
                 is AmountInputResult.Canceled -> Unit
             }
         }
     )
 
-    val percentageInputLauncher = rememberPercentageInputLauncher (
+    val percentageInputLauncher = rememberPercentageInputLauncher(
         onResult = {
-            result.value  = when (it) {
+            result.value = when (it) {
                 PercentageInputResult.Canceled -> "Percent action canceled"
                 is PercentageInputResult.Success -> it.percent.value.toString()
             }
@@ -72,9 +79,17 @@ fun App() {
 
     val pinInputLauncher = rememberPinInputLauncher(
         onResult = {
-            result.value  =  when (it) {
-                PinInputResult.Canceled -> "Wrong PIN"
+            result.value = when (it) {
+                PinInputResult.Canceled -> "Pin action canceled"
                 is PinInputResult.Success -> "PIN entry successful"
+            }
+        }
+    )
+    val quantityInputLauncher = rememberQuantityInputLauncher(
+        onResult = {
+            result.value = when (it) {
+                QuantityInputResult.Canceled -> "Quantity action canceled"
+                is QuantityInputResult.Success -> it.quantity.toString()
             }
         }
     )
@@ -130,6 +145,7 @@ fun App() {
                     )
                     currentScreen = null
                 }
+
                 InputScreen.Percentage -> LaunchedEffect(Unit) {
                     percentageInputLauncher.launchPercentageInput(
                         request = PercentageInputRequest(
@@ -141,6 +157,7 @@ fun App() {
                     )
                     currentScreen = null
                 }
+
                 InputScreen.Pin -> LaunchedEffect(Unit) {
                     pinInputLauncher.launchPinInput(
                         request = PinInputRequest(
@@ -150,7 +167,19 @@ fun App() {
                     )
                     currentScreen = null
                 }
-                else -> {}
+
+                InputScreen.Quantity -> LaunchedEffect(Unit) {
+                    quantityInputLauncher.launchQuantityInput(
+                        QuantityInputRequest(
+                            quantity = QuantityIO.ZERO,
+                            minQuantity = QuantityParam.Enable(-QuantityIO.of(50)),
+                            maxQuantity = QuantityParam.Enable(QuantityIO.of(50)),
+                            quantityHint = QuantityParam.Enable(QuantityIO.of(BigDecimal.TEN))
+                        ),
+                    )
+                }
+
+                else -> Unit
             }
         }
     }

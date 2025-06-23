@@ -1,5 +1,6 @@
 package de.tillhub.inputengine.helper
 
+import androidx.annotation.IntRange
 import com.ionspin.kotlin.bignum.integer.BigInteger
 import de.tillhub.inputengine.financial.helper.isPositive
 
@@ -32,31 +33,24 @@ object DigitBuilder {
      * then defined by [fractionCount] the resulting list will contain leading 0 digits.
      * i.e. a value of 0.001234 ([minorValue] of 1234 and [fractionCount] of 6) will result in [0,0,1,2,3,4]
      */
-    fun minorDigits(minorValue: BigInteger, fractionCount: Int): List<Digit> =
-        processValue(fractionCount, 1, Int.MAX_VALUE).let { validatedCount ->
-            mutableListOf<Digit>().also { list ->
-                var currentValue = minorValue
-                var zerosAtEnd = 0
-                while (currentValue.isPositive(includeZero = false)) {
-                    val digitValue = currentValue.mod(BigInteger.TEN).intValue()
-                    if (list.isNotEmpty() || digitValue != 0) {
-                        list.add(Digit.from(digitValue))
-                    } else {
-                        zerosAtEnd += 1
-                    }
-                    currentValue = currentValue.divide(BigInteger.TEN)
+    internal fun minorDigits(minorValue: BigInteger, @IntRange(from = 1) fractionCount: Int): List<Digit> =
+        mutableListOf<Digit>().also { list ->
+            var currentValue = minorValue
+            var zerosAtEnd = 0
+            while (currentValue.isPositive(includeZero = false)) {
+                val digitValue = currentValue.mod(BigInteger.TEN).intValue()
+                if (list.isNotEmpty() || digitValue != 0) {
+                    list.add(Digit.from(digitValue))
+                } else {
+                    zerosAtEnd += 1
                 }
-
-                if (minorValue.isPositive(includeZero = false)) {
-                    val leadingZeros = validatedCount - zerosAtEnd - list.size
-                    repeat(leadingZeros) { list.add(Digit.ZERO) }
-                }
-                list.reverse()
+                currentValue = currentValue.divide(BigInteger.TEN)
             }
-        }
 
-    fun processValue(value: Int, from: Int, to: Int): Int {
-        require(value in from..to) { "Value must be between $from and $to" }
-        return value
-    }
+            if (minorValue.isPositive(includeZero = false)) {
+                val leadingZeros = fractionCount - zerosAtEnd - list.size
+                repeat(leadingZeros) { list.add(Digit.ZERO) }
+            }
+            list.reverse()
+        }
 }

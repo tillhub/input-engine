@@ -16,15 +16,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LifecycleEventEffect
+import androidx.lifecycle.viewmodel.compose.viewModel
 import de.tillhub.inputengine.contract.AmountInputRequest
 import de.tillhub.inputengine.contract.AmountInputResult
-import de.tillhub.inputengine.financial.data.MoneyIO
-import de.tillhub.inputengine.financial.helper.serializer.MoneyIOSerializer
 import de.tillhub.inputengine.financial.param.MoneyParam
 import de.tillhub.inputengine.formatter.MoneyFormatter
 import de.tillhub.inputengine.resources.Res
+import de.tillhub.inputengine.resources.max_value
+import de.tillhub.inputengine.resources.min_value
 import de.tillhub.inputengine.resources.numpad_title_amount
 import de.tillhub.inputengine.ui.amount.MoneyInputData.Companion.EMPTY
 import de.tillhub.inputengine.ui.components.Numpad
@@ -36,22 +35,20 @@ import de.tillhub.inputengine.ui.theme.MagneticGrey
 import de.tillhub.inputengine.ui.theme.OrbitalBlue
 import de.tillhub.inputengine.ui.theme.SoyuzGrey
 import de.tillhub.inputengine.ui.theme.TabletScaffoldModifier
-import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun AmountInputScreen(
     request: AmountInputRequest,
-    viewModel: AmountInputViewModel = remember { AmountInputViewModel() },
     onResult: (AmountInputResult.Success) -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    viewModel: AmountInputViewModel = viewModel(
+        factory = remember {
+            provideAmountInputViewModelFactory(request)
+        }
+    ),
 ) {
-    LifecycleEventEffect(Lifecycle.Event.ON_START) {
-        viewModel.init(request)
-    }
-
-    val title = stringResource(Res.string.numpad_title_amount)
     val amountMin by viewModel.uiMinValue.collectAsState()
     val amountMax by viewModel.uiMaxValue.collectAsState()
     val amount by viewModel.moneyInput.collectAsState()
@@ -63,7 +60,7 @@ fun AmountInputScreen(
                 isMobile = Modifier
             ),
             topBar = {
-                Toolbar(title) { onDismiss() }
+                Toolbar(stringResource(Res.string.numpad_title_amount)) { onDismiss() }
             }
         ) { innerPadding ->
             Column(
@@ -117,7 +114,7 @@ internal fun InputPreview(
                 .wrapContentWidth(Alignment.CenterHorizontally),
             style = MaterialTheme.typography.bodyMedium,
             maxLines = 1,
-            text = "max. ${MoneyFormatter.format(amountMax.amount)}",
+            text = stringResource(Res.string.max_value, MoneyFormatter.format(amountMax.amount)),
             color = SoyuzGrey
         )
     }
@@ -137,7 +134,7 @@ internal fun InputPreview(
                 .wrapContentWidth(Alignment.CenterHorizontally),
             style = MaterialTheme.typography.bodyMedium,
             maxLines = 1,
-            text = "min. ${MoneyFormatter.format(amountMin.amount)}",
+            text = stringResource(Res.string.min_value, MoneyFormatter.format(amountMin.amount)),
             color = SoyuzGrey
         )
     }
