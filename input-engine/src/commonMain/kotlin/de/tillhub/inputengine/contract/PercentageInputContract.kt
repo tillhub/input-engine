@@ -1,8 +1,9 @@
 package de.tillhub.inputengine.contract
 
 import androidx.compose.runtime.Composable
-import de.tillhub.inputengine.ui.percentage.PercentageInputRequest
-import de.tillhub.inputengine.ui.percentage.PercentageInputResult
+import de.tillhub.inputengine.financial.data.PercentIO
+import de.tillhub.inputengine.financial.param.PercentageParam
+import kotlinx.serialization.Serializable
 
 interface PercentageInputContract {
     fun launchPercentageInput(request: PercentageInputRequest)
@@ -12,3 +13,26 @@ interface PercentageInputContract {
 expect fun rememberPercentageInputLauncher(
     onResult: (PercentageInputResult) -> Unit
 ): PercentageInputContract
+
+
+@Serializable
+data class PercentageInputRequest(
+    val percent: PercentIO = PercentIO.ZERO,
+    val allowsZero: Boolean = false,
+    val allowDecimal: Boolean = false,
+    val percentageMin: PercentageParam = PercentageParam.Disable,
+    val percentageMax: PercentageParam = PercentageParam.Disable,
+    val extras: Map<String, String> = emptyMap()
+)
+
+@Serializable
+sealed class PercentageInputResult {
+    @Serializable
+    data class Success(
+        val percent: PercentIO,
+        val extras: Map<String, String> = emptyMap()
+    ) : PercentageInputResult()
+
+    @Serializable
+    data object Canceled : PercentageInputResult()
+}

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import de.tillhub.inputengine.contract.AmountInputRequest
 import de.tillhub.inputengine.financial.helper.serializer.MoneyIOSerializer
 import de.tillhub.inputengine.helper.ExtraKeys
 import kotlinx.serialization.json.Json

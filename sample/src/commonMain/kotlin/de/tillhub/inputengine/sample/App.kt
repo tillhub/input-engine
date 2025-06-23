@@ -26,18 +26,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import de.tillhub.inputengine.contract.AmountInputRequest
+import de.tillhub.inputengine.contract.AmountInputResult
+import de.tillhub.inputengine.contract.PercentageInputRequest
+import de.tillhub.inputengine.contract.PercentageInputResult
+import de.tillhub.inputengine.contract.PinInputRequest
+import de.tillhub.inputengine.contract.PinInputResult
 import de.tillhub.inputengine.contract.rememberAmountInputLauncher
 import de.tillhub.inputengine.contract.rememberPercentageInputLauncher
+import de.tillhub.inputengine.contract.rememberPinInputLauncher
 import de.tillhub.inputengine.financial.data.CurrencyIO
 import de.tillhub.inputengine.financial.data.MoneyIO
 import de.tillhub.inputengine.financial.data.PercentIO
 import de.tillhub.inputengine.financial.param.MoneyParam
 import de.tillhub.inputengine.financial.param.PercentageParam
 import de.tillhub.inputengine.sample.theme.InputEngineTheme
-import de.tillhub.inputengine.ui.amount.AmountInputRequest
-import de.tillhub.inputengine.ui.amount.AmountInputResult
-import de.tillhub.inputengine.ui.percentage.PercentageInputRequest
-import de.tillhub.inputengine.ui.percentage.PercentageInputResult
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -63,6 +66,15 @@ fun App() {
             result.value  = when (it) {
                 PercentageInputResult.Canceled -> "Percent action canceled"
                 is PercentageInputResult.Success -> it.percent.value.toString()
+            }
+        }
+    )
+
+    val pinInputLauncher = rememberPinInputLauncher(
+        onResult = {
+            result.value  =  when (it) {
+                PinInputResult.Canceled -> "Wrong PIN"
+                is PinInputResult.Success -> "PIN entry successful"
             }
         }
     )
@@ -125,6 +137,15 @@ fun App() {
                             percentageMin = PercentageParam.Enable(PercentIO.ZERO),
                             percentageMax = PercentageParam.Enable(PercentIO.WHOLE),
                             allowsZero = false
+                        )
+                    )
+                    currentScreen = null
+                }
+                InputScreen.Pin -> LaunchedEffect(Unit) {
+                    pinInputLauncher.launchPinInput(
+                        request = PinInputRequest(
+                            pin = "1234",
+                            overridePinInput = true
                         )
                     )
                     currentScreen = null

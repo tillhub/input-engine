@@ -1,6 +1,7 @@
 package de.tillhub.inputengine.ui.percentage
 
 import androidx.lifecycle.ViewModel
+import de.tillhub.inputengine.contract.PercentageInputRequest
 import de.tillhub.inputengine.financial.data.PercentIO
 import de.tillhub.inputengine.financial.param.PercentageParam
 import de.tillhub.inputengine.formatter.PercentageFormatter

@@ -2,6 +2,7 @@ package de.tillhub.inputengine.ui.amount
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import de.tillhub.inputengine.contract.AmountInputRequest
 import de.tillhub.inputengine.financial.data.CurrencyIO
 import de.tillhub.inputengine.financial.data.MoneyIO
 import de.tillhub.inputengine.financial.param.MoneyParam

@@ -18,7 +18,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import de.tillhub.inputengine.financial.data.PercentIO
+import de.tillhub.inputengine.contract.PercentageInputRequest
+import de.tillhub.inputengine.contract.PercentageInputResult
 import de.tillhub.inputengine.financial.param.PercentageParam
 import de.tillhub.inputengine.formatter.PercentageFormatter
 import de.tillhub.inputengine.resources.Res
@@ -31,7 +32,6 @@ import de.tillhub.inputengine.ui.theme.AppTheme
 import de.tillhub.inputengine.ui.theme.MagneticGrey
 import de.tillhub.inputengine.ui.theme.OrbitalBlue
 import de.tillhub.inputengine.ui.theme.TabletScaffoldModifier
-import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -115,26 +115,4 @@ fun InputPreview(
             color = MagneticGrey,
         )
     }
-}
-
-@Serializable
-data class PercentageInputRequest(
-    val percent: PercentIO = PercentIO.ZERO,
-    val allowsZero: Boolean = false,
-    val allowDecimal: Boolean = false,
-    val percentageMin: PercentageParam = PercentageParam.Disable,
-    val percentageMax: PercentageParam = PercentageParam.Disable,
-    val extras: Map<String, String> = emptyMap()
-)
-
-@Serializable
-sealed class PercentageInputResult {
-    @Serializable
-    data class Success(
-        val percent: PercentIO,
-        val extras: Map<String, String> = emptyMap()
-    ) : PercentageInputResult()
-
-    @Serializable
-    data object Canceled : PercentageInputResult()
 }

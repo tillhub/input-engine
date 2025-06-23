@@ -3,8 +3,6 @@ package de.tillhub.inputengine.contract
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.window.ComposeUIViewController
-import de.tillhub.inputengine.ui.amount.AmountInputRequest
-import de.tillhub.inputengine.ui.amount.AmountInputResult
 import de.tillhub.inputengine.ui.amount.AmountInputScreen
 import platform.UIKit.UIApplication
 import platform.UIKit.UIViewController

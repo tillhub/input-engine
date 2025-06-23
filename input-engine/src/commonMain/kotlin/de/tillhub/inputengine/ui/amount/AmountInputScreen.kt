@@ -18,6 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
+import de.tillhub.inputengine.contract.AmountInputRequest
+import de.tillhub.inputengine.contract.AmountInputResult
 import de.tillhub.inputengine.financial.data.MoneyIO
 import de.tillhub.inputengine.financial.helper.serializer.MoneyIOSerializer
 import de.tillhub.inputengine.financial.param.MoneyParam
@@ -139,26 +141,4 @@ internal fun InputPreview(
             color = SoyuzGrey
         )
     }
-}
-
-@Serializable
-data class AmountInputRequest(
-    val amount: MoneyIO,
-    val isZeroAllowed: Boolean = false,
-    val amountMin: MoneyParam = MoneyParam.Disable,
-    val amountMax: MoneyParam = MoneyParam.Disable,
-    val hintAmount: MoneyParam = MoneyParam.Disable,
-    val extras: Map<String, String> = emptyMap()
-)
-
-@Serializable
-sealed class AmountInputResult {
-    @Serializable
-    data class Success(
-        @Serializable(with = MoneyIOSerializer::class) val amount: MoneyIO,
-        val extras: Map<String, String> = emptyMap()
-    ) : AmountInputResult()
-
-    @Serializable
-    data object Canceled : AmountInputResult()
 }

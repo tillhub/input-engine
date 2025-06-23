@@ -10,8 +10,6 @@ import androidx.compose.ui.platform.LocalContext
 import de.tillhub.inputengine.financial.data.PercentIO
 import de.tillhub.inputengine.helper.ExtraKeys
 import de.tillhub.inputengine.ui.percentage.PercentageInputActivity
-import de.tillhub.inputengine.ui.percentage.PercentageInputRequest
-import de.tillhub.inputengine.ui.percentage.PercentageInputResult
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 

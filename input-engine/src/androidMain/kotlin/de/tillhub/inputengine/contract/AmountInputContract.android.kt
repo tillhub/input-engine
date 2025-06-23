@@ -10,8 +10,6 @@ import androidx.compose.ui.platform.LocalContext
 import de.tillhub.inputengine.financial.helper.serializer.MoneyIOSerializer
 import de.tillhub.inputengine.helper.ExtraKeys
 import de.tillhub.inputengine.ui.amount.AmountInputActivity
-import de.tillhub.inputengine.ui.amount.AmountInputRequest
-import de.tillhub.inputengine.ui.amount.AmountInputResult
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
