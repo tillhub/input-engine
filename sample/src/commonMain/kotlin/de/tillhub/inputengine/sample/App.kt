@@ -26,13 +26,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import de.tillhub.inputengine.contract.rememberAmountInputLauncher
+import de.tillhub.inputengine.contract.rememberPercentageInputLauncher
 import de.tillhub.inputengine.financial.data.CurrencyIO
 import de.tillhub.inputengine.financial.data.MoneyIO
+import de.tillhub.inputengine.financial.data.PercentIO
 import de.tillhub.inputengine.financial.param.MoneyParam
+import de.tillhub.inputengine.financial.param.PercentageParam
 import de.tillhub.inputengine.sample.theme.InputEngineTheme
-import de.tillhub.inputengine.ui.contract.rememberAmountInputLauncher
-import de.tillhub.inputengine.ui.amountinput.AmountInputRequest
-import de.tillhub.inputengine.ui.amountinput.AmountInputResult
+import de.tillhub.inputengine.ui.amount.AmountInputRequest
+import de.tillhub.inputengine.ui.amount.AmountInputResult
+import de.tillhub.inputengine.ui.percentage.PercentageInputRequest
+import de.tillhub.inputengine.ui.percentage.PercentageInputResult
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -42,13 +47,22 @@ fun App() {
 
     val eur = CurrencyIO.forCode("EUR")
     val result = remember { mutableStateOf("No result") }
-    val inputLauncher = rememberAmountInputLauncher(
+    val amountInputLauncher = rememberAmountInputLauncher(
         onResult = {
             when (it) {
                 is AmountInputResult.Success -> {
                     result.value = it.amount.amount.toPlainString()
                 }
                 is AmountInputResult.Canceled -> Unit
+            }
+        }
+    )
+
+    val percentageInputLauncher = rememberPercentageInputLauncher (
+        onResult = {
+            result.value  = when (it) {
+                PercentageInputResult.Canceled -> "Percent action canceled"
+                is PercentageInputResult.Success -> it.percent.value.toString()
             }
         }
     )
@@ -95,11 +109,22 @@ fun App() {
 
             when (currentScreen) {
                 InputScreen.Money -> LaunchedEffect(Unit) {
-                    inputLauncher.launchAmountInput(
+                    amountInputLauncher.launchAmountInput(
                         request = AmountInputRequest(
                             amount = MoneyIO.of(100, eur),
                             amountMin = MoneyParam.Enable(MoneyIO.of(-30_00, eur)),
                             amountMax = MoneyParam.Enable(MoneyIO.of(50_00, eur)),
+                        )
+                    )
+                    currentScreen = null
+                }
+                InputScreen.Percentage -> LaunchedEffect(Unit) {
+                    percentageInputLauncher.launchPercentageInput(
+                        request = PercentageInputRequest(
+                            percent = PercentIO.ZERO,
+                            percentageMin = PercentageParam.Enable(PercentIO.ZERO),
+                            percentageMax = PercentageParam.Enable(PercentIO.WHOLE),
+                            allowsZero = false
                         )
                     )
                     currentScreen = null

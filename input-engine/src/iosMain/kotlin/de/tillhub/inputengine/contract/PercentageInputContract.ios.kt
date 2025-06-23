@@ -1,41 +1,40 @@
-package de.tillhub.inputengine.ui.contract
+package de.tillhub.inputengine.contract
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.window.ComposeUIViewController
-import de.tillhub.inputengine.ui.amountinput.AmountInputRequest
-import de.tillhub.inputengine.ui.amountinput.AmountInputResult
-import de.tillhub.inputengine.ui.amountinput.AmountInputScreen
+import de.tillhub.inputengine.ui.percentage.PercentageInputRequest
+import de.tillhub.inputengine.ui.percentage.PercentageInputResult
+import de.tillhub.inputengine.ui.percentage.PercentageInputScreen
 import platform.UIKit.UIApplication
 import platform.UIKit.UIViewController
 
+
 @Composable
-actual fun rememberAmountInputLauncher(
-    onResult: (AmountInputResult) -> Unit
-): AmountInputContract = remember {
-    object : AmountInputContract {
+actual fun rememberPercentageInputLauncher(
+    onResult: (PercentageInputResult) -> Unit
+): PercentageInputContract = remember {
+    object : PercentageInputContract {
         private var viewController: UIViewController? = null
 
-        override fun launchAmountInput( request: AmountInputRequest) {
+        override fun launchPercentageInput(request: PercentageInputRequest) {
             val rootVC = UIApplication.sharedApplication.keyWindow?.rootViewController ?: return
 
             viewController = ComposeUIViewController {
-                AmountInputScreen(
+                PercentageInputScreen(
                     request = request,
                     onResult = {
                         onResult(it)
                         dismiss()
                     },
                     onDismiss = {
-                        onResult(AmountInputResult.Canceled)
+                        onResult(PercentageInputResult.Canceled)
                         dismiss()
                     }
                 )
             }
 
-            viewController?.let { vc ->
-                rootVC.presentViewController(vc, animated = true, completion = null)
-            }
+            rootVC.presentViewController(viewController!!, animated = true, completion = null)
         }
 
         private fun dismiss() {

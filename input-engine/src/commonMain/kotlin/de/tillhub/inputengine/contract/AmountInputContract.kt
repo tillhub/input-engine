@@ -1,8 +1,8 @@
-package de.tillhub.inputengine.ui.contract
+package de.tillhub.inputengine.contract
 
 import androidx.compose.runtime.Composable
-import de.tillhub.inputengine.ui.amountinput.AmountInputRequest
-import de.tillhub.inputengine.ui.amountinput.AmountInputResult
+import de.tillhub.inputengine.ui.amount.AmountInputRequest
+import de.tillhub.inputengine.ui.amount.AmountInputResult
 
 interface AmountInputContract {
     fun launchAmountInput(request: AmountInputRequest,)

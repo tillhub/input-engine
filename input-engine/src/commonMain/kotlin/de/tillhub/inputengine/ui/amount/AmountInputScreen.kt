@@ -1,4 +1,4 @@
-package de.tillhub.inputengine.ui.amountinput
+package de.tillhub.inputengine.ui.amount
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,29 +10,30 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import de.tillhub.inputengine.financial.data.MoneyIO
 import de.tillhub.inputengine.financial.helper.serializer.MoneyIOSerializer
 import de.tillhub.inputengine.financial.param.MoneyParam
 import de.tillhub.inputengine.formatter.MoneyFormatter
 import de.tillhub.inputengine.resources.Res
+import de.tillhub.inputengine.resources.numpad_title_amount
+import de.tillhub.inputengine.ui.amount.MoneyInputData.Companion.EMPTY
 import de.tillhub.inputengine.ui.components.Numpad
 import de.tillhub.inputengine.ui.components.SubmitButton
 import de.tillhub.inputengine.ui.components.Toolbar
 import de.tillhub.inputengine.ui.components.getModifierBasedOnDeviceType
-import de.tillhub.inputengine.ui.amountinput.MoneyInputData.Companion.EMPTY
 import de.tillhub.inputengine.ui.theme.AppTheme
 import de.tillhub.inputengine.ui.theme.MagneticGrey
 import de.tillhub.inputengine.ui.theme.OrbitalBlue
 import de.tillhub.inputengine.ui.theme.SoyuzGrey
 import de.tillhub.inputengine.ui.theme.TabletScaffoldModifier
-import de.tillhub.inputengine.resources.numpad_title_amount
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -44,7 +45,7 @@ fun AmountInputScreen(
     onResult: (AmountInputResult.Success) -> Unit,
     onDismiss: () -> Unit
 ) {
-    LaunchedEffect(Unit) {
+    LifecycleEventEffect(Lifecycle.Event.ON_START) {
         viewModel.init(request)
     }
 

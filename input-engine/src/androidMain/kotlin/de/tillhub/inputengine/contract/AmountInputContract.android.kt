@@ -1,16 +1,17 @@
-package de.tillhub.inputengine.ui.contract
+package de.tillhub.inputengine.contract
 
 import android.app.Activity
 import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import de.tillhub.inputengine.financial.helper.serializer.MoneyIOSerializer
 import de.tillhub.inputengine.helper.ExtraKeys
-import de.tillhub.inputengine.ui.amountinput.AmountInputRequest
-import de.tillhub.inputengine.ui.amountinput.AmountInputResult
-import de.tillhub.inputengine.ui.amountinput.AmountInputActivity
+import de.tillhub.inputengine.ui.amount.AmountInputActivity
+import de.tillhub.inputengine.ui.amount.AmountInputRequest
+import de.tillhub.inputengine.ui.amount.AmountInputResult
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 

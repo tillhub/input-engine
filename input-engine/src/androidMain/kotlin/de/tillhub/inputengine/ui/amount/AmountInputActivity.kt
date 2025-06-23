@@ -1,4 +1,4 @@
-package de.tillhub.inputengine.ui.amountinput
+package de.tillhub.inputengine.ui.amount
 
 import android.content.Intent
 import android.os.Bundle

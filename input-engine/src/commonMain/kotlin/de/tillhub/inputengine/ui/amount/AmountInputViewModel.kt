@@ -1,13 +1,13 @@
-package de.tillhub.inputengine.ui.amountinput
+package de.tillhub.inputengine.ui.amount
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.tillhub.inputengine.financial.data.CurrencyIO
 import de.tillhub.inputengine.financial.data.MoneyIO
-import de.tillhub.inputengine.helper.NumpadKey
 import de.tillhub.inputengine.financial.param.MoneyParam
 import de.tillhub.inputengine.formatter.MoneyFormatter
 import de.tillhub.inputengine.formatter.defaultLocale
+import de.tillhub.inputengine.helper.NumpadKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow

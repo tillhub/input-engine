@@ -6,7 +6,7 @@ import com.ionspin.kotlin.bignum.decimal.toBigDecimal
 import com.ionspin.kotlin.bignum.integer.BigInteger
 import com.ionspin.kotlin.bignum.integer.toBigInteger
 
-internal class NumberInputController(
+class NumberInputController(
     private val maxMajorDigits: Int = 8,
     private val maxMinorDigits: Int = 4
 ) {
