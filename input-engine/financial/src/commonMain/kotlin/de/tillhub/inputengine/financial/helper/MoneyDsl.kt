@@ -35,3 +35,4 @@ val BigNumber<*>.usd: MoneyIO
     }
 val EUR: CurrencyIO get() = CurrencyIO.forCode("EUR")
 val USD: CurrencyIO get() = CurrencyIO.forCode("USD")
+

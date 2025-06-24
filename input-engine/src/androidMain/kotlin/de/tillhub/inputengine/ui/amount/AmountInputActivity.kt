@@ -11,7 +11,7 @@ import kotlinx.serialization.json.Json
 
 class AmountInputActivity : ComponentActivity() {
 
-    val request: AmountInputRequest by lazy {
+    private val request: AmountInputRequest by lazy {
         intent.getStringExtra(ExtraKeys.EXTRA_REQUEST)?.let { requestJson ->
             Json.decodeFromString(requestJson)
         } ?: throw IllegalArgumentException("Argument MoneyInputRequest is missing")
@@ -25,7 +25,7 @@ class AmountInputActivity : ComponentActivity() {
                 onResult = {
                     val resultIntent = Intent().apply {
                         val extras = Bundle().apply {
-                            it.extras.forEach { (key, value) -> putString(key, value) }
+                            it.extras.forEach { (key, value) -> putInt(key, value) }
                         }
                         val result = Json.encodeToString(MoneyIOSerializer, it.amount)
                         putExtra(ExtraKeys.EXTRAS_RESULT, result)

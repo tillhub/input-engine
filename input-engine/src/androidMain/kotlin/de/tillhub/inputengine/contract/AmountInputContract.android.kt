@@ -28,13 +28,11 @@ actual fun rememberAmountInputLauncher(
                 val amountJson = resultData?.getString(ExtraKeys.EXTRAS_RESULT)
                 val amount = amountJson?.let { Json.decodeFromString(MoneyIOSerializer, it) }
 
-                val extrasMap = resultData
-                    ?.getBundle(ExtraKeys.EXTRAS_ARGS)
-                    ?.keySet()
-                    ?.associateWith { key ->
-                        resultData.getBundle(ExtraKeys.EXTRAS_ARGS)?.getString(key)
-                            ?: throw IllegalArgumentException("Non-string value for key: $key")
-                    }.orEmpty()
+                // Extract extras as Map<String, Int>
+                val extrasBundle = resultData?.getBundle(ExtraKeys.EXTRAS_ARGS)
+                val extrasMap: Map<String, Int> = extrasBundle?.keySet()
+                    ?.associateWith { extrasBundle.getInt(it) }
+                    .orEmpty()
 
                 AmountInputResult.Success(checkNotNull(amount), extrasMap)
             }
@@ -56,4 +54,3 @@ actual fun rememberAmountInputLauncher(
         }
     }
 }
-

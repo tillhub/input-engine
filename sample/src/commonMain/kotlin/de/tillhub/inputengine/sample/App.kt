@@ -161,8 +161,8 @@ fun App() {
                 InputScreen.Pin -> LaunchedEffect(Unit) {
                     pinInputLauncher.launchPinInput(
                         request = PinInputRequest(
-                            pin = "1234",
-                            overridePinInput = true
+                            pin = "9876",
+                            extras = mapOf("argPin" to "hint for pin")
                         )
                     )
                     currentScreen = null

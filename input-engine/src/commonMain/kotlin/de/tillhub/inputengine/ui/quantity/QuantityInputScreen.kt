@@ -14,15 +14,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import de.tillhub.inputengine.contract.QuantityInputRequest
 import de.tillhub.inputengine.contract.QuantityInputResult
 import de.tillhub.inputengine.financial.param.QuantityParam
 import de.tillhub.inputengine.formatter.QuantityFormatter
+import de.tillhub.inputengine.helper.rememberViewModel
 import de.tillhub.inputengine.resources.Res
 import de.tillhub.inputengine.resources.ic_minus
 import de.tillhub.inputengine.resources.ic_plus
@@ -41,14 +41,12 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun QuantityInputScreen(
+internal fun QuantityInputScreen(
     request: QuantityInputRequest,
     onResult: (QuantityInputResult) -> Unit,
-    viewModel: QuantityInputViewModel = viewModel(
-        factory = remember {
-            provideQuantityInputViewModelFactory(request)
-        }
-    )
+    viewModel: QuantityInputViewModel = rememberViewModel {
+        provideQuantityInputViewModelFactory(request)
+    },
 ) {
     val displayData by viewModel.displayDataFlow.collectAsState()
 
@@ -141,6 +139,7 @@ fun QuantityPreview(
                 }
                 Text(
                     text = quantityText,
+                    modifier = Modifier.testTag("qtyValue"),
                     color = quantityColor,
                     style = MaterialTheme.typography.displaySmall
                 )

@@ -17,18 +17,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.tillhub.inputengine.financial.data.Digit
-import de.tillhub.inputengine.helper.NumpadKey
 import de.tillhub.inputengine.formatter.DecimalFormatter
-import de.tillhub.inputengine.ui.theme.buttonElevation
-import de.tillhub.inputengine.ui.theme.GalacticBlue
-import de.tillhub.inputengine.ui.theme.LunarGray
-import de.tillhub.inputengine.ui.theme.Tint
-import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import de.tillhub.inputengine.helper.NumpadKey
 import de.tillhub.inputengine.resources.Res
 import de.tillhub.inputengine.resources.numpad_button_clear
 import de.tillhub.inputengine.resources.numpad_button_delete
 import de.tillhub.inputengine.resources.numpad_button_negative
+import de.tillhub.inputengine.ui.theme.GalacticBlue
+import de.tillhub.inputengine.ui.theme.LunarGray
+import de.tillhub.inputengine.ui.theme.Tint
+import de.tillhub.inputengine.ui.theme.buttonElevation
+import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Suppress("LongMethod")
 @Preview
@@ -36,9 +36,12 @@ import de.tillhub.inputengine.resources.numpad_button_negative
 internal fun Numpad(
     onClick: (NumpadKey) -> Unit = {},
     showDecimalSeparator: Boolean = false,
-    showNegative: Boolean = false
+    showNegative: Boolean = false,
+    modifier: Modifier = Modifier
 ) {
     Column(
+        modifier = modifier,
+        horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceAround,
     ) {
         Row(
@@ -103,7 +106,9 @@ internal fun Numpad(
                                 )
                             }"
                         }
-
+                        showDecimalSeparator -> {
+                            DecimalFormatter.decimalSeparator.toString()
+                        }
                         showNegative -> stringResource(Res.string.numpad_button_negative)
                         else -> stringResource(Res.string.numpad_button_clear)
                     },

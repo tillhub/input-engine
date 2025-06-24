@@ -9,12 +9,13 @@ import de.tillhub.inputengine.financial.param.PercentageParam
 import de.tillhub.inputengine.formatter.PercentageFormatter
 import de.tillhub.inputengine.formatter.defaultLocale
 import de.tillhub.inputengine.helper.NumberInputController
+import de.tillhub.inputengine.helper.NumberInputControllerContract
 import de.tillhub.inputengine.helper.NumpadKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class PercentageInputViewModel(
-    private val inputController: NumberInputController = NumberInputController(maxMajorDigits = 3),
+internal class PercentageInputViewModel(
+    private val inputController: NumberInputControllerContract = NumberInputController(maxMajorDigits = 3),
     private val locale: String = defaultLocale()
 ) : ViewModel() {
 
@@ -61,11 +62,11 @@ class PercentageInputViewModel(
             NumpadKey.Negate -> Unit
         }
 
-        val inputValue = PercentIO.of(inputController.value())
-        val percent = if (inputValue > maxPercent) {
+        val tempPercentage = PercentIO.of(inputController.value())
+        val percent = if (tempPercentage > maxPercent) {
             inputController.clear()
             maxPercent
-        } else inputValue
+        } else tempPercentage
 
         setValue(percent)
     }
@@ -80,10 +81,14 @@ class PercentageInputViewModel(
 
     private fun isValid(percentIO: PercentIO): Boolean {
         return if (isZeroAllowed) {
-            percentIO in minPercent..maxPercent
+            isValueBetweenMinMax(percentIO)
         } else {
-            percentIO.isNotZero() && percentIO in minPercent..maxPercent
+            percentIO.isNotZero() && isValueBetweenMinMax(percentIO)
         }
+    }
+
+    private fun isValueBetweenMinMax(percent: PercentIO): Boolean {
+        return percent in minPercent..maxPercent
     }
 }
 
@@ -97,7 +102,7 @@ data class PercentageInputData(
     }
 }
 
-fun providePercentageInputViewModelFactory(request: PercentageInputRequest) = viewModelFactory {
+internal fun providePercentageInputViewModelFactory(request: PercentageInputRequest) = viewModelFactory {
     initializer {
         PercentageInputViewModel().apply {
             init(request)

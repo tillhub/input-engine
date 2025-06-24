@@ -11,13 +11,14 @@ import de.tillhub.inputengine.financial.param.MoneyParam
 import de.tillhub.inputengine.formatter.MoneyFormatter
 import de.tillhub.inputengine.formatter.defaultLocale
 import de.tillhub.inputengine.helper.NumpadKey
+import de.tillhub.inputengine.ui.amount.MoneyInputData.Companion.DEFAULT_CURRENCY
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
-class AmountInputViewModel(
+internal class AmountInputViewModel(
     private val locale: String = defaultLocale()
 ) : ViewModel() {
 
@@ -30,7 +31,7 @@ class AmountInputViewModel(
     private lateinit var moneyMax: MoneyIO
     private lateinit var moneyMin: MoneyIO
 
-    private val _inputCurrencyMoneyInput = MutableStateFlow(MoneyIO.zero(CurrencyIO.forCode("EUR")))
+    private val _inputCurrencyMoneyInput = MutableStateFlow(MoneyIO.zero(DEFAULT_CURRENCY))
     internal val moneyInput: StateFlow<MoneyInputData> = _inputCurrencyMoneyInput.map {
         MoneyInputData(
             money = when (amountInputMode) {
@@ -198,7 +199,7 @@ internal data class MoneyInputData(
     }
 }
 
-fun provideAmountInputViewModelFactory(request: AmountInputRequest) = viewModelFactory {
+internal fun provideAmountInputViewModelFactory(request: AmountInputRequest) = viewModelFactory {
     initializer {
         AmountInputViewModel().apply {
             init(request)

@@ -39,6 +39,8 @@ object MoneyIOSerializer : KSerializer<MoneyIO> {
         }
 
         dec.endStructure(descriptor)
-        return MoneyIO.fromMajorUnits(amount!!, currency!!)
+        if (amount == null) throw SerializationException("Missing amount field")
+        if (currency == null) throw SerializationException("Missing currency field")
+        return MoneyIO.fromMajorUnits(amount, currency)
     }
 }

@@ -17,12 +17,12 @@ expect fun rememberAmountInputLauncher(
 
 @Serializable
 data class AmountInputRequest(
-    val amount: MoneyIO,
+    @Serializable(with = MoneyIOSerializer::class) val amount: MoneyIO,
     val isZeroAllowed: Boolean = false,
     val amountMin: MoneyParam = MoneyParam.Disable,
     val amountMax: MoneyParam = MoneyParam.Disable,
     val hintAmount: MoneyParam = MoneyParam.Disable,
-    val extras: Map<String, String> = emptyMap()
+    val extras: Map<String, Int> = emptyMap()
 )
 
 @Serializable
@@ -30,7 +30,7 @@ sealed class AmountInputResult {
     @Serializable
     data class Success(
         @Serializable(with = MoneyIOSerializer::class) val amount: MoneyIO,
-        val extras: Map<String, String> = emptyMap()
+        val extras: Map<String, Int> = emptyMap()
     ) : AmountInputResult()
 
     @Serializable

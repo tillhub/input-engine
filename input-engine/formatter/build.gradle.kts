@@ -18,9 +18,6 @@ kotlin {
         compileSdk = Configs.COMPILE_SDK
         minSdk = Configs.MIN_SDK
         experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
-
-        withHostTestBuilder {
-        }
     }
 
     val xcfName = "formatterKit"
@@ -46,8 +43,5 @@ kotlin {
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
-    }
-    sourceSets.androidUnitTest.dependencies {
-        implementation(kotlin("test"))
     }
 }

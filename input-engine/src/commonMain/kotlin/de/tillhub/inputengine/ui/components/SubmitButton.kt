@@ -11,22 +11,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import de.tillhub.inputengine.ui.theme.MagneticGrey
-import de.tillhub.inputengine.ui.theme.OrbitalBlue
 import de.tillhub.inputengine.resources.Res
 import de.tillhub.inputengine.resources.numpad_button_submit
+import de.tillhub.inputengine.ui.theme.MagneticGrey
+import de.tillhub.inputengine.ui.theme.OrbitalBlue
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-@Preview
 internal fun SubmitButton(
     isEnable: Boolean = true,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
 ) {
     Button(
         enabled = isEnable,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .testTag("submitButton"),
         shape = RectangleShape,

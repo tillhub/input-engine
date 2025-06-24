@@ -1,3 +1,5 @@
+import org.jetbrains.compose.ExperimentalComposeLibrary
+
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
@@ -12,28 +14,44 @@ kotlin {
         freeCompilerArgs.add("-Xexpect-actual-classes")
     }
 
-    // Android target setup
     androidLibrary {
         namespace = Configs.APPLICATION_ID
         compileSdk = Configs.COMPILE_SDK
         minSdk = Configs.MIN_SDK
         experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
+
+        withHostTestBuilder {
+        }
+
+        @Suppress("UnstableApiUsage")
+        withDeviceTestBuilder {
+            sourceSetTreeName = "test"
+        }.configure {
+            instrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        }
     }
 
     val xcfName = "input-engineKit"
-    iosX64 { binaries.framework { baseName = xcfName } }
-    iosArm64 { binaries.framework { baseName = xcfName } }
-    iosSimulatorArm64 { binaries.framework { baseName = xcfName } }
 
-    sourceSets {
-        androidMain {
-            dependencies {
-                implementation(compose.preview)
-                implementation(libs.androidx.activity.compose)
-                implementation(libs.androidx.activity.ktx)
-                implementation(libs.kotlinx.serialization.json)
-            }
+    iosX64 {
+        binaries.framework {
+            baseName = xcfName
         }
+    }
+
+    iosArm64 {
+        binaries.framework {
+            baseName = xcfName
+        }
+    }
+
+    iosSimulatorArm64 {
+        binaries.framework {
+            baseName = xcfName
+        }
+    }
+
+   sourceSets {
         commonMain {
             dependencies {
                 api(project(":input-engine:formatter"))
@@ -48,26 +66,64 @@ kotlin {
                 implementation(compose.components.resources)
                 implementation(compose.components.uiToolingPreview)
                 implementation(compose.materialIconsExtended)
-                implementation(libs.androidx.lifecycle.viewmodel)
-                implementation(libs.androidx.lifecycle.runtimeCompose)
-                implementation(libs.lifecycle.viewmodel.compose)
 
                 // Lifecycle
                 implementation(libs.androidx.lifecycle.viewmodel)
                 implementation(libs.androidx.lifecycle.runtimeCompose)
+                implementation(libs.lifecycle.viewmodel.compose)
 
                 // Math
                 implementation(libs.kotlin.bignum)
             }
         }
-        commonTest.dependencies {
-            implementation(libs.kotlin.test)
+
+        commonTest {
+            dependencies {
+                implementation(libs.kotlin.test)
+                implementation(libs.kotlinx.coroutines.test)
+                implementation(libs.kotlin.test)
+                implementation(kotlin("test-annotations-common"))
+
+                @OptIn(ExperimentalComposeLibrary::class)
+                implementation(compose.uiTest)
+            }
+        }
+
+        androidMain {
+            dependencies {
+                implementation(compose.preview)
+                implementation(libs.androidx.activity.compose)
+                implementation(libs.androidx.activity.ktx)
+                implementation(libs.kotlinx.serialization.json)
+            }
+        }
+
+        getByName("androidDeviceTest") {
+            dependencies {
+                implementation(libs.androidx.runner)
+                implementation(libs.androidx.core.v150)
+                implementation(libs.androidx.junit.v115)
+                implementation(libs.androidx.espresso.core)
+                implementation(libs.androidx.ui.test.junit4)
+                implementation(libs.kotlinx.serialization.json.v163)
+                implementation(libs.compose.ui.test.manifest)
+            }
+        }
+
+        iosMain {
+            dependencies {
+                implementation(libs.kotlin.test)
+                implementation(libs.junit)
+                implementation(libs.kotlinx.coroutines.test)
+                implementation(libs.kotlin.test)
+
+                @OptIn(ExperimentalComposeLibrary::class)
+                implementation(compose.uiTest)
+            }
         }
     }
 }
-
 compose.resources {
     packageOfResClass = "de.tillhub.inputengine.resources"
     generateResClass = auto
 }
-

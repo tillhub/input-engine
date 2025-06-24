@@ -23,15 +23,17 @@ actual fun rememberPercentageInputLauncher(
     ) { result ->
         val resultData = result.data?.extras
         val percentValue = resultData?.getDouble(ExtraKeys.EXTRAS_RESULT)
-        val extras = resultData
-            ?.getBundle(ExtraKeys.EXTRAS_ARGS)
-            ?.keySet()
-            ?.associateWith { resultData.getBundle(ExtraKeys.EXTRAS_ARGS)?.getString(it).orEmpty() }
+
+        // Extract extras as Map<String, Int>
+        val extrasBundle = resultData?.getBundle(ExtraKeys.EXTRAS_ARGS)
+        val extras: Map<String, Int> = extrasBundle?.keySet()
+            ?.associateWith { extrasBundle.getInt(it) }
             .orEmpty()
 
         val finalResult = when (result.resultCode) {
             Activity.RESULT_OK -> PercentageInputResult.Success(
-                PercentIO.of(checkNotNull(percentValue)), extras
+                percent = PercentIO.of(checkNotNull(percentValue)),
+                extras = extras
             )
             else -> PercentageInputResult.Canceled
         }

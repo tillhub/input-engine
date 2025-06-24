@@ -29,7 +29,7 @@ class QuantityInputActivity : ComponentActivity() {
                                 putExtra(
                                     ExtraKeys.EXTRAS_ARGS,
                                     Bundle().apply {
-                                        it.extras.forEach { (k, v) -> putString(k, v) }
+                                        it.extras.forEach { (k, v) -> putInt(k, v) }
                                     }
                                 )
                             }

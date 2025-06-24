@@ -22,7 +22,7 @@ data class PercentageInputRequest(
     val allowDecimal: Boolean = false,
     val percentageMin: PercentageParam = PercentageParam.Disable,
     val percentageMax: PercentageParam = PercentageParam.Disable,
-    val extras: Map<String, String> = emptyMap()
+    val extras: Map<String, Int> = emptyMap()
 )
 
 @Serializable
@@ -30,7 +30,7 @@ sealed class PercentageInputResult {
     @Serializable
     data class Success(
         val percent: PercentIO,
-        val extras: Map<String, String> = emptyMap()
+        val extras: Map<String, Int> = emptyMap()
     ) : PercentageInputResult()
 
     @Serializable

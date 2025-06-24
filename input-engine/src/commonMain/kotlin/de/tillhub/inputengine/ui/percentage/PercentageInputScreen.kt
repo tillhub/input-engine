@@ -10,17 +10,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import de.tillhub.inputengine.contract.PercentageInputRequest
 import de.tillhub.inputengine.contract.PercentageInputResult
 import de.tillhub.inputengine.financial.param.PercentageParam
 import de.tillhub.inputengine.formatter.PercentageFormatter
+import de.tillhub.inputengine.helper.rememberViewModel
 import de.tillhub.inputengine.resources.Res
 import de.tillhub.inputengine.resources.max_value
 import de.tillhub.inputengine.resources.min_value
@@ -36,17 +36,15 @@ import de.tillhub.inputengine.ui.theme.TabletScaffoldModifier
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun PercentageInputScreen(
+internal fun PercentageInputScreen(
     request: PercentageInputRequest,
     onResult: (PercentageInputResult.Success) -> Unit,
     onDismiss: () -> Unit,
-    viewModel: PercentageInputViewModel = viewModel(
-        factory = remember {
-            providePercentageInputViewModelFactory(request)
-        }
-    ),
+    viewModel: PercentageInputViewModel = rememberViewModel {
+        providePercentageInputViewModelFactory(request)
+    },
 ) {
-    val displayData by viewModel.percentageInput.collectAsStateWithLifecycle()
+    val displayData by viewModel.percentageInput.collectAsState()
 
     AppTheme {
         Scaffold(
@@ -93,13 +91,18 @@ fun InputPreview(
             modifier = Modifier.fillMaxWidth().wrapContentWidth(Alignment.CenterHorizontally),
             style = MaterialTheme.typography.bodyMedium,
             maxLines = 1,
-            text = stringResource(Res.string.max_value, PercentageFormatter.format(percentageMax.percent)),
+            text = stringResource(
+                Res.string.max_value,
+                PercentageFormatter.format(percentageMax.percent)
+            ),
             color = MagneticGrey,
         )
     }
 
     Text(
-        modifier = Modifier.fillMaxWidth().wrapContentWidth(Alignment.CenterHorizontally),
+        modifier = Modifier.fillMaxWidth()
+            .wrapContentWidth(Alignment.CenterHorizontally)
+            .testTag("percentValue"),
         style = MaterialTheme.typography.displaySmall,
         maxLines = 1,
         text = percentText,
@@ -111,7 +114,10 @@ fun InputPreview(
             modifier = Modifier.fillMaxWidth().wrapContentWidth(Alignment.CenterHorizontally),
             style = MaterialTheme.typography.bodyMedium,
             maxLines = 1,
-            text =stringResource(Res.string.min_value, PercentageFormatter.format(percentageMin.percent)),
+            text = stringResource(
+                Res.string.min_value,
+                PercentageFormatter.format(percentageMin.percent)
+            ),
             color = MagneticGrey,
         )
     }

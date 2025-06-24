@@ -11,19 +11,24 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
-class PinInputViewModel : ViewModel() {
+internal class PinInputViewModel : ViewModel() {
 
     private lateinit var pin: String
 
-    private val _pinInputState = MutableStateFlow<PinInputState>(PinInputState.AwaitingInput)
-    val pinInputState: StateFlow<PinInputState> = _pinInputState
+    private val _pinInputState: MutableStateFlow<PinInputState> =
+        MutableStateFlow(PinInputState.AwaitingInput)
+    internal val pinInputState: StateFlow<PinInputState> = _pinInputState
 
-    private val _pinInputChars = MutableStateFlow<List<Char>>(emptyList())
+    private val _pinInputChars = MutableStateFlow(emptyList<Char>())
     val enteredPin: StateFlow<String> = _pinInputChars.map { chars ->
-        val pinInput = chars.joinToString("")
-        validateInput(pinInput)
-        pinInput
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), "")
+        chars.joinToString("").apply {
+            validateStringInput(this)
+        }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(),
+        initialValue = ""
+    )
 
     fun init(pin: String) {
         this.pin = pin
@@ -33,34 +38,58 @@ class PinInputViewModel : ViewModel() {
     }
 
     fun input(key: NumpadKey) {
-        _pinInputChars.value = when (key) {
-            NumpadKey.Clear -> emptyList()
-            NumpadKey.Delete -> _pinInputChars.value.dropLast(1)
-            is NumpadKey.SingleDigit -> _pinInputChars.value + key.digit.value.digitToChar()
-            else -> _pinInputChars.value
+        when (key) {
+            NumpadKey.Clear -> {
+                _pinInputChars.value = emptyList()
+            }
+
+            NumpadKey.Delete -> {
+                _pinInputChars.value = _pinInputChars.value.toMutableList().dropLast(1)
+            }
+
+            is NumpadKey.SingleDigit -> {
+                _pinInputChars.value = _pinInputChars.value.toMutableList()
+                    .apply { add(key.digit.value.digitToChar()) }
+            }
+
+            is NumpadKey.DecimalSeparator -> Unit
+            NumpadKey.Negate -> Unit
         }
     }
 
-    private fun validateInput(pinInput: String) {
-        _pinInputState.value = when {
-            pinInput == pin -> PinInputState.PinValid
-            pinInput.length >= pin.length -> PinInputState.PinInvalid
-            else -> PinInputState.AwaitingInput
+    private fun validateStringInput(pinInput: CharSequence) {
+        when {
+            isPinValid(pinInput) -> {
+                _pinInputState.value = PinInputState.PinValid
+            }
+
+            pinInput.length >= pin.length -> {
+                _pinInputState.value = PinInputState.PinInvalid
+            }
+
+            else -> {
+                _pinInputState.value = PinInputState.AwaitingInput
+            }
         }
     }
 
-    private fun isPinFormatValid(pin: String): Boolean =
-        pin.isNotBlank() && pin.all { it.isDigit() }
+    private fun isPinValid(pinInput: CharSequence): Boolean {
+        return this.pin == pinInput
+    }
+
+    private fun isPinFormatValid(pin: String): Boolean {
+        return pin.isNotEmpty() && pin.all { it.isDigit() }
+    }
 }
 
-sealed class PinInputState {
+internal sealed class PinInputState {
     data object AwaitingInput : PinInputState()
     data object InvalidPinFormat : PinInputState()
     data object PinValid : PinInputState()
     data object PinInvalid : PinInputState()
 }
 
-fun providePinInputViewModelFactory(pin: String) = viewModelFactory {
+internal fun providePinInputViewModelFactory(pin: String) = viewModelFactory {
     initializer {
         PinInputViewModel().apply {
             init(pin)

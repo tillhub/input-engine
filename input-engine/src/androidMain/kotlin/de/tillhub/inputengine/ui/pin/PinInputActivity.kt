@@ -39,13 +39,14 @@ class PinInputActivity : ComponentActivity() {
                                 )
                             }
                             setResult(RESULT_OK, resultIntent)
+                            finish()
                         }
 
                         PinInputResult.Canceled -> {
                             setResult(RESULT_CANCELED)
+                            finish()
                         }
                     }
-                    finish()
                 }
             )
         }

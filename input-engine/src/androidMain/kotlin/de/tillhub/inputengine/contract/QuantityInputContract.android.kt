@@ -23,12 +23,11 @@ actual fun rememberQuantityInputLauncher(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
         val resultData = result.data?.extras
-        val extrasMap = resultData
-            ?.getBundle(ExtraKeys.EXTRAS_ARGS)
-            ?.keySet()
-            ?.associateWith { key ->
-                resultData.getBundle(ExtraKeys.EXTRAS_ARGS)?.getString(key).orEmpty()
-            }
+
+        // Corrected: Extract extras as Map<String, Int>
+        val extrasBundle = resultData?.getBundle(ExtraKeys.EXTRAS_ARGS)
+        val extrasMap: Map<String, Int> = extrasBundle?.keySet()
+            ?.associateWith { extrasBundle.getInt(it) }
             .orEmpty()
 
         val quantity = resultData?.getDouble(ExtraKeys.EXTRAS_RESULT)

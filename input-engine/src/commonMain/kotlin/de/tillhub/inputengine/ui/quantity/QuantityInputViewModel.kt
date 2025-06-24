@@ -6,20 +6,21 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import de.tillhub.inputengine.contract.QuantityInputRequest
 import de.tillhub.inputengine.financial.data.QuantityIO
+import de.tillhub.inputengine.financial.helper.getMajorDigits
+import de.tillhub.inputengine.financial.helper.getMinorDigits
 import de.tillhub.inputengine.financial.param.QuantityParam
 import de.tillhub.inputengine.formatter.QuantityFormatter
 import de.tillhub.inputengine.formatter.defaultLocale
 import de.tillhub.inputengine.helper.NumberInputController
+import de.tillhub.inputengine.helper.NumberInputControllerContract
 import de.tillhub.inputengine.helper.NumpadKey
-import de.tillhub.inputengine.financial.helper.getMajorDigits
-import de.tillhub.inputengine.financial.helper.getMinorDigits
 import de.tillhub.inputengine.ui.theme.MagneticGrey
 import de.tillhub.inputengine.ui.theme.OrbitalBlue
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class QuantityInputViewModel(
-    private val inputController: NumberInputController = NumberInputController(maxMajorDigits = 5),
+internal class QuantityInputViewModel(
+    private val inputController: NumberInputControllerContract = NumberInputController(maxMajorDigits = 5),
     private val locale: String = defaultLocale()
 ) : ViewModel() {
 
@@ -160,7 +161,7 @@ class QuantityInputViewModel(
     }
 }
 
-data class QuantityInputData(
+internal data class QuantityInputData(
     val qty: QuantityIO,
     val text: String,
     val color: Color,
@@ -175,7 +176,8 @@ data class QuantityInputData(
         )
     }
 }
-fun provideQuantityInputViewModelFactory(request: QuantityInputRequest) = viewModelFactory {
+
+internal fun provideQuantityInputViewModelFactory(request: QuantityInputRequest) = viewModelFactory {
     initializer {
         QuantityInputViewModel().apply {
             setInitialValue(request)

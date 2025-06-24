@@ -15,8 +15,10 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
@@ -24,7 +26,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import de.tillhub.inputengine.contract.PinInputRequest
 import de.tillhub.inputengine.contract.PinInputResult
@@ -42,10 +43,11 @@ import de.tillhub.inputengine.ui.theme.HintGray
 import de.tillhub.inputengine.ui.theme.OrbitalBlue
 import de.tillhub.inputengine.ui.theme.TabletScaffoldModifier
 import de.tillhub.inputengine.ui.theme.textFieldTransparentColors
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun PinInputScreen(
+internal fun PinInputScreen(
     request: PinInputRequest,
     onResult: (PinInputResult) -> Unit,
     viewModel: PinInputViewModel = viewModel(
@@ -57,21 +59,27 @@ fun PinInputScreen(
     val errorMessage = stringResource(Res.string.pin_wrong)
     val correctPin = stringResource(Res.string.pin_correct)
 
-    val enteredPin by viewModel.enteredPin.collectAsStateWithLifecycle()
-    val pinInputState by viewModel.pinInputState.collectAsStateWithLifecycle()
+    val enteredPin by viewModel.enteredPin.collectAsState()
+    val pinInputState by viewModel.pinInputState.collectAsState()
 
+    val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(pinInputState) {
         when (pinInputState) {
             PinInputState.PinInvalid -> {
-                snackbarHostState.showSnackbar(errorMessage)
+                scope.launch {
+                    snackbarHostState.showSnackbar(errorMessage)
+                }
                 viewModel.input(NumpadKey.Clear)
             }
 
             PinInputState.PinValid -> {
-                snackbarHostState.showSnackbar(correctPin)
+                scope.launch {
+                    snackbarHostState.showSnackbar(correctPin)
+                }
                 onResult(PinInputResult.Success(request.extras))
+
             }
 
             PinInputState.InvalidPinFormat -> {
