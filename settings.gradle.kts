@@ -21,3 +21,4 @@ include(":input-engine")
 include(":input-engine:formatter")
 include(":input-engine:financial")
 
+include(":test")

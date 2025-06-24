@@ -11,8 +11,8 @@ import de.tillhub.inputengine.formatter.QuantityFormatter
 import de.tillhub.inputengine.formatter.defaultLocale
 import de.tillhub.inputengine.helper.NumberInputController
 import de.tillhub.inputengine.helper.NumpadKey
-import de.tillhub.inputengine.helper.getMajorDigits
-import de.tillhub.inputengine.helper.getMinorDigits
+import de.tillhub.inputengine.financial.helper.getMajorDigits
+import de.tillhub.inputengine.financial.helper.getMinorDigits
 import de.tillhub.inputengine.ui.theme.MagneticGrey
 import de.tillhub.inputengine.ui.theme.OrbitalBlue
 import kotlinx.coroutines.flow.MutableStateFlow

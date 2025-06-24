@@ -1,5 +1,6 @@
-package de.tillhub.inputengine.helper
+package de.tillhub.inputengine.financial.helper
 
+import de.tillhub.inputengine.financial.data.Digit
 import de.tillhub.inputengine.financial.data.QuantityIO
 import de.tillhub.inputengine.financial.data.QuantityIO.Companion.FRACTIONS
 import de.tillhub.inputengine.financial.data.QuantityIO.Companion.FRACTIONS_FACTOR_INT

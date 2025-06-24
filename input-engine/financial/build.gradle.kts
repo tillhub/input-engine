@@ -38,5 +38,8 @@ kotlin {
                 implementation(libs.kotlin.bignum)
             }
         }
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+        }
     }
 }

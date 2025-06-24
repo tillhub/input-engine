@@ -8,7 +8,9 @@ androidx-espresso = "3.6.1"
 androidx-lifecycle = "2.9.0"
 androidx-testExt = "1.2.1"
 composeMultiplatform = "1.8.1"
+coreVersion = "1.5.0"
 junit = "4.13.2"
+junitVersion = "1.1.5"
 kotlin = "2.1.21"
 kotlinStdlib = "2.1.21"
 kotlinxSerializationJson = "1.7.3"
@@ -19,6 +21,8 @@ core = "1.6.1"
 activityKtx = "1.10.1"
 
 [libraries]
+androidx-core-v150 = { module = "androidx.test:core", version.ref = "coreVersion" }
+androidx-junit-v115 = { module = "androidx.test.ext:junit", version.ref = "junitVersion" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-testJunit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 junit = { module = "junit:junit", version.ref = "junit" }

@@ -1,5 +1,7 @@
 package de.tillhub.inputengine.helper
 
+import de.tillhub.inputengine.financial.data.Digit
+
 sealed class NumpadKey {
     data class SingleDigit(val digit: Digit) : NumpadKey()
     data object DecimalSeparator : NumpadKey()

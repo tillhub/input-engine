@@ -26,6 +26,14 @@ kotlin {
     iosSimulatorArm64 { binaries.framework { baseName = xcfName } }
 
     sourceSets {
+        androidMain {
+            dependencies {
+                implementation(compose.preview)
+                implementation(libs.androidx.activity.compose)
+                implementation(libs.androidx.activity.ktx)
+                implementation(libs.kotlinx.serialization.json)
+            }
+        }
         commonMain {
             dependencies {
                 api(project(":input-engine:formatter"))
@@ -52,12 +60,8 @@ kotlin {
                 implementation(libs.kotlin.bignum)
             }
         }
-        androidMain {
-            dependencies {
-                implementation(libs.androidx.activity.compose)
-                implementation(libs.androidx.activity.ktx)
-                implementation(libs.kotlinx.serialization.json)
-            }
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
         }
     }
 }
@@ -66,3 +70,4 @@ compose.resources {
     packageOfResClass = "de.tillhub.inputengine.resources"
     generateResClass = auto
 }
+

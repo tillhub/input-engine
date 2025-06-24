@@ -1,5 +1,6 @@
 package de.tillhub.inputengine.financial.data
 
+import com.ionspin.kotlin.bignum.BigNumber
 import com.ionspin.kotlin.bignum.decimal.BigDecimal
 import com.ionspin.kotlin.bignum.decimal.DecimalMode
 import com.ionspin.kotlin.bignum.decimal.RoundingMode
@@ -20,7 +21,8 @@ class QuantityIO private constructor(
     @Serializable(with = BigIntegerSerializer::class) val value: BigInteger
 ) : Comparable<QuantityIO>, Number() {
 
-    fun getDecimal(): BigDecimal = BigDecimal.fromBigInteger(value).divide(FRACTIONS_FACTOR, PRECISION)
+    fun getDecimal(): BigDecimal =
+        BigDecimal.fromBigInteger(value).divide(FRACTIONS_FACTOR, PRECISION)
 
     fun getMajorValue(): BigInteger = value / FRACTIONS_FACTOR_INT
 
@@ -197,16 +199,17 @@ class QuantityIO private constructor(
 
                 is Float -> BigDecimal.fromFloat(number).multiply(FRACTIONS_FACTOR).floor()
                     .toBigInteger()
+
                 else -> throw IllegalArgumentException("Not supported number for quantity")
             }
         )
 
-        fun of(number: BigDecimal): QuantityIO = QuantityIO(
-            number.multiply(FRACTIONS_FACTOR, PRECISION).toBigInteger()
-        )
-
-        fun of(number: BigInteger): QuantityIO = QuantityIO(
-            number.multiply(FRACTIONS_FACTOR_INT)
+        fun of(number: BigNumber<*>): QuantityIO = QuantityIO(
+            when (number) {
+                is BigInteger -> number.multiply(FRACTIONS_FACTOR_INT)
+                is BigDecimal -> number.multiply(FRACTIONS_FACTOR, PRECISION).toBigInteger()
+                else -> throw IllegalArgumentException("Percent $number is not supported type.")
+            }
         )
     }
 }

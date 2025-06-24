@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import de.tillhub.inputengine.helper.Digit
+import de.tillhub.inputengine.financial.data.Digit
 import de.tillhub.inputengine.helper.NumpadKey
 import de.tillhub.inputengine.formatter.DecimalFormatter
 import de.tillhub.inputengine.ui.theme.buttonElevation

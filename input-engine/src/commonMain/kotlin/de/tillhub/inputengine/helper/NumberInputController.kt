@@ -3,7 +3,10 @@ package de.tillhub.inputengine.helper
 import com.ionspin.kotlin.bignum.decimal.BigDecimal
 import com.ionspin.kotlin.bignum.decimal.RoundingMode
 import com.ionspin.kotlin.bignum.decimal.toBigDecimal
+import com.ionspin.kotlin.bignum.integer.BigInteger
 import com.ionspin.kotlin.bignum.integer.toBigInteger
+import de.tillhub.inputengine.financial.data.Digit
+import de.tillhub.inputengine.financial.helper.DigitBuilder
 
 class NumberInputController(
     private val maxMajorDigits: Int = 8,
@@ -14,7 +17,6 @@ class NumberInputController(
     private val _majorDigits: MutableList<Digit> = mutableListOf(Digit.ZERO)
     private val _minorDigits: MutableList<Digit> = mutableListOf()
 
-    internal val majorDigits: List<Digit> get() = _majorDigits
     internal val minorDigits: List<Digit> get() = _minorDigits
 
     internal fun setValue(majorDigits: List<Digit>, minorDigits: List<Digit>, isNegative: Boolean) {
@@ -90,9 +92,9 @@ class NumberInputController(
 
     fun value(): Number {
         return if (_minorDigits.isEmpty()) {
-            val major = _majorDigits.fold(com.ionspin.kotlin.bignum.integer.BigInteger.ZERO) { acc, digit ->
-                acc * com.ionspin.kotlin.bignum.integer.BigInteger.TEN +
-                        com.ionspin.kotlin.bignum.integer.BigInteger.fromInt(digit.value)
+            val major = _majorDigits.fold(BigInteger.ZERO) { acc, digit ->
+                acc * BigInteger.TEN +
+                        BigInteger.fromInt(digit.value)
             }.let { if (switchToNegate) it.negate() else it }
 
             major.longValue(false)

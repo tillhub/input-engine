@@ -1,4 +1,4 @@
-package de.tillhub.inputengine.helper
+package de.tillhub.inputengine.financial.data
 
 enum class Digit(val value: Int) {
     ZERO(0),

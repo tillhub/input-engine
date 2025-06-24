@@ -1,5 +1,9 @@
 package de.tillhub.inputengine.financial.data
 
+import com.ionspin.kotlin.bignum.BigNumber
+import com.ionspin.kotlin.bignum.decimal.BigDecimal
+import com.ionspin.kotlin.bignum.decimal.toBigDecimal
+import com.ionspin.kotlin.bignum.integer.BigInteger
 import kotlinx.serialization.Serializable
 
 /**
@@ -56,6 +60,15 @@ class PercentIO private constructor(
                     is Long -> number * I_100
                     is Double -> (number * I_100).toLong()
                     else -> number.toLong() * I_100
+                }
+            )
+        }
+        fun of(number: BigNumber<*>): PercentIO {
+            return PercentIO(
+                when (number) {
+                    is BigInteger -> number.longValue() * I_100
+                    is BigDecimal -> number.multiply(I_100.toBigDecimal()).longValue()
+                    else -> throw IllegalArgumentException("Percent $number is not supported type.")
                 }
             )
         }

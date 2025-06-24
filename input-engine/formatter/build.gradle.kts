@@ -8,9 +8,9 @@ plugins {
 
 kotlin {
     // Enable expect/actual class support
-  compilerOptions {
-    freeCompilerArgs.add("-Xexpect-actual-classes")
-}
+    compilerOptions {
+        freeCompilerArgs.add("-Xexpect-actual-classes")
+    }
 
     // Android target setup
     androidLibrary {
@@ -18,6 +18,9 @@ kotlin {
         compileSdk = Configs.COMPILE_SDK
         minSdk = Configs.MIN_SDK
         experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
+
+        withHostTestBuilder {
+        }
     }
 
     val xcfName = "formatterKit"
@@ -40,5 +43,11 @@ kotlin {
                 implementation(libs.kotlin.bignum)
             }
         }
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+        }
+    }
+    sourceSets.androidUnitTest.dependencies {
+        implementation(kotlin("test"))
     }
 }

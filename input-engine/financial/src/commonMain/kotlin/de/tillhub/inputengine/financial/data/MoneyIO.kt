@@ -1,8 +1,10 @@
 package de.tillhub.inputengine.financial.data
 
+import com.ionspin.kotlin.bignum.BigNumber
 import com.ionspin.kotlin.bignum.decimal.BigDecimal
 import com.ionspin.kotlin.bignum.decimal.RoundingMode
 import com.ionspin.kotlin.bignum.decimal.toBigDecimal
+import com.ionspin.kotlin.bignum.integer.BigInteger
 import de.tillhub.inputengine.financial.helper.serializer.BigDecimalSerializer
 import de.tillhub.inputengine.financial.helper.serializer.CurrencySerializer
 import kotlinx.serialization.Serializable
@@ -79,7 +81,7 @@ class MoneyIO private constructor(
     companion object {
 
         // MAX_VALUE_NORMAL for the Money class is 10 000 000 currency
-        private val MAX_VALUE_DECIMAL: BigDecimal =10000000.0.toBigDecimal()
+        private val MAX_VALUE_DECIMAL: BigDecimal = 10000000.0.toBigDecimal()
 
         // MIN_VALUE_NORMAL for the Money class is 0 currency
         private val MIN_VALUE_DECIMAL: BigDecimal = MAX_VALUE_DECIMAL.negate()
@@ -92,9 +94,28 @@ class MoneyIO private constructor(
         fun of(amount: Number, currency: CurrencyIO): MoneyIO {
             return MoneyIO(
                 when (amount) {
-                    is Int -> amount.toBigDecimal().moveDecimalPoint(-currency.defaultFractionDigits)
-                    is Long -> amount.toBigDecimal().moveDecimalPoint(-currency.defaultFractionDigits)
-                    is Double -> amount.toBigDecimal().moveDecimalPoint(-currency.defaultFractionDigits)
+                    is Int -> amount.toBigDecimal()
+                        .moveDecimalPoint(-currency.defaultFractionDigits)
+
+                    is Long -> amount.toBigDecimal()
+                        .moveDecimalPoint(-currency.defaultFractionDigits)
+
+                    is Double -> amount.toBigDecimal()
+                        .moveDecimalPoint(-currency.defaultFractionDigits)
+
+                    else -> throw IllegalArgumentException("Money $amount is not supported type.")
+                },
+                currency
+            )
+        }
+
+        fun of(amount: BigNumber<*>, currency: CurrencyIO): MoneyIO {
+            return MoneyIO(
+                when (amount) {
+                    is BigDecimal -> amount.moveDecimalPoint(-currency.defaultFractionDigits)
+                    is BigInteger -> BigDecimal.fromBigInteger(amount)
+                        .moveDecimalPoint(-currency.defaultFractionDigits)
+
                     else -> throw IllegalArgumentException("Money $amount is not supported type.")
                 },
                 currency
@@ -130,6 +151,6 @@ class MoneyIO private constructor(
         }
 
         const val MOVE_ONE_LEFT = -1
-        const val MOVE_ONE_RIGHT= 1
+        const val MOVE_ONE_RIGHT = 1
     }
 }
