@@ -49,8 +49,7 @@ class MoneyIO private constructor(
         return body()
     }
 
-    override fun toByte(): Byte =
-        amount.moveDecimalPoint(currency.defaultFractionDigits).byteValue(exactRequired = false)
+    override fun toByte(): Byte = amount.byteValue(exactRequired = false)
 
     override fun toShort(): Short =
         amount.moveDecimalPoint(currency.defaultFractionDigits).shortValue(exactRequired = false)

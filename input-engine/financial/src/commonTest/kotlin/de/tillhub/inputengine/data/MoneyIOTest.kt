@@ -146,5 +146,25 @@ class MoneyIOTest {
         assertEquals(0.01.eur, MoneyIO.removeLastDigit(0.11.eur))
         assertEquals(1.10.eur, MoneyIO.removeLastDigit(11.0.eur))
     }
+
+    @Test
+    fun testUnaryMinus() {
+        assertEquals((-10).eur, (-10).eur)
+        assertEquals(10.eur, -(-10).eur)
+    }
+
+    @Test
+    fun testByteAndShortConversion() {
+        assertEquals(1.toByte(), 1.eur.toByte())
+        assertEquals(100.toShort(), 1.eur.toShort())
+    }
+
+    @Test
+    fun testEqualsAndHashCode() {
+        val m1 = 10.eur
+        val m2 = MoneyIO.of(1000, EUR)
+        assertTrue(m1 == m2)
+        assertEquals(m1.hashCode(), m2.hashCode())
+    }
 }
 

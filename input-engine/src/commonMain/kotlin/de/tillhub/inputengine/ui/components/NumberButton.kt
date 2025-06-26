@@ -37,7 +37,7 @@ internal fun NumberButton(
         colors = ButtonDefaults.outlinedButtonColors(containerColor = Tint),
     ) {
         Text(
-            text = number.toString(),
+            text = number.value.toString(),
             fontSize = 14.sp,
             color = GalacticBlue
         )

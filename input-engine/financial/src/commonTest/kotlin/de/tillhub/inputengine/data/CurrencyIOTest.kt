@@ -6,6 +6,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class CurrencyIOTests {
 
@@ -60,5 +61,16 @@ class CurrencyIOTests {
 	@Test
 	fun testToString() {
 		assertEquals(expected = "EUR", actual = CurrencyIO.forCode("eur").toString())
+	}
+
+	@Test
+	fun testAllCurrencyCodesAreUnique() {
+		val codes = CurrencyIO.all.map { it.code.value }
+		assertEquals(codes.size, codes.toSet().size, "Currency codes in 'all' must be unique")
+	}
+
+	@Test
+	fun testCurrencyTableHasExpectedSize() {
+		assertTrue(CurrencyIO.all.size > 150, "Currency table should have at least 150 entries")
 	}
 }
