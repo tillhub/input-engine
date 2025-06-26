@@ -26,7 +26,7 @@ import de.tillhub.inputengine.resources.max_value
 import de.tillhub.inputengine.resources.min_value
 import de.tillhub.inputengine.resources.numpad_title_amount
 import de.tillhub.inputengine.ui.amount.MoneyInputData.Companion.EMPTY
-import de.tillhub.inputengine.ui.components.Numpad
+import de.tillhub.inputengine.ui.components.NumberKeyboard
 import de.tillhub.inputengine.ui.components.SubmitButton
 import de.tillhub.inputengine.ui.components.Toolbar
 import de.tillhub.inputengine.ui.components.getModifierBasedOnDeviceType
@@ -77,7 +77,7 @@ internal fun AmountInputScreen(
                     amountMax = amountMax,
                     amountHint = request.hintAmount
                 )
-                Numpad(
+                NumberKeyboard(
                     onClick = viewModel::input,
                     showNegative = viewModel.amountInputMode == AmountInputMode.BOTH,
                     modifier = Modifier

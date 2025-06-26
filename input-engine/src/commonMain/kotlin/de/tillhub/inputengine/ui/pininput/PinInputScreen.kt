@@ -35,7 +35,7 @@ import de.tillhub.inputengine.resources.numpad_title_pin
 import de.tillhub.inputengine.resources.pin_correct
 import de.tillhub.inputengine.resources.pin_enter
 import de.tillhub.inputengine.resources.pin_wrong
-import de.tillhub.inputengine.ui.components.Numpad
+import de.tillhub.inputengine.ui.components.NumberKeyboard
 import de.tillhub.inputengine.ui.components.Toolbar
 import de.tillhub.inputengine.ui.components.getModifierBasedOnDeviceType
 import de.tillhub.inputengine.ui.theme.AppTheme
@@ -117,7 +117,7 @@ internal fun PinInputScreen(
                     overridePinInput = request.overridePinInput,
                     onOverride = { onResult(PinInputResult.Success(request.extras)) }
                 )
-                Numpad(onClick = viewModel::input)
+                NumberKeyboard(onClick = viewModel::input)
             }
         }
     }

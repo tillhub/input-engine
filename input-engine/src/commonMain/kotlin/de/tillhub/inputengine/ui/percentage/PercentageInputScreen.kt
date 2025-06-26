@@ -25,7 +25,7 @@ import de.tillhub.inputengine.resources.Res
 import de.tillhub.inputengine.resources.max_value
 import de.tillhub.inputengine.resources.min_value
 import de.tillhub.inputengine.resources.numpad_title_percentage
-import de.tillhub.inputengine.ui.components.Numpad
+import de.tillhub.inputengine.ui.components.NumberKeyboard
 import de.tillhub.inputengine.ui.components.SubmitButton
 import de.tillhub.inputengine.ui.components.Toolbar
 import de.tillhub.inputengine.ui.components.getModifierBasedOnDeviceType
@@ -66,7 +66,7 @@ internal fun PercentageInputScreen(
                     percentageMin = request.percentageMin,
                     percentageMax = request.percentageMax
                 )
-                Numpad(
+                NumberKeyboard(
                     onClick = viewModel::input,
                     showDecimalSeparator = request.allowDecimal
                 )

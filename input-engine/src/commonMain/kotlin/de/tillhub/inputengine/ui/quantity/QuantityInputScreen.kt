@@ -29,7 +29,7 @@ import de.tillhub.inputengine.resources.ic_plus
 import de.tillhub.inputengine.resources.max_value
 import de.tillhub.inputengine.resources.min_value
 import de.tillhub.inputengine.resources.numpad_title_quantity
-import de.tillhub.inputengine.ui.components.Numpad
+import de.tillhub.inputengine.ui.components.NumberKeyboard
 import de.tillhub.inputengine.ui.components.SubmitButton
 import de.tillhub.inputengine.ui.components.Toolbar
 import de.tillhub.inputengine.ui.components.getModifierBasedOnDeviceType
@@ -79,7 +79,7 @@ internal fun QuantityInputScreen(
                     decrease = { viewModel.decrease() }
                 )
 
-                Numpad(
+                NumberKeyboard(
                     onClick = viewModel::processKey,
                     showDecimalSeparator = request.allowDecimal,
                     showNegative = when (val minQty = request.minQuantity) {

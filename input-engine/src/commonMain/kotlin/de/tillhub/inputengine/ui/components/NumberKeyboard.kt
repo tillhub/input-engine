@@ -1,15 +1,11 @@
 package de.tillhub.inputengine.ui.components
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,16 +20,10 @@ import de.tillhub.inputengine.resources.numpad_button_clear
 import de.tillhub.inputengine.resources.numpad_button_delete
 import de.tillhub.inputengine.resources.numpad_button_negative
 import de.tillhub.inputengine.ui.theme.GalacticBlue
-import de.tillhub.inputengine.ui.theme.LunarGray
-import de.tillhub.inputengine.ui.theme.Tint
-import de.tillhub.inputengine.ui.theme.buttonElevation
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
-@Suppress("LongMethod")
-@Preview
 @Composable
-internal fun Numpad(
+internal fun NumberKeyboard(
     onClick: (NumpadKey) -> Unit = {},
     showDecimalSeparator: Boolean = false,
     showNegative: Boolean = false,
@@ -49,18 +39,18 @@ internal fun Numpad(
                 .padding(top = 16.dp, start = 24.dp, end = 24.dp)
                 .fillMaxWidth()
         ) {
-            NumberButton(number = 7, onClick = onClick, modifier = Modifier.weight(1f))
-            NumberButton(number = 8, onClick = onClick, modifier = Modifier.weight(1f))
-            NumberButton(number = 9, onClick = onClick, modifier = Modifier.weight(1f))
+            NumberButton(number = Digit.SEVEN, onClick = onClick, modifier = Modifier.weight(1f))
+            NumberButton(number = Digit.EIGHT, onClick = onClick, modifier = Modifier.weight(1f))
+            NumberButton(number = Digit.NINE, onClick = onClick, modifier = Modifier.weight(1f))
         }
         Row(
             modifier = Modifier
                 .padding(start = 24.dp, end = 24.dp)
                 .fillMaxWidth()
         ) {
-            NumberButton(number = 4, onClick = onClick, modifier = Modifier.weight(1f))
-            NumberButton(number = 5, onClick = onClick, modifier = Modifier.weight(1f))
-            NumberButton(number = 6, onClick = onClick, modifier = Modifier.weight(1f))
+            NumberButton(number = Digit.FOUR, onClick = onClick, modifier = Modifier.weight(1f))
+            NumberButton(number = Digit.FIVE, onClick = onClick, modifier = Modifier.weight(1f))
+            NumberButton(number = Digit.SIX, onClick = onClick, modifier = Modifier.weight(1f))
         }
 
         Row(
@@ -68,9 +58,9 @@ internal fun Numpad(
                 .padding(start = 24.dp, end = 24.dp)
                 .fillMaxWidth()
         ) {
-            NumberButton(number = 1, onClick = onClick, modifier = Modifier.weight(1f))
-            NumberButton(number = 2, onClick = onClick, modifier = Modifier.weight(1f))
-            NumberButton(number = 3, onClick = onClick, modifier = Modifier.weight(1f))
+            NumberButton(number = Digit.ONE, onClick = onClick, modifier = Modifier.weight(1f))
+            NumberButton(number = Digit.TWO, onClick = onClick, modifier = Modifier.weight(1f))
+            NumberButton(number = Digit.ZERO, onClick = onClick, modifier = Modifier.weight(1f))
         }
         Row(
             modifier = Modifier
@@ -116,7 +106,7 @@ internal fun Numpad(
                     color = GalacticBlue,
                 )
             }
-            NumberButton(number = 0, onClick = onClick, modifier = Modifier.weight(1f))
+            NumberButton(number = Digit.ZERO, onClick = onClick, modifier = Modifier.weight(1f))
             DoubleActionButton(
                 onClick = { onClick(NumpadKey.Delete) },
                 onLongClick = { onClick(NumpadKey.Clear) },
@@ -135,31 +125,3 @@ internal fun Numpad(
         }
     }
 }
-
-@Composable
-private fun NumberButton(
-    modifier: Modifier = Modifier,
-    onClick: (NumpadKey) -> Unit,
-    number: Int
-) {
-    OutlinedButton(
-        onClick = {
-            onClick(NumpadKey.SingleDigit(Digit.from(number)))
-        },
-        modifier = modifier
-            .aspectRatio(BUTTON_ASPECT_RATIO)
-            .padding(6.dp),
-        shape = RoundedCornerShape(2.dp),
-        border = BorderStroke(width = 1.0.dp, color = LunarGray),
-        elevation = buttonElevation(),
-        colors = ButtonDefaults.outlinedButtonColors(containerColor = Tint),
-    ) {
-        Text(
-            text = number.toString(),
-            fontSize = 14.sp,
-            color = GalacticBlue
-        )
-    }
-}
-
-const val BUTTON_ASPECT_RATIO = 1.25f
