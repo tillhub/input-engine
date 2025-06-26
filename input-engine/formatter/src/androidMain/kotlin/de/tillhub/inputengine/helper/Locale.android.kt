@@ -1,4 +1,4 @@
-package de.tillhub.inputengine.formatter
+package de.tillhub.inputengine.helper
 
 import java.util.Locale
 

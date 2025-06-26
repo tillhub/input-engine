@@ -1,9 +1,10 @@
-package de.tillhub.inputengine.formatter
+package de.tillhub.helper
 
+import de.tillhub.inputengine.helper.defaultLocale
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
-class DefaultLocaleTest {
+class LocaleTest {
 
     @Test
     fun testDefaultLocaleNotBlank() {

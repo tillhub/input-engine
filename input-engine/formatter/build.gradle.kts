@@ -1,23 +1,18 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
-    alias(libs.plugins.composeMultiplatform)
-    alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinSerialization)
 }
 
 kotlin {
-    // Enable expect/actual class support
     compilerOptions {
         freeCompilerArgs.add("-Xexpect-actual-classes")
     }
 
-    // Android target setup
     androidLibrary {
         namespace = Configs.APPLICATION_ID + ".formatter"
         compileSdk = Configs.COMPILE_SDK
         minSdk = Configs.MIN_SDK
-        experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
     }
 
     val xcfName = "formatterKit"
@@ -31,12 +26,13 @@ kotlin {
                 implementation(project(":input-engine:financial"))
                 implementation(libs.kotlin.stdlib)
                 implementation(libs.kotlinx.serialization.json)
-                implementation(compose.runtime)
                 implementation(libs.kotlin.bignum)
             }
         }
-        commonTest.dependencies {
-            implementation(libs.kotlin.test)
+        commonTest {
+            dependencies {
+                implementation(libs.kotlin.test)
+            }
         }
     }
 }

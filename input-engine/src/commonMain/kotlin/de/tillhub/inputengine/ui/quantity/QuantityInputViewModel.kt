@@ -10,7 +10,7 @@ import de.tillhub.inputengine.financial.helper.getMajorDigits
 import de.tillhub.inputengine.financial.helper.getMinorDigits
 import de.tillhub.inputengine.financial.param.QuantityParam
 import de.tillhub.inputengine.formatter.QuantityFormatter
-import de.tillhub.inputengine.formatter.defaultLocale
+import de.tillhub.inputengine.helper.defaultLocale
 import de.tillhub.inputengine.helper.NumberInputController
 import de.tillhub.inputengine.helper.NumberInputControllerContract
 import de.tillhub.inputengine.helper.NumpadKey

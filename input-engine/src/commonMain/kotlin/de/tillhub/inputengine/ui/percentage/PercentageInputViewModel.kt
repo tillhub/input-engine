@@ -7,7 +7,7 @@ import de.tillhub.inputengine.contract.PercentageInputRequest
 import de.tillhub.inputengine.financial.data.PercentIO
 import de.tillhub.inputengine.financial.param.PercentageParam
 import de.tillhub.inputengine.formatter.PercentageFormatter
-import de.tillhub.inputengine.formatter.defaultLocale
+import de.tillhub.inputengine.helper.defaultLocale
 import de.tillhub.inputengine.helper.NumberInputController
 import de.tillhub.inputengine.helper.NumberInputControllerContract
 import de.tillhub.inputengine.helper.NumpadKey

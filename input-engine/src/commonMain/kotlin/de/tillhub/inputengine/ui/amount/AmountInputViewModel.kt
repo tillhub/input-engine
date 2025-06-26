@@ -9,7 +9,7 @@ import de.tillhub.inputengine.financial.data.CurrencyIO
 import de.tillhub.inputengine.financial.data.MoneyIO
 import de.tillhub.inputengine.financial.param.MoneyParam
 import de.tillhub.inputengine.formatter.MoneyFormatter
-import de.tillhub.inputengine.formatter.defaultLocale
+import de.tillhub.inputengine.helper.defaultLocale
 import de.tillhub.inputengine.helper.NumpadKey
 import de.tillhub.inputengine.ui.amount.MoneyInputData.Companion.DEFAULT_CURRENCY
 import kotlinx.coroutines.flow.MutableStateFlow

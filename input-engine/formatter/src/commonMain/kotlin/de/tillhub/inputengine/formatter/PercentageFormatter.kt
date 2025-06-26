@@ -1,6 +1,7 @@
 package de.tillhub.inputengine.formatter
 
 import de.tillhub.inputengine.financial.data.PercentIO
+import de.tillhub.inputengine.helper.defaultLocale
 
 expect object PercentageFormatter {
     fun format(
