@@ -34,28 +34,15 @@ kotlin {
 
     val xcfName = "input-engineKit"
 
-    iosX64 {
-        binaries.framework {
-            baseName = xcfName
-        }
-    }
-
-    iosArm64 {
-        binaries.framework {
-            baseName = xcfName
-        }
-    }
-
-    iosSimulatorArm64 {
-        binaries.framework {
-            baseName = xcfName
-        }
-    }
+    iosX64 { binaries.framework { baseName = xcfName } }
+    iosArm64 { binaries.framework { baseName = xcfName } }
+    iosSimulatorArm64 { binaries.framework { baseName = xcfName } }
 
    sourceSets {
         commonMain {
             dependencies {
-                api(project(":input-engine:formatter"))
+                api(project(":input-engine:financial"))
+                implementation(project(":input-engine:formatter"))
                 implementation(libs.kotlin.stdlib)
                 implementation(libs.kotlinx.serialization.json)
 

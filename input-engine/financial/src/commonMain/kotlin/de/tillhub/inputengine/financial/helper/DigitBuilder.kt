@@ -10,7 +10,7 @@ object DigitBuilder {
      * zero digit as well.
      * i.e. 0 will result in [0]; 1234 will result in [1,2,3,4]; 1200 will result in [1,2,0,0]
      */
-    fun digits(value: BigInteger): List<Digit> =
+     fun digits(value: BigInteger): List<Digit> =
         mutableListOf<Digit>().also {
             var currentValue = value.abs()
             while (currentValue.isPositive(includeZero = false)) {

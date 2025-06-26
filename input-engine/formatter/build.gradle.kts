@@ -28,15 +28,10 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api(project(":input-engine:financial"))
-
+                implementation(project(":input-engine:financial"))
                 implementation(libs.kotlin.stdlib)
                 implementation(libs.kotlinx.serialization.json)
-
-                // Compose Multiplatform
                 implementation(compose.runtime)
-
-                // Math
                 implementation(libs.kotlin.bignum)
             }
         }
