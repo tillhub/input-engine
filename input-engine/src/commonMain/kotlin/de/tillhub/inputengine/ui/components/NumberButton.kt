@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ButtonDefaults.buttonElevation
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,6 +18,7 @@ import de.tillhub.inputengine.helper.NumpadKey
 import de.tillhub.inputengine.ui.theme.GalacticBlue
 import de.tillhub.inputengine.ui.theme.LunarGray
 import de.tillhub.inputengine.ui.theme.Tint
+import de.tillhub.inputengine.ui.theme.buttonElevation
 
 @Composable
 internal fun NumberButton(

@@ -37,27 +37,28 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
+                // Project modules
                 api(project(":input-engine:financial"))
                 implementation(project(":input-engine:formatter"))
+
+                // Kotlin
                 implementation(libs.kotlin.stdlib)
                 implementation(libs.kotlinx.serialization.json)
+                implementation(libs.kotlin.bignum)
 
                 // Compose Multiplatform
-                implementation(compose.runtime)
-                implementation(compose.foundation)
-                implementation(compose.material3)
-                implementation(compose.ui)
                 implementation(compose.components.resources)
                 implementation(compose.components.uiToolingPreview)
+                implementation(compose.foundation)
+                implementation(compose.material3)
                 implementation(compose.materialIconsExtended)
+                implementation(compose.runtime)
+                implementation(compose.ui)
 
                 // Lifecycle
-                implementation(libs.androidx.lifecycle.viewmodel)
                 implementation(libs.androidx.lifecycle.runtimeCompose)
+                implementation(libs.androidx.lifecycle.viewmodel)
                 implementation(libs.lifecycle.viewmodel.compose)
-
-                // Math
-                implementation(libs.kotlin.bignum)
             }
         }
 
@@ -65,7 +66,6 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.test)
                 implementation(libs.kotlinx.coroutines.test)
-                implementation(kotlin("test-annotations-common"))
 
                 @OptIn(ExperimentalComposeLibrary::class)
                 implementation(compose.uiTest)
@@ -83,21 +83,23 @@ kotlin {
 
         getByName("androidDeviceTest") {
             dependencies {
+                implementation(libs.androidx.core)
+                implementation(libs.androidx.junit)
                 implementation(libs.androidx.runner)
-                implementation(libs.androidx.core.v150)
-                implementation(libs.androidx.junit.v115)
-                implementation(libs.androidx.espresso.core)
                 implementation(libs.androidx.ui.test.junit4)
-                implementation(libs.kotlinx.serialization.json.v163)
                 implementation(libs.compose.ui.test.manifest)
+                implementation(libs.kotlinx.serialization.json)
             }
         }
 
         iosMain {
-            dependencies {}
+            dependencies {
+                // Add iOS-specific dependencies here if needed
+            }
         }
     }
 }
+
 compose.resources {
     packageOfResClass = "de.tillhub.inputengine.resources"
     generateResClass = auto

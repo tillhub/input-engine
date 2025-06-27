@@ -1,53 +1,45 @@
 [versions]
+activityKtx = "1.10.1"
 agp = "8.10.1"
 androidx-activity = "1.10.1"
-androidx-espresso = "3.6.1"
 androidx-lifecycle = "2.9.0"
 composeMultiplatform = "1.8.1"
+composeTest = "1.8.3"
 coreVersion = "1.5.0"
-junit = "4.13.2"
 junitVersion = "1.1.5"
 kotlin = "2.1.21"
+kotlin-bignum = "0.3.10"
 kotlinStdlib = "2.1.21"
 kotlinxCoroutinesTest = "1.8.0"
 kotlinxSerializationJson = "1.7.3"
-kotlin-bignum = "0.3.10"
-kotlinxSerializationJsonVersion = "1.6.3"
 lifecycleViewmodelCompose = "2.9.1"
-mockative = "3.0.1"
 runner = "1.6.2"
-activityKtx = "1.10.1"
-uiTestJunit4 = "1.6.1"
-composeTest = "1.8.3"
 spotless = "6.21.0"
+uiTestJunit4 = "1.6.1"
 
 [libraries]
-androidx-core-v150 = { module = "androidx.test:core", version.ref = "coreVersion" }
-androidx-junit-v115 = { module = "androidx.test.ext:junit", version.ref = "junitVersion" }
-androidx-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "uiTestJunit4" }
-kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
-junit = { module = "junit:junit", version.ref = "junit" }
-androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "androidx-espresso" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
-androidx-lifecycle-viewmodel = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
+androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activityKtx" }
+androidx-core = { module = "androidx.test:core", version.ref = "coreVersion" }
+androidx-junit = { module = "androidx.test.ext:junit", version.ref = "junitVersion" }
 androidx-lifecycle-runtimeCompose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
-kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlinStdlib" }
+androidx-lifecycle-viewmodel = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
 androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
+androidx-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "uiTestJunit4" }
+compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "composeTest" }
+kotlin-bignum = { module = "com.ionspin.kotlin:bignum", version.ref = "kotlin-bignum" }
+kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlinStdlib" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
-androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activityKtx" }
-kotlin-bignum = { module = "com.ionspin.kotlin:bignum", version.ref = "kotlin-bignum" }
-kotlinx-serialization-json-v163 = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJsonVersion" }
 lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "composeTest" }
-mockative = { module = "io.mockative:mockative", version.ref = "mockative" }
 
 [plugins]
-kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version = "2.1.21" }
 androidApplication = { id = "com.android.application", version.ref = "agp" }
-androidLibrary = { id = "com.android.library", version.ref = "agp" }
-composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
-composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 androidKotlinMultiplatformLibrary = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
+androidLibrary = { id = "com.android.library", version.ref = "agp" }
+composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
+kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version = "2.1.21" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
