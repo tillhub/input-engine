@@ -1,4 +1,4 @@
-package de.tillhub.inputengine.financial.helper
+package de.tillhub.inputengine.helper
 
 import com.ionspin.kotlin.bignum.BigNumber
 import com.ionspin.kotlin.bignum.decimal.BigDecimal
