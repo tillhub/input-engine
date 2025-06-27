@@ -1,102 +1,69 @@
-package de.tillhub.inputengine.test.contract
+package de.tillhub.inputengine.contract
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.result.ActivityResult
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import de.tillhub.inputengine.contract.QuantityInputResult
-import de.tillhub.inputengine.contract.rememberQuantityInputLauncher
 import de.tillhub.inputengine.financial.data.QuantityIO
 import de.tillhub.inputengine.helper.ExtraKeys
 import org.junit.Assert.assertEquals
-import org.junit.Rule
 import org.junit.Test
 
-class QuantityInputContractTest {
-
-    @get:Rule
-    val composeTestRule = createAndroidComposeRule<ComponentActivity>()
+class QuantityInputResultParsingTest {
 
     @Test
-    fun testSuccessResultParsing() {
-        lateinit var result: QuantityInputResult
-
+    fun parse_success_result_correctly() {
         val quantityValue = 42.5
         val extras = Bundle().apply {
-            putString("unit", "kg")
-            putString("note", "from scale")
+            putDouble(ExtraKeys.EXTRAS_RESULT, quantityValue)
+            putBundle(ExtraKeys.EXTRAS_ARGS, Bundle().apply {
+                putInt("unit", 1)
+                putInt("note", 2)
+            })
         }
 
-        val intent = Intent().apply {
-            putExtra(ExtraKeys.EXTRAS_RESULT, quantityValue)
-            putExtra(ExtraKeys.EXTRAS_ARGS, extras)
-        }
+        val actual = parseQuantityInputResult(Activity.RESULT_OK, extras)
+        val expected = QuantityInputResult.Success(
+            QuantityIO.of(quantityValue),
+            mapOf("unit" to 1, "note" to 2)
+        )
 
-        val activityResult = ActivityResult(Activity.RESULT_OK, intent)
-
-        composeTestRule.setContent {
-            rememberQuantityInputLauncher {
-                result = it
-            }.apply {
-                val extrasMap = activityResult.data?.extras?.getBundle(ExtraKeys.EXTRAS_ARGS)
-                    ?.keySet()
-                    ?.associateWith { key ->
-                        activityResult.data?.extras?.getBundle(ExtraKeys.EXTRAS_ARGS)?.getString(key).orEmpty()
-                    }
-                    .orEmpty()
-
-                val quantity = activityResult.data?.extras?.getDouble(ExtraKeys.EXTRAS_RESULT)
-                result = if (activityResult.resultCode == Activity.RESULT_OK && quantity != null) {
-                    QuantityInputResult.Success(QuantityIO.of(quantity), extrasMap)
-                } else {
-                    QuantityInputResult.Canceled
-                }
-            }
-        }
-
-        composeTestRule.runOnIdle {
-            val expected = QuantityInputResult.Success(
-                QuantityIO.of(quantityValue),
-                mapOf("unit" to "kg", "note" to "from scale")
-            )
-            assertEquals(expected, result)
-        }
+        assertEquals(expected, actual)
     }
 
     @Test
-    fun testCanceledResult() {
-        lateinit var result: QuantityInputResult
-
-        val canceledIntent = Intent()
-        val activityResult = ActivityResult(Activity.RESULT_CANCELED, canceledIntent)
-
-        composeTestRule.setContent {
-            rememberQuantityInputLauncher {
-                result = it
-            }.apply {
-                // simulate how the launcher callback would handle the canceled result
-                val resultData = activityResult.data?.extras
-                val extrasMap = resultData
-                    ?.getBundle(ExtraKeys.EXTRAS_ARGS)
-                    ?.keySet()
-                    ?.associateWith { key -> resultData.getBundle(ExtraKeys.EXTRAS_ARGS)?.getString(key).orEmpty() }
-                    .orEmpty()
-
-                val quantity = resultData?.getDouble(ExtraKeys.EXTRAS_RESULT)
-
-                result = when {
-                    activityResult.resultCode == Activity.RESULT_OK && quantity != null ->
-                        QuantityInputResult.Success(QuantityIO.of(quantity), extrasMap)
-                    else -> QuantityInputResult.Canceled
-                }
-            }
+    fun return_canceled_if_result_code_not_ok() {
+        val extras = Bundle().apply {
+            putDouble(ExtraKeys.EXTRAS_RESULT, 42.0)
         }
 
-        composeTestRule.runOnIdle {
-            assertEquals(QuantityInputResult.Canceled, result)
-        }
+        val actual = parseQuantityInputResult(Activity.RESULT_CANCELED, extras)
+        assertEquals(QuantityInputResult.Canceled, actual)
     }
 
+    @Test
+    fun return_canceled_if_extras_null() {
+        val actual = parseQuantityInputResult(Activity.RESULT_OK, null)
+        assertEquals(QuantityInputResult.Canceled, actual)
+    }
+
+    @Test
+    fun return_canceled_if_quantity_missing() {
+        val extras = Bundle().apply {
+            putBundle(ExtraKeys.EXTRAS_ARGS, Bundle().apply {
+                putInt("unit", 1)
+            })
+        }
+
+        val actual = parseQuantityInputResult(Activity.RESULT_OK, extras)
+        assertEquals(QuantityInputResult.Canceled, actual)
+    }
+
+    @Test
+    fun return_canceled_if_quantity_is_nan() {
+        val extras = Bundle().apply {
+            putDouble(ExtraKeys.EXTRAS_RESULT, Double.NaN)
+        }
+
+        val actual = parseQuantityInputResult(Activity.RESULT_OK, extras)
+        assertEquals(QuantityInputResult.Canceled, actual)
+    }
 }

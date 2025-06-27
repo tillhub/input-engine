@@ -1,4 +1,5 @@
-package de.tillhub.inputengine.test.contract
+package de.tillhub.inputengine.contract
+
 
 import android.app.Activity
 import android.content.Intent
@@ -6,8 +7,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResult
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import de.tillhub.inputengine.contract.PercentageInputResult
-import de.tillhub.inputengine.contract.rememberPercentageInputLauncher
 import de.tillhub.inputengine.financial.data.PercentIO
 import de.tillhub.inputengine.helper.ExtraKeys
 import org.junit.Assert.assertEquals
@@ -24,13 +23,13 @@ class PercentageInputContractTest {
         lateinit var result: PercentageInputResult
 
         val percentValue = 17.5
-        val extras = Bundle().apply {
-            putString("source", "user-typed")
+        val extrasBundle = Bundle().apply {
+            putInt("source_id", 42)
         }
 
         val intent = Intent().apply {
             putExtra(ExtraKeys.EXTRAS_RESULT, percentValue)
-            putExtra(ExtraKeys.EXTRAS_ARGS, extras)
+            putExtra(ExtraKeys.EXTRAS_ARGS, extrasBundle)
         }
 
         val activityResult = ActivityResult(Activity.RESULT_OK, intent)
@@ -39,24 +38,15 @@ class PercentageInputContractTest {
             rememberPercentageInputLauncher {
                 result = it
             }.apply {
-                // Simulate parsing logic
-                val resultData = activityResult.data?.extras
-                val parsedPercent = resultData?.getDouble(ExtraKeys.EXTRAS_RESULT)
-                val parsedExtras = resultData?.getBundle(ExtraKeys.EXTRAS_ARGS)
-                    ?.keySet()
-                    ?.associateWith { key -> resultData.getBundle(ExtraKeys.EXTRAS_ARGS)?.getString(key).orEmpty()  }
-                    .orEmpty()
-
-                result = PercentageInputResult.Success(
-                    PercentIO.of(checkNotNull(parsedPercent)), parsedExtras
-                )
+                val parsed = parsePercentageInputResult(activityResult.resultCode, activityResult.data?.extras)
+                result = parsed
             }
         }
 
         composeTestRule.runOnIdle {
             val expected = PercentageInputResult.Success(
-                PercentIO.of(percentValue),
-                mapOf("source" to "user-typed")
+                percent = PercentIO.of(percentValue),
+                extras = mapOf("source_id" to 42)
             )
             assertEquals(expected, result)
         }
@@ -73,22 +63,7 @@ class PercentageInputContractTest {
             rememberPercentageInputLauncher {
                 result = it
             }.apply {
-                val resultData = activityResult.data?.extras
-                val percentValue = resultData?.getDouble(ExtraKeys.EXTRAS_RESULT)
-                val extras = resultData
-                    ?.getBundle(ExtraKeys.EXTRAS_ARGS)
-                    ?.keySet()
-                    ?.associateWith { key -> resultData.getBundle(ExtraKeys.EXTRAS_ARGS)?.getString(key).orEmpty() }
-                    .orEmpty()
-
-                result = if (activityResult.resultCode == Activity.RESULT_OK && percentValue != null) {
-                    PercentageInputResult.Success(
-                        PercentIO.of(percentValue),
-                        extras
-                    )
-                } else {
-                    PercentageInputResult.Canceled
-                }
+                result = parsePercentageInputResult(activityResult.resultCode, activityResult.data?.extras)
             }
         }
 
@@ -97,3 +72,4 @@ class PercentageInputContractTest {
         }
     }
 }
+

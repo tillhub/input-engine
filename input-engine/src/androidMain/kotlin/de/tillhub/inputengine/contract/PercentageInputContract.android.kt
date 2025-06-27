@@ -2,6 +2,7 @@ package de.tillhub.inputengine.contract
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Bundle
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
@@ -12,6 +13,7 @@ import de.tillhub.inputengine.helper.ExtraKeys
 import de.tillhub.inputengine.ui.percentage.PercentageInputActivity
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import org.jetbrains.annotations.VisibleForTesting
 
 @Composable
 actual fun rememberPercentageInputLauncher(
@@ -21,24 +23,7 @@ actual fun rememberPercentageInputLauncher(
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        val resultData = result.data?.extras
-        val percentValue = resultData?.getDouble(ExtraKeys.EXTRAS_RESULT)
-
-        // Extract extras as Map<String, Int>
-        val extrasBundle = resultData?.getBundle(ExtraKeys.EXTRAS_ARGS)
-        val extras: Map<String, Int> = extrasBundle?.keySet()
-            ?.associateWith { extrasBundle.getInt(it) }
-            .orEmpty()
-
-        val finalResult = when (result.resultCode) {
-            Activity.RESULT_OK -> PercentageInputResult.Success(
-                percent = PercentIO.of(checkNotNull(percentValue)),
-                extras = extras
-            )
-            else -> PercentageInputResult.Canceled
-        }
-
-        onResult(finalResult)
+        onResult(parsePercentageInputResult(result.resultCode, result.data?.extras))
     }
 
     return remember {
@@ -51,4 +36,27 @@ actual fun rememberPercentageInputLauncher(
             }
         }
     }
+}
+
+@VisibleForTesting
+internal fun parsePercentageInputResult(
+    resultCode: Int,
+    extras: Bundle?
+): PercentageInputResult {
+    if (resultCode != Activity.RESULT_OK || extras == null) {
+        return PercentageInputResult.Canceled
+    }
+
+    val percentValue = extras.getDouble(ExtraKeys.EXTRAS_RESULT, Double.NaN)
+    if (percentValue.isNaN()) return PercentageInputResult.Canceled
+
+    val extrasMap = extras.getBundle(ExtraKeys.EXTRAS_ARGS)
+        ?.keySet()
+        ?.associateWith { key -> extras.getBundle(ExtraKeys.EXTRAS_ARGS)!!.getInt(key) }
+        .orEmpty()
+
+    return PercentageInputResult.Success(
+        percent = PercentIO.of(percentValue),
+        extras = extrasMap
+    )
 }

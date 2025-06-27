@@ -27,7 +27,7 @@ class PercentageInputActivityTest {
             allowDecimal = true,
             percentageMin = PercentageParam.Enable(PercentIO.of(5.0)),
             percentageMax = PercentageParam.Enable(PercentIO.of(20.0)),
-            extras = mapOf("origin" to "checkout")
+            extras = mapOf("origin" to 42)
         )
 
         val intent = Intent(
@@ -42,13 +42,13 @@ class PercentageInputActivityTest {
         scenario.onActivity { activity ->
             val result = PercentageInputResult.Success(
                 percent = PercentIO.of(18.5),
-                extras = mapOf("confirmed" to "true")
+                extras = mapOf("confirmed" to 42)
             )
 
             activity.runOnUiThread {
                 val resultIntent = Intent().apply {
                     val extras = Bundle().apply {
-                        result.extras.forEach { (key, value) -> putString(key, value) }
+                        result.extras.forEach { (key, value) -> putInt(key, value) }
                     }
                     putExtra(ExtraKeys.EXTRAS_RESULT, result.percent)
                     putExtra(ExtraKeys.EXTRAS_ARGS, extras)

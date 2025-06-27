@@ -2,6 +2,7 @@ package de.tillhub.inputengine.contract
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Bundle
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
@@ -12,6 +13,7 @@ import de.tillhub.inputengine.helper.ExtraKeys
 import de.tillhub.inputengine.ui.amount.AmountInputActivity
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import org.jetbrains.annotations.VisibleForTesting
 
 @Composable
 actual fun rememberAmountInputLauncher(
@@ -22,25 +24,7 @@ actual fun rememberAmountInputLauncher(
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        val resultData = result.data?.extras
-        val amountInputResult = when (result.resultCode) {
-            Activity.RESULT_OK -> {
-                val amountJson = resultData?.getString(ExtraKeys.EXTRAS_RESULT)
-                val amount = amountJson?.let { Json.decodeFromString(MoneyIOSerializer, it) }
-
-                // Extract extras as Map<String, Int>
-                val extrasBundle = resultData?.getBundle(ExtraKeys.EXTRAS_ARGS)
-                val extrasMap: Map<String, Int> = extrasBundle?.keySet()
-                    ?.associateWith { extrasBundle.getInt(it) }
-                    .orEmpty()
-
-                AmountInputResult.Success(checkNotNull(amount), extrasMap)
-            }
-
-            else -> AmountInputResult.Canceled
-        }
-
-        onResult(amountInputResult)
+        onResult(parseAmountInputResult(result.resultCode, result.data?.extras))
     }
 
     return remember {
@@ -53,4 +37,21 @@ actual fun rememberAmountInputLauncher(
             }
         }
     }
+}
+
+@VisibleForTesting
+internal fun parseAmountInputResult(resultCode: Int, extras: Bundle?): AmountInputResult {
+    if (resultCode != Activity.RESULT_OK || extras == null) {
+        return AmountInputResult.Canceled
+    }
+    val amount = extras.getString(ExtraKeys.EXTRAS_RESULT)
+        ?.let { Json.decodeFromString(MoneyIOSerializer, it) }
+        ?: return AmountInputResult.Canceled
+
+    val extrasMap = extras.getBundle(ExtraKeys.EXTRAS_ARGS)
+        ?.let { bundle ->
+            bundle.keySet().associateWith { bundle.getInt(it) }
+        }.orEmpty()
+
+    return AmountInputResult.Success(amount, extrasMap)
 }

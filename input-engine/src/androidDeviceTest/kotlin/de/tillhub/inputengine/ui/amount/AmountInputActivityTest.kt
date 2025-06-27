@@ -30,7 +30,7 @@ class AmountInputActivityTest {
             amountMin = MoneyParam.Enable(10.0.eur),
             amountMax = MoneyParam.Disable,
             hintAmount = MoneyParam.Disable,
-            extras = mapOf("source" to "checkout")
+            extras = mapOf("source" to 42)
         )
 
         val intent = Intent(
@@ -45,13 +45,13 @@ class AmountInputActivityTest {
         scenario.onActivity { activity ->
             val result = AmountInputResult.Success(
                 amount = 18.00.eur,
-                extras = mapOf("confirmed" to "true")
+                extras = mapOf("confirmed" to 42)
             )
 
             activity.runOnUiThread {
                 val resultIntent = Intent().apply {
                     val extras = Bundle().apply {
-                        result.extras.forEach { (key, value) -> putString(key, value) }
+                        result.extras.forEach { (key, value) -> putInt(key, value) }
                     }
                     val resultString = Json.encodeToString(MoneyIOSerializer, result.amount)
                     putExtra(ExtraKeys.EXTRAS_RESULT, resultString)

@@ -1,4 +1,4 @@
-package de.tillhub.inputengine.test.contract
+package de.tillhub.inputengine.contract
 
 import android.app.Activity
 import android.content.Intent
@@ -6,8 +6,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResult
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import de.tillhub.inputengine.contract.PinInputResult
-import de.tillhub.inputengine.contract.rememberPinInputLauncher
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
@@ -19,28 +17,19 @@ class PinInputContractTest {
 
     @Test
     fun testSuccessResultParsing() {
-        lateinit var result: PinInputResult
-
         val extras = Bundle().apply {
             putString("pinDigits", "1234")
             putString("entrySource", "keypad")
         }
 
-        val intent = Intent().apply {
-            putExtras(extras)
-        }
-
-        val activityResult = ActivityResult(Activity.RESULT_OK, intent)
+        val activityResult = ActivityResult(Activity.RESULT_OK, Intent().putExtras(extras))
+        lateinit var result: PinInputResult
 
         composeTestRule.setContent {
             rememberPinInputLauncher {
                 result = it
             }.apply {
-                val parsedExtras = activityResult.data?.extras
-                val parsedMap = parsedExtras?.keySet()
-                    ?.associateWith { key -> parsedExtras.getString(key).orEmpty() }
-                    .orEmpty()
-                result = PinInputResult.Success(parsedMap)
+                result = parsePinInputResult(activityResult.resultCode, activityResult.data?.extras)
             }
         }
 
@@ -54,22 +43,14 @@ class PinInputContractTest {
 
     @Test
     fun testCanceledResult() {
+        val activityResult = ActivityResult(Activity.RESULT_CANCELED, Intent())
         lateinit var result: PinInputResult
-
-        val canceledIntent = Intent()
-        val activityResult = ActivityResult(Activity.RESULT_CANCELED, canceledIntent)
 
         composeTestRule.setContent {
             rememberPinInputLauncher {
                 result = it
             }.apply {
-                val extras = activityResult.data?.extras
-                result = if (activityResult.resultCode == Activity.RESULT_OK && extras != null) {
-                    val map = extras.keySet().associateWith { extras.getString(it).orEmpty() }
-                    PinInputResult.Success(map)
-                } else {
-                    PinInputResult.Canceled
-                }
+                result = parsePinInputResult(activityResult.resultCode, activityResult.data?.extras)
             }
         }
 
@@ -77,5 +58,4 @@ class PinInputContractTest {
             assertEquals(PinInputResult.Canceled, result)
         }
     }
-
 }

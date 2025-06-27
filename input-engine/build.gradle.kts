@@ -6,7 +6,6 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinSerialization)
-    id("io.mockative") version "3.0.1"
 }
 
 kotlin {
@@ -73,7 +72,6 @@ kotlin {
 
                 @OptIn(ExperimentalComposeLibrary::class)
                 implementation(compose.uiTest)
-                implementation(libs.mockative)
             }
         }
 

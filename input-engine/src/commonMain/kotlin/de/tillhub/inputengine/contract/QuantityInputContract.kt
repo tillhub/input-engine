@@ -14,7 +14,6 @@ expect fun rememberQuantityInputLauncher(
     onResult: (QuantityInputResult) -> Unit
 ): QuantityInputContract
 
-
 @Serializable
 data class QuantityInputRequest(
     val quantity: QuantityIO = QuantityIO.ZERO,
@@ -25,7 +24,6 @@ data class QuantityInputRequest(
     val quantityHint: QuantityParam = QuantityParam.Disable,
     val extras: Map<String, Int> = emptyMap()
 )
-
 
 @Serializable
 sealed class QuantityInputResult {

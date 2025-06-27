@@ -2,6 +2,7 @@ package de.tillhub.inputengine.contract
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Bundle
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
@@ -12,6 +13,7 @@ import de.tillhub.inputengine.helper.ExtraKeys
 import de.tillhub.inputengine.ui.quantity.QuantityInputActivity
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import org.jetbrains.annotations.VisibleForTesting
 
 @Composable
 actual fun rememberQuantityInputLauncher(
@@ -20,39 +22,43 @@ actual fun rememberQuantityInputLauncher(
     val context = LocalContext.current
 
     val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult()
+        ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        val resultData = result.data?.extras
-
-        // Corrected: Extract extras as Map<String, Int>
-        val extrasBundle = resultData?.getBundle(ExtraKeys.EXTRAS_ARGS)
-        val extrasMap: Map<String, Int> = extrasBundle?.keySet()
-            ?.associateWith { extrasBundle.getInt(it) }
-            .orEmpty()
-
-        val quantity = resultData?.getDouble(ExtraKeys.EXTRAS_RESULT)
-
-        val resultObj = when {
-            result.resultCode == Activity.RESULT_OK && quantity != null ->
-                QuantityInputResult.Success(
-                    quantity = QuantityIO.of(quantity),
-                    extras = extrasMap
-                )
-
-            else -> QuantityInputResult.Canceled
-        }
-
-        onResult(resultObj)
+        onResult(parseQuantityInputResult(result.resultCode, result.data?.extras))
     }
 
     return remember {
         object : QuantityInputContract {
             override fun launchQuantityInput(request: QuantityInputRequest) {
-                val intent = Intent(context, QuantityInputActivity::class.java).apply {
-                    putExtra(ExtraKeys.EXTRA_REQUEST, Json.encodeToString(request))
+                val intent = Intent(context, QuantityInputActivity::class.java).also {
+                    it.putExtra(ExtraKeys.EXTRA_REQUEST, Json.encodeToString(request))
                 }
                 launcher.launch(intent)
             }
         }
     }
 }
+
+@VisibleForTesting
+internal fun parseQuantityInputResult(
+    resultCode: Int,
+    extras: Bundle?
+): QuantityInputResult {
+    if (resultCode != Activity.RESULT_OK || extras == null) {
+        return QuantityInputResult.Canceled
+    }
+
+    val quantityValue = extras.getDouble(ExtraKeys.EXTRAS_RESULT, Double.NaN)
+    if (quantityValue.isNaN()) return QuantityInputResult.Canceled
+
+    val extrasMap = extras.getBundle(ExtraKeys.EXTRAS_ARGS)
+        ?.keySet()
+        ?.associateWith { key -> extras.getBundle(ExtraKeys.EXTRAS_ARGS)!!.getInt(key) }
+        .orEmpty()
+
+    return QuantityInputResult.Success(
+        quantity = QuantityIO.of(quantityValue),
+        extras = extrasMap
+    )
+}
+
