@@ -31,8 +31,13 @@ internal fun NumberKeyboard(
     showNegative: Boolean = false,
     modifier: Modifier = Modifier
 ) {
-    val (leftActionContentDescription, leftActionText) =
-        leftActionLabel(showDecimalSeparator, showNegative)
+    val (leftActionContentDescription, leftActionText) = getLeftActionLabel(
+        showDecimalSeparator,
+        showNegative,
+        DecimalFormatter.decimalSeparator.toString(),
+        stringResource(Res.string.numpad_button_negative),
+        stringResource(Res.string.numpad_button_clear)
+    )
 
     Column(
         modifier = modifier,
@@ -123,28 +128,26 @@ internal fun NumberKeyboard(
         }
     }
 }
-@Composable
-private fun leftActionLabel(
+fun getLeftActionLabel(
     showDecimalSeparator: Boolean,
-    showNegative: Boolean
+    showNegative: Boolean,
+    decimalSeparator: String,
+    negativeLabel: String,
+    clearLabel: String
 ): Pair<String, String> {
     return when {
         showDecimalSeparator && showNegative -> {
-            val decimal = DecimalFormatter.decimalSeparator.toString()
-            val negative = stringResource(Res.string.numpad_button_negative)
-            "Decimal separator and Negative sign" to "$decimal\n$negative"
+            "Decimal separator and Negative sign" to "$decimalSeparator\n$negativeLabel"
         }
         showDecimalSeparator -> {
-            val decimal = DecimalFormatter.decimalSeparator.toString()
-            "Decimal separator" to decimal
+            "Decimal separator" to decimalSeparator
         }
         showNegative -> {
-            val negative = stringResource(Res.string.numpad_button_negative)
-            "Negative sign" to negative
+            "Negative sign" to negativeLabel
         }
         else -> {
-            val clear = stringResource(Res.string.numpad_button_clear)
-            "Clear" to clear
+            "Clear" to clearLabel
         }
     }
 }
+
