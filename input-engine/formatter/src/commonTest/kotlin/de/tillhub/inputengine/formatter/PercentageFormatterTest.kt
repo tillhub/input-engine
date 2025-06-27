@@ -5,7 +5,7 @@ import de.tillhub.inputengine.formatter.MoneyFormatterTest.Companion.LOCALE
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class PercentageFormatterAndroidTest {
+class PercentageFormatterTest {
 
     @Test
     fun testFormatInt() {
