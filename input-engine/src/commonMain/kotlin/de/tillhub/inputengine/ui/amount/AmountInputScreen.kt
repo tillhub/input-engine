@@ -23,9 +23,9 @@ import de.tillhub.inputengine.financial.param.MoneyParam
 import de.tillhub.inputengine.formatter.MoneyFormatter
 import de.tillhub.inputengine.helper.rememberViewModel
 import de.tillhub.inputengine.resources.Res
+import de.tillhub.inputengine.resources.allStringResources
 import de.tillhub.inputengine.resources.max_value
 import de.tillhub.inputengine.resources.min_value
-import de.tillhub.inputengine.resources.numpad_title_amount
 import de.tillhub.inputengine.ui.amount.MoneyInputData.Companion.EMPTY
 import de.tillhub.inputengine.ui.components.NumberKeyboard
 import de.tillhub.inputengine.ui.components.SubmitButton
@@ -60,7 +60,7 @@ internal fun AmountInputScreen(
             ),
             topBar = {
                 Toolbar(
-                    title = stringResource(Res.string.numpad_title_amount),
+                    title = stringResource(Res.allStringResources.getValue(request.toolbarTitle)),
                     onClick = onDismiss,
                 )
             },

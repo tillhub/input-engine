@@ -3,6 +3,8 @@ package de.tillhub.inputengine.contract
 import androidx.compose.runtime.Composable
 import de.tillhub.inputengine.financial.data.PercentIO
 import de.tillhub.inputengine.financial.param.PercentageParam
+import de.tillhub.inputengine.resources.Res
+import de.tillhub.inputengine.resources.numpad_title_percentage
 import kotlinx.serialization.Serializable
 
 interface PercentageInputContract {
@@ -18,6 +20,7 @@ expect fun rememberPercentageInputLauncher(
 data class PercentageInputRequest(
     val percent: PercentIO = PercentIO.ZERO,
     val allowsZero: Boolean = false,
+    val toolbarTitle: String = Res.string.numpad_title_percentage.key,
     val allowDecimal: Boolean = false,
     val percentageMin: PercentageParam = PercentageParam.Disable,
     val percentageMax: PercentageParam = PercentageParam.Disable,

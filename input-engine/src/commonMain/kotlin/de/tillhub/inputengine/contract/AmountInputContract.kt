@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import de.tillhub.inputengine.financial.data.MoneyIO
 import de.tillhub.inputengine.financial.helper.serializer.MoneyIOSerializer
 import de.tillhub.inputengine.financial.param.MoneyParam
+import de.tillhub.inputengine.resources.Res
+import de.tillhub.inputengine.resources.numpad_title_amount
 import kotlinx.serialization.Serializable
 
 interface AmountInputContract {
@@ -19,6 +21,7 @@ expect fun rememberAmountInputLauncher(
 data class AmountInputRequest(
     @Serializable(with = MoneyIOSerializer::class) val amount: MoneyIO,
     val isZeroAllowed: Boolean = false,
+    val toolbarTitle: String = Res.string.numpad_title_amount.key,
     val amountMin: MoneyParam = MoneyParam.Disable,
     val amountMax: MoneyParam = MoneyParam.Disable,
     val hintAmount: MoneyParam = MoneyParam.Disable,

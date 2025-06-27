@@ -25,11 +25,11 @@ import de.tillhub.inputengine.financial.param.QuantityParam
 import de.tillhub.inputengine.formatter.QuantityFormatter
 import de.tillhub.inputengine.helper.rememberViewModel
 import de.tillhub.inputengine.resources.Res
+import de.tillhub.inputengine.resources.allStringResources
 import de.tillhub.inputengine.resources.ic_minus
 import de.tillhub.inputengine.resources.ic_plus
 import de.tillhub.inputengine.resources.max_value
 import de.tillhub.inputengine.resources.min_value
-import de.tillhub.inputengine.resources.numpad_title_quantity
 import de.tillhub.inputengine.ui.components.NumberKeyboard
 import de.tillhub.inputengine.ui.components.SubmitButton
 import de.tillhub.inputengine.ui.components.Toolbar
@@ -58,11 +58,10 @@ internal fun QuantityInputScreen(
                 isMobile = Modifier,
             ),
             topBar = {
-                Toolbar(title = stringResource(Res.string.numpad_title_quantity)) {
-                    onResult(
-                        QuantityInputResult.Canceled,
-                    )
-                }
+                Toolbar(
+                    title = stringResource(Res.allStringResources.getValue(request.toolbarTitle)),
+                    onClick = { onResult(QuantityInputResult.Canceled) },
+                )
             },
         ) { innerPadding ->
             Column(

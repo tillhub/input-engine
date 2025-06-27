@@ -23,9 +23,9 @@ import de.tillhub.inputengine.financial.param.PercentageParam
 import de.tillhub.inputengine.formatter.PercentageFormatter
 import de.tillhub.inputengine.helper.rememberViewModel
 import de.tillhub.inputengine.resources.Res
+import de.tillhub.inputengine.resources.allStringResources
 import de.tillhub.inputengine.resources.max_value
 import de.tillhub.inputengine.resources.min_value
-import de.tillhub.inputengine.resources.numpad_title_percentage
 import de.tillhub.inputengine.ui.components.NumberKeyboard
 import de.tillhub.inputengine.ui.components.SubmitButton
 import de.tillhub.inputengine.ui.components.Toolbar
@@ -53,7 +53,12 @@ internal fun PercentageInputScreen(
                 isTablet = TabletScaffoldModifier,
                 isMobile = Modifier,
             ),
-            topBar = { Toolbar(stringResource(Res.string.numpad_title_percentage)) { onDismiss() } },
+            topBar = {
+                Toolbar(
+                    title = stringResource(Res.allStringResources.getValue(request.toolbarTitle)),
+                    onClick = onDismiss,
+                )
+            },
         ) { innerPadding ->
             Column(
                 modifier = Modifier

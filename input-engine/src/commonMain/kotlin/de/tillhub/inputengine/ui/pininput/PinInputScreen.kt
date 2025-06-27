@@ -31,7 +31,7 @@ import de.tillhub.inputengine.contract.PinInputRequest
 import de.tillhub.inputengine.contract.PinInputResult
 import de.tillhub.inputengine.helper.NumpadKey
 import de.tillhub.inputengine.resources.Res
-import de.tillhub.inputengine.resources.numpad_title_pin
+import de.tillhub.inputengine.resources.allStringResources
 import de.tillhub.inputengine.resources.pin_correct
 import de.tillhub.inputengine.resources.pin_enter
 import de.tillhub.inputengine.resources.pin_wrong
@@ -97,7 +97,7 @@ internal fun PinInputScreen(
             ),
             topBar = {
                 Toolbar(
-                    title = stringResource(Res.string.numpad_title_pin),
+                    title = stringResource(Res.allStringResources.getValue(request.toolbarTitle)),
                     onClick = { onResult(PinInputResult.Canceled) },
                 )
             },
