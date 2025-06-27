@@ -3,7 +3,7 @@ package de.tillhub.inputengine.ui.percentage
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
-import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.printToLog
@@ -18,7 +18,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 @OptIn(ExperimentalTestApi::class)
-class PercentageInputScreenTest {
+    class PercentageInputScreenTest {
     private lateinit var request: PercentageInputRequest
     private lateinit var viewModel: PercentageInputViewModel
 
@@ -50,18 +50,18 @@ class PercentageInputScreenTest {
             )
         }
 
-        onNodeWithTag("toolbarTitle").assertTextEquals("Percentage")
+        onNodeWithContentDescription("toolbarTitle").assertTextEquals("Percentage")
         onNodeWithText("min. 5%").assertIsDisplayed()
-        onNodeWithTag("percentValue").printToLog("percentValue")
-        onNodeWithTag("percentValue").assertTextEquals("15%")
+        onNodeWithContentDescription("percentValue").printToLog("percentValue")
+        onNodeWithContentDescription("percentValue").assertTextEquals("15%")
         onNodeWithText("max. 100%").assertIsDisplayed()
 
         onNodeWithText("2").performClick()
         onNodeWithText("5").performClick()
-        onNodeWithTag("percentValue").printToLog("percentValue")
-        onNodeWithTag("percentValue").assertTextEquals("25%")
+        onNodeWithContentDescription("percentValue").printToLog("percentValue")
+        onNodeWithContentDescription("percentValue").assertTextEquals("25%")
 
-        onNodeWithTag("submitButton").performClick()
+        onNodeWithContentDescription("submitButton").performClick()
 
         assertEquals(
             PercentageInputResult.Success(

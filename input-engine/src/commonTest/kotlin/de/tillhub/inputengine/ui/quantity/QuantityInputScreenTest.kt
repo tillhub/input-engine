@@ -3,7 +3,7 @@ package de.tillhub.inputengine.ui.quantity
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
-import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
@@ -48,17 +48,17 @@ class QuantityInputScreenTest {
             )
         }
 
-        onNodeWithTag("toolbarTitle").assertTextEquals("Quantity")
+        onNodeWithContentDescription("toolbarTitle").assertTextEquals("Quantity")
         onNodeWithText("min. 1").assertIsDisplayed()
-        onNodeWithTag("qtyValue").assertTextEquals("5")
+        onNodeWithContentDescription("qtyValue").assertTextEquals("5")
         onNodeWithText("max. 20").assertIsDisplayed()
 
         onNodeWithText("1").performClick()
         onNodeWithText("6").performClick()
 
-        onNodeWithTag("qtyValue").assertTextEquals("16")
+        onNodeWithContentDescription("qtyValue").assertTextEquals("16")
 
-        onNodeWithTag("submitButton").performClick()
+        onNodeWithContentDescription("submitButton").performClick()
         assertEquals(
             QuantityInputResult.Success(QuantityIO.of(16), extras = mapOf("argQty" to 73)),
             result

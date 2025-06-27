@@ -14,7 +14,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import de.tillhub.inputengine.contract.PercentageInputRequest
 import de.tillhub.inputengine.contract.PercentageInputResult
@@ -102,7 +103,7 @@ fun InputPreview(
     Text(
         modifier = Modifier.fillMaxWidth()
             .wrapContentWidth(Alignment.CenterHorizontally)
-            .testTag("percentValue"),
+            .semantics { contentDescription = "percentValue" },
         style = MaterialTheme.typography.displaySmall,
         maxLines = 1,
         text = percentText,

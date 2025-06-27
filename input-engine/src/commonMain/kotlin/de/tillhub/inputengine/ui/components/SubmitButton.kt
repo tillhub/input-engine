@@ -9,14 +9,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import de.tillhub.inputengine.resources.Res
 import de.tillhub.inputengine.resources.numpad_button_submit
 import de.tillhub.inputengine.ui.theme.MagneticGrey
 import de.tillhub.inputengine.ui.theme.OrbitalBlue
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 internal fun SubmitButton(
@@ -28,7 +28,7 @@ internal fun SubmitButton(
         enabled = isEnable,
         modifier = modifier
             .fillMaxWidth()
-            .testTag("submitButton"),
+            .semantics { contentDescription = "submitButton" },
         shape = RectangleShape,
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
@@ -38,7 +38,7 @@ internal fun SubmitButton(
         Text(
             style = MaterialTheme.typography.headlineSmall,
             modifier = Modifier.padding(vertical = 8.dp),
-            text = stringResource( resource = Res.string.numpad_button_submit)
+            text = stringResource(resource = Res.string.numpad_button_submit)
         )
     }
 }

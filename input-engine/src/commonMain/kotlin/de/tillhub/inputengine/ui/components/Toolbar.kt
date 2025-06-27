@@ -16,7 +16,8 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -32,13 +33,13 @@ internal fun Toolbar(
                 Text(
                     title,
                     style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.testTag("toolbarTitle")
+                    modifier = Modifier.semantics { contentDescription =  "toolbarTitle"}
                 )
             },
             navigationIcon = {
                 IconButton(
                     onClick = onClick,
-                    modifier = Modifier.testTag("toolbarIcon")
+                    modifier = Modifier.semantics { contentDescription ="toolbarIcon" }
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Close,

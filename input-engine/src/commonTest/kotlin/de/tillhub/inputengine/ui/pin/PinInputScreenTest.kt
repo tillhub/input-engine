@@ -2,7 +2,7 @@ package de.tillhub.inputengine.ui.pin
 
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertTextEquals
-import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
@@ -43,7 +43,7 @@ class PinInputScreenTest {
             )
         }
 
-        onNodeWithTag("toolbarTitle").assertTextEquals("Pin")
+        onNodeWithContentDescription("toolbarTitle").assertTextEquals("Pin")
 
         onNodeWithText("9").performClick()
         onNodeWithText("8").performClick()

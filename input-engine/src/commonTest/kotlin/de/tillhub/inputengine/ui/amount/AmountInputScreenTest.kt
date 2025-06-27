@@ -3,7 +3,7 @@ package de.tillhub.inputengine.ui.amount
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
-import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
@@ -49,7 +49,7 @@ class AmountInputScreenTest {
             )
         }
 
-        onNodeWithTag("toolbarTitle").assertTextEquals("Amount")
+        onNodeWithContentDescription("toolbarTitle").assertTextEquals("Amount")
         onNodeWithText("min. -€30.00").assertIsDisplayed()
         onNodeWithText("€1.00").assertIsDisplayed()
         onNodeWithText("max. €50.00").assertIsDisplayed()
@@ -61,7 +61,7 @@ class AmountInputScreenTest {
 
         onNodeWithText("€12.34").assertIsDisplayed()
 
-        onNodeWithTag("submitButton").performClick()
+        onNodeWithContentDescription("submitButton").performClick()
         assertEquals(AmountInputResult.Success(12.34.eur, extras = mapOf("arg" to 56)), result)
     }
 }

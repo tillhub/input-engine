@@ -3,7 +3,7 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
-import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
@@ -26,9 +26,9 @@ class SubmitButtonTest {
             )
         }
 
-        onNodeWithTag("submitButton").assertIsEnabled()
+        onNodeWithContentDescription("submitButton").assertIsEnabled()
         onNodeWithText("Submit").assertIsDisplayed() // Replace with raw text if R.string not accessible
-        onNodeWithTag("submitButton").performClick()
+        onNodeWithContentDescription("submitButton").performClick()
 
         assertTrue(clicked)
     }
@@ -44,9 +44,9 @@ class SubmitButtonTest {
             )
         }
 
-        onNodeWithTag("submitButton").assertIsNotEnabled()
+        onNodeWithContentDescription("submitButton").assertIsNotEnabled()
         onNodeWithText("Submit").assertIsDisplayed()
-        onNodeWithTag("submitButton").performClick()
+        onNodeWithContentDescription("submitButton").performClick()
 
         assertFalse(clicked)
     }
