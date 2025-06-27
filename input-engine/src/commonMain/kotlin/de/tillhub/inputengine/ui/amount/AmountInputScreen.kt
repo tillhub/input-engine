@@ -56,32 +56,32 @@ internal fun AmountInputScreen(
         Scaffold(
             modifier = getModifierBasedOnDeviceType(
                 isTablet = TabletScaffoldModifier,
-                isMobile = Modifier
+                isMobile = Modifier,
             ),
             topBar = {
                 Toolbar(
                     title = stringResource(Res.string.numpad_title_amount),
                     onClick = onDismiss,
                 )
-            }
+            },
         ) { innerPadding ->
             Column(
                 modifier = Modifier
                     .padding(innerPadding)
                     .padding(top = 16.dp)
                     .fillMaxHeight(),
-                verticalArrangement = Arrangement.SpaceBetween
+                verticalArrangement = Arrangement.SpaceBetween,
             ) {
                 InputPreview(
                     amount = amount,
                     amountMin = amountMin,
                     amountMax = amountMax,
-                    amountHint = request.hintAmount
+                    amountHint = request.hintAmount,
                 )
                 NumberKeyboard(
                     onClick = viewModel::input,
                     showNegative = viewModel.amountInputMode == AmountInputMode.BOTH,
-                    modifier = Modifier
+                    modifier = Modifier,
                 )
                 SubmitButton(
                     isEnable = amount.isValid,
@@ -89,8 +89,8 @@ internal fun AmountInputScreen(
                     onResult(
                         AmountInputResult.Success(
                             amount.money,
-                            request.extras
-                        )
+                            request.extras,
+                        ),
                     )
                 }
             }
@@ -104,7 +104,7 @@ internal fun InputPreview(
     amount: MoneyInputData = EMPTY,
     amountMin: MoneyParam = MoneyParam.Disable,
     amountMax: MoneyParam = MoneyParam.Disable,
-    amountHint: MoneyParam = MoneyParam.Disable
+    amountHint: MoneyParam = MoneyParam.Disable,
 ) {
     val (amountString, amountColor) = if (amountHint is MoneyParam.Enable && amount.money.isZero()) {
         MoneyFormatter.format(amountHint.amount) to MagneticGrey
@@ -120,7 +120,7 @@ internal fun InputPreview(
             style = MaterialTheme.typography.bodyMedium,
             maxLines = 1,
             text = stringResource(Res.string.max_value, MoneyFormatter.format(amountMax.amount)),
-            color = SoyuzGrey
+            color = SoyuzGrey,
         )
     }
 
@@ -143,7 +143,7 @@ internal fun InputPreview(
             style = MaterialTheme.typography.bodyMedium,
             maxLines = 1,
             text = stringResource(Res.string.min_value, MoneyFormatter.format(amountMin.amount)),
-            color = SoyuzGrey
+            color = SoyuzGrey,
         )
     }
 }

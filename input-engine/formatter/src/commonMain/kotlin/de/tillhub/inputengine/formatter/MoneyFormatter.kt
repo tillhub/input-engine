@@ -6,6 +6,6 @@ import de.tillhub.inputengine.helper.defaultLocale
 expect object MoneyFormatter {
     fun format(
         money: MoneyIO,
-        locale: String = defaultLocale()
+        locale: String = defaultLocale(),
     ): String
 }

@@ -2,7 +2,6 @@ package de.tillhub.inputengine.ui.pin
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Bundle as AndroidBundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import de.tillhub.inputengine.contract.PinInputRequest
@@ -10,6 +9,7 @@ import de.tillhub.inputengine.contract.PinInputResult
 import de.tillhub.inputengine.helper.ExtraKeys
 import de.tillhub.inputengine.ui.pininput.PinInputScreen
 import kotlinx.serialization.json.Json
+import android.os.Bundle as AndroidBundle
 
 class PinInputActivity : ComponentActivity() {
 
@@ -35,7 +35,7 @@ class PinInputActivity : ComponentActivity() {
                                         result.extras.forEach { (key, value) ->
                                             putString(key, value)
                                         }
-                                    }
+                                    },
                                 )
                             }
                             setResult(RESULT_OK, resultIntent)
@@ -47,7 +47,7 @@ class PinInputActivity : ComponentActivity() {
                             finish()
                         }
                     }
-                }
+                },
             )
         }
     }

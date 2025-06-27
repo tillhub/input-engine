@@ -6,7 +6,7 @@ import de.tillhub.inputengine.ui.percentage.PercentageInputPresenter
 
 @Composable
 actual fun rememberPercentageInputLauncher(
-    onResult: (PercentageInputResult) -> Unit
+    onResult: (PercentageInputResult) -> Unit,
 ): PercentageInputContract = remember {
     val presenter = PercentageInputPresenter(onResult)
 
@@ -16,4 +16,3 @@ actual fun rememberPercentageInputLauncher(
         }
     }
 }
-

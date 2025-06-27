@@ -167,4 +167,3 @@ class MoneyIOTest {
         assertEquals(m1.hashCode(), m2.hashCode())
     }
 }
-

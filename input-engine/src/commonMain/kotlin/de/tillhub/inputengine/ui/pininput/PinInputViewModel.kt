@@ -27,7 +27,7 @@ internal class PinInputViewModel : ViewModel() {
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(),
-        initialValue = ""
+        initialValue = "",
     )
 
     fun init(pin: String) {
@@ -96,4 +96,3 @@ internal fun providePinInputViewModelFactory(pin: String) = viewModelFactory {
         }
     }
 }
-

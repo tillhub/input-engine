@@ -7,7 +7,7 @@ import platform.UIKit.UIApplication
 import platform.UIKit.UIViewController
 
 class PercentageInputPresenter(
-    private val onResult: (PercentageInputResult) -> Unit
+    private val onResult: (PercentageInputResult) -> Unit,
 ) {
 
     private var viewController: UIViewController? = null
@@ -25,7 +25,7 @@ class PercentageInputPresenter(
                 onDismiss = {
                     onResult(PercentageInputResult.Canceled)
                     dismiss()
-                }
+                },
             )
         }
 

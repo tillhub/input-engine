@@ -8,7 +8,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 inline fun <reified VM : ViewModel> rememberViewModel(
-    crossinline factoryBuilder: () -> ViewModelProvider.Factory
+    crossinline factoryBuilder: () -> ViewModelProvider.Factory,
 ): VM {
     val factory = remember { factoryBuilder() }
     return viewModel(factory = factory)

@@ -29,14 +29,14 @@ internal fun NumberKeyboard(
     onClick: (NumpadKey) -> Unit = {},
     showDecimalSeparator: Boolean = false,
     showNegative: Boolean = false,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val (leftActionContentDescription, leftActionText) = getLeftActionLabel(
         showDecimalSeparator,
         showNegative,
         DecimalFormatter.decimalSeparator.toString(),
         stringResource(Res.string.numpad_button_negative),
-        stringResource(Res.string.numpad_button_clear)
+        stringResource(Res.string.numpad_button_clear),
     )
 
     Column(
@@ -47,7 +47,7 @@ internal fun NumberKeyboard(
         Row(
             modifier = Modifier
                 .padding(top = 16.dp, start = 24.dp, end = 24.dp)
-                .fillMaxWidth()
+                .fillMaxWidth(),
         ) {
             NumberButton(number = Digit.SEVEN, onClick = onClick, modifier = Modifier.weight(1f))
             NumberButton(number = Digit.EIGHT, onClick = onClick, modifier = Modifier.weight(1f))
@@ -56,7 +56,7 @@ internal fun NumberKeyboard(
         Row(
             modifier = Modifier
                 .padding(start = 24.dp, end = 24.dp)
-                .fillMaxWidth()
+                .fillMaxWidth(),
         ) {
             NumberButton(number = Digit.FOUR, onClick = onClick, modifier = Modifier.weight(1f))
             NumberButton(number = Digit.FIVE, onClick = onClick, modifier = Modifier.weight(1f))
@@ -66,7 +66,7 @@ internal fun NumberKeyboard(
         Row(
             modifier = Modifier
                 .padding(start = 24.dp, end = 24.dp)
-                .fillMaxWidth()
+                .fillMaxWidth(),
         ) {
             NumberButton(number = Digit.ONE, onClick = onClick, modifier = Modifier.weight(1f))
             NumberButton(number = Digit.TWO, onClick = onClick, modifier = Modifier.weight(1f))
@@ -76,7 +76,7 @@ internal fun NumberKeyboard(
         Row(
             modifier = Modifier
                 .padding(start = 24.dp, end = 24.dp)
-                .fillMaxWidth()
+                .fillMaxWidth(),
         ) {
             DoubleActionButton(
                 onClick = {
@@ -97,7 +97,7 @@ internal fun NumberKeyboard(
                     .semantics { contentDescription = leftActionContentDescription }
                     .weight(1f)
                     .aspectRatio(BUTTON_ASPECT_RATIO)
-                    .padding(6.dp)
+                    .padding(6.dp),
             ) {
                 Text(
                     text = leftActionText,
@@ -106,8 +106,12 @@ internal fun NumberKeyboard(
                 )
             }
 
-            NumberButton(number = Digit.ZERO, onClick = onClick, modifier = Modifier.weight(1f)
-                    .semantics { contentDescription = "Number 0" })
+            NumberButton(
+                number = Digit.ZERO,
+                onClick = onClick,
+                modifier = Modifier.weight(1f)
+                    .semantics { contentDescription = "Number 0" },
+            )
 
             DoubleActionButton(
                 onClick = { onClick(NumpadKey.Delete) },
@@ -116,13 +120,13 @@ internal fun NumberKeyboard(
                     .semantics { contentDescription = "Delete" }
                     .weight(1f)
                     .aspectRatio(BUTTON_ASPECT_RATIO)
-                    .padding(6.dp)
+                    .padding(6.dp),
             ) {
                 Text(
                     text = stringResource(resource = Res.string.numpad_button_delete),
                     fontSize = 24.sp,
                     color = GalacticBlue,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
         }
@@ -133,7 +137,7 @@ fun getLeftActionLabel(
     showNegative: Boolean,
     decimalSeparator: String,
     negativeLabel: String,
-    clearLabel: String
+    clearLabel: String,
 ): Pair<String, String> {
     return when {
         showDecimalSeparator && showNegative -> {
@@ -150,4 +154,3 @@ fun getLeftActionLabel(
         }
     }
 }
-

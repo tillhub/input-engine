@@ -7,16 +7,16 @@ import de.tillhub.inputengine.contract.PercentageInputRequest
 import de.tillhub.inputengine.financial.data.PercentIO
 import de.tillhub.inputengine.financial.param.PercentageParam
 import de.tillhub.inputengine.formatter.PercentageFormatter
-import de.tillhub.inputengine.helper.defaultLocale
 import de.tillhub.inputengine.helper.NumberInputController
 import de.tillhub.inputengine.helper.NumberInputControllerContract
 import de.tillhub.inputengine.helper.NumpadKey
+import de.tillhub.inputengine.helper.defaultLocale
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 internal class PercentageInputViewModel(
     private val inputController: NumberInputControllerContract = NumberInputController(maxMajorDigits = 3),
-    private val locale: String = defaultLocale()
+    private val locale: String = defaultLocale(),
 ) : ViewModel() {
 
     private val _inputPercentIO = MutableStateFlow(PercentageInputData.EMPTY)
@@ -66,7 +66,9 @@ internal class PercentageInputViewModel(
         val percent = if (tempPercentage > maxPercent) {
             inputController.clear()
             maxPercent
-        } else tempPercentage
+        } else {
+            tempPercentage
+        }
 
         setValue(percent)
     }
@@ -75,7 +77,7 @@ internal class PercentageInputViewModel(
         _inputPercentIO.value = PercentageInputData(
             percent = percent,
             text = PercentageFormatter.format(percent, inputController.minorDigits.size, locale),
-            isValid = isValid(percent)
+            isValid = isValid(percent),
         )
     }
 
@@ -95,7 +97,7 @@ internal class PercentageInputViewModel(
 data class PercentageInputData(
     val percent: PercentIO,
     val text: String,
-    val isValid: Boolean
+    val isValid: Boolean,
 ) {
     companion object {
         val EMPTY = PercentageInputData(PercentIO.ZERO, "", false)

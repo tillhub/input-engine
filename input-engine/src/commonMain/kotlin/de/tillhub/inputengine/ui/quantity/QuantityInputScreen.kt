@@ -55,21 +55,21 @@ internal fun QuantityInputScreen(
         Scaffold(
             modifier = getModifierBasedOnDeviceType(
                 isTablet = TabletScaffoldModifier,
-                isMobile = Modifier
+                isMobile = Modifier,
             ),
             topBar = {
                 Toolbar(title = stringResource(Res.string.numpad_title_quantity)) {
                     onResult(
-                        QuantityInputResult.Canceled
+                        QuantityInputResult.Canceled,
                     )
                 }
-            }
+            },
         ) { innerPadding ->
             Column(
                 modifier = Modifier
                     .padding(innerPadding)
                     .fillMaxHeight(),
-                verticalArrangement = Arrangement.SpaceBetween
+                verticalArrangement = Arrangement.SpaceBetween,
             ) {
                 QuantityPreview(
                     quantityText = displayData.text,
@@ -77,7 +77,7 @@ internal fun QuantityInputScreen(
                     minQuantity = request.minQuantity,
                     maxQuantity = request.maxQuantity,
                     increase = { viewModel.increase() },
-                    decrease = { viewModel.decrease() }
+                    decrease = { viewModel.decrease() },
                 )
 
                 NumberKeyboard(
@@ -86,15 +86,15 @@ internal fun QuantityInputScreen(
                     showNegative = when (val minQty = request.minQuantity) {
                         QuantityParam.Disable -> true
                         is QuantityParam.Enable -> minQty.value.isNegative()
-                    }
+                    },
                 )
 
                 SubmitButton(displayData.isValid) {
                     onResult(
                         QuantityInputResult.Success(
                             quantity = displayData.qty,
-                            extras = request.extras
-                        )
+                            extras = request.extras,
+                        ),
                     )
                 }
             }
@@ -109,49 +109,49 @@ fun QuantityPreview(
     minQuantity: QuantityParam,
     maxQuantity: QuantityParam,
     decrease: () -> Unit,
-    increase: () -> Unit
+    increase: () -> Unit,
 ) {
     Column(modifier = Modifier.padding(16.dp)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             IconButton(onClick = decrease) {
                 Icon(
                     painter = painterResource(Res.drawable.ic_minus),
                     contentDescription = "Decrease",
-                    tint = OrbitalBlue
+                    tint = OrbitalBlue,
                 )
             }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             ) {
                 if (maxQuantity is QuantityParam.Enable) {
                     Text(
                         text = stringResource(
                             Res.string.max_value,
-                            QuantityFormatter.format(maxQuantity.value)
+                            QuantityFormatter.format(maxQuantity.value),
                         ),
                         color = MagneticGrey,
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodyMedium,
                     )
                 }
                 Text(
                     text = quantityText,
-                    modifier = Modifier.semantics { contentDescription =  "qtyValue"},
+                    modifier = Modifier.semantics { contentDescription = "qtyValue" },
                     color = quantityColor,
-                    style = MaterialTheme.typography.displaySmall
+                    style = MaterialTheme.typography.displaySmall,
                 )
                 if (minQuantity is QuantityParam.Enable) {
                     Text(
                         text = stringResource(
                             Res.string.min_value,
-                            QuantityFormatter.format(minQuantity.value)
+                            QuantityFormatter.format(minQuantity.value),
                         ),
                         color = MagneticGrey,
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodyMedium,
                     )
                 }
             }
@@ -159,7 +159,7 @@ fun QuantityPreview(
                 Icon(
                     painter = painterResource(Res.drawable.ic_plus),
                     contentDescription = "Increase",
-                    tint = OrbitalBlue
+                    tint = OrbitalBlue,
                 )
             }
         }

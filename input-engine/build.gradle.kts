@@ -20,9 +20,6 @@ kotlin {
         minSdk = Configs.MIN_SDK
         experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
 
-        withHostTestBuilder {
-        }
-
         @Suppress("UnstableApiUsage")
         withDeviceTestBuilder {
             sourceSetTreeName = "test"
@@ -37,7 +34,7 @@ kotlin {
     iosArm64 { binaries.framework { baseName = xcfName } }
     iosSimulatorArm64 { binaries.framework { baseName = xcfName } }
 
-   sourceSets {
+    sourceSets {
         commonMain {
             dependencies {
                 api(project(":input-engine:financial"))
@@ -97,15 +94,7 @@ kotlin {
         }
 
         iosMain {
-            dependencies {
-                implementation(libs.kotlin.test)
-                implementation(libs.junit)
-                implementation(libs.kotlinx.coroutines.test)
-                implementation(libs.kotlin.test)
-
-                @OptIn(ExperimentalComposeLibrary::class)
-                implementation(compose.uiTest)
-            }
+            dependencies {}
         }
     }
 }

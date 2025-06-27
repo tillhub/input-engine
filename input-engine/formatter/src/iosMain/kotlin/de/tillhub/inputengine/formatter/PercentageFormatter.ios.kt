@@ -1,16 +1,16 @@
 package de.tillhub.inputengine.formatter
 
 import de.tillhub.inputengine.financial.data.PercentIO
-import platform.Foundation.NSNumberFormatter
-import platform.Foundation.NSNumberFormatterPercentStyle
 import platform.Foundation.NSLocale
 import platform.Foundation.NSNumber
+import platform.Foundation.NSNumberFormatter
+import platform.Foundation.NSNumberFormatterPercentStyle
 
 actual object PercentageFormatter {
     actual fun format(
         percent: PercentIO,
         minimumFractionDigits: Int,
-        locale: String
+        locale: String,
     ): String {
         val formatter = NSNumberFormatter().apply {
             setLocale(NSLocale(locale))

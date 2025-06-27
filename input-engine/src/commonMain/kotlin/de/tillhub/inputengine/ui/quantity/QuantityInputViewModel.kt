@@ -10,10 +10,10 @@ import de.tillhub.inputengine.financial.helper.getMajorDigits
 import de.tillhub.inputengine.financial.helper.getMinorDigits
 import de.tillhub.inputengine.financial.param.QuantityParam
 import de.tillhub.inputengine.formatter.QuantityFormatter
-import de.tillhub.inputengine.helper.defaultLocale
 import de.tillhub.inputengine.helper.NumberInputController
 import de.tillhub.inputengine.helper.NumberInputControllerContract
 import de.tillhub.inputengine.helper.NumpadKey
+import de.tillhub.inputengine.helper.defaultLocale
 import de.tillhub.inputengine.ui.theme.MagneticGrey
 import de.tillhub.inputengine.ui.theme.OrbitalBlue
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 internal class QuantityInputViewModel(
     private val inputController: NumberInputControllerContract = NumberInputController(maxMajorDigits = 5),
-    private val locale: String = defaultLocale()
+    private val locale: String = defaultLocale(),
 ) : ViewModel() {
 
     private val _mutableDisplayDataFlow = MutableStateFlow(QuantityInputData.EMPTY)
@@ -59,7 +59,7 @@ internal class QuantityInputViewModel(
     fun decrease() {
         val newValue = displayDataFlow.value.qty.nextSmaller(
             allowsZero = isZeroAllowed,
-            allowsNegatives = minQuantity.isNegative()
+            allowsNegatives = minQuantity.isNegative(),
         )
         if (isValid(newValue)) {
             setValue(newValue)
@@ -110,7 +110,7 @@ internal class QuantityInputViewModel(
         inputController.setValue(
             majorDigits = currentValue.getMajorDigits(),
             minorDigits = currentValue.getMinorDigits(),
-            isNegative = currentValue.isNegative()
+            isNegative = currentValue.isNegative(),
         )
         updateDisplayData(currentValue)
 
@@ -130,13 +130,13 @@ internal class QuantityInputViewModel(
         ) {
             QuantityFormatter.format(
                 quantity = (quantityHint as QuantityParam.Enable).value,
-                locale = locale
+                locale = locale,
             ) to MagneticGrey
         } else {
             QuantityFormatter.format(
                 quantity = quantity,
                 minFractionDigits = inputController.minorDigits.size,
-                locale = locale
+                locale = locale,
             ) to OrbitalBlue
         }
 
@@ -144,7 +144,7 @@ internal class QuantityInputViewModel(
             qty = quantity,
             text = quantityText,
             color = quantityColor,
-            isValid = isValid(quantity)
+            isValid = isValid(quantity),
         )
     }
 
@@ -165,14 +165,14 @@ internal data class QuantityInputData(
     val qty: QuantityIO,
     val text: String,
     val color: Color,
-    val isValid: Boolean
+    val isValid: Boolean,
 ) {
     companion object {
         val EMPTY = QuantityInputData(
             qty = QuantityIO.ZERO,
             text = QuantityFormatter.format(QuantityIO.ZERO),
             color = MagneticGrey,
-            isValid = false
+            isValid = false,
         )
     }
 }

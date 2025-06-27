@@ -17,7 +17,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 class MoneyIO private constructor(
     @Serializable(with = BigDecimalSerializer::class) val amount: BigDecimal,
-    @Serializable(with = CurrencySerializer::class) val currency: CurrencyIO
+    @Serializable(with = CurrencySerializer::class) val currency: CurrencyIO,
 ) : Comparable<MoneyIO>, Number() {
 
     fun isZero() = amount.signum() == 0
@@ -30,7 +30,7 @@ class MoneyIO private constructor(
     }
 
     fun isValid(): Boolean = this <= MoneyIO(MAX_VALUE_DECIMAL, currency) &&
-            this >= MoneyIO(MIN_VALUE_DECIMAL, currency)
+        this >= MoneyIO(MIN_VALUE_DECIMAL, currency)
 
     fun negate(): MoneyIO = MoneyIO(amount.negate(), currency)
 
@@ -68,8 +68,8 @@ class MoneyIO private constructor(
 
     override fun toString() = "MoneyIO(amount=$amount, currency=$currency)"
     override fun equals(other: Any?) = other is MoneyIO &&
-            amount == other.amount &&
-            currency == other.currency
+        amount == other.amount &&
+        currency == other.currency
 
     override fun hashCode(): Int {
         var result = amount.hashCode()
@@ -104,7 +104,7 @@ class MoneyIO private constructor(
 
                     else -> throw IllegalArgumentException("Money $amount is not supported type.")
                 },
-                currency
+                currency,
             )
         }
 
@@ -117,7 +117,7 @@ class MoneyIO private constructor(
 
                     else -> throw IllegalArgumentException("Money $amount is not supported type.")
                 },
-                currency
+                currency,
             )
         }
 
@@ -144,7 +144,7 @@ class MoneyIO private constructor(
             val base = it.amount.moveDecimalPoint(MOVE_ONE_LEFT)
             val scale = base.roundToDigitPositionAfterDecimalPoint(
                 digitPosition = it.currency.defaultFractionDigits.toLong(),
-                roundingMode = RoundingMode.TOWARDS_ZERO
+                roundingMode = RoundingMode.TOWARDS_ZERO,
             )
             return MoneyIO(scale, it.currency)
         }

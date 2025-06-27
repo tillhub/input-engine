@@ -51,29 +51,29 @@ internal fun PercentageInputScreen(
         Scaffold(
             modifier = getModifierBasedOnDeviceType(
                 isTablet = TabletScaffoldModifier,
-                isMobile = Modifier
+                isMobile = Modifier,
             ),
-            topBar = { Toolbar(stringResource(Res.string.numpad_title_percentage)) { onDismiss() } }
+            topBar = { Toolbar(stringResource(Res.string.numpad_title_percentage)) { onDismiss() } },
         ) { innerPadding ->
             Column(
                 modifier = Modifier
                     .padding(innerPadding)
                     .padding(top = 16.dp)
                     .fillMaxHeight(),
-                verticalArrangement = Arrangement.SpaceBetween
+                verticalArrangement = Arrangement.SpaceBetween,
             ) {
                 InputPreview(
                     percentText = displayData.text,
                     percentageMin = request.percentageMin,
-                    percentageMax = request.percentageMax
+                    percentageMax = request.percentageMax,
                 )
                 NumberKeyboard(
                     onClick = viewModel::input,
-                    showDecimalSeparator = request.allowDecimal
+                    showDecimalSeparator = request.allowDecimal,
                 )
                 SubmitButton(displayData.isValid) {
                     onResult(
-                        PercentageInputResult.Success(displayData.percent, request.extras)
+                        PercentageInputResult.Success(displayData.percent, request.extras),
                     )
                 }
             }
@@ -85,7 +85,7 @@ internal fun PercentageInputScreen(
 fun InputPreview(
     percentText: String,
     percentageMin: PercentageParam = PercentageParam.Disable,
-    percentageMax: PercentageParam = PercentageParam.Disable
+    percentageMax: PercentageParam = PercentageParam.Disable,
 ) {
     if (percentageMax is PercentageParam.Enable) {
         Text(
@@ -94,7 +94,7 @@ fun InputPreview(
             maxLines = 1,
             text = stringResource(
                 Res.string.max_value,
-                PercentageFormatter.format(percentageMax.percent)
+                PercentageFormatter.format(percentageMax.percent),
             ),
             color = MagneticGrey,
         )
@@ -117,7 +117,7 @@ fun InputPreview(
             maxLines = 1,
             text = stringResource(
                 Res.string.min_value,
-                PercentageFormatter.format(percentageMin.percent)
+                PercentageFormatter.format(percentageMin.percent),
             ),
             color = MagneticGrey,
         )

@@ -7,7 +7,7 @@ import platform.UIKit.UIApplication
 import platform.UIKit.UIViewController
 
 class QuantityInputPresenter(
-    private val onResult: (QuantityInputResult) -> Unit
+    private val onResult: (QuantityInputResult) -> Unit,
 ) {
 
     private var viewController: UIViewController? = null
@@ -21,7 +21,7 @@ class QuantityInputPresenter(
                 onResult = {
                     onResult(it)
                     dismiss()
-                }
+                },
             )
         }
 

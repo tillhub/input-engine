@@ -12,7 +12,7 @@ actual object QuantityFormatter {
     actual fun format(
         quantity: QuantityIO,
         minFractionDigits: Int,
-        locale: String
+        locale: String,
     ): String {
         val localeObj = Locale.forLanguageTag(locale)
         val format = NumberFormat.getNumberInstance(localeObj)

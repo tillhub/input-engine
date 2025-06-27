@@ -11,7 +11,7 @@ import kotlin.test.assertEquals
 @Serializable
 data class DecimalWrapper(
     @Serializable(with = BigDecimalSerializer::class)
-    val value: BigDecimal
+    val value: BigDecimal,
 )
 
 class BigDecimalSerializerTest {

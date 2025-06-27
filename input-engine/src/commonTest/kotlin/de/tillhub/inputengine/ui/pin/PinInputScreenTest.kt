@@ -21,9 +21,9 @@ class PinInputScreenTest {
 
     @BeforeTest
     fun setup() {
-        request =  PinInputRequest(
+        request = PinInputRequest(
             pin = "9876",
-            extras = mapOf("argPin" to "hint for pin")
+            extras = mapOf("argPin" to "hint for pin"),
         )
         viewModel = PinInputViewModel().apply {
             init(request.pin)
@@ -39,7 +39,7 @@ class PinInputScreenTest {
                 viewModel = viewModel,
                 onResult = {
                     result = it
-                }
+                },
             )
         }
 

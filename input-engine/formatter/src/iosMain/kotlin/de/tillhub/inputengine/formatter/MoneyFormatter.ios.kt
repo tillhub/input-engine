@@ -9,7 +9,7 @@ import platform.Foundation.NSNumberFormatterCurrencyStyle
 actual object MoneyFormatter {
     actual fun format(
         money: MoneyIO,
-        locale: String
+        locale: String,
     ): String {
         val formatter = NSNumberFormatter().apply {
             this.locale = NSLocale(locale)

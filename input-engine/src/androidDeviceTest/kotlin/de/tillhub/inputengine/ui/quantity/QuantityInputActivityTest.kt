@@ -27,12 +27,12 @@ class QuantityInputActivityTest {
             allowDecimal = true,
             minQuantity = QuantityParam.Enable(QuantityIO.of(1.0)),
             maxQuantity = QuantityParam.Enable(QuantityIO.of(10.0)),
-            extras = mapOf("usage" to 42)
+            extras = mapOf("usage" to 42),
         )
 
         val intent = Intent(
             ApplicationProvider.getApplicationContext(),
-            QuantityInputActivity::class.java
+            QuantityInputActivity::class.java,
         ).apply {
             putExtra(ExtraKeys.EXTRA_REQUEST, Json.encodeToString(request))
         }
@@ -42,7 +42,7 @@ class QuantityInputActivityTest {
         scenario.onActivity { activity ->
             val result = QuantityInputResult.Success(
                 quantity = QuantityIO.of(5.5),
-                extras = mapOf("confirmed" to 42)
+                extras = mapOf("confirmed" to 42),
             )
 
             activity.runOnUiThread {
@@ -52,7 +52,7 @@ class QuantityInputActivityTest {
                         ExtraKeys.EXTRAS_ARGS,
                         Bundle().apply {
                             result.extras.forEach { (key, value) -> putInt(key, value) }
-                        }
+                        },
                     )
                 }
                 activity.setResult(Activity.RESULT_OK, resultIntent)
@@ -66,12 +66,12 @@ class QuantityInputActivityTest {
         val request = QuantityInputRequest(
             quantity = QuantityIO.of(0.0),
             allowsZero = true,
-            allowDecimal = false
+            allowDecimal = false,
         )
 
         val intent = Intent(
             ApplicationProvider.getApplicationContext(),
-            QuantityInputActivity::class.java
+            QuantityInputActivity::class.java,
         ).apply {
             putExtra(ExtraKeys.EXTRA_REQUEST, Json.encodeToString(request))
         }

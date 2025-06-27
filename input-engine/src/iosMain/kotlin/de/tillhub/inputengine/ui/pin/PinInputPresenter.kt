@@ -8,7 +8,7 @@ import platform.UIKit.UIApplication
 import platform.UIKit.UIViewController
 
 class PinInputPresenter(
-    private val onResult: (PinInputResult) -> Unit
+    private val onResult: (PinInputResult) -> Unit,
 ) {
 
     private var viewController: UIViewController? = null
@@ -22,7 +22,7 @@ class PinInputPresenter(
                 onResult = {
                     onResult(it)
                     dismiss()
-                }
+                },
             )
         }
 

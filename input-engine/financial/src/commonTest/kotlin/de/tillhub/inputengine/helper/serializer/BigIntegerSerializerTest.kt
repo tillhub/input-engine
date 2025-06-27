@@ -11,7 +11,7 @@ import kotlin.test.assertEquals
 @Serializable
 data class IntegerWrapper(
     @Serializable(with = BigIntegerSerializer::class)
-    val value: BigInteger
+    val value: BigInteger,
 )
 
 class BigIntegerSerializerTest {

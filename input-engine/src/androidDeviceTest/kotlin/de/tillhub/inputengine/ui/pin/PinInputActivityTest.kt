@@ -22,12 +22,12 @@ class PinInputActivityTest {
         val request = PinInputRequest(
             pin = "1234",
             overridePinInput = false,
-            extras = mapOf("flow" to "checkout")
+            extras = mapOf("flow" to "checkout"),
         )
 
         val intent = Intent(
             ApplicationProvider.getApplicationContext(),
-            PinInputActivity::class.java
+            PinInputActivity::class.java,
         ).apply {
             putExtra(ExtraKeys.EXTRA_REQUEST, Json.encodeToString(request))
         }
@@ -36,7 +36,7 @@ class PinInputActivityTest {
 
         scenario.onActivity { activity ->
             val result = PinInputResult.Success(
-                extras = mapOf("authenticated" to "true", "pinMethod" to "manual")
+                extras = mapOf("authenticated" to "true", "pinMethod" to "manual"),
             )
 
             activity.runOnUiThread {
@@ -56,12 +56,12 @@ class PinInputActivityTest {
     fun returnsCanceledResult() {
         val request = PinInputRequest(
             pin = "0000",
-            overridePinInput = true
+            overridePinInput = true,
         )
 
         val intent = Intent(
             ApplicationProvider.getApplicationContext(),
-            PinInputActivity::class.java
+            PinInputActivity::class.java,
         ).apply {
             putExtra(ExtraKeys.EXTRA_REQUEST, Json.encodeToString(request))
         }

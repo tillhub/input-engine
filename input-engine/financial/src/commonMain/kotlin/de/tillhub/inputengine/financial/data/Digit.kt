@@ -10,7 +10,8 @@ enum class Digit(val value: Int) {
     SIX(6),
     SEVEN(7),
     EIGHT(8),
-    NINE(9);
+    NINE(9),
+    ;
 
     companion object {
         fun from(value: Int): Digit {

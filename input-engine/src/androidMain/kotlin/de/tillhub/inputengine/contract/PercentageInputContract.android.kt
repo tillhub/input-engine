@@ -17,11 +17,11 @@ import org.jetbrains.annotations.VisibleForTesting
 
 @Composable
 actual fun rememberPercentageInputLauncher(
-    onResult: (PercentageInputResult) -> Unit
+    onResult: (PercentageInputResult) -> Unit,
 ): PercentageInputContract {
     val context = LocalContext.current
     val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult()
+        contract = ActivityResultContracts.StartActivityForResult(),
     ) { result ->
         onResult(parsePercentageInputResult(result.resultCode, result.data?.extras))
     }
@@ -41,7 +41,7 @@ actual fun rememberPercentageInputLauncher(
 @VisibleForTesting
 internal fun parsePercentageInputResult(
     resultCode: Int,
-    extras: Bundle?
+    extras: Bundle?,
 ): PercentageInputResult {
     if (resultCode != Activity.RESULT_OK || extras == null) {
         return PercentageInputResult.Canceled
@@ -57,6 +57,6 @@ internal fun parsePercentageInputResult(
 
     return PercentageInputResult.Success(
         percent = PercentIO.of(percentValue),
-        extras = extrasMap
+        extras = extrasMap,
     )
 }

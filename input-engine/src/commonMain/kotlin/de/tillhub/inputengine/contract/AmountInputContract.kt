@@ -7,12 +7,12 @@ import de.tillhub.inputengine.financial.param.MoneyParam
 import kotlinx.serialization.Serializable
 
 interface AmountInputContract {
-    fun launchAmountInput(request: AmountInputRequest,)
+    fun launchAmountInput(request: AmountInputRequest)
 }
 
 @Composable
 expect fun rememberAmountInputLauncher(
-    onResult: (AmountInputResult) -> Unit
+    onResult: (AmountInputResult) -> Unit,
 ): AmountInputContract
 
 @Serializable
@@ -22,7 +22,7 @@ data class AmountInputRequest(
     val amountMin: MoneyParam = MoneyParam.Disable,
     val amountMax: MoneyParam = MoneyParam.Disable,
     val hintAmount: MoneyParam = MoneyParam.Disable,
-    val extras: Map<String, Int> = emptyMap()
+    val extras: Map<String, Int> = emptyMap(),
 )
 
 @Serializable
@@ -30,7 +30,7 @@ sealed class AmountInputResult {
     @Serializable
     data class Success(
         @Serializable(with = MoneyIOSerializer::class) val amount: MoneyIO,
-        val extras: Map<String, Int> = emptyMap()
+        val extras: Map<String, Int> = emptyMap(),
     ) : AmountInputResult()
 
     @Serializable

@@ -1,8 +1,6 @@
 package de.tillhub.inputengine.ui.percentage
 
 import com.ionspin.kotlin.bignum.BigNumber
-import com.ionspin.kotlin.bignum.decimal.toBigDecimal
-import com.ionspin.kotlin.bignum.integer.BigInteger
 import de.tillhub.inputengine.contract.PercentageInputRequest
 import de.tillhub.inputengine.financial.data.Digit
 import de.tillhub.inputengine.financial.data.PercentIO
@@ -40,12 +38,12 @@ class PercentageInputViewModelTest {
             PercentageInputRequest(
                 percent = PercentIO.of(20),
                 percentageMin = PercentageParam.Enable(PercentIO.of(10)),
-                percentageMax = PercentageParam.Enable(PercentIO.of(90))
-            )
+                percentageMax = PercentageParam.Enable(PercentIO.of(90)),
+            ),
         )
         assertEquals(
             PercentageInputData(PercentIO.of(20), "20 %", isValid = true),
-            viewModel.percentageInput.first()
+            viewModel.percentageInput.first(),
         )
     }
 
@@ -56,12 +54,12 @@ class PercentageInputViewModelTest {
                 percent = PercentIO.ZERO,
                 percentageMin = PercentageParam.Enable(PercentIO.of(10)),
                 percentageMax = PercentageParam.Enable(PercentIO.of(90)),
-                allowsZero = false
-            )
+                allowsZero = false,
+            ),
         )
         assertEquals(
             PercentageInputData(PercentIO.ZERO, "0 %", isValid = false),
-            viewModel.percentageInput.first()
+            viewModel.percentageInput.first(),
         )
     }
 
@@ -71,8 +69,8 @@ class PercentageInputViewModelTest {
             PercentageInputRequest(
                 percent = PercentIO.of(20),
                 percentageMin = PercentageParam.Enable(PercentIO.of(10)),
-                percentageMax = PercentageParam.Enable(PercentIO.of(90))
-            )
+                percentageMax = PercentageParam.Enable(PercentIO.of(90)),
+            ),
         )
 
         viewModel.input(NumpadKey.Clear)
@@ -90,7 +88,7 @@ class PercentageInputViewModelTest {
 
         assertEquals(
             PercentageInputData(PercentIO.of(25), "25 %", isValid = true),
-            viewModel.percentageInput.first()
+            viewModel.percentageInput.first(),
         )
     }
 
@@ -102,15 +100,15 @@ class PercentageInputViewModelTest {
             PercentageInputRequest(
                 percent = PercentIO.of(20),
                 percentageMin = PercentageParam.Enable(PercentIO.of(10)),
-                percentageMax = PercentageParam.Enable(PercentIO.of(90))
-            )
+                percentageMax = PercentageParam.Enable(PercentIO.of(90)),
+            ),
         )
 
         viewModel.input(NumpadKey.SingleDigit(Digit.ONE))
 
         assertEquals(
             PercentageInputData(PercentIO.of(90), "90 %", isValid = true),
-            viewModel.percentageInput.first()
+            viewModel.percentageInput.first(),
         )
     }
     class FakeNumberInputController : NumberInputControllerContract {

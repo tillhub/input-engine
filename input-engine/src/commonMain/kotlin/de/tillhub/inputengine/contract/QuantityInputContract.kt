@@ -11,7 +11,7 @@ interface QuantityInputContract {
 
 @Composable
 expect fun rememberQuantityInputLauncher(
-    onResult: (QuantityInputResult) -> Unit
+    onResult: (QuantityInputResult) -> Unit,
 ): QuantityInputContract
 
 @Serializable
@@ -22,7 +22,7 @@ data class QuantityInputRequest(
     val minQuantity: QuantityParam = QuantityParam.Disable,
     val maxQuantity: QuantityParam = QuantityParam.Disable,
     val quantityHint: QuantityParam = QuantityParam.Disable,
-    val extras: Map<String, Int> = emptyMap()
+    val extras: Map<String, Int> = emptyMap(),
 )
 
 @Serializable
@@ -30,7 +30,7 @@ sealed class QuantityInputResult {
     @Serializable
     data class Success(
         val quantity: QuantityIO,
-        val extras: Map<String, Int> = emptyMap()
+        val extras: Map<String, Int> = emptyMap(),
     ) : QuantityInputResult()
 
     @Serializable

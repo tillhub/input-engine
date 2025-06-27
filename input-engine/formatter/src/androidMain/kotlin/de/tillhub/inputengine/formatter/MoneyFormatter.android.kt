@@ -9,7 +9,7 @@ import java.math.BigDecimal as JvmBigDecimal
 actual object MoneyFormatter {
     actual fun format(
         money: MoneyIO,
-        locale: String
+        locale: String,
     ): String {
         val localeObj = Locale.forLanguageTag(locale)
         val format = NumberFormat.getCurrencyInstance(localeObj).apply {

@@ -1,6 +1,5 @@
 package de.tillhub.inputengine.contract
 
-
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -46,7 +45,7 @@ class PercentageInputContractTest {
         composeTestRule.runOnIdle {
             val expected = PercentageInputResult.Success(
                 percent = PercentIO.of(percentValue),
-                extras = mapOf("source_id" to 42)
+                extras = mapOf("source_id" to 42),
             )
             assertEquals(expected, result)
         }
@@ -72,4 +71,3 @@ class PercentageInputContractTest {
         }
     }
 }
-

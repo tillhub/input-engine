@@ -14,7 +14,7 @@ import kotlin.test.assertTrue
 @Serializable
 data class CurrencyWrapper(
     @Serializable(with = CurrencySerializer::class)
-    val currency: CurrencyIO
+    val currency: CurrencyIO,
 )
 
 class CurrencySerializerTest {

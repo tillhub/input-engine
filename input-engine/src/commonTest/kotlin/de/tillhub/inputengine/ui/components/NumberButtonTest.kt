@@ -21,7 +21,7 @@ class NumberButtonTest {
         setContent {
             NumberButton(
                 number = Digit.from(7),
-                onClick = { clickedKey = it }
+                onClick = { clickedKey = it },
             )
         }
 

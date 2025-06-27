@@ -30,12 +30,12 @@ class AmountInputActivityTest {
             amountMin = MoneyParam.Enable(10.0.eur),
             amountMax = MoneyParam.Disable,
             hintAmount = MoneyParam.Disable,
-            extras = mapOf("source" to 42)
+            extras = mapOf("source" to 42),
         )
 
         val intent = Intent(
             ApplicationProvider.getApplicationContext(),
-            AmountInputActivity::class.java
+            AmountInputActivity::class.java,
         ).apply {
             putExtra(ExtraKeys.EXTRA_REQUEST, Json.encodeToString(request))
         }
@@ -45,7 +45,7 @@ class AmountInputActivityTest {
         scenario.onActivity { activity ->
             val result = AmountInputResult.Success(
                 amount = 18.00.eur,
-                extras = mapOf("confirmed" to 42)
+                extras = mapOf("confirmed" to 42),
             )
 
             activity.runOnUiThread {
@@ -68,7 +68,7 @@ class AmountInputActivityTest {
         val request = AmountInputRequest(amount = 0.0.eur)
         val intent = Intent(
             ApplicationProvider.getApplicationContext(),
-            AmountInputActivity::class.java
+            AmountInputActivity::class.java,
         ).apply {
             putExtra(ExtraKeys.EXTRA_REQUEST, Json.encodeToString(request))
         }

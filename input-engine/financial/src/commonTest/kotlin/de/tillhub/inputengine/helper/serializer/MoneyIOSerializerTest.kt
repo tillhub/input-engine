@@ -16,7 +16,7 @@ import kotlin.test.assertTrue
 @Serializable
 data class MoneyWrapper(
     @Serializable(with = MoneyIOSerializer::class)
-    val money: MoneyIO
+    val money: MoneyIO,
 )
 
 class MoneyIOSerializerTest {
@@ -44,7 +44,7 @@ class MoneyIOSerializerTest {
     @Test
     fun testRoundTrip() {
         val original = MoneyWrapper(
-            MoneyIO.fromMajorUnits(BigDecimal.parseString("0.01"), CurrencyIO.forCode("JPY"))
+            MoneyIO.fromMajorUnits(BigDecimal.parseString("0.01"), CurrencyIO.forCode("JPY")),
         )
         val encoded = json.encodeToString(original)
         val decoded = json.decodeFromString<MoneyWrapper>(encoded)

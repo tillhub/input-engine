@@ -9,14 +9,14 @@ interface PinInputContract {
 
 @Composable
 expect fun rememberPinInputLauncher(
-    onResult: (PinInputResult) -> Unit
+    onResult: (PinInputResult) -> Unit,
 ): PinInputContract
 
 @Serializable
 data class PinInputRequest(
     val pin: String,
     val overridePinInput: Boolean = false,
-    val extras: Map<String, String> = emptyMap()
+    val extras: Map<String, String> = emptyMap(),
 )
 
 @Serializable

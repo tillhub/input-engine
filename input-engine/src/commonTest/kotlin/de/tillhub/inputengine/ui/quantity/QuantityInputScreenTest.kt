@@ -27,7 +27,7 @@ class QuantityInputScreenTest {
             quantityHint = QuantityParam.Enable(QuantityIO.of(5)),
             minQuantity = QuantityParam.Enable(QuantityIO.of(1)),
             maxQuantity = QuantityParam.Enable(QuantityIO.of(20)),
-            extras = mapOf("argQty" to 73)
+            extras = mapOf("argQty" to 73),
         )
 
         viewModel = QuantityInputViewModel().apply {
@@ -44,7 +44,7 @@ class QuantityInputScreenTest {
                 viewModel = viewModel,
                 onResult = {
                     result = it
-                }
+                },
             )
         }
 
@@ -61,7 +61,7 @@ class QuantityInputScreenTest {
         onNodeWithContentDescription("submitButton").performClick()
         assertEquals(
             QuantityInputResult.Success(QuantityIO.of(16), extras = mapOf("argQty" to 73)),
-            result
+            result,
         )
     }
 }

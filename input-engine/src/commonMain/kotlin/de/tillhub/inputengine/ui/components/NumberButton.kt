@@ -24,7 +24,7 @@ import de.tillhub.inputengine.ui.theme.Tint
 internal fun NumberButton(
     modifier: Modifier = Modifier,
     onClick: (NumpadKey) -> Unit,
-    number: Digit
+    number: Digit,
 ) {
     OutlinedButton(
         onClick = {
@@ -42,7 +42,7 @@ internal fun NumberButton(
         Text(
             text = number.value.toString(),
             fontSize = 14.sp,
-            color = GalacticBlue
+            color = GalacticBlue,
         )
     }
 }

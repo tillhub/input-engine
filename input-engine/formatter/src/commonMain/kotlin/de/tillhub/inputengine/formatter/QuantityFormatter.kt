@@ -10,6 +10,6 @@ expect object QuantityFormatter {
     fun format(
         quantity: QuantityIO,
         minFractionDigits: Int = 0,
-        locale: String = defaultLocale()
+        locale: String = defaultLocale(),
     ): String
 }

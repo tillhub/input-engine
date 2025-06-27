@@ -39,7 +39,7 @@ internal fun DoubleActionButton(
     colors: ButtonColors = ButtonDefaults.outlinedButtonColors(containerColor = ExtraButtonTint),
     border: BorderStroke? = BorderStroke(width = 1.0.dp, color = LunarGray),
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
-    content: @Composable RowScope.() -> Unit
+    content: @Composable RowScope.() -> Unit,
 ) {
     val containerColor = if (enabled) colors.containerColor else colors.disabledContainerColor
     val contentColor = if (enabled) colors.contentColor else colors.disabledContentColor
@@ -51,30 +51,30 @@ internal fun DoubleActionButton(
                 onClick = onClick,
                 onLongClick = onLongClick,
                 enabled = enabled,
-                role = Role.Button
+                role = Role.Button,
             ),
         shape = shape,
         color = containerColor,
         contentColor = contentColor,
         shadowElevation = elevation,
         tonalElevation = elevation,
-        border = border
+        border = border,
     ) {
         val mergedStyle = LocalTextStyle.current.merge(MaterialTheme.typography.labelLarge)
         CompositionLocalProvider(
             LocalContentColor provides contentColor,
-            LocalTextStyle provides mergedStyle
+            LocalTextStyle provides mergedStyle,
         ) {
             Row(
                 Modifier
                     .defaultMinSize(
                         minWidth = ButtonDefaults.MinWidth,
-                        minHeight = ButtonDefaults.MinHeight
+                        minHeight = ButtonDefaults.MinHeight,
                     )
                     .padding(contentPadding),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
-                content = content
+                content = content,
             )
         }
     }

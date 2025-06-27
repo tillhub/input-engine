@@ -17,12 +17,12 @@ import org.jetbrains.annotations.VisibleForTesting
 
 @Composable
 actual fun rememberQuantityInputLauncher(
-    onResult: (QuantityInputResult) -> Unit
+    onResult: (QuantityInputResult) -> Unit,
 ): QuantityInputContract {
     val context = LocalContext.current
 
     val launcher = rememberLauncherForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
+        ActivityResultContracts.StartActivityForResult(),
     ) { result ->
         onResult(parseQuantityInputResult(result.resultCode, result.data?.extras))
     }
@@ -42,7 +42,7 @@ actual fun rememberQuantityInputLauncher(
 @VisibleForTesting
 internal fun parseQuantityInputResult(
     resultCode: Int,
-    extras: Bundle?
+    extras: Bundle?,
 ): QuantityInputResult {
     if (resultCode != Activity.RESULT_OK || extras == null) {
         return QuantityInputResult.Canceled
@@ -58,7 +58,6 @@ internal fun parseQuantityInputResult(
 
     return QuantityInputResult.Success(
         quantity = QuantityIO.of(quantityValue),
-        extras = extrasMap
+        extras = extrasMap,
     )
 }
-

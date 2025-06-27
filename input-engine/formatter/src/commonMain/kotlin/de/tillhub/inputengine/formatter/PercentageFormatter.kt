@@ -7,6 +7,6 @@ expect object PercentageFormatter {
     fun format(
         percent: PercentIO,
         minimumFractionDigits: Int = 0,
-        locale: String = defaultLocale()
+        locale: String = defaultLocale(),
     ): String
 }

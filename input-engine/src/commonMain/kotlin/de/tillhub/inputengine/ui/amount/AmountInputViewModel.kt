@@ -9,8 +9,8 @@ import de.tillhub.inputengine.financial.data.CurrencyIO
 import de.tillhub.inputengine.financial.data.MoneyIO
 import de.tillhub.inputengine.financial.param.MoneyParam
 import de.tillhub.inputengine.formatter.MoneyFormatter
-import de.tillhub.inputengine.helper.defaultLocale
 import de.tillhub.inputengine.helper.NumpadKey
+import de.tillhub.inputengine.helper.defaultLocale
 import de.tillhub.inputengine.ui.amount.MoneyInputData.Companion.DEFAULT_CURRENCY
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
 internal class AmountInputViewModel(
-    private val locale: String = defaultLocale()
+    private val locale: String = defaultLocale(),
 ) : ViewModel() {
 
     private var isInitValue = false
@@ -40,12 +40,12 @@ internal class AmountInputViewModel(
                 AmountInputMode.BOTH -> it
             },
             text = MoneyFormatter.format(it, locale),
-            isValid = isValid(it)
+            isValid = isValid(it),
         )
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(),
-        initialValue = MoneyInputData.EMPTY
+        initialValue = MoneyInputData.EMPTY,
     )
 
     private val _uiMinValue: MutableStateFlow<MoneyParam> = MutableStateFlow(MoneyParam.Disable)
@@ -181,20 +181,20 @@ internal class AmountInputViewModel(
 internal enum class AmountInputMode {
     POSITIVE,
     NEGATIVE,
-    BOTH
+    BOTH,
 }
 
 internal data class MoneyInputData(
     val money: MoneyIO,
     val text: String,
-    val isValid: Boolean
+    val isValid: Boolean,
 ) {
     companion object {
         val DEFAULT_CURRENCY = CurrencyIO.forCode("EUR")
         val EMPTY = MoneyInputData(
             money = MoneyIO.zero(DEFAULT_CURRENCY),
             text = "",
-            isValid = false
+            isValid = false,
         )
     }
 }

@@ -13,7 +13,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 class PercentIO private constructor(
-    val value: Long
+    val value: Long,
 ) : Comparable<PercentIO>, Number() {
 
     override fun compareTo(other: PercentIO): Int = value.compareTo(other.value)
@@ -60,7 +60,7 @@ class PercentIO private constructor(
                     is Long -> number * I_100
                     is Double -> (number * I_100).toLong()
                     else -> number.toLong() * I_100
-                }
+                },
             )
         }
         fun of(number: BigNumber<*>): PercentIO {
@@ -69,7 +69,7 @@ class PercentIO private constructor(
                     is BigInteger -> number.longValue() * I_100
                     is BigDecimal -> number.multiply(I_100.toBigDecimal()).longValue()
                     else -> throw IllegalArgumentException("Percent $number is not supported type.")
-                }
+                },
             )
         }
     }

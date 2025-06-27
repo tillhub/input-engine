@@ -13,7 +13,7 @@ actual object QuantityFormatter {
     actual fun format(
         quantity: QuantityIO,
         minFractionDigits: Int,
-        locale: String
+        locale: String,
     ): String {
         val decimal = quantity.getDecimal()
 

@@ -29,7 +29,7 @@ class AmountInputContractTest {
         val intent = Intent().apply {
             putExtra(
                 ExtraKeys.EXTRAS_RESULT,
-                Json.encodeToString(MoneyIOSerializer, testAmount)
+                Json.encodeToString(MoneyIOSerializer, testAmount),
             )
             putExtra(ExtraKeys.EXTRAS_ARGS, extrasBundle)
         }
@@ -50,7 +50,7 @@ class AmountInputContractTest {
         composeRule.runOnIdle {
             val expected = AmountInputResult.Success(
                 amount = testAmount,
-                extras = mapOf("comment" to 1)
+                extras = mapOf("comment" to 1),
             )
             assertEquals(expected, capturedResult)
         }

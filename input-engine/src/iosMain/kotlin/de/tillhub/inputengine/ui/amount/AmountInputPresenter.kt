@@ -23,7 +23,7 @@ class AmountInputPresenter(private val onResult: (AmountInputResult) -> Unit) {
                 onDismiss = {
                     onResult(AmountInputResult.Canceled)
                     dismiss()
-                }
+                },
             )
         }
 
@@ -38,4 +38,3 @@ class AmountInputPresenter(private val onResult: (AmountInputResult) -> Unit) {
         }
     }
 }
-

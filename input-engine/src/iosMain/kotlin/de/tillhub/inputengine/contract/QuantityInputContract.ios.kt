@@ -6,7 +6,7 @@ import de.tillhub.inputengine.ui.quantity.QuantityInputPresenter
 
 @Composable
 actual fun rememberQuantityInputLauncher(
-    onResult: (QuantityInputResult) -> Unit
+    onResult: (QuantityInputResult) -> Unit,
 ): QuantityInputContract = remember {
     val presenter = QuantityInputPresenter(onResult)
 

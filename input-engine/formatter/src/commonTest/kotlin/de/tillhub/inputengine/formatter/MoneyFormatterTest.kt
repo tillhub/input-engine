@@ -7,13 +7,13 @@ import de.tillhub.inputengine.financial.helper.EUR
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-
 class MoneyFormatterTest {
 
     @Test
     fun testFormatInt() {
         val result = MoneyFormatter.format(
-            MoneyIO.Companion.of(156, EUR), LOCALE
+            MoneyIO.Companion.of(156, EUR),
+            LOCALE,
         )
         assertEquals("1,56 €", result)
     }
@@ -21,7 +21,8 @@ class MoneyFormatterTest {
     @Test
     fun testFormatDouble() {
         val result = MoneyFormatter.format(
-            MoneyIO.Companion.of(100.0, EUR), LOCALE
+            MoneyIO.Companion.of(100.0, EUR),
+            LOCALE,
         )
         assertEquals("1,00 €", result)
     }
@@ -29,7 +30,8 @@ class MoneyFormatterTest {
     @Test
     fun testFormatBigInteger() {
         val result = MoneyFormatter.format(
-            MoneyIO.of(BigInteger.fromInt(100), EUR), LOCALE
+            MoneyIO.of(BigInteger.fromInt(100), EUR),
+            LOCALE,
         )
         assertEquals("1,00 €", result)
     }
@@ -37,7 +39,8 @@ class MoneyFormatterTest {
     @Test
     fun testZeroWithBigDecimal() {
         val result = MoneyFormatter.format(
-            MoneyIO.of(BigDecimal.ZERO, EUR), LOCALE
+            MoneyIO.of(BigDecimal.ZERO, EUR),
+            LOCALE,
         )
         assertEquals("0,00 €", result)
     }
@@ -45,7 +48,8 @@ class MoneyFormatterTest {
     @Test
     fun testZeroWithBigInteger() {
         val result = MoneyFormatter.format(
-            MoneyIO.of(BigInteger.ZERO, EUR), LOCALE
+            MoneyIO.of(BigInteger.ZERO, EUR),
+            LOCALE,
         )
         assertEquals("0,00 €", result)
     }

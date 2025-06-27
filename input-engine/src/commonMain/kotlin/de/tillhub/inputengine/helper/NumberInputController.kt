@@ -25,7 +25,7 @@ internal interface NumberInputControllerContract {
 
 internal class NumberInputController(
     private val maxMajorDigits: Int = 8,
-    private val maxMinorDigits: Int = 4
+    private val maxMinorDigits: Int = 4,
 ) : NumberInputControllerContract {
     private var switchToMinorDigits = false
     private var switchToNegate = false
@@ -91,7 +91,7 @@ internal class NumberInputController(
         val scaledMinor = fractionalPart
             .roundToDigitPositionAfterDecimalPoint(
                 digitPosition = maxMinorDigits.toLong(),
-                roundingMode = RoundingMode.TOWARDS_ZERO
+                roundingMode = RoundingMode.TOWARDS_ZERO,
             )
             .multiply(BigDecimal.TEN.pow(maxMinorDigits.toLong()))
             .floor()
@@ -158,7 +158,7 @@ internal class NumberInputController(
             val scaled = combined
                 .divide(
                     BigDecimal.TEN.pow(scale),
-                    decimalMode = DecimalMode(DEFAULT_DECIMAL_PRECISION)
+                    decimalMode = DecimalMode(DEFAULT_DECIMAL_PRECISION),
                 )
                 .let { if (switchToNegate) it.negate() else it }
 
@@ -178,4 +178,3 @@ internal class NumberInputController(
         private const val DEFAULT_DECIMAL_PRECISION = 34L
     }
 }
-

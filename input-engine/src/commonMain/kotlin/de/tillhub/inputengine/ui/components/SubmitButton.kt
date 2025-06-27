@@ -22,7 +22,7 @@ import org.jetbrains.compose.resources.stringResource
 internal fun SubmitButton(
     isEnable: Boolean = true,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
 ) {
     Button(
         enabled = isEnable,
@@ -32,13 +32,13 @@ internal fun SubmitButton(
         shape = RectangleShape,
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (isEnable) OrbitalBlue else MagneticGrey
-        )
+            containerColor = if (isEnable) OrbitalBlue else MagneticGrey,
+        ),
     ) {
         Text(
             style = MaterialTheme.typography.headlineSmall,
             modifier = Modifier.padding(vertical = 8.dp),
-            text = stringResource(resource = Res.string.numpad_button_submit)
+            text = stringResource(resource = Res.string.numpad_button_submit),
         )
     }
 }

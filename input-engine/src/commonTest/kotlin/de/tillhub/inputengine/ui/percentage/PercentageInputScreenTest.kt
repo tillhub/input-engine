@@ -18,7 +18,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 @OptIn(ExperimentalTestApi::class)
-    class PercentageInputScreenTest {
+class PercentageInputScreenTest {
     private lateinit var request: PercentageInputRequest
     private lateinit var viewModel: PercentageInputViewModel
 
@@ -29,7 +29,7 @@ import kotlin.test.assertEquals
             percent = PercentIO.of(15),
             percentageMin = PercentageParam.Enable(PercentIO.of(5)),
             percentageMax = PercentageParam.Enable(PercentIO.WHOLE),
-            extras = mapOf("argPercentage" to 6)
+            extras = mapOf("argPercentage" to 6),
         )
         viewModel = PercentageInputViewModel().apply {
             init(request)
@@ -46,7 +46,7 @@ import kotlin.test.assertEquals
                 onDismiss = {},
                 onResult = {
                     result = it
-                }
+                },
             )
         }
 
@@ -66,8 +66,9 @@ import kotlin.test.assertEquals
         assertEquals(
             PercentageInputResult.Success(
                 PercentIO.of(25),
-                extras = mapOf("argPercentage" to 6)
-            ), result
+                extras = mapOf("argPercentage" to 6),
+            ),
+            result,
         )
     }
 }

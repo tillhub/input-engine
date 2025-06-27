@@ -30,7 +30,7 @@ class QuantityInputActivity : ComponentActivity() {
                                     ExtraKeys.EXTRAS_ARGS,
                                     Bundle().apply {
                                         it.extras.forEach { (k, v) -> putInt(k, v) }
-                                    }
+                                    },
                                 )
                             }
                             setResult(RESULT_OK, intent)
@@ -39,7 +39,7 @@ class QuantityInputActivity : ComponentActivity() {
                         QuantityInputResult.Canceled -> setResult(RESULT_CANCELED)
                     }
                     finish()
-                }
+                },
             )
         }
     }

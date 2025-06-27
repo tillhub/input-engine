@@ -37,7 +37,7 @@ class AmountInputActivity : ComponentActivity() {
                 onDismiss = {
                     setResult(RESULT_CANCELED)
                     finish()
-                }
+                },
             )
         }
     }

@@ -39,7 +39,7 @@ class QuantityInputViewModelTest {
             quantityHint = QuantityParam.Enable(QuantityIO.of(1)),
             minQuantity = QuantityParam.Enable(QuantityIO.of(-20)),
             maxQuantity = QuantityParam.Enable(QuantityIO.of(20)),
-            allowsZero = false
+            allowsZero = false,
         )
         viewModel.setInitialValue(request)
 
@@ -61,8 +61,8 @@ class QuantityInputViewModelTest {
                 quantityHint = QuantityParam.Disable,
                 minQuantity = QuantityParam.Enable(QuantityIO.of(-20)),
                 maxQuantity = QuantityParam.Enable(QuantityIO.of(20)),
-                allowsZero = false
-            )
+                allowsZero = false,
+            ),
         )
         viewModel.decrease()
         assertEquals(QuantityIO.of(-1), viewModel.displayDataFlow.first().qty)
@@ -76,8 +76,8 @@ class QuantityInputViewModelTest {
                 quantity = QuantityIO.of(1.5),
                 quantityHint = QuantityParam.Disable,
                 minQuantity = QuantityParam.Enable(QuantityIO.of(-20)),
-                maxQuantity = QuantityParam.Enable(QuantityIO.of(20))
-            )
+                maxQuantity = QuantityParam.Enable(QuantityIO.of(20)),
+            ),
         )
         viewModel.increase()
         assertEquals(QuantityIO.of(2), viewModel.displayDataFlow.first().qty)
@@ -92,8 +92,8 @@ class QuantityInputViewModelTest {
                 quantityHint = QuantityParam.Enable(QuantityIO.of(1)),
                 minQuantity = QuantityParam.Enable(QuantityIO.of(-20)),
                 maxQuantity = QuantityParam.Enable(QuantityIO.of(20)),
-                allowsZero = false
-            )
+                allowsZero = false,
+            ),
         )
 
         assertEquals(
@@ -101,9 +101,9 @@ class QuantityInputViewModelTest {
                 qty = QuantityIO.ZERO,
                 text = "1", // hint fallback
                 color = MagneticGrey,
-                isValid = false
+                isValid = false,
             ),
-            viewModel.displayDataFlow.first()
+            viewModel.displayDataFlow.first(),
         )
 
         viewModel.processKey(NumpadKey.SingleDigit(Digit.ONE))
@@ -127,9 +127,9 @@ class QuantityInputViewModelTest {
                 qty = QuantityIO.of(5),
                 text = "5",
                 color = OrbitalBlue,
-                isValid = true
+                isValid = true,
             ),
-            viewModel.displayDataFlow.first()
+            viewModel.displayDataFlow.first(),
         )
     }
 
@@ -155,7 +155,7 @@ class QuantityInputViewModelTest {
         override fun setValue(
             majorDigits: List<Digit>,
             minorDigits: List<Digit>,
-            isNegative: Boolean
+            isNegative: Boolean,
         ) = Unit
 
         override fun setValue(number: Number) = Unit

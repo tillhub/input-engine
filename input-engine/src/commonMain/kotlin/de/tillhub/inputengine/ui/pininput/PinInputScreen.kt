@@ -53,8 +53,8 @@ internal fun PinInputScreen(
     viewModel: PinInputViewModel = viewModel(
         factory = remember {
             providePinInputViewModelFactory(request.pin)
-        }
-    )
+        },
+    ),
 ) {
     val errorMessage = stringResource(Res.string.pin_wrong)
     val correctPin = stringResource(Res.string.pin_correct)
@@ -79,7 +79,6 @@ internal fun PinInputScreen(
                     snackbarHostState.showSnackbar(correctPin)
                 }
                 onResult(PinInputResult.Success(request.extras))
-
             }
 
             PinInputState.InvalidPinFormat -> {
@@ -94,28 +93,28 @@ internal fun PinInputScreen(
         Scaffold(
             modifier = getModifierBasedOnDeviceType(
                 isTablet = TabletScaffoldModifier,
-                isMobile = Modifier
+                isMobile = Modifier,
             ),
             topBar = {
                 Toolbar(
                     title = stringResource(Res.string.numpad_title_pin),
-                    onClick = { onResult(PinInputResult.Canceled) }
+                    onClick = { onResult(PinInputResult.Canceled) },
                 )
             },
-            snackbarHost = { SnackbarHost(snackbarHostState) }
+            snackbarHost = { SnackbarHost(snackbarHostState) },
         ) { innerPadding ->
             Column(
                 modifier = Modifier
                     .padding(innerPadding)
                     .padding(vertical = 16.dp)
                     .fillMaxHeight(),
-                verticalArrangement = Arrangement.SpaceBetween
+                verticalArrangement = Arrangement.SpaceBetween,
             ) {
                 PinPreview(
                     pin = enteredPin,
                     hint = "•".repeat(request.pin.length),
                     overridePinInput = request.overridePinInput,
-                    onOverride = { onResult(PinInputResult.Success(request.extras)) }
+                    onOverride = { onResult(PinInputResult.Success(request.extras)) },
                 )
                 NumberKeyboard(onClick = viewModel::input)
             }
@@ -128,7 +127,7 @@ private fun PinPreview(
     pin: String,
     overridePinInput: Boolean,
     hint: String,
-    onOverride: () -> Unit
+    onOverride: () -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxWidth()) {
         OutlinedTextField(
@@ -139,7 +138,7 @@ private fun PinPreview(
             textStyle = TextStyle.Default.copy(
                 color = OrbitalBlue,
                 fontSize = 64.sp,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             ),
             maxLines = 1,
             placeholder = {
@@ -149,7 +148,7 @@ private fun PinPreview(
                     style = TextStyle.Default.copy(
                         color = HintGray,
                         fontSize = 64.sp,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
                     ),
                     text = hint,
                 )
@@ -168,7 +167,7 @@ private fun PinPreview(
                 maxLines = 1,
                 style = MaterialTheme.typography.bodyMedium,
                 text = stringResource(Res.string.pin_enter),
-                color = OrbitalBlue
+                color = OrbitalBlue,
             )
         }
     }

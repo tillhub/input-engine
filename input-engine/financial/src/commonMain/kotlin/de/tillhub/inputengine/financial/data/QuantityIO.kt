@@ -18,7 +18,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 class QuantityIO private constructor(
-    @Serializable(with = BigIntegerSerializer::class) val value: BigInteger
+    @Serializable(with = BigIntegerSerializer::class) val value: BigInteger,
 ) : Comparable<QuantityIO>, Number() {
 
     fun getDecimal(): BigDecimal =
@@ -57,7 +57,7 @@ class QuantityIO private constructor(
     @Suppress("ComplexMethod", "NestedBlockDepth")
     fun nextSmaller(
         allowsZero: Boolean = false,
-        allowsNegatives: Boolean = false
+        allowsNegatives: Boolean = false,
     ): QuantityIO =
         when (hasFractions()) {
             true -> when (isPositive(includeZero = false) && getMajorValue() != BigInteger.ZERO) {
@@ -110,7 +110,7 @@ class QuantityIO private constructor(
             true -> when (allowsZero) {
                 true -> {
                     val nextValue = QuantityIO(
-                        value = getMajorValue().add(BigInteger.ONE).multiply(FRACTIONS_FACTOR_INT)
+                        value = getMajorValue().add(BigInteger.ONE).multiply(FRACTIONS_FACTOR_INT),
                     )
                     if (nextValue <= maxQuantity) {
                         nextValue
@@ -121,7 +121,7 @@ class QuantityIO private constructor(
 
                 false -> {
                     val nextValue = QuantityIO(
-                        value = getMajorValue().add(BigInteger.ONE).multiply(FRACTIONS_FACTOR_INT)
+                        value = getMajorValue().add(BigInteger.ONE).multiply(FRACTIONS_FACTOR_INT),
                     )
                     val tempValue =
                         if (isPositive()) {
@@ -135,7 +135,7 @@ class QuantityIO private constructor(
                         }
                     if (tempValue.value == BigInteger.ZERO) {
                         QuantityIO(
-                            tempValue.value.add(BigInteger.ONE).multiply(FRACTIONS_FACTOR_INT)
+                            tempValue.value.add(BigInteger.ONE).multiply(FRACTIONS_FACTOR_INT),
                         )
                     } else {
                         tempValue
@@ -146,7 +146,7 @@ class QuantityIO private constructor(
             false -> when (allowsZero) {
                 true -> {
                     val nextValue = QuantityIO(
-                        value = getMajorValue().add(BigInteger.ONE).multiply(FRACTIONS_FACTOR_INT)
+                        value = getMajorValue().add(BigInteger.ONE).multiply(FRACTIONS_FACTOR_INT),
                     )
                     if (nextValue <= maxQuantity) {
                         nextValue
@@ -157,7 +157,7 @@ class QuantityIO private constructor(
 
                 false -> {
                     val nextValue = QuantityIO(
-                        value = getMajorValue().add(BigInteger.ONE).multiply(FRACTIONS_FACTOR_INT)
+                        value = getMajorValue().add(BigInteger.ONE).multiply(FRACTIONS_FACTOR_INT),
                     )
                     val tempValue = if (nextValue <= maxQuantity) {
                         nextValue
@@ -166,7 +166,7 @@ class QuantityIO private constructor(
                     }
                     if (tempValue.value == BigInteger.ZERO) {
                         QuantityIO(
-                            tempValue.value.add(BigInteger.ONE).multiply(FRACTIONS_FACTOR_INT)
+                            tempValue.value.add(BigInteger.ONE).multiply(FRACTIONS_FACTOR_INT),
                         )
                     } else {
                         tempValue
@@ -201,7 +201,7 @@ class QuantityIO private constructor(
                     .toBigInteger()
 
                 else -> throw IllegalArgumentException("Not supported number for quantity")
-            }
+            },
         )
 
         fun of(number: BigNumber<*>): QuantityIO = QuantityIO(
@@ -209,8 +209,7 @@ class QuantityIO private constructor(
                 is BigInteger -> number.multiply(FRACTIONS_FACTOR_INT)
                 is BigDecimal -> number.multiply(FRACTIONS_FACTOR, PRECISION).toBigInteger()
                 else -> throw IllegalArgumentException("Percent $number is not supported type.")
-            }
+            },
         )
     }
 }
-

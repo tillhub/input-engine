@@ -25,13 +25,13 @@ class PercentageInputActivity : ComponentActivity() {
                     val resultIntent = Intent().apply {
                         putExtra(
                             ExtraKeys.EXTRAS_RESULT,
-                            it.percent
+                            it.percent,
                         )
                         putExtra(
                             ExtraKeys.EXTRAS_ARGS,
                             Bundle().apply {
                                 it.extras.forEach { (k, v) -> putInt(k, v) }
-                            }
+                            },
                         )
                     }
                     setResult(RESULT_OK, resultIntent)
@@ -40,7 +40,7 @@ class PercentageInputActivity : ComponentActivity() {
                 onDismiss = {
                     setResult(RESULT_CANCELED)
                     finish()
-                }
+                },
             )
         }
     }

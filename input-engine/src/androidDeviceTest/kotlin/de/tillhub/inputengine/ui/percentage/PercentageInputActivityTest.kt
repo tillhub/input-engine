@@ -27,12 +27,12 @@ class PercentageInputActivityTest {
             allowDecimal = true,
             percentageMin = PercentageParam.Enable(PercentIO.of(5.0)),
             percentageMax = PercentageParam.Enable(PercentIO.of(20.0)),
-            extras = mapOf("origin" to 42)
+            extras = mapOf("origin" to 42),
         )
 
         val intent = Intent(
             ApplicationProvider.getApplicationContext(),
-            PercentageInputActivity::class.java
+            PercentageInputActivity::class.java,
         ).apply {
             putExtra(ExtraKeys.EXTRA_REQUEST, Json.encodeToString(request))
         }
@@ -42,7 +42,7 @@ class PercentageInputActivityTest {
         scenario.onActivity { activity ->
             val result = PercentageInputResult.Success(
                 percent = PercentIO.of(18.5),
-                extras = mapOf("confirmed" to 42)
+                extras = mapOf("confirmed" to 42),
             )
 
             activity.runOnUiThread {
@@ -63,12 +63,12 @@ class PercentageInputActivityTest {
     fun returnsCanceledResult() {
         val request = PercentageInputRequest(
             percent = PercentIO.of(0.0),
-            allowsZero = true
+            allowsZero = true,
         )
 
         val intent = Intent(
             ApplicationProvider.getApplicationContext(),
-            PercentageInputActivity::class.java
+            PercentageInputActivity::class.java,
         ).apply {
             putExtra(ExtraKeys.EXTRA_REQUEST, Json.encodeToString(request))
         }

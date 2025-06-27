@@ -13,22 +13,22 @@ class DigitBuilderTest {
     fun testDigits_PositiveNumbers() {
         assertEquals(
             listOf(Digit.ZERO),
-            DigitBuilder.digits(BigInteger.ZERO)
+            DigitBuilder.digits(BigInteger.ZERO),
         )
 
         assertEquals(
             listOf(Digit.ONE),
-            DigitBuilder.digits(BigInteger.ONE)
+            DigitBuilder.digits(BigInteger.ONE),
         )
 
         assertEquals(
             listOf(Digit.ONE, Digit.TWO, Digit.THREE, Digit.FOUR),
-            DigitBuilder.digits(BigInteger.parseString("1234"))
+            DigitBuilder.digits(BigInteger.parseString("1234")),
         )
 
         assertEquals(
             listOf(Digit.ONE, Digit.TWO, Digit.ZERO, Digit.ZERO),
-            DigitBuilder.digits(BigInteger.parseString("1200"))
+            DigitBuilder.digits(BigInteger.parseString("1200")),
         )
     }
 
@@ -36,12 +36,12 @@ class DigitBuilderTest {
     fun testDigits_NegativeNumbers() {
         assertEquals(
             listOf(Digit.ONE, Digit.TWO, Digit.THREE),
-            DigitBuilder.digits(BigInteger.parseString("-123"))
+            DigitBuilder.digits(BigInteger.parseString("-123")),
         )
 
         assertEquals(
             listOf(Digit.ZERO),
-            DigitBuilder.digits(BigInteger.parseString("-0"))
+            DigitBuilder.digits(BigInteger.parseString("-0")),
         )
     }
 

@@ -51,7 +51,7 @@ class AmountInputViewModelTest {
             amount = MoneyIO.of(400, EUR),
             isZeroAllowed = true,
             amountMin = MoneyParam.Enable(MoneyIO.of(-2000, EUR)),
-            amountMax = MoneyParam.Enable(MoneyIO.of(2000, EUR))
+            amountMax = MoneyParam.Enable(MoneyIO.of(2000, EUR)),
         )
         viewModel.init(request)
 
@@ -68,8 +68,8 @@ class AmountInputViewModelTest {
                 amount = MoneyIO.of(400, EUR),
                 isZeroAllowed = true,
                 amountMin = MoneyParam.Enable(MoneyIO.of(900, EUR)),
-                amountMax = MoneyParam.Enable(MoneyIO.of(500, EUR))
-            )
+                amountMax = MoneyParam.Enable(MoneyIO.of(500, EUR)),
+            ),
         )
         assertEquals(MoneyParam.Disable, viewModel.uiMinValue.value)
         assertEquals(MoneyParam.Disable, viewModel.uiMaxValue.value)
@@ -81,8 +81,8 @@ class AmountInputViewModelTest {
                 amount = MoneyIO.of(400, EUR),
                 isZeroAllowed = false,
                 amountMin = MoneyParam.Enable(MoneyIO.of(-2000, EUR)),
-                amountMax = MoneyParam.Enable(MoneyIO.of(2000, EUR))
-            )
+                amountMax = MoneyParam.Enable(MoneyIO.of(2000, EUR)),
+            ),
         )
 
         viewModel.input(NumpadKey.SingleDigit(Digit.ONE))
@@ -111,8 +111,8 @@ class AmountInputViewModelTest {
                 amount = MoneyIO.of(-500, EUR),
                 isZeroAllowed = true,
                 amountMin = MoneyParam.Enable(MoneyIO.zero(EUR)),
-                amountMax = MoneyParam.Enable(MoneyIO.of(1000, EUR))
-            )
+                amountMax = MoneyParam.Enable(MoneyIO.of(1000, EUR)),
+            ),
         )
         assertEquals(AmountInputMode.POSITIVE, viewModel.amountInputMode)
         assertEquals(MoneyParam.Disable, viewModel.uiMinValue.value)
@@ -125,8 +125,8 @@ class AmountInputViewModelTest {
                 amount = MoneyIO.of(-500, EUR),
                 isZeroAllowed = true,
                 amountMin = MoneyParam.Enable(MoneyIO.of(-1000, EUR)),
-                amountMax = MoneyParam.Enable(MoneyIO.of(-200, EUR))
-            )
+                amountMax = MoneyParam.Enable(MoneyIO.of(-200, EUR)),
+            ),
         )
         assertEquals(AmountInputMode.NEGATIVE, viewModel.amountInputMode)
         assertEquals(MoneyIO.of(200, EUR), (viewModel.uiMinValue.value as MoneyParam.Enable).amount)
@@ -140,8 +140,8 @@ class AmountInputViewModelTest {
                 amount = MoneyIO.zero(EUR),
                 isZeroAllowed = false,
                 amountMin = MoneyParam.Enable(MoneyIO.of(-2000, EUR)),
-                amountMax = MoneyParam.Enable(MoneyIO.of(2000, EUR))
-            )
+                amountMax = MoneyParam.Enable(MoneyIO.of(2000, EUR)),
+            ),
         )
         assertFalse(viewModel.moneyInput.first().isValid)
     }

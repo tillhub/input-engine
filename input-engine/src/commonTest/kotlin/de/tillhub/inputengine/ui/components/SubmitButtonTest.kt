@@ -22,7 +22,7 @@ class SubmitButtonTest {
         setContent {
             SubmitButton(
                 isEnable = true,
-                onClick = { clicked = true }
+                onClick = { clicked = true },
             )
         }
 
@@ -40,7 +40,7 @@ class SubmitButtonTest {
         setContent {
             SubmitButton(
                 isEnable = false,
-                onClick = { clicked = true }
+                onClick = { clicked = true },
             )
         }
 

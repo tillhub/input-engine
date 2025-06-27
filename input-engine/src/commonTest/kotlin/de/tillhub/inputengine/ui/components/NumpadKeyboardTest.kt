@@ -25,7 +25,7 @@ class NumberKeyboardTest {
             NumberKeyboard(
                 onClick = { receivedKeys.add(it) },
                 showDecimalSeparator = true,
-                showNegative = true
+                showNegative = true,
             )
         }
 
@@ -50,11 +50,11 @@ class NumberKeyboardTest {
             .performClick()
 
         val expectedKeys = digits.map { NumpadKey.SingleDigit(Digit.from(it)) } +
-                listOf(
-                    NumpadKey.DecimalSeparator,
-                    NumpadKey.SingleDigit(Digit.ZERO),
-                    NumpadKey.Delete
-                )
+            listOf(
+                NumpadKey.DecimalSeparator,
+                NumpadKey.SingleDigit(Digit.ZERO),
+                NumpadKey.Delete,
+            )
 
         assertEquals(expectedKeys, receivedKeys)
     }
@@ -65,7 +65,7 @@ class NumberKeyboardTest {
             NumberKeyboard(
                 onClick = {},
                 showDecimalSeparator = true,
-                showNegative = true
+                showNegative = true,
             )
         }
 
@@ -90,7 +90,7 @@ class NumberKeyboardTest {
         setContent {
             NumberKeyboard(
                 onClick = { actions.add(it) },
-                showNegative = true
+                showNegative = true,
             )
         }
 

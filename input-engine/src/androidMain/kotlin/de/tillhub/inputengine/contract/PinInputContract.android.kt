@@ -16,12 +16,12 @@ import org.jetbrains.annotations.VisibleForTesting
 
 @Composable
 actual fun rememberPinInputLauncher(
-    onResult: (PinInputResult) -> Unit
+    onResult: (PinInputResult) -> Unit,
 ): PinInputContract {
     val context = LocalContext.current
 
     val launcher = rememberLauncherForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
+        ActivityResultContracts.StartActivityForResult(),
     ) { result ->
         onResult(parsePinInputResult(result.resultCode, result.data?.extras))
     }
@@ -50,4 +50,3 @@ internal fun parsePinInputResult(resultCode: Int, extras: Bundle?): PinInputResu
 
     return PinInputResult.Success(dataMap)
 }
-

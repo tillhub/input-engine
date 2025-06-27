@@ -17,7 +17,7 @@ class ToolbarTest {
         setContent {
             Toolbar(
                 title = "Toolbar title",
-                onClick = { clicked = true }
+                onClick = { clicked = true },
             )
         }
 

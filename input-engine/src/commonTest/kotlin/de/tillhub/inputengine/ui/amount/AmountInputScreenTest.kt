@@ -28,7 +28,7 @@ class AmountInputScreenTest {
             amount = 1.eur,
             amountMin = MoneyParam.Enable(MoneyIO.of(-30_00, EUR)),
             amountMax = MoneyParam.Enable(MoneyIO.of(50_00, EUR)),
-            extras = mapOf("arg" to 56)
+            extras = mapOf("arg" to 56),
         )
         viewModel = AmountInputViewModel().apply {
             init(request)
@@ -45,7 +45,7 @@ class AmountInputScreenTest {
                 onDismiss = {},
                 onResult = {
                     result = it
-                }
+                },
             )
         }
 

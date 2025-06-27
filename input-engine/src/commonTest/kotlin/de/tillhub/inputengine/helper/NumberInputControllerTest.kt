@@ -39,7 +39,7 @@ class NumberInputControllerTest {
         target.setValue(567.126)
         assertEquals(
             567.126.toBigDecimal(),
-            target.value().toBigDecimal()
+            target.value().toBigDecimal(),
         )
 
         target.setValue(567.1267)
@@ -48,7 +48,7 @@ class NumberInputControllerTest {
         target.setValue(567.12671)
         assertEquals(
             567.1267.toBigDecimal(),
-            target.value().toBigDecimal()
+            target.value().toBigDecimal(),
         )
 
         target.setValue(367.12)
@@ -67,7 +67,7 @@ class NumberInputControllerTest {
         target.setValue(
             listOf(Digit.ONE, Digit.TWO, Digit.NINE),
             listOf(Digit.EIGHT, Digit.SEVEN),
-            false
+            false,
         )
         assertEquals(129.87.toBigDecimal(), target.value().toBigDecimal())
 
@@ -109,10 +109,9 @@ class NumberInputControllerTest {
         target.setValue(
             listOf(Digit.ONE, Digit.TWO, Digit.NINE),
             listOf(Digit.EIGHT, Digit.SEVEN),
-            false
+            false,
         )
         target.clear()
         assertEquals(0.toBigInteger(), target.value().toBigInteger())
     }
 }
-

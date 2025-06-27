@@ -1,6 +1,5 @@
 package de.tillhub.inputengine.helper
 
-
 import com.ionspin.kotlin.bignum.decimal.BigDecimal
 import com.ionspin.kotlin.bignum.integer.BigInteger
 import de.tillhub.inputengine.financial.data.Digit

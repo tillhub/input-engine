@@ -6,7 +6,7 @@ import de.tillhub.inputengine.ui.pin.PinInputPresenter
 
 @Composable
 actual fun rememberPinInputLauncher(
-    onResult: (PinInputResult) -> Unit
+    onResult: (PinInputResult) -> Unit,
 ): PinInputContract = remember {
     val presenter = PinInputPresenter(onResult)
 

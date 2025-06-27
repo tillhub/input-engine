@@ -17,12 +17,12 @@ import org.jetbrains.annotations.VisibleForTesting
 
 @Composable
 actual fun rememberAmountInputLauncher(
-    onResult: (AmountInputResult) -> Unit
+    onResult: (AmountInputResult) -> Unit,
 ): AmountInputContract {
     val context = LocalContext.current
 
     val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult()
+        contract = ActivityResultContracts.StartActivityForResult(),
     ) { result ->
         onResult(parseAmountInputResult(result.resultCode, result.data?.extras))
     }

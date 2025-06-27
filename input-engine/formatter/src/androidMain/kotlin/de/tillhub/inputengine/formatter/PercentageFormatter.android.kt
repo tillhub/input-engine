@@ -8,7 +8,7 @@ actual object PercentageFormatter {
     actual fun format(
         percent: PercentIO,
         minimumFractionDigits: Int,
-        locale: String
+        locale: String,
     ): String {
         val localeObj = Locale.forLanguageTag(locale)
         val format = NumberFormat.getPercentInstance(localeObj).apply {

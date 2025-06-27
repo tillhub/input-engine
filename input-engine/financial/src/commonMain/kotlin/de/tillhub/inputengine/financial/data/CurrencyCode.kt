@@ -2,9 +2,7 @@ package de.tillhub.inputengine.financial.data
 
 import de.tillhub.inputengine.financial.helper.isLatinLetter
 import de.tillhub.inputengine.financial.helper.serializer.CurrencyCodeSerializer
-import kotlinx.serialization.*
-import kotlinx.serialization.descriptors.*
-import kotlinx.serialization.encoding.*
+import kotlinx.serialization.Serializable
 
 /**
  * An ISO 4217 3-letter currency code, for example `EUR` or `USD`.
@@ -34,9 +32,8 @@ class CurrencyCode(val value: String) {
 
         private fun isValidFormat(string: String) =
             string.length == 3 &&
-                    string[0].isLatinLetter() &&
-                    string[1].isLatinLetter() &&
-                    string[2].isLatinLetter()
+                string[0].isLatinLetter() &&
+                string[1].isLatinLetter() &&
+                string[2].isLatinLetter()
     }
 }
-

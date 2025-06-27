@@ -6,7 +6,7 @@ import de.tillhub.inputengine.ui.amount.AmountInputPresenter
 
 @Composable
 actual fun rememberAmountInputLauncher(
-    onResult: (AmountInputResult) -> Unit
+    onResult: (AmountInputResult) -> Unit,
 ): AmountInputContract = remember {
     val presenter = AmountInputPresenter(onResult)
 
@@ -16,4 +16,3 @@ actual fun rememberAmountInputLauncher(
         }
     }
 }
-

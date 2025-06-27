@@ -35,7 +35,7 @@ class PinInputContractTest {
 
         composeTestRule.runOnIdle {
             val expected = PinInputResult.Success(
-                mapOf("pinDigits" to "1234", "entrySource" to "keypad")
+                mapOf("pinDigits" to "1234", "entrySource" to "keypad"),
             )
             assertEquals(expected, result)
         }
