@@ -26,7 +26,7 @@ class NumberButtonTest {
         }
 
         onNodeWithText("7").assertIsDisplayed()
-        onNodeWithContentDescription("number_button_7").performClick()
+        onNodeWithContentDescription("Number 7").performClick()
 
         assertEquals(NumpadKey.SingleDigit(Digit.from(7)), clickedKey)
     }

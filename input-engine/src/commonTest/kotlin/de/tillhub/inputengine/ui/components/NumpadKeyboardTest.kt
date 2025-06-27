@@ -32,20 +32,20 @@ class NumberKeyboardTest {
         val digits = listOf(7, 8, 9, 4, 5, 6, 1, 2, 3)
 
         digits.forEach { digit ->
-            onNodeWithContentDescription("number_button_$digit")
+            onNodeWithContentDescription("Number $digit")
                 .assertIsDisplayed()
                 .performClick()
         }
 
-        onNodeWithContentDescription("button_left_action")
+        onNodeWithContentDescription("Decimal separator and Negative sign")
             .assertIsDisplayed()
             .performClick()
 
-        onNodeWithContentDescription("number_button_0")
+        onNodeWithContentDescription("Number 0")
             .assertIsDisplayed()
             .performClick()
 
-        onNodeWithContentDescription("button_delete")
+        onNodeWithContentDescription("Delete")
             .assertIsDisplayed()
             .performClick()
 
@@ -71,12 +71,12 @@ class NumberKeyboardTest {
 
         val expectedDigitOrder = listOf(7, 8, 9, 4, 5, 6, 1, 2, 3, 0)
 
-        val actualOrder = onAllNodes(hasContentDescriptionPrefix("number_button_"))
+        val actualOrder = onAllNodes(hasContentDescriptionPrefix("Number "))
             .fetchSemanticsNodes()
             .mapNotNull {
                 it.config[SemanticsProperties.ContentDescription]
                     .firstOrNull()
-                    ?.removePrefix("number_button_")
+                    ?.removePrefix("Number ")
                     ?.toIntOrNull()
             }
 
@@ -90,22 +90,19 @@ class NumberKeyboardTest {
         setContent {
             NumberKeyboard(
                 onClick = { actions.add(it) },
-                showDecimalSeparator = true,
                 showNegative = true
             )
         }
 
-        // Left action button (decimal separator)
-        onNodeWithContentDescription("button_left_action")
+        onNodeWithContentDescription("Negative sign")
             .assertIsDisplayed()
             .performClick()
 
-        // Delete button
-        onNodeWithContentDescription("button_delete")
+        onNodeWithContentDescription("Delete")
             .assertIsDisplayed()
             .performClick()
 
-        assertEquals(listOf(NumpadKey.DecimalSeparator, NumpadKey.Delete), actions)
+        assertEquals(listOf(NumpadKey.Negate, NumpadKey.Delete), actions)
     }
 }
 
@@ -119,4 +116,3 @@ fun hasContentDescriptionPrefix(prefix: String): SemanticsMatcher {
         }
     }
 }
-

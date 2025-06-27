@@ -31,6 +31,9 @@ internal fun NumberKeyboard(
     showNegative: Boolean = false,
     modifier: Modifier = Modifier
 ) {
+    val (leftActionContentDescription, leftActionText) =
+        leftActionLabel(showDecimalSeparator, showNegative)
+
     Column(
         modifier = modifier,
         horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
@@ -86,36 +89,26 @@ internal fun NumberKeyboard(
                     }
                 },
                 modifier = Modifier
-                    .semantics { contentDescription = "button_left_action" }
+                    .semantics { contentDescription = leftActionContentDescription }
                     .weight(1f)
                     .aspectRatio(BUTTON_ASPECT_RATIO)
                     .padding(6.dp)
             ) {
                 Text(
-                    text = when {
-                        showDecimalSeparator && showNegative -> {
-                            "${DecimalFormatter.decimalSeparator}\n${
-                                stringResource(Res.string.numpad_button_negative)
-                            }"
-                        }
-
-                        showDecimalSeparator -> DecimalFormatter.decimalSeparator.toString()
-                        showNegative -> stringResource(Res.string.numpad_button_negative)
-                        else -> stringResource(Res.string.numpad_button_clear)
-                    },
+                    text = leftActionText,
                     fontSize = 14.sp,
                     color = GalacticBlue,
                 )
             }
 
             NumberButton(number = Digit.ZERO, onClick = onClick, modifier = Modifier.weight(1f)
-                    .semantics { contentDescription = "number_button_0" })
+                    .semantics { contentDescription = "Number 0" })
 
             DoubleActionButton(
                 onClick = { onClick(NumpadKey.Delete) },
                 onLongClick = { onClick(NumpadKey.Clear) },
                 modifier = Modifier
-                    .semantics { contentDescription = "button_delete" }
+                    .semantics { contentDescription = "Delete" }
                     .weight(1f)
                     .aspectRatio(BUTTON_ASPECT_RATIO)
                     .padding(6.dp)
@@ -127,6 +120,31 @@ internal fun NumberKeyboard(
                     fontWeight = FontWeight.Bold
                 )
             }
+        }
+    }
+}
+@Composable
+private fun leftActionLabel(
+    showDecimalSeparator: Boolean,
+    showNegative: Boolean
+): Pair<String, String> {
+    return when {
+        showDecimalSeparator && showNegative -> {
+            val decimal = DecimalFormatter.decimalSeparator.toString()
+            val negative = stringResource(Res.string.numpad_button_negative)
+            "Decimal separator and Negative sign" to "$decimal\n$negative"
+        }
+        showDecimalSeparator -> {
+            val decimal = DecimalFormatter.decimalSeparator.toString()
+            "Decimal separator" to decimal
+        }
+        showNegative -> {
+            val negative = stringResource(Res.string.numpad_button_negative)
+            "Negative sign" to negative
+        }
+        else -> {
+            val clear = stringResource(Res.string.numpad_button_clear)
+            "Clear" to clear
         }
     }
 }

@@ -26,13 +26,12 @@ internal fun NumberButton(
     onClick: (NumpadKey) -> Unit,
     number: Digit
 ) {
-    println("=======Number: ${number.value}")
     OutlinedButton(
         onClick = {
             onClick(NumpadKey.SingleDigit(Digit.from(number.value)))
         },
         modifier = modifier
-            .semantics { contentDescription = "number_button_${number.value}" }
+            .semantics { contentDescription = "Number ${number.value}" }
             .aspectRatio(BUTTON_ASPECT_RATIO)
             .padding(6.dp),
         shape = RoundedCornerShape(2.dp),
