@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -60,8 +62,9 @@ internal fun NumberKeyboard(
         ) {
             NumberButton(number = Digit.ONE, onClick = onClick, modifier = Modifier.weight(1f))
             NumberButton(number = Digit.TWO, onClick = onClick, modifier = Modifier.weight(1f))
-            NumberButton(number = Digit.ZERO, onClick = onClick, modifier = Modifier.weight(1f))
+            NumberButton(number = Digit.THREE, onClick = onClick, modifier = Modifier.weight(1f))
         }
+
         Row(
             modifier = Modifier
                 .padding(start = 24.dp, end = 24.dp)
@@ -83,6 +86,7 @@ internal fun NumberKeyboard(
                     }
                 },
                 modifier = Modifier
+                    .semantics { contentDescription = "button_left_action" }
                     .weight(1f)
                     .aspectRatio(BUTTON_ASPECT_RATIO)
                     .padding(6.dp)
@@ -91,14 +95,11 @@ internal fun NumberKeyboard(
                     text = when {
                         showDecimalSeparator && showNegative -> {
                             "${DecimalFormatter.decimalSeparator}\n${
-                                stringResource(
-                                    Res.string.numpad_button_negative
-                                )
+                                stringResource(Res.string.numpad_button_negative)
                             }"
                         }
-                        showDecimalSeparator -> {
-                            DecimalFormatter.decimalSeparator.toString()
-                        }
+
+                        showDecimalSeparator -> DecimalFormatter.decimalSeparator.toString()
                         showNegative -> stringResource(Res.string.numpad_button_negative)
                         else -> stringResource(Res.string.numpad_button_clear)
                     },
@@ -106,11 +107,15 @@ internal fun NumberKeyboard(
                     color = GalacticBlue,
                 )
             }
-            NumberButton(number = Digit.ZERO, onClick = onClick, modifier = Modifier.weight(1f))
+
+            NumberButton(number = Digit.ZERO, onClick = onClick, modifier = Modifier.weight(1f)
+                    .semantics { contentDescription = "number_button_0" })
+
             DoubleActionButton(
                 onClick = { onClick(NumpadKey.Delete) },
                 onLongClick = { onClick(NumpadKey.Clear) },
                 modifier = Modifier
+                    .semantics { contentDescription = "button_delete" }
                     .weight(1f)
                     .aspectRatio(BUTTON_ASPECT_RATIO)
                     .padding(6.dp)

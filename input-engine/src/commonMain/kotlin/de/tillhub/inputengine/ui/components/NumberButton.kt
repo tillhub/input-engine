@@ -10,6 +10,8 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.tillhub.inputengine.financial.data.Digit
@@ -24,11 +26,13 @@ internal fun NumberButton(
     onClick: (NumpadKey) -> Unit,
     number: Digit
 ) {
+    println("=======Number: ${number.value}")
     OutlinedButton(
         onClick = {
             onClick(NumpadKey.SingleDigit(Digit.from(number.value)))
         },
         modifier = modifier
+            .semantics { contentDescription = "number_button_${number.value}" }
             .aspectRatio(BUTTON_ASPECT_RATIO)
             .padding(6.dp),
         shape = RoundedCornerShape(2.dp),
@@ -43,4 +47,5 @@ internal fun NumberButton(
         )
     }
 }
+
 const val BUTTON_ASPECT_RATIO = 1.25f
