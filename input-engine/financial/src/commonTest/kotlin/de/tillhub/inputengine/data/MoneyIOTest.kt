@@ -5,9 +5,9 @@ import com.ionspin.kotlin.bignum.integer.BigInteger
 import com.ionspin.kotlin.bignum.integer.toBigInteger
 import de.tillhub.inputengine.financial.data.Digit
 import de.tillhub.inputengine.financial.data.MoneyIO
-import de.tillhub.inputengine.helper.EUR
-import de.tillhub.inputengine.helper.eur
-import de.tillhub.inputengine.helper.usd
+import de.tillhub.inputengine.financial.helper.EUR
+import de.tillhub.inputengine.financial.helper.eur
+import de.tillhub.inputengine.financial.helper.usd
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
