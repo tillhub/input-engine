@@ -54,4 +54,3 @@ class SubmitButtonTest {
         verify(mode = VerifyMode.not) { onClickMock() }
     }
 }
-

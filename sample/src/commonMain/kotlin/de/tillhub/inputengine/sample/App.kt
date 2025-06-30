@@ -65,7 +65,7 @@ fun App() {
 
                 is AmountInputResult.Canceled -> Unit
             }
-        }
+        },
     )
 
     val percentageInputLauncher = rememberPercentageInputLauncher(
@@ -74,7 +74,7 @@ fun App() {
                 PercentageInputResult.Canceled -> "Percent action canceled"
                 is PercentageInputResult.Success -> it.percent.value.toString()
             }
-        }
+        },
     )
 
     val pinInputLauncher = rememberPinInputLauncher(
@@ -83,7 +83,7 @@ fun App() {
                 PinInputResult.Canceled -> "Pin action canceled"
                 is PinInputResult.Success -> "PIN entry successful"
             }
-        }
+        },
     )
     val quantityInputLauncher = rememberQuantityInputLauncher(
         onResult = {
@@ -91,7 +91,7 @@ fun App() {
                 QuantityInputResult.Canceled -> "Quantity action canceled"
                 is QuantityInputResult.Success -> it.quantity.toString()
             }
-        }
+        },
     )
     InputEngineTheme {
         Box(
@@ -99,14 +99,14 @@ fun App() {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(WindowInsets.systemBars.asPaddingValues())
-                .padding(16.dp)
+                .padding(16.dp),
         ) {
             Column {
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 24.dp),
-                    elevation = CardDefaults.cardElevation(4.dp)
+                    elevation = CardDefaults.cardElevation(4.dp),
                 ) {
                     Text(
                         modifier = Modifier
@@ -116,7 +116,7 @@ fun App() {
                             .wrapContentWidth(),
                         text = "Results : ${result.value}",
                         fontSize = 20.sp,
-                        style = MaterialTheme.typography.titleMedium
+                        style = MaterialTheme.typography.titleMedium,
                     )
                 }
 
@@ -141,7 +141,7 @@ fun App() {
                             amount = MoneyIO.of(100, eur),
                             amountMin = MoneyParam.Enable(MoneyIO.of(-30_00, eur)),
                             amountMax = MoneyParam.Enable(MoneyIO.of(50_00, eur)),
-                        )
+                        ),
                     )
                     currentScreen = null
                 }
@@ -152,8 +152,8 @@ fun App() {
                             percent = PercentIO.ZERO,
                             percentageMin = PercentageParam.Enable(PercentIO.ZERO),
                             percentageMax = PercentageParam.Enable(PercentIO.WHOLE),
-                            allowsZero = false
-                        )
+                            allowsZero = false,
+                        ),
                     )
                     currentScreen = null
                 }
@@ -162,8 +162,8 @@ fun App() {
                     pinInputLauncher.launchPinInput(
                         request = PinInputRequest(
                             pin = "9876",
-                            extras = mapOf("argPin" to "hint for pin")
-                        )
+                            extras = mapOf("argPin" to "hint for pin"),
+                        ),
                     )
                     currentScreen = null
                 }
@@ -174,7 +174,7 @@ fun App() {
                             quantity = QuantityIO.ZERO,
                             minQuantity = QuantityParam.Enable(-QuantityIO.of(50)),
                             maxQuantity = QuantityParam.Enable(QuantityIO.of(50)),
-                            quantityHint = QuantityParam.Enable(QuantityIO.of(BigDecimal.TEN))
+                            quantityHint = QuantityParam.Enable(QuantityIO.of(BigDecimal.TEN)),
                         ),
                     )
                 }
@@ -188,12 +188,12 @@ fun App() {
 @Composable
 fun InputSection(
     label: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Column {
         OutlinedButton(
             modifier = Modifier.fillMaxWidth(),
-            onClick = onClick
+            onClick = onClick,
         ) {
             Text(text = label)
         }
@@ -203,4 +203,3 @@ fun InputSection(
 enum class InputScreen {
     Money, Pin, Quantity, Percentage
 }
-

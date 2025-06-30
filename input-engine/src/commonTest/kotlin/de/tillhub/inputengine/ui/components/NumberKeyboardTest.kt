@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalTestApi::class)
-
 package de.tillhub.inputengine.ui.components
 
 import androidx.compose.ui.semantics.SemanticsProperties
@@ -18,6 +16,7 @@ import dev.mokkery.verify
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@OptIn(ExperimentalTestApi::class)
 class NumberKeyboardTest {
 
     internal interface NumpadEvents {
@@ -30,7 +29,7 @@ class NumberKeyboardTest {
 
         setContent {
             NumberKeyboard(
-                onClick = events::onClick
+                onClick = events::onClick,
             )
         }
         onNodeWithText("1").assertIsDisplayed()
@@ -116,7 +115,7 @@ class NumberKeyboardTest {
         setContent {
             NumberKeyboard(
                 showNegative = true,
-                onClick = events::onClick
+                onClick = events::onClick,
             )
         }
 
@@ -149,7 +148,7 @@ class NumberKeyboardTest {
         setContent {
             NumberKeyboard(
                 showDecimalSeparator = true,
-                onClick = events::onClick
+                onClick = events::onClick,
             )
         }
 

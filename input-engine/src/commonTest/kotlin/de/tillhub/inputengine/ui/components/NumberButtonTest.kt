@@ -33,4 +33,3 @@ class NumberButtonTest {
         verify { onClickMock(NumpadKey.SingleDigit(Digit.from(7))) }
     }
 }
-
