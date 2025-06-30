@@ -10,7 +10,7 @@ import com.ionspin.kotlin.bignum.integer.toBigInteger
 import de.tillhub.inputengine.financial.data.Digit
 import de.tillhub.inputengine.financial.helper.DigitBuilder
 
-internal interface NumberInputControllerContract {
+internal interface NumberInputController {
     val minorDigits: List<Digit>
     fun addDigit(digit: Digit)
     fun deleteLast()
@@ -23,16 +23,15 @@ internal interface NumberInputControllerContract {
     fun value(): Number
 }
 
-internal class NumberInputController(
+internal class NumberInputControllerImpl(
     private val maxMajorDigits: Int = 8,
     private val maxMinorDigits: Int = 4,
-) : NumberInputControllerContract {
+) : NumberInputController {
     private var switchToMinorDigits = false
     private var switchToNegate = false
     private val _majorDigits: MutableList<Digit> = mutableListOf(Digit.ZERO)
     private val _minorDigits: MutableList<Digit> = mutableListOf()
 
-    internal val majorDigits: List<Digit> get() = _majorDigits
     override val minorDigits: List<Digit> get() = _minorDigits
 
     override fun setValue(majorDigits: List<Digit>, minorDigits: List<Digit>, isNegative: Boolean) {

@@ -5,24 +5,28 @@ import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
+import dev.mokkery.MockMode
+import dev.mokkery.mock
+import dev.mokkery.verify
 import kotlin.test.Test
-import kotlin.test.assertTrue
 
 @OptIn(ExperimentalTestApi::class)
 class ToolbarTest {
 
     @Test
     fun testToolbar() = runComposeUiTest {
-        var clicked = false
+        val onClickMock = mock<() -> Unit>(mode = MockMode.autofill)
+
         setContent {
             Toolbar(
                 title = "Toolbar title",
-                onClick = { clicked = true },
+                onClick = onClickMock,
             )
         }
 
         onNodeWithContentDescription("toolbarTitle").assertTextEquals("Toolbar title")
         onNodeWithContentDescription("toolbarIcon").performClick()
-        assertTrue(clicked)
+
+        verify { onClickMock() }
     }
 }

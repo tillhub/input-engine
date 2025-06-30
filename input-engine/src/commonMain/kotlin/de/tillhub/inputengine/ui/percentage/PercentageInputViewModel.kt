@@ -8,14 +8,14 @@ import de.tillhub.inputengine.financial.data.PercentIO
 import de.tillhub.inputengine.financial.param.PercentageParam
 import de.tillhub.inputengine.formatter.PercentageFormatter
 import de.tillhub.inputengine.helper.NumberInputController
-import de.tillhub.inputengine.helper.NumberInputControllerContract
+import de.tillhub.inputengine.helper.NumberInputControllerImpl
 import de.tillhub.inputengine.helper.NumpadKey
 import de.tillhub.inputengine.helper.defaultLocale
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 internal class PercentageInputViewModel(
-    private val inputController: NumberInputControllerContract = NumberInputController(maxMajorDigits = 3),
+    private val inputController: NumberInputController = NumberInputControllerImpl(maxMajorDigits = 3),
     private val locale: String = defaultLocale(),
 ) : ViewModel() {
 

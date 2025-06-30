@@ -11,7 +11,7 @@ import de.tillhub.inputengine.financial.helper.getMinorDigits
 import de.tillhub.inputengine.financial.param.QuantityParam
 import de.tillhub.inputengine.formatter.QuantityFormatter
 import de.tillhub.inputengine.helper.NumberInputController
-import de.tillhub.inputengine.helper.NumberInputControllerContract
+import de.tillhub.inputengine.helper.NumberInputControllerImpl
 import de.tillhub.inputengine.helper.NumpadKey
 import de.tillhub.inputengine.helper.defaultLocale
 import de.tillhub.inputengine.ui.theme.MagneticGrey
@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 internal class QuantityInputViewModel(
-    private val inputController: NumberInputControllerContract = NumberInputController(maxMajorDigits = 5),
+    private val inputController: NumberInputController = NumberInputControllerImpl(maxMajorDigits = 5),
     private val locale: String = defaultLocale(),
 ) : ViewModel() {
 

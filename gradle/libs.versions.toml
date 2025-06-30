@@ -16,6 +16,7 @@ lifecycleViewmodelCompose = "2.9.1"
 runner = "1.6.2"
 spotless = "6.21.0"
 uiTestJunit4 = "1.6.1"
+mokkery = "2.8.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
@@ -43,3 +44,4 @@ composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "composeMul
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version = "2.1.21" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+mokkery = { id = "dev.mokkery", version.ref = "mokkery" }

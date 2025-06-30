@@ -15,7 +15,7 @@ class NumberInputControllerTest {
 
     @BeforeTest
     fun setUp() {
-        target = NumberInputController()
+        target = NumberInputControllerImpl()
     }
 
     @Test

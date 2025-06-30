@@ -8,26 +8,29 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
 import de.tillhub.inputengine.financial.data.Digit
 import de.tillhub.inputengine.helper.NumpadKey
+import dev.mokkery.MockMode
+import dev.mokkery.mock
+import dev.mokkery.verify
 import kotlin.test.Test
-import kotlin.test.assertEquals
 
 @OptIn(ExperimentalTestApi::class)
 class NumberButtonTest {
 
     @Test
     fun testNumberButtonClick_sendsCorrectDigit() = runComposeUiTest {
-        var clickedKey: NumpadKey? = null
+        val onClickMock = mock<(NumpadKey) -> Unit>(mode = MockMode.autofill)
 
         setContent {
             NumberButton(
                 number = Digit.from(7),
-                onClick = { clickedKey = it },
+                onClick = onClickMock,
             )
         }
 
         onNodeWithText("7").assertIsDisplayed()
         onNodeWithContentDescription("Number 7").performClick()
 
-        assertEquals(NumpadKey.SingleDigit(Digit.from(7)), clickedKey)
+        verify { onClickMock(NumpadKey.SingleDigit(Digit.from(7))) }
     }
 }
+

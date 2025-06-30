@@ -1,28 +1,33 @@
 package de.tillhub.inputengine.ui.percentage
 
-import com.ionspin.kotlin.bignum.BigNumber
 import de.tillhub.inputengine.contract.PercentageInputRequest
 import de.tillhub.inputengine.financial.data.Digit
 import de.tillhub.inputengine.financial.data.PercentIO
 import de.tillhub.inputengine.financial.param.PercentageParam
-import de.tillhub.inputengine.helper.NumberInputControllerContract
+import de.tillhub.inputengine.helper.NumberInputController
 import de.tillhub.inputengine.helper.NumpadKey
+import dev.mokkery.MockMode
+import dev.mokkery.answering.returns
+import dev.mokkery.every
+import dev.mokkery.matcher.any
+import dev.mokkery.mock
+import dev.mokkery.verify
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 class PercentageInputViewModelTest {
 
-    private lateinit var inputController: FakeNumberInputController
+    private lateinit var inputController: NumberInputController
     private lateinit var viewModel: PercentageInputViewModel
 
     @BeforeTest
     fun setup() {
-        inputController = FakeNumberInputController().apply {
-            valueOverride = 25.0
+        inputController = mock<NumberInputController>(mode = MockMode.autofill) {
+            every { value() } returns 25.0
+            every { minorDigits } returns emptyList()
         }
         viewModel = PercentageInputViewModel(inputController, LOCALE)
     }
@@ -65,6 +70,13 @@ class PercentageInputViewModelTest {
 
     @Test
     fun input_callsControllerAndUpdatesState() = runTest {
+        // Arrange: set up expectations for input controller interactions
+        every { inputController.clear() } returns Unit
+        every { inputController.switchToMinor(any()) } returns Unit
+        every { inputController.deleteLast() } returns Unit
+        every { inputController.addDigit(any()) } returns Unit
+        every { inputController.value() } returns 25.0
+
         viewModel.init(
             PercentageInputRequest(
                 percent = PercentIO.of(20),
@@ -74,17 +86,17 @@ class PercentageInputViewModelTest {
         )
 
         viewModel.input(NumpadKey.Clear)
-        assertTrue(inputController.clearCalled)
+        verify { inputController.clear() }
 
         viewModel.input(NumpadKey.DecimalSeparator)
-        assertTrue(inputController.switchToMinorCalled)
+        verify { inputController.switchToMinor(true) }
 
         viewModel.input(NumpadKey.Delete)
-        assertTrue(inputController.deleteCalled)
+        verify { inputController.deleteLast() }
 
         viewModel.input(NumpadKey.SingleDigit(Digit.ONE))
-        assertTrue(inputController.clearCalledAfterInit)
-        assertEquals(Digit.ONE, inputController.lastAddedDigit)
+        verify { inputController.clear() }
+        verify { inputController.addDigit(Digit.ONE) }
 
         assertEquals(
             PercentageInputData(PercentIO.of(25), "25 %", isValid = true),
@@ -94,7 +106,7 @@ class PercentageInputViewModelTest {
 
     @Test
     fun input_maxOverreached_clampsToMax() = runTest {
-        inputController.valueOverride = 105.0
+        every { inputController.value() } returns 105.0
 
         viewModel.init(
             PercentageInputRequest(
@@ -111,39 +123,7 @@ class PercentageInputViewModelTest {
             viewModel.percentageInput.first(),
         )
     }
-    class FakeNumberInputController : NumberInputControllerContract {
-        var clearCalled = false
-        var clearCalledAfterInit = false
-        var deleteCalled = false
-        var switchToMinorCalled = false
-        var lastAddedDigit: Digit? = null
-        var valueOverride: Number = 0
 
-        override fun clear() {
-            clearCalled = true
-            clearCalledAfterInit = true
-        }
-
-        override fun switchToMinor(enabled: Boolean) {
-            switchToMinorCalled = enabled
-        }
-
-        override fun switchNegate() {}
-        override fun deleteLast() {
-            deleteCalled = true
-        }
-
-        override fun addDigit(digit: Digit) {
-            lastAddedDigit = digit
-        }
-
-        override fun setValue(majorDigits: List<Digit>, minorDigits: List<Digit>, isNegative: Boolean) {}
-        override fun setValue(number: Number) {}
-        override fun setValue(number: BigNumber<*>) {}
-
-        override val minorDigits: List<Digit> = emptyList()
-        override fun value(): Number = valueOverride
-    }
     companion object {
         const val LOCALE = "de"
     }

@@ -1,3 +1,4 @@
+package de.tillhub.inputengine.ui.components
 
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
@@ -7,40 +8,41 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
-import de.tillhub.inputengine.ui.components.SubmitButton
+import dev.mokkery.MockMode
+import dev.mokkery.mock
+import dev.mokkery.verify
+import dev.mokkery.verify.VerifyMode
 import kotlin.test.Test
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 @OptIn(ExperimentalTestApi::class)
 class SubmitButtonTest {
 
     @Test
     fun testEnabledSubmitButton() = runComposeUiTest {
-        var clicked = false
+        val onClickMock = mock<() -> Unit>(mode = MockMode.autofill)
 
         setContent {
             SubmitButton(
                 isEnable = true,
-                onClick = { clicked = true },
+                onClick = onClickMock,
             )
         }
 
         onNodeWithContentDescription("submitButton").assertIsEnabled()
-        onNodeWithText("Submit").assertIsDisplayed() // Replace with raw text if R.string not accessible
+        onNodeWithText("Submit").assertIsDisplayed()
         onNodeWithContentDescription("submitButton").performClick()
 
-        assertTrue(clicked)
+        verify { onClickMock() }
     }
 
     @Test
     fun testDisabledSubmitButton() = runComposeUiTest {
-        var clicked = false
+        val onClickMock = mock<() -> Unit>(mode = MockMode.autofill)
 
         setContent {
             SubmitButton(
                 isEnable = false,
-                onClick = { clicked = true },
+                onClick = onClickMock,
             )
         }
 
@@ -48,6 +50,8 @@ class SubmitButtonTest {
         onNodeWithText("Submit").assertIsDisplayed()
         onNodeWithContentDescription("submitButton").performClick()
 
-        assertFalse(clicked)
+        // No click should be registered
+        verify(mode = VerifyMode.not) { onClickMock() }
     }
 }
+
