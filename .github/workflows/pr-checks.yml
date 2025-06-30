@@ -23,7 +23,7 @@ jobs:
               uses: android-actions/setup-android@v3
 
             - name: Run Detekt Code Analysis
-              run: ./gradlew detekt
+              run: ./gradlew spotlessCheck
 
             - name: Run Unit tests
               run: ./gradlew testDebug
