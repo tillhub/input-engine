@@ -56,9 +56,9 @@ internal fun QuantityInputScreen(
                 )
 
                 NumberKeyboard(
-                    onClick = viewModel::processKey,
                     showDecimalSeparator = viewModel.allowDecimal,
                     showNegative = viewModel.allowNegative,
+                    onClick = viewModel::processKey,
                 )
 
                 SubmitButton(displayData.isValid) {

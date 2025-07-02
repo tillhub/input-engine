@@ -27,15 +27,16 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun NumberKeyboard(
-    onClick: (NumpadKey) -> Unit = {},
+    modifier: Modifier = Modifier,
     showDecimalSeparator: Boolean = false,
     showNegative: Boolean = false,
-    modifier: Modifier = Modifier,
+    decimalSeparator: String = DecimalFormatter.decimalSeparator.toString(),
+    onClick: (NumpadKey) -> Unit = {},
 ) {
     val (leftActionContentDescription, leftActionText) = getLeftActionLabel(
         showDecimalSeparator,
         showNegative,
-        DecimalFormatter.decimalSeparator.toString(),
+        decimalSeparator,
         stringResource(Res.string.numpad_button_negative),
         stringResource(Res.string.numpad_button_clear),
     )
@@ -50,18 +51,54 @@ internal fun NumberKeyboard(
                 .padding(top = 16.dp, start = 24.dp, end = 24.dp)
                 .fillMaxWidth(),
         ) {
-            NumberButton(number = Digit.SEVEN, onClick = onClick, modifier = Modifier.weight(1f))
-            NumberButton(number = Digit.EIGHT, onClick = onClick, modifier = Modifier.weight(1f))
-            NumberButton(number = Digit.NINE, onClick = onClick, modifier = Modifier.weight(1f))
+            NumberButton(
+                modifier = Modifier.weight(1f).semantics {
+                    contentDescription = "Number button 7"
+                },
+                number = Digit.SEVEN,
+                onClick = onClick
+            )
+            NumberButton(
+                modifier = Modifier.weight(1f).semantics {
+                    contentDescription = "Number button 8"
+                },
+                number = Digit.EIGHT,
+                onClick = onClick,
+            )
+            NumberButton(
+                modifier = Modifier.weight(1f).semantics {
+                    contentDescription = "Number button 9"
+                },
+                number = Digit.NINE,
+                onClick = onClick,
+            )
         }
         Row(
             modifier = Modifier
                 .padding(start = 24.dp, end = 24.dp)
                 .fillMaxWidth(),
         ) {
-            NumberButton(number = Digit.FOUR, onClick = onClick, modifier = Modifier.weight(1f))
-            NumberButton(number = Digit.FIVE, onClick = onClick, modifier = Modifier.weight(1f))
-            NumberButton(number = Digit.SIX, onClick = onClick, modifier = Modifier.weight(1f))
+            NumberButton(
+                modifier = Modifier.weight(1f).semantics {
+                    contentDescription = "Number button 4"
+                },
+                number = Digit.FOUR,
+                onClick = onClick,
+            )
+            NumberButton(
+                modifier = Modifier.weight(1f).semantics {
+                    contentDescription = "Number button 5"
+                },
+                number = Digit.FIVE,
+                onClick = onClick,
+            )
+            NumberButton(
+                modifier = Modifier.weight(1f).semantics {
+                    contentDescription = "Number button 6"
+                },
+                number = Digit.SIX,
+                onClick = onClick,
+            )
         }
 
         Row(
@@ -69,9 +106,27 @@ internal fun NumberKeyboard(
                 .padding(start = 24.dp, end = 24.dp)
                 .fillMaxWidth(),
         ) {
-            NumberButton(number = Digit.ONE, onClick = onClick, modifier = Modifier.weight(1f))
-            NumberButton(number = Digit.TWO, onClick = onClick, modifier = Modifier.weight(1f))
-            NumberButton(number = Digit.THREE, onClick = onClick, modifier = Modifier.weight(1f))
+            NumberButton(
+                modifier = Modifier.weight(1f).semantics {
+                    contentDescription = "Number button 1"
+                },
+                number = Digit.ONE,
+                onClick = onClick,
+            )
+            NumberButton(
+                modifier = Modifier.weight(1f).semantics {
+                    contentDescription = "Number button 2"
+                },
+                number = Digit.TWO,
+                onClick = onClick,
+            )
+            NumberButton(
+                modifier = Modifier.weight(1f).semantics {
+                    contentDescription = "Number button 3"
+                },
+                number = Digit.THREE,
+                onClick = onClick,
+            )
         }
 
         Row(
@@ -81,7 +136,6 @@ internal fun NumberKeyboard(
         ) {
             DoubleActionButton(
                 modifier = Modifier
-                    .semantics { contentDescription = leftActionContentDescription }
                     .weight(1f)
                     .aspectRatio(BUTTON_ASPECT_RATIO)
                     .padding(6.dp),
@@ -101,6 +155,9 @@ internal fun NumberKeyboard(
                 },
             ) {
                 Text(
+                    modifier = Modifier.semantics {
+                        contentDescription = leftActionContentDescription
+                    },
                     text = leftActionText,
                     fontSize = 14.sp,
                     color = GalacticBlue,
@@ -108,22 +165,25 @@ internal fun NumberKeyboard(
             }
 
             NumberButton(
+                modifier = Modifier.weight(1f).semantics {
+                    contentDescription = "Number button 0"
+                },
                 number = Digit.ZERO,
                 onClick = onClick,
-                modifier = Modifier.weight(1f)
-                    .semantics { contentDescription = "Number 0" },
             )
 
             DoubleActionButton(
                 onClick = { onClick(NumpadKey.Delete) },
                 onLongClick = { onClick(NumpadKey.Clear) },
                 modifier = Modifier
-                    .semantics { contentDescription = "Delete" }
                     .weight(1f)
                     .aspectRatio(BUTTON_ASPECT_RATIO)
                     .padding(6.dp),
             ) {
                 Text(
+                    modifier = Modifier.semantics {
+                        contentDescription = "Delete"
+                    },
                     text = stringResource(resource = Res.string.numpad_button_delete),
                     fontSize = 24.sp,
                     color = GalacticBlue,

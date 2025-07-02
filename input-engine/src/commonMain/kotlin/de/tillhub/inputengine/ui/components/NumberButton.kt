@@ -23,15 +23,14 @@ import de.tillhub.inputengine.theme.buttonElevation
 @Composable
 internal fun NumberButton(
     modifier: Modifier = Modifier,
-    onClick: (NumpadKey) -> Unit,
     number: Digit,
+    onClick: (NumpadKey) -> Unit,
 ) {
     OutlinedButton(
         onClick = {
             onClick(NumpadKey.SingleDigit(Digit.from(number.value)))
         },
         modifier = modifier
-            .semantics { contentDescription = "Number ${number.value}" }
             .aspectRatio(BUTTON_ASPECT_RATIO)
             .padding(6.dp),
         shape = RoundedCornerShape(2.dp),
