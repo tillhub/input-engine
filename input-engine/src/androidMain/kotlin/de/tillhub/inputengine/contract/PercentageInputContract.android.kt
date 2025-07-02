@@ -8,9 +8,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
-import de.tillhub.inputengine.financial.data.PercentIO
-import de.tillhub.inputengine.helper.ExtraKeys
-import de.tillhub.inputengine.ui.percentage.PercentageInputActivity
+import de.tillhub.inputengine.data.PercentIO
+import de.tillhub.inputengine.domain.ExtraKeys
+import de.tillhub.inputengine.ui.PercentageInputActivity
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.jetbrains.annotations.VisibleForTesting
@@ -52,7 +52,7 @@ internal fun parsePercentageInputResult(
 
     val extrasMap = extras.getBundle(ExtraKeys.EXTRAS_ARGS)
         ?.keySet()
-        ?.associateWith { key -> extras.getBundle(ExtraKeys.EXTRAS_ARGS)!!.getInt(key) }
+        ?.associateWith { key -> extras.getBundle(ExtraKeys.EXTRAS_ARGS)!!.getString(key)!! }
         .orEmpty()
 
     return PercentageInputResult.Success(

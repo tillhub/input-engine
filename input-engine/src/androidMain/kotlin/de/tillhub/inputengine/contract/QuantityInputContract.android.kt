@@ -8,9 +8,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
-import de.tillhub.inputengine.financial.data.QuantityIO
-import de.tillhub.inputengine.helper.ExtraKeys
-import de.tillhub.inputengine.ui.quantity.QuantityInputActivity
+import de.tillhub.inputengine.data.QuantityIO
+import de.tillhub.inputengine.domain.ExtraKeys
+import de.tillhub.inputengine.ui.QuantityInputActivity
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.jetbrains.annotations.VisibleForTesting
@@ -53,7 +53,7 @@ internal fun parseQuantityInputResult(
 
     val extrasMap = extras.getBundle(ExtraKeys.EXTRAS_ARGS)
         ?.keySet()
-        ?.associateWith { key -> extras.getBundle(ExtraKeys.EXTRAS_ARGS)!!.getInt(key) }
+        ?.associateWith { key -> extras.getBundle(ExtraKeys.EXTRAS_ARGS)!!.getString(key)!! }
         .orEmpty()
 
     return QuantityInputResult.Success(

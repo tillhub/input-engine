@@ -39,13 +39,13 @@ import de.tillhub.inputengine.contract.rememberAmountInputLauncher
 import de.tillhub.inputengine.contract.rememberPercentageInputLauncher
 import de.tillhub.inputengine.contract.rememberPinInputLauncher
 import de.tillhub.inputengine.contract.rememberQuantityInputLauncher
-import de.tillhub.inputengine.financial.data.CurrencyIO
-import de.tillhub.inputengine.financial.data.MoneyIO
-import de.tillhub.inputengine.financial.data.PercentIO
-import de.tillhub.inputengine.financial.data.QuantityIO
-import de.tillhub.inputengine.financial.param.MoneyParam
-import de.tillhub.inputengine.financial.param.PercentageParam
-import de.tillhub.inputengine.financial.param.QuantityParam
+import de.tillhub.inputengine.data.CurrencyIO
+import de.tillhub.inputengine.data.MoneyIO
+import de.tillhub.inputengine.data.PercentIO
+import de.tillhub.inputengine.data.QuantityIO
+import de.tillhub.inputengine.data.MoneyParam
+import de.tillhub.inputengine.data.PercentageParam
+import de.tillhub.inputengine.data.QuantityParam
 import de.tillhub.inputengine.sample.theme.InputEngineTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -174,7 +174,7 @@ fun App() {
                             quantity = QuantityIO.ZERO,
                             minQuantity = QuantityParam.Enable(-QuantityIO.of(50)),
                             maxQuantity = QuantityParam.Enable(QuantityIO.of(50)),
-                            quantityHint = QuantityParam.Enable(QuantityIO.of(BigDecimal.TEN)),
+                            hintQuantity = QuantityParam.Enable(QuantityIO.of(BigDecimal.TEN)),
                         ),
                     )
                 }

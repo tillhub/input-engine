@@ -8,9 +8,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
-import de.tillhub.inputengine.financial.helper.serializer.MoneyIOSerializer
-import de.tillhub.inputengine.helper.ExtraKeys
-import de.tillhub.inputengine.ui.amount.AmountInputActivity
+import de.tillhub.inputengine.domain.serializer.MoneyIOSerializer
+import de.tillhub.inputengine.domain.ExtraKeys
+import de.tillhub.inputengine.ui.AmountInputActivity
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.jetbrains.annotations.VisibleForTesting
@@ -48,9 +48,9 @@ internal fun parseAmountInputResult(resultCode: Int, extras: Bundle?): AmountInp
         ?.let { Json.decodeFromString(MoneyIOSerializer, it) }
         ?: return AmountInputResult.Canceled
 
-    val extrasMap = extras.getBundle(ExtraKeys.EXTRAS_ARGS)
+    val extrasMap: Map<String, String> = extras.getBundle(ExtraKeys.EXTRAS_ARGS)
         ?.let { bundle ->
-            bundle.keySet().associateWith { bundle.getInt(it) }
+            bundle.keySet().associateWith { bundle.getString(it)!! }
         }.orEmpty()
 
     return AmountInputResult.Success(amount, extrasMap)

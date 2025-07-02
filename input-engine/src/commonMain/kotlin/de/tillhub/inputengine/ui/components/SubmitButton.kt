@@ -14,8 +14,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import de.tillhub.inputengine.resources.Res
 import de.tillhub.inputengine.resources.numpad_button_submit
-import de.tillhub.inputengine.ui.theme.MagneticGrey
-import de.tillhub.inputengine.ui.theme.OrbitalBlue
+import de.tillhub.inputengine.theme.MagneticGrey
+import de.tillhub.inputengine.theme.OrbitalBlue
 import org.jetbrains.compose.resources.stringResource
 
 @Composable

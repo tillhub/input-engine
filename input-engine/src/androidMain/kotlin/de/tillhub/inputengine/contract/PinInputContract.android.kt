@@ -8,8 +8,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
-import de.tillhub.inputengine.helper.ExtraKeys
-import de.tillhub.inputengine.ui.pin.PinInputActivity
+import de.tillhub.inputengine.domain.ExtraKeys
+import de.tillhub.inputengine.ui.PinInputActivity
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.jetbrains.annotations.VisibleForTesting

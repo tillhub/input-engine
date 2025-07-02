@@ -1,19 +1,27 @@
 package de.tillhub.inputengine.ui.pininput
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import de.tillhub.inputengine.helper.NumpadKey
+import de.tillhub.inputengine.contract.PinInputRequest
+import de.tillhub.inputengine.domain.NumpadKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
-internal class PinInputViewModel : ViewModel() {
+internal class PinInputViewModel(
+    private val request: PinInputRequest,
+) : ViewModel() {
 
-    private lateinit var pin: String
+    val toolbarTitle: String get() = request.toolbarTitle
+    val responseExtras: Map<String, String> get() = request.extras
+    val overridePinInput: Boolean get() = request.overridePinInput
+    val hint: String = "•".repeat(request.pin.length)
 
     private val _pinInputState: MutableStateFlow<PinInputState> =
         MutableStateFlow(PinInputState.AwaitingInput)
@@ -30,9 +38,8 @@ internal class PinInputViewModel : ViewModel() {
         initialValue = "",
     )
 
-    fun init(pin: String) {
-        this.pin = pin
-        if (!isPinFormatValid(pin)) {
+    init {
+        if (!isPinFormatValid(request.pin)) {
             _pinInputState.value = PinInputState.InvalidPinFormat
         }
     }
@@ -63,7 +70,7 @@ internal class PinInputViewModel : ViewModel() {
                 _pinInputState.value = PinInputState.PinValid
             }
 
-            pinInput.length >= pin.length -> {
+            pinInput.length >= request.pin.length -> {
                 _pinInputState.value = PinInputState.PinInvalid
             }
 
@@ -74,11 +81,23 @@ internal class PinInputViewModel : ViewModel() {
     }
 
     private fun isPinValid(pinInput: CharSequence): Boolean {
-        return this.pin == pinInput
+        return request.pin == pinInput
     }
 
     private fun isPinFormatValid(pin: String): Boolean {
         return pin.isNotEmpty() && pin.all { it.isDigit() }
+    }
+
+    companion object {
+        // Define a custom keys for our dependency
+        val REQUEST_KEY = object : CreationExtras.Key<PinInputRequest> {}
+
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val request = this[REQUEST_KEY] as PinInputRequest
+                PinInputViewModel(request)
+            }
+        }
     }
 }
 
@@ -87,12 +106,4 @@ internal sealed class PinInputState {
     data object InvalidPinFormat : PinInputState()
     data object PinValid : PinInputState()
     data object PinInvalid : PinInputState()
-}
-
-internal fun providePinInputViewModelFactory(pin: String) = viewModelFactory {
-    initializer {
-        PinInputViewModel().apply {
-            init(pin)
-        }
-    }
 }

@@ -1,48 +1,53 @@
 package de.tillhub.inputengine.ui.percentage
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import de.tillhub.inputengine.contract.PercentageInputRequest
-import de.tillhub.inputengine.financial.data.PercentIO
-import de.tillhub.inputengine.financial.param.PercentageParam
-import de.tillhub.inputengine.formatter.PercentageFormatter
-import de.tillhub.inputengine.helper.NumberInputController
-import de.tillhub.inputengine.helper.NumberInputControllerImpl
-import de.tillhub.inputengine.helper.NumpadKey
-import de.tillhub.inputengine.helper.defaultLocale
+import de.tillhub.inputengine.data.PercentIO
+import de.tillhub.inputengine.data.PercentageParam
+import de.tillhub.inputengine.domain.StringParam
+import de.tillhub.inputengine.data.mapToStringParam
+import de.tillhub.inputengine.formatting.PercentageFormatter
+import de.tillhub.inputengine.domain.helper.NumberInputController
+import de.tillhub.inputengine.domain.helper.NumberInputControllerImpl
+import de.tillhub.inputengine.domain.NumpadKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 internal class PercentageInputViewModel(
+    private val request: PercentageInputRequest,
+    private val formatter: PercentageFormatter,
     private val inputController: NumberInputController = NumberInputControllerImpl(maxMajorDigits = 3),
-    private val locale: String = defaultLocale(),
 ) : ViewModel() {
+
+    val toolbarTitle: String get() = request.toolbarTitle
+    val responseExtras: Map<String, String> get() = request.extras
+    val allowDecimal: Boolean get() = request.allowDecimal
+
+    val maxStringParam: StringParam get() = request.percentageMax.mapToStringParam {
+        formatter.format(it)
+    }
+    val minStringParam: StringParam get() = request.percentageMin.mapToStringParam {
+        formatter.format(it)
+    }
 
     private val _inputPercentIO = MutableStateFlow(PercentageInputData.EMPTY)
     val percentageInput: StateFlow<PercentageInputData> = _inputPercentIO
 
-    private var isInitValue = false
-    private var maxPercent: PercentIO = PercentIO.WHOLE
-    private var minPercent: PercentIO = PercentIO.ZERO
-    private var isZeroAllowed: Boolean = false
-        set(value) {
-            field = value
-            setValue(percentageInput.value.percent)
-        }
+    private var isInitValue = true
+    private var maxPercent: PercentIO = when (request.percentageMax) {
+        PercentageParam.Disable -> PercentIO.WHOLE
+        is PercentageParam.Enable -> request.percentageMax.percent
+    }
+    private var minPercent: PercentIO = when (request.percentageMin) {
+        PercentageParam.Disable -> PercentIO.ZERO
+        is PercentageParam.Enable -> request.percentageMin.percent
+    }
 
-    fun init(request: PercentageInputRequest) {
-        this.isInitValue = true
-        this.isZeroAllowed = request.allowsZero
-        minPercent = when (request.percentageMin) {
-            PercentageParam.Disable -> PercentIO.ZERO
-            is PercentageParam.Enable -> request.percentageMin.percent
-        }
-        maxPercent = when (request.percentageMax) {
-            PercentageParam.Disable -> PercentIO.WHOLE
-            is PercentageParam.Enable -> request.percentageMax.percent
-        }
-
+    init {
         inputController.setValue(request.percent.toDouble())
         setValue(request.percent)
     }
@@ -76,13 +81,13 @@ internal class PercentageInputViewModel(
     private fun setValue(percent: PercentIO) {
         _inputPercentIO.value = PercentageInputData(
             percent = percent,
-            text = PercentageFormatter.format(percent, inputController.minorDigits.size, locale),
+            text = formatter.format(percent),
             isValid = isValid(percent),
         )
     }
 
     private fun isValid(percentIO: PercentIO): Boolean {
-        return if (isZeroAllowed) {
+        return if (request.allowsZero) {
             isValueBetweenMinMax(percentIO)
         } else {
             percentIO.isNotZero() && isValueBetweenMinMax(percentIO)
@@ -91,6 +96,23 @@ internal class PercentageInputViewModel(
 
     private fun isValueBetweenMinMax(percent: PercentIO): Boolean {
         return percent in minPercent..maxPercent
+    }
+
+    companion object {
+        // Define a custom keys for our dependency
+        val REQUEST_KEY = object : CreationExtras.Key<PercentageInputRequest> {}
+        val FORMATTER_KEY = object : CreationExtras.Key<PercentageFormatter> {}
+
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val request = this[REQUEST_KEY] as PercentageInputRequest
+                val formatter = this[FORMATTER_KEY] as PercentageFormatter
+                PercentageInputViewModel(
+                    request = request,
+                    formatter = formatter
+                )
+            }
+        }
     }
 }
 
@@ -101,13 +123,5 @@ data class PercentageInputData(
 ) {
     companion object {
         val EMPTY = PercentageInputData(PercentIO.ZERO, "", false)
-    }
-}
-
-internal fun providePercentageInputViewModelFactory(request: PercentageInputRequest) = viewModelFactory {
-    initializer {
-        PercentageInputViewModel().apply {
-            init(request)
-        }
     }
 }

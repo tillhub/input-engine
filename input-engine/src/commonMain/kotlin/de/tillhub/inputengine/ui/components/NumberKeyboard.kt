@@ -8,20 +8,21 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import de.tillhub.inputengine.financial.data.Digit
-import de.tillhub.inputengine.formatter.DecimalFormatter
-import de.tillhub.inputengine.helper.NumpadKey
+import de.tillhub.inputengine.domain.Digit
+import de.tillhub.inputengine.formatting.DecimalFormatter
+import de.tillhub.inputengine.domain.NumpadKey
 import de.tillhub.inputengine.resources.Res
 import de.tillhub.inputengine.resources.numpad_button_clear
 import de.tillhub.inputengine.resources.numpad_button_delete
 import de.tillhub.inputengine.resources.numpad_button_negative
-import de.tillhub.inputengine.ui.theme.GalacticBlue
+import de.tillhub.inputengine.theme.GalacticBlue
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -41,7 +42,7 @@ internal fun NumberKeyboard(
 
     Column(
         modifier = modifier,
-        horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
+        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceAround,
     ) {
         Row(
@@ -79,6 +80,11 @@ internal fun NumberKeyboard(
                 .fillMaxWidth(),
         ) {
             DoubleActionButton(
+                modifier = Modifier
+                    .semantics { contentDescription = leftActionContentDescription }
+                    .weight(1f)
+                    .aspectRatio(BUTTON_ASPECT_RATIO)
+                    .padding(6.dp),
                 onClick = {
                     when {
                         showDecimalSeparator -> onClick(NumpadKey.DecimalSeparator)
@@ -93,11 +99,6 @@ internal fun NumberKeyboard(
                         else -> onClick(NumpadKey.Clear)
                     }
                 },
-                modifier = Modifier
-                    .semantics { contentDescription = leftActionContentDescription }
-                    .weight(1f)
-                    .aspectRatio(BUTTON_ASPECT_RATIO)
-                    .padding(6.dp),
             ) {
                 Text(
                     text = leftActionText,

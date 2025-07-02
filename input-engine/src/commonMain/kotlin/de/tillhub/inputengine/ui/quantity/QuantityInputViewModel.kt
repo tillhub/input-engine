@@ -1,54 +1,61 @@
 package de.tillhub.inputengine.ui.quantity
 
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import de.tillhub.inputengine.contract.QuantityInputRequest
-import de.tillhub.inputengine.financial.data.QuantityIO
-import de.tillhub.inputengine.financial.helper.getMajorDigits
-import de.tillhub.inputengine.financial.helper.getMinorDigits
-import de.tillhub.inputengine.financial.param.QuantityParam
-import de.tillhub.inputengine.formatter.QuantityFormatter
-import de.tillhub.inputengine.helper.NumberInputController
-import de.tillhub.inputengine.helper.NumberInputControllerImpl
-import de.tillhub.inputengine.helper.NumpadKey
-import de.tillhub.inputengine.helper.defaultLocale
-import de.tillhub.inputengine.ui.theme.MagneticGrey
-import de.tillhub.inputengine.ui.theme.OrbitalBlue
+import de.tillhub.inputengine.data.QuantityIO
+import de.tillhub.inputengine.domain.helper.getMajorDigits
+import de.tillhub.inputengine.domain.helper.getMinorDigits
+import de.tillhub.inputengine.data.QuantityParam
+import de.tillhub.inputengine.domain.StringParam
+import de.tillhub.inputengine.data.mapToStringParam
+import de.tillhub.inputengine.formatting.QuantityFormatter
+import de.tillhub.inputengine.domain.helper.NumberInputController
+import de.tillhub.inputengine.domain.helper.NumberInputControllerImpl
+import de.tillhub.inputengine.domain.NumpadKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 internal class QuantityInputViewModel(
+    private val request: QuantityInputRequest,
+    private val formatter: QuantityFormatter,
     private val inputController: NumberInputController = NumberInputControllerImpl(maxMajorDigits = 5),
-    private val locale: String = defaultLocale(),
 ) : ViewModel() {
+
+    val toolbarTitle: String get() = request.toolbarTitle
+    val responseExtras: Map<String, String> get() = request.extras
+    val allowDecimal: Boolean get() = request.allowDecimal
+    val allowNegative: Boolean get() = when (val minQty = request.minQuantity) {
+        QuantityParam.Disable -> true
+        is QuantityParam.Enable -> minQty.value.isNegative()
+    }
+
+    val maxStringParam: StringParam get() = request.maxQuantity.mapToStringParam {
+        formatter.format(it)
+    }
+    val minStringParam: StringParam get() = request.minQuantity.mapToStringParam {
+        formatter.format(it)
+    }
 
     private val _mutableDisplayDataFlow = MutableStateFlow(QuantityInputData.EMPTY)
     val displayDataFlow: StateFlow<QuantityInputData> = _mutableDisplayDataFlow
 
     private var nextKeyResetsCurrentValue = false
-    private var quantityHint: QuantityParam = QuantityParam.Disable
-    private var minQuantity: QuantityIO = QuantityIO.MIN_VALUE
-    private var maxQuantity: QuantityIO = QuantityIO.MAX_VALUE
 
-    private var isZeroAllowed: Boolean = false
-        set(value) {
-            field = value
-            updateDisplayData(displayDataFlow.value.qty)
-        }
 
-    fun setInitialValue(request: QuantityInputRequest) {
-        isZeroAllowed = request.allowsZero
-        quantityHint = request.quantityHint
-        minQuantity = when (request.minQuantity) {
-            QuantityParam.Disable -> QuantityIO.MIN_VALUE
-            is QuantityParam.Enable -> request.minQuantity.value
-        }
-        maxQuantity = when (request.maxQuantity) {
-            QuantityParam.Disable -> QuantityIO.MAX_VALUE
-            is QuantityParam.Enable -> request.maxQuantity.value
-        }
+    private var minQuantity: QuantityIO = when (request.minQuantity) {
+        QuantityParam.Disable -> QuantityIO.MIN_VALUE
+        is QuantityParam.Enable -> request.minQuantity.value
+    }
+    private var maxQuantity: QuantityIO = when (request.maxQuantity) {
+        QuantityParam.Disable -> QuantityIO.MAX_VALUE
+        is QuantityParam.Enable -> request.maxQuantity.value
+    }
+
+    init {
         if (minQuantity >= maxQuantity) {
             minQuantity = QuantityIO.MIN_VALUE
             maxQuantity = QuantityIO.MAX_VALUE
@@ -58,7 +65,7 @@ internal class QuantityInputViewModel(
 
     fun decrease() {
         val newValue = displayDataFlow.value.qty.nextSmaller(
-            allowsZero = isZeroAllowed,
+            allowsZero = request.allowsZero,
             allowsNegatives = minQuantity.isNegative(),
         )
         if (isValid(newValue)) {
@@ -125,31 +132,26 @@ internal class QuantityInputViewModel(
     }
 
     private fun updateDisplayData(quantity: QuantityIO) {
-        val (quantityText, quantityColor) = if (quantityHint is QuantityParam.Enable &&
-            quantity.isZero() && !isZeroAllowed
-        ) {
-            QuantityFormatter.format(
-                quantity = (quantityHint as QuantityParam.Enable).value,
-                locale = locale,
-            ) to MagneticGrey
-        } else {
-            QuantityFormatter.format(
-                quantity = quantity,
-                minFractionDigits = inputController.minorDigits.size,
-                locale = locale,
-            ) to OrbitalBlue
-        }
+        val formattedQuantity = formatQuantity(quantity)
 
         _mutableDisplayDataFlow.value = QuantityInputData(
             qty = quantity,
-            text = quantityText,
-            color = quantityColor,
+            text = formattedQuantity.first,
             isValid = isValid(quantity),
+            isHint = formattedQuantity.second,
         )
     }
 
+    private fun formatQuantity(qty: QuantityIO): Pair<String, Boolean> {
+        return if (request.hintQuantity is QuantityParam.Enable && qty.isZero()) {
+            formatter.format(request.hintQuantity.value) to true
+        } else {
+            formatter.format(qty) to false
+        }
+    }
+
     private fun isValid(quantity: QuantityIO): Boolean {
-        return if (isZeroAllowed) {
+        return if (request.allowsZero) {
             isValueBetweenMinMax(quantity)
         } else {
             !quantity.isZero() && isValueBetweenMinMax(quantity)
@@ -159,28 +161,34 @@ internal class QuantityInputViewModel(
     private fun isValueBetweenMinMax(quantity: QuantityIO): Boolean {
         return quantity in minQuantity..maxQuantity
     }
+
+    companion object {
+        // Define a custom keys for our dependency
+        val REQUEST_KEY = object : CreationExtras.Key<QuantityInputRequest> {}
+        val FORMATTER_KEY = object : CreationExtras.Key<QuantityFormatter> {}
+
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val request = this[REQUEST_KEY] as QuantityInputRequest
+                val formatter = this[FORMATTER_KEY] as QuantityFormatter
+                QuantityInputViewModel(request, formatter)
+            }
+        }
+    }
 }
 
 internal data class QuantityInputData(
     val qty: QuantityIO,
     val text: String,
-    val color: Color,
     val isValid: Boolean,
+    val isHint: Boolean,
 ) {
     companion object {
         val EMPTY = QuantityInputData(
             qty = QuantityIO.ZERO,
-            text = QuantityFormatter.format(QuantityIO.ZERO),
-            color = MagneticGrey,
+            text = "0.0",
             isValid = false,
+            isHint = true,
         )
-    }
-}
-
-internal fun provideQuantityInputViewModelFactory(request: QuantityInputRequest) = viewModelFactory {
-    initializer {
-        QuantityInputViewModel().apply {
-            setInitialValue(request)
-        }
     }
 }

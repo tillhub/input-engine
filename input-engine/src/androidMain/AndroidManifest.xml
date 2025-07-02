@@ -2,16 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application>
         <activity
-            android:name="de.tillhub.inputengine.ui.amount.AmountInputActivity"
+            android:name="de.tillhub.inputengine.ui.AmountInputActivity"
             android:exported="false" />
         <activity
-            android:name="de.tillhub.inputengine.ui.pin.PinInputActivity"
+            android:name="de.tillhub.inputengine.ui.PinInputActivity"
             android:exported="false" />
         <activity
-            android:name="de.tillhub.inputengine.ui.quantity.QuantityInputActivity"
+            android:name="de.tillhub.inputengine.ui.QuantityInputActivity"
             android:exported="false" />
         <activity
-            android:name="de.tillhub.inputengine.ui.percentage.PercentageInputActivity"
+            android:name="de.tillhub.inputengine.ui.PercentageInputActivity"
             android:exported="false" />
     </application>
 </manifest>

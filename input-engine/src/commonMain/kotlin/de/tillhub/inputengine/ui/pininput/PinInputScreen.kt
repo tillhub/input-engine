@@ -1,60 +1,38 @@
 package de.tillhub.inputengine.ui.pininput
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import de.tillhub.inputengine.contract.PinInputRequest
 import de.tillhub.inputengine.contract.PinInputResult
-import de.tillhub.inputengine.helper.NumpadKey
+import de.tillhub.inputengine.domain.NumpadKey
 import de.tillhub.inputengine.resources.Res
 import de.tillhub.inputengine.resources.allStringResources
 import de.tillhub.inputengine.resources.pin_correct
-import de.tillhub.inputengine.resources.pin_enter
 import de.tillhub.inputengine.resources.pin_wrong
 import de.tillhub.inputengine.ui.components.NumberKeyboard
+import de.tillhub.inputengine.ui.components.PinInputPreview
 import de.tillhub.inputengine.ui.components.Toolbar
 import de.tillhub.inputengine.ui.components.getModifierBasedOnDeviceType
-import de.tillhub.inputengine.ui.theme.AppTheme
-import de.tillhub.inputengine.ui.theme.HintGray
-import de.tillhub.inputengine.ui.theme.OrbitalBlue
-import de.tillhub.inputengine.ui.theme.TabletScaffoldModifier
-import de.tillhub.inputengine.ui.theme.textFieldTransparentColors
+import de.tillhub.inputengine.theme.AppTheme
+import de.tillhub.inputengine.theme.TabletScaffoldModifier
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun PinInputScreen(
-    request: PinInputRequest,
     onResult: (PinInputResult) -> Unit,
-    viewModel: PinInputViewModel = viewModel(
-        factory = remember {
-            providePinInputViewModelFactory(request.pin)
-        },
-    ),
+    viewModel: PinInputViewModel,
 ) {
     val errorMessage = stringResource(Res.string.pin_wrong)
     val correctPin = stringResource(Res.string.pin_correct)
@@ -65,28 +43,26 @@ internal fun PinInputScreen(
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    LaunchedEffect(pinInputState) {
-        when (pinInputState) {
-            PinInputState.PinInvalid -> {
-                scope.launch {
-                    snackbarHostState.showSnackbar(errorMessage)
-                }
-                viewModel.input(NumpadKey.Clear)
+    when (pinInputState) {
+        PinInputState.PinInvalid -> {
+            scope.launch {
+                snackbarHostState.showSnackbar(errorMessage)
             }
-
-            PinInputState.PinValid -> {
-                scope.launch {
-                    snackbarHostState.showSnackbar(correctPin)
-                }
-                onResult(PinInputResult.Success(request.extras))
-            }
-
-            PinInputState.InvalidPinFormat -> {
-                onResult(PinInputResult.Canceled)
-            }
-
-            else -> Unit
+            viewModel.input(NumpadKey.Clear)
         }
+
+        PinInputState.PinValid -> {
+            scope.launch {
+                snackbarHostState.showSnackbar(correctPin)
+            }
+            onResult(PinInputResult.Success(viewModel.responseExtras))
+        }
+
+        PinInputState.InvalidPinFormat -> {
+            onResult(PinInputResult.Canceled)
+        }
+
+        else -> Unit
     }
 
     AppTheme {
@@ -97,7 +73,7 @@ internal fun PinInputScreen(
             ),
             topBar = {
                 Toolbar(
-                    title = stringResource(Res.allStringResources.getValue(request.toolbarTitle)),
+                    title = stringResource(Res.allStringResources.getValue(viewModel.toolbarTitle)),
                     onClick = { onResult(PinInputResult.Canceled) },
                 )
             },
@@ -110,65 +86,14 @@ internal fun PinInputScreen(
                     .fillMaxHeight(),
                 verticalArrangement = Arrangement.SpaceBetween,
             ) {
-                PinPreview(
+                PinInputPreview(
                     pin = enteredPin,
-                    hint = "•".repeat(request.pin.length),
-                    overridePinInput = request.overridePinInput,
-                    onOverride = { onResult(PinInputResult.Success(request.extras)) },
+                    hint = viewModel.hint,
+                    overridePinInput = viewModel.overridePinInput,
+                    onOverride = { onResult(PinInputResult.Success(viewModel.responseExtras)) },
                 )
                 NumberKeyboard(onClick = viewModel::input)
             }
-        }
-    }
-}
-
-@Composable
-private fun PinPreview(
-    pin: String,
-    overridePinInput: Boolean,
-    hint: String,
-    onOverride: () -> Unit,
-) {
-    Box(modifier = Modifier.fillMaxWidth()) {
-        OutlinedTextField(
-            readOnly = true,
-            modifier = Modifier.align(Alignment.Center),
-            value = pin,
-            onValueChange = { },
-            textStyle = TextStyle.Default.copy(
-                color = OrbitalBlue,
-                fontSize = 64.sp,
-                textAlign = TextAlign.Center,
-            ),
-            maxLines = 1,
-            placeholder = {
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    style = TextStyle.Default.copy(
-                        color = HintGray,
-                        fontSize = 64.sp,
-                        textAlign = TextAlign.Center,
-                    ),
-                    text = hint,
-                )
-            },
-            visualTransformation = PasswordVisualTransformation(),
-            colors = textFieldTransparentColors(),
-        )
-        if (overridePinInput) {
-            Text(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .clickable {
-                        onOverride()
-                    },
-                textAlign = TextAlign.End,
-                maxLines = 1,
-                style = MaterialTheme.typography.bodyMedium,
-                text = stringResource(Res.string.pin_enter),
-                color = OrbitalBlue,
-            )
         }
     }
 }

@@ -2,7 +2,7 @@ package de.tillhub.inputengine.contract
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import de.tillhub.inputengine.ui.pin.PinInputPresenter
+import de.tillhub.inputengine.ui.PinInputPresenter
 
 @Composable
 actual fun rememberPinInputLauncher(

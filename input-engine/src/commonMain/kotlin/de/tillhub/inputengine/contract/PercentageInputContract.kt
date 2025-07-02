@@ -1,8 +1,8 @@
 package de.tillhub.inputengine.contract
 
 import androidx.compose.runtime.Composable
-import de.tillhub.inputengine.financial.data.PercentIO
-import de.tillhub.inputengine.financial.param.PercentageParam
+import de.tillhub.inputengine.data.PercentIO
+import de.tillhub.inputengine.data.PercentageParam
 import de.tillhub.inputengine.resources.Res
 import de.tillhub.inputengine.resources.numpad_title_percentage
 import kotlinx.serialization.Serializable
@@ -24,7 +24,7 @@ data class PercentageInputRequest(
     val allowDecimal: Boolean = false,
     val percentageMin: PercentageParam = PercentageParam.Disable,
     val percentageMax: PercentageParam = PercentageParam.Disable,
-    val extras: Map<String, Int> = emptyMap(),
+    val extras: Map<String, String> = emptyMap(),
 )
 
 @Serializable
@@ -32,7 +32,7 @@ sealed class PercentageInputResult {
     @Serializable
     data class Success(
         val percent: PercentIO,
-        val extras: Map<String, Int> = emptyMap(),
+        val extras: Map<String, String> = emptyMap(),
     ) : PercentageInputResult()
 
     @Serializable

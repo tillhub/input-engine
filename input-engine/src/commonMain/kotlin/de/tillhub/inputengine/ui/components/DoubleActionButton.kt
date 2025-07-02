@@ -3,7 +3,6 @@ package de.tillhub.inputengine.ui.components
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.defaultMinSize
@@ -19,28 +18,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import de.tillhub.inputengine.ui.theme.ExtraButtonTint
-import de.tillhub.inputengine.ui.theme.LunarGray
+import de.tillhub.inputengine.theme.LunarGray
 
 @Composable
 internal fun DoubleActionButton(
-    onClick: () -> Unit,
-    onLongClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    elevation: Dp = 3.dp,
-    shape: Shape = RoundedCornerShape(2.dp),
-    colors: ButtonColors = ButtonDefaults.outlinedButtonColors(containerColor = ExtraButtonTint),
-    border: BorderStroke? = BorderStroke(width = 1.0.dp, color = LunarGray),
-    contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
+    onClick: () -> Unit,
+    onLongClick: () -> Unit,
     content: @Composable RowScope.() -> Unit,
 ) {
+    val colors: ButtonColors = ButtonDefaults.outlinedButtonColors(
+        containerColor = MaterialTheme.colorScheme.onPrimary
+    )
     val containerColor = if (enabled) colors.containerColor else colors.disabledContainerColor
     val contentColor = if (enabled) colors.contentColor else colors.disabledContentColor
 
@@ -53,12 +47,12 @@ internal fun DoubleActionButton(
                 enabled = enabled,
                 role = Role.Button,
             ),
-        shape = shape,
+        shape = RoundedCornerShape(2.dp),
         color = containerColor,
         contentColor = contentColor,
-        shadowElevation = elevation,
-        tonalElevation = elevation,
-        border = border,
+        shadowElevation = 3.dp,
+        tonalElevation = 3.dp,
+        border = BorderStroke(width = 1.0.dp, color = LunarGray),
     ) {
         val mergedStyle = LocalTextStyle.current.merge(MaterialTheme.typography.labelLarge)
         CompositionLocalProvider(
@@ -71,7 +65,7 @@ internal fun DoubleActionButton(
                         minWidth = ButtonDefaults.MinWidth,
                         minHeight = ButtonDefaults.MinHeight,
                     )
-                    .padding(contentPadding),
+                    .padding(ButtonDefaults.ContentPadding),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
                 content = content,

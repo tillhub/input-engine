@@ -13,12 +13,12 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import de.tillhub.inputengine.financial.data.Digit
-import de.tillhub.inputengine.helper.NumpadKey
-import de.tillhub.inputengine.ui.theme.GalacticBlue
-import de.tillhub.inputengine.ui.theme.LunarGray
-import de.tillhub.inputengine.ui.theme.Tint
-import de.tillhub.inputengine.ui.theme.buttonElevation
+import de.tillhub.inputengine.domain.Digit
+import de.tillhub.inputengine.domain.NumpadKey
+import de.tillhub.inputengine.theme.GalacticBlue
+import de.tillhub.inputengine.theme.LunarGray
+import de.tillhub.inputengine.theme.Tint
+import de.tillhub.inputengine.theme.buttonElevation
 
 @Composable
 internal fun NumberButton(
