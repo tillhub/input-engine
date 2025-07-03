@@ -64,6 +64,13 @@ kotlin {
             }
         }
 
+        iosTest.dependencies {
+            implementation(kotlin("test"))
+
+            @OptIn(ExperimentalComposeLibrary::class)
+            implementation(compose.uiTest)
+        }
+
         androidMain {
             dependencies {
                 implementation(compose.preview)

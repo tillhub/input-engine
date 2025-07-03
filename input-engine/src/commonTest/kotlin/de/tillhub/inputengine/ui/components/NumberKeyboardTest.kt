@@ -2,6 +2,7 @@
 
 package de.tillhub.inputengine.ui.components
 
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
@@ -12,6 +13,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
 import de.tillhub.inputengine.domain.Digit
 import de.tillhub.inputengine.domain.NumpadKey
+import de.tillhub.inputengine.testing.runCustomComposeUiTest
 import de.tillhub.inputengine.theme.AppTheme
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -94,7 +96,9 @@ class NumberKeyboardTest {
     }
 
     @Test
-    fun testNumpadKey() = runComposeUiTest {
+    fun testNumpadKey() = runCustomComposeUiTest(
+        size = Size(1024.0f, 1024.0f)
+    ) {
 
         val events = mutableListOf<NumpadKey>()
 
