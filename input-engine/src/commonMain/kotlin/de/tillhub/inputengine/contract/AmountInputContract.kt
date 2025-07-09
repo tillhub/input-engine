@@ -2,7 +2,6 @@ package de.tillhub.inputengine.contract
 
 import androidx.compose.runtime.Composable
 import de.tillhub.inputengine.data.MoneyIO
-import de.tillhub.inputengine.domain.serializer.MoneyIOSerializer
 import de.tillhub.inputengine.data.MoneyParam
 import de.tillhub.inputengine.resources.Res
 import de.tillhub.inputengine.resources.numpad_title_amount
@@ -19,7 +18,7 @@ expect fun rememberAmountInputLauncher(
 
 @Serializable
 data class AmountInputRequest(
-    @Serializable(with = MoneyIOSerializer::class) val amount: MoneyIO,
+    val amount: MoneyIO,
     val isZeroAllowed: Boolean = false,
     val toolbarTitle: String = Res.string.numpad_title_amount.key,
     val amountMin: MoneyParam = MoneyParam.Disable,
@@ -32,7 +31,7 @@ data class AmountInputRequest(
 sealed class AmountInputResult {
     @Serializable
     data class Success(
-        @Serializable(with = MoneyIOSerializer::class) val amount: MoneyIO,
+        val amount: MoneyIO,
         val extras: Map<String, String> = emptyMap(),
     ) : AmountInputResult()
 

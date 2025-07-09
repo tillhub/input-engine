@@ -42,7 +42,10 @@ internal fun QuantityInputPreview(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            IconButton(onClick = decrease) {
+            IconButton(
+                modifier = Modifier.semantics { contentDescription = "Button decrease" },
+                onClick = decrease
+            ) {
                 Icon(
                     painter = painterResource(Res.drawable.ic_minus),
                     contentDescription = "Decrease",
@@ -55,6 +58,8 @@ internal fun QuantityInputPreview(
             ) {
                 if (maxQuantity is StringParam.Enable) {
                     Text(
+                        modifier = Modifier
+                            .semantics { contentDescription = "Max allowed quantity" },
                         text = stringResource(
                             Res.string.max_value,
                             maxQuantity.value,
@@ -65,7 +70,8 @@ internal fun QuantityInputPreview(
                 }
                 Text(
                     text = quantity.text,
-                    modifier = Modifier.semantics { contentDescription = "qtyValue" },
+                    modifier = Modifier
+                        .semantics { contentDescription = "Current quantity" },
                     color = if (quantity.isHint) {
                         MaterialTheme.colorScheme.hintColor
                     } else {
@@ -75,6 +81,8 @@ internal fun QuantityInputPreview(
                 )
                 if (minQuantity is StringParam.Enable) {
                     Text(
+                        modifier = Modifier
+                            .semantics { contentDescription = "Min allowed quantity" },
                         text = stringResource(
                             Res.string.min_value,
                             minQuantity.value,
@@ -84,7 +92,10 @@ internal fun QuantityInputPreview(
                     )
                 }
             }
-            IconButton(onClick = increase) {
+            IconButton(
+                modifier = Modifier.semantics { contentDescription = "Button increase" },
+                onClick = increase
+            ) {
                 Icon(
                     painter = painterResource(Res.drawable.ic_plus),
                     contentDescription = "Increase",

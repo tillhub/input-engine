@@ -15,7 +15,7 @@ actual class MoneyFormatter(
 
     actual fun format(money: MoneyIO): String {
         return with(currencyFormat) {
-            this.currency = Currency.getInstance(money.currency.code.isoValue)
+            this.currency = Currency.getInstance(money.currency.isoCode)
             format(money.amount.toJavaBigDecimal())
         }
     }

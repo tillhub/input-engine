@@ -23,7 +23,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 internal fun Toolbar(
     title: String,
-    onClick: () -> Unit,
+    onBackClick: () -> Unit,
 ) {
     Column {
         TopAppBar(
@@ -31,15 +31,15 @@ internal fun Toolbar(
                 .copy(containerColor = Color.White),
             title = {
                 Text(
-                    title,
+                    modifier = Modifier.semantics { contentDescription = "Toolbar title" },
                     style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.semantics { contentDescription = "toolbarTitle" },
+                    text = title,
                 )
             },
             navigationIcon = {
                 IconButton(
-                    onClick = onClick,
-                    modifier = Modifier.semantics { contentDescription = "toolbarIcon" },
+                    onClick = onBackClick,
+                    modifier = Modifier.semantics { contentDescription = "Toolbar back button" },
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Close,

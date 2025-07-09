@@ -27,8 +27,7 @@ internal fun SubmitButton(
     Button(
         enabled = isEnable,
         modifier = modifier
-            .fillMaxWidth()
-            .semantics { contentDescription = "submitButton" },
+            .fillMaxWidth(),
         shape = RectangleShape,
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
@@ -36,8 +35,10 @@ internal fun SubmitButton(
         ),
     ) {
         Text(
+            modifier = Modifier
+                .padding(vertical = 8.dp)
+                .semantics { contentDescription = "Submit button label" },
             style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.padding(vertical = 8.dp),
             text = stringResource(resource = Res.string.numpad_button_submit),
         )
     }

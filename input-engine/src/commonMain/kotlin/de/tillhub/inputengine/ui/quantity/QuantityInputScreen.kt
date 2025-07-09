@@ -37,7 +37,7 @@ internal fun QuantityInputScreen(
             topBar = {
                 Toolbar(
                     title = stringResource(Res.allStringResources.getValue(viewModel.toolbarTitle)),
-                    onClick = { onResult(QuantityInputResult.Canceled) },
+                    onBackClick = { onResult(QuantityInputResult.Canceled) },
                 )
             },
         ) { innerPadding ->

@@ -8,15 +8,16 @@ import androidx.lifecycle.viewmodel.MutableCreationExtras
 import androidx.lifecycle.viewmodel.compose.viewModel
 import de.tillhub.inputengine.contract.PercentageInputRequest
 import de.tillhub.inputengine.formatting.PercentageFormatter
-import de.tillhub.inputengine.domain.ExtraKeys
+import de.tillhub.inputengine.ExtraKeys
 import de.tillhub.inputengine.ui.percentage.PercentageInputScreen
 import de.tillhub.inputengine.ui.percentage.PercentageInputViewModel
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 class PercentageInputActivity : ComponentActivity() {
 
     private val request: PercentageInputRequest by lazy {
-        intent.getStringExtra(ExtraKeys.EXTRA_REQUEST)?.let { requestJson ->
+        intent.getStringExtra(ExtraKeys.EXTRAS_REQUEST)?.let { requestJson ->
             Json.Default.decodeFromString<PercentageInputRequest>(requestJson)
         } ?: throw IllegalArgumentException("Argument PercentageInputRequest is missing")
     }
@@ -26,18 +27,9 @@ class PercentageInputActivity : ComponentActivity() {
 
         setContent {
             PercentageInputScreen(
-                onResult = {
+                onResult = { result ->
                     val resultIntent = Intent().apply {
-                        putExtra(
-                            ExtraKeys.EXTRAS_RESULT,
-                            it.percent,
-                        )
-                        putExtra(
-                            ExtraKeys.EXTRAS_ARGS,
-                            Bundle().apply {
-                                it.extras.forEach { (k, v) -> putString(k, v) }
-                            },
-                        )
+                        putExtra(ExtraKeys.EXTRAS_RESULT, Json.encodeToString(result))
                     }
                     setResult(RESULT_OK, resultIntent)
                     finish()

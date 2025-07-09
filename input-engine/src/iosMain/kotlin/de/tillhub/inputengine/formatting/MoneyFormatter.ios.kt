@@ -20,8 +20,8 @@ actual class MoneyFormatter(
 
     actual fun format(money: MoneyIO): String {
         return with(currencyFormat) {
-            currencyCode = money.currency.code.isoValue
-            stringFromNumber(NSNumber(money.toDouble()))
+            currencyCode = money.currency.isoCode
+            stringFromNumber(NSNumber(double = money.amount.doubleValue(exactRequired = false)))
         } ?: "${money.amount} ${money.currency}"
     }
 }

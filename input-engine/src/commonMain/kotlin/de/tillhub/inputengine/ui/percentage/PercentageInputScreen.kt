@@ -39,7 +39,7 @@ internal fun PercentageInputScreen(
             topBar = {
                 Toolbar(
                     title = stringResource(Res.allStringResources.getValue(viewModel.toolbarTitle)),
-                    onClick = onDismiss,
+                    onBackClick = onDismiss,
                 )
             },
         ) { innerPadding ->

@@ -9,33 +9,29 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import de.tillhub.inputengine.contract.QuantityInputRequest
 import de.tillhub.inputengine.contract.QuantityInputResult
 import de.tillhub.inputengine.formatting.QuantityFormatter
-import de.tillhub.inputengine.domain.ExtraKeys
+import de.tillhub.inputengine.ExtraKeys
 import de.tillhub.inputengine.ui.quantity.QuantityInputScreen
 import de.tillhub.inputengine.ui.quantity.QuantityInputViewModel
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 class QuantityInputActivity : ComponentActivity() {
 
+    private val request: QuantityInputRequest by lazy {
+        intent.getStringExtra(ExtraKeys.EXTRAS_REQUEST)?.let { requestJson ->
+            Json.decodeFromString(requestJson)
+        } ?: throw IllegalArgumentException("Missing QuantityInputRequest")
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val json = intent.getStringExtra(ExtraKeys.EXTRA_REQUEST)
-            ?: throw IllegalArgumentException("Missing QuantityInputRequest")
-        val request = Json.Default.decodeFromString<QuantityInputRequest>(json)
-
         setContent {
             QuantityInputScreen(
-                onResult = {
-                    when (it) {
+                onResult = { result ->
+                    when (result) {
                         is QuantityInputResult.Success -> {
                             val intent = Intent().apply {
-                                putExtra(ExtraKeys.EXTRAS_RESULT, it.quantity.toDouble())
-                                putExtra(
-                                    ExtraKeys.EXTRAS_ARGS,
-                                    Bundle().apply {
-                                        it.extras.forEach { (k, v) -> putString(k, v) }
-                                    },
-                                )
+                                putExtra(ExtraKeys.EXTRAS_RESULT, Json.encodeToString(result))
                             }
                             setResult(RESULT_OK, intent)
                         }

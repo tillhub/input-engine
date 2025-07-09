@@ -8,7 +8,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
-import de.tillhub.inputengine.domain.ExtraKeys
+import de.tillhub.inputengine.ExtraKeys
 import de.tillhub.inputengine.ui.PinInputActivity
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -30,7 +30,7 @@ actual fun rememberPinInputLauncher(
         object : PinInputContract {
             override fun launchPinInput(request: PinInputRequest) {
                 val intent = Intent(context, PinInputActivity::class.java).also {
-                    it.putExtra(ExtraKeys.EXTRA_REQUEST, Json.encodeToString(request))
+                    it.putExtra(ExtraKeys.EXTRAS_REQUEST, Json.encodeToString(request))
                 }
                 launcher.launch(intent)
             }
@@ -44,9 +44,7 @@ internal fun parsePinInputResult(resultCode: Int, extras: Bundle?): PinInputResu
         return PinInputResult.Canceled
     }
 
-    val dataMap = extras.keySet().associateWith { key ->
-        extras.getString(key).orEmpty()
-    }
-
-    return PinInputResult.Success(dataMap)
+    return extras.getString(ExtraKeys.EXTRAS_RESULT)
+        ?.let { Json.decodeFromString<PinInputResult.Success>(it) }
+        ?: PinInputResult.Canceled
 }

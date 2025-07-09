@@ -60,7 +60,7 @@ fun App() {
         onResult = {
             when (it) {
                 is AmountInputResult.Success -> {
-                    result.value = it.amount.amount.toPlainString()
+                    result.value = it.amount.toString() + "\n" + it.extras.toString()
                 }
 
                 is AmountInputResult.Canceled -> Unit
@@ -141,6 +141,7 @@ fun App() {
                             amount = MoneyIO.of(100, eur),
                             amountMin = MoneyParam.Enable(MoneyIO.of(-30_00, eur)),
                             amountMax = MoneyParam.Enable(MoneyIO.of(50_00, eur)),
+                            extras = mapOf("extraArg" to "argument value"),
                         ),
                     )
                     currentScreen = null

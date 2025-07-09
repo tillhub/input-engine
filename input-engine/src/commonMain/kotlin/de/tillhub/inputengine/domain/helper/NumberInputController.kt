@@ -119,11 +119,11 @@ internal class NumberInputControllerImpl(
 
     override fun deleteLast() {
         when {
-            _minorDigits.isNotEmpty() -> _minorDigits.removeLast().also {
+            _minorDigits.isNotEmpty() -> _minorDigits.removeAt(_minorDigits.lastIndex).also {
                 switchToMinorDigits = _minorDigits.isNotEmpty()
             }
 
-            _majorDigits.isNotEmpty() -> _majorDigits.removeLast()
+            _majorDigits.isNotEmpty() -> _majorDigits.removeAt(_majorDigits.lastIndex)
         }
     }
 

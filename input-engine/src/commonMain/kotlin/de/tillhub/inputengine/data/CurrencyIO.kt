@@ -3,13 +3,26 @@ package de.tillhub.inputengine.data
 import kotlinx.serialization.Serializable
 
 @Serializable
-class CurrencyIO private constructor(
-    val code: CurrencyCode,
+class CurrencyIO internal constructor(
+    val isoCode: String,
     val defaultFractionDigits: Int,
     val numericCode: Int,
 ) {
     override fun toString(): String =
-        code.toString()
+        "CurrencyIO(isoCode=$isoCode, defaultFractionDigits=$defaultFractionDigits, numericCode=$numericCode)"
+
+    override fun equals(other: Any?): Boolean = other is CurrencyIO &&
+        defaultFractionDigits == other.defaultFractionDigits &&
+        numericCode == other.numericCode &&
+        isoCode == other.isoCode
+
+    override fun hashCode(): Int {
+        var result = defaultFractionDigits
+        result = 31 * result + numericCode
+        result = 31 * result + isoCode.hashCode()
+        return result
+    }
+
     companion object {
         // https://www.currency-iso.org/en/home/tables/table-a1.html
         val all: Set<CurrencyIO> = hashSetOf(
@@ -193,25 +206,19 @@ class CurrencyIO private constructor(
             make(isoCode = "ZMW", defaultFractionDigits = 2, numericCode = 967),
             make(isoCode = "ZWL", defaultFractionDigits = 2, numericCode = 932),
         )
-        private val allByCode: Map<CurrencyCode, CurrencyIO> = all.associateByTo(hashMapOf()) { it.code }
+        private val allByCode: Map<String, CurrencyIO> = all.associateByTo(hashMapOf()) { it.isoCode }
 
         private fun make(isoCode: String, defaultFractionDigits: Int, numericCode: Int): CurrencyIO =
             CurrencyIO(
-                code = CurrencyCode(isoCode),
+                isoCode = isoCode,
                 defaultFractionDigits = defaultFractionDigits,
                 numericCode = numericCode,
             )
 
-        fun forCode(code: CurrencyCode): CurrencyIO =
-            forCodeOrNull(code) ?: error("Invalid ISO 4217 currency code: $code")
+        fun forCode(isoCode: String): CurrencyIO =
+            forCodeOrNull(isoCode) ?: error("Invalid ISO 4217 currency code: $isoCode")
 
-        fun forCodeOrNull(code: CurrencyCode): CurrencyIO? =
-            allByCode[code]
-
-        fun forCode(code: String): CurrencyIO =
-            forCodeOrNull(CurrencyCode.Companion.parse(code)) ?: error("Invalid ISO 4217 currency code: $code")
-
-        fun forCodeOrNull(code: String): CurrencyIO? =
-            CurrencyCode.Companion.parseOrNull(code)?.let(::forCodeOrNull)
+        fun forCodeOrNull(isoCode: String): CurrencyIO? =
+            allByCode[isoCode]
     }
 }

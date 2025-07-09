@@ -25,7 +25,10 @@ fun PercentageInputPreview(
 ) {
     if (percentageMax is StringParam.Enable) {
         Text(
-            modifier = Modifier.fillMaxWidth().wrapContentWidth(Alignment.CenterHorizontally),
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentWidth(Alignment.CenterHorizontally)
+                .semantics { contentDescription = "Max allowed percentage" },
             style = MaterialTheme.typography.bodyMedium,
             maxLines = 1,
             text = stringResource(Res.string.max_value, percentageMax.value),
@@ -36,7 +39,7 @@ fun PercentageInputPreview(
     Text(
         modifier = Modifier.fillMaxWidth()
             .wrapContentWidth(Alignment.CenterHorizontally)
-            .semantics { contentDescription = "percentValue" },
+            .semantics { contentDescription = "Current percentage" },
         style = MaterialTheme.typography.displaySmall,
         maxLines = 1,
         text = percentText,
@@ -45,7 +48,10 @@ fun PercentageInputPreview(
 
     if (percentageMin is StringParam.Enable) {
         Text(
-            modifier = Modifier.fillMaxWidth().wrapContentWidth(Alignment.CenterHorizontally),
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentWidth(Alignment.CenterHorizontally)
+                .semantics { contentDescription = "Min allowed percentage" },
             style = MaterialTheme.typography.bodyMedium,
             maxLines = 1,
             text = stringResource(Res.string.min_value, percentageMin.value),

@@ -10,13 +10,15 @@ import platform.Foundation.currentLocale
 actual class PercentageFormatter(
     private val locale: NSLocale = NSLocale.currentLocale
 ) {
-    actual fun format(percent: PercentIO): String {
-        val formatter = NSNumberFormatter().apply {
-            setLocale(locale)
-            setNumberStyle(NSNumberFormatterPercentStyle)
-            setMinimumFractionDigits(0u)
-            setMaximumFractionDigits(2u)
+    private val formatter by lazy {
+        NSNumberFormatter().apply {
+            numberStyle = NSNumberFormatterPercentStyle
+            locale = this@PercentageFormatter.locale
+            minimumFractionDigits = 0u
+            maximumFractionDigits = 2u
         }
-        return formatter.stringFromNumber(NSNumber(percent.toRatio())) ?: "${percent.toRatio() * 100}%"
     }
+
+    actual fun format(percent: PercentIO): String =
+        formatter.stringFromNumber(NSNumber(percent.toRatio())) ?: "${percent.toRatio() * 100}%"
 }

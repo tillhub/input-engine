@@ -8,8 +8,11 @@ import platform.Foundation.groupingSeparator
 
 actual object DecimalFormatter {
     @VisibleForTesting
-    val locale = NSLocale.currentLocale()
+    var locale = NSLocale.currentLocale()
 
-    actual val decimalSeparator: Char = locale.decimalSeparator.firstOrNull() ?: '.'
-    actual val groupingSeparator: Char = locale.groupingSeparator.firstOrNull() ?: ','
+    actual val decimalSeparator: Char
+        get() = locale.decimalSeparator.firstOrNull() ?: '.'
+
+    actual val groupingSeparator: Char
+        get() = locale.groupingSeparator.firstOrNull() ?: ','
 }

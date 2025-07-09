@@ -6,7 +6,6 @@ import com.ionspin.kotlin.bignum.decimal.RoundingMode
 import com.ionspin.kotlin.bignum.decimal.toBigDecimal
 import com.ionspin.kotlin.bignum.integer.BigInteger
 import de.tillhub.inputengine.domain.serializer.BigDecimalSerializer
-import de.tillhub.inputengine.domain.serializer.CurrencySerializer
 import kotlinx.serialization.Serializable
 
 /**
@@ -15,9 +14,9 @@ import kotlinx.serialization.Serializable
  * Double 100.0 -> 1,00 EUR
  */
 @Serializable
-class MoneyIO private constructor(
+class MoneyIO internal constructor(
     @Serializable(with = BigDecimalSerializer::class) val amount: BigDecimal,
-    @Serializable(with = CurrencySerializer::class) val currency: CurrencyIO,
+    @Serializable val currency: CurrencyIO,
 ) : Comparable<MoneyIO>, Number() {
 
     fun isZero() = amount.signum() == 0
@@ -43,7 +42,7 @@ class MoneyIO private constructor(
     operator fun unaryMinus() = MoneyIO(amount.negate(), currency)
 
     private fun <T> calculable(other: MoneyIO, body: () -> T): T {
-        require(currency.code == other.currency.code) {
+        require(currency.isoCode == other.currency.isoCode) {
             "currency $currency differs from other currency: ${other.currency}"
         }
         return body()

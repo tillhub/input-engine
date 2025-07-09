@@ -74,7 +74,7 @@ internal fun PinInputScreen(
             topBar = {
                 Toolbar(
                     title = stringResource(Res.allStringResources.getValue(viewModel.toolbarTitle)),
-                    onClick = { onResult(PinInputResult.Canceled) },
+                    onBackClick = { onResult(PinInputResult.Canceled) },
                 )
             },
             snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -87,8 +87,8 @@ internal fun PinInputScreen(
                 verticalArrangement = Arrangement.SpaceBetween,
             ) {
                 PinInputPreview(
-                    pin = enteredPin,
-                    hint = viewModel.hint,
+                    pinText = enteredPin,
+                    hintText = viewModel.hint,
                     overridePinInput = viewModel.overridePinInput,
                     onOverride = { onResult(PinInputResult.Success(viewModel.responseExtras)) },
                 )

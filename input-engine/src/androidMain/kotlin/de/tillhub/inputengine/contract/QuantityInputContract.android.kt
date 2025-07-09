@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import de.tillhub.inputengine.data.QuantityIO
-import de.tillhub.inputengine.domain.ExtraKeys
+import de.tillhub.inputengine.ExtraKeys
 import de.tillhub.inputengine.ui.QuantityInputActivity
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -31,7 +31,7 @@ actual fun rememberQuantityInputLauncher(
         object : QuantityInputContract {
             override fun launchQuantityInput(request: QuantityInputRequest) {
                 val intent = Intent(context, QuantityInputActivity::class.java).also {
-                    it.putExtra(ExtraKeys.EXTRA_REQUEST, Json.encodeToString(request))
+                    it.putExtra(ExtraKeys.EXTRAS_REQUEST, Json.encodeToString(request))
                 }
                 launcher.launch(intent)
             }
@@ -48,16 +48,7 @@ internal fun parseQuantityInputResult(
         return QuantityInputResult.Canceled
     }
 
-    val quantityValue = extras.getDouble(ExtraKeys.EXTRAS_RESULT, Double.NaN)
-    if (quantityValue.isNaN()) return QuantityInputResult.Canceled
-
-    val extrasMap = extras.getBundle(ExtraKeys.EXTRAS_ARGS)
-        ?.keySet()
-        ?.associateWith { key -> extras.getBundle(ExtraKeys.EXTRAS_ARGS)!!.getString(key)!! }
-        .orEmpty()
-
-    return QuantityInputResult.Success(
-        quantity = QuantityIO.of(quantityValue),
-        extras = extrasMap,
-    )
+    return extras.getString(ExtraKeys.EXTRAS_RESULT)
+        ?.let { Json.decodeFromString<QuantityInputResult.Success>(it) }
+        ?: QuantityInputResult.Canceled
 }

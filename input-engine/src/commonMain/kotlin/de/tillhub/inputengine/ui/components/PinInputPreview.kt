@@ -9,6 +9,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -22,16 +25,18 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun PinInputPreview(
-    pin: String,
-    hint: String,
+    pinText: String,
+    hintText: String,
     overridePinInput: Boolean,
     onOverride: () -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxWidth()) {
         OutlinedTextField(
             readOnly = true,
-            modifier = Modifier.align(Alignment.Center),
-            value = pin,
+            modifier = Modifier
+                .align(Alignment.Center)
+                .testTag("Pin placeholder"),
+            value = pinText,
             onValueChange = { },
             textStyle = TextStyle.Default.copy(
                 color = OrbitalBlue,
@@ -42,13 +47,14 @@ fun PinInputPreview(
             placeholder = {
                 Text(
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .semantics { contentDescription = "Pin hint text" },
                     style = TextStyle.Default.copy(
                         color = HintGray,
                         fontSize = 64.sp,
                         textAlign = TextAlign.Center,
                     ),
-                    text = hint,
+                    text = hintText,
                 )
             },
             visualTransformation = PasswordVisualTransformation(),
@@ -60,7 +66,8 @@ fun PinInputPreview(
                     .align(Alignment.BottomCenter)
                     .clickable {
                         onOverride()
-                    },
+                    }
+                    .semantics { contentDescription = "Override pin" },
                 textAlign = TextAlign.End,
                 maxLines = 1,
                 style = MaterialTheme.typography.bodyMedium,
