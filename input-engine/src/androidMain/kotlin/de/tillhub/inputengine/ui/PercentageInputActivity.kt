@@ -8,7 +8,6 @@ import androidx.lifecycle.viewmodel.MutableCreationExtras
 import androidx.lifecycle.viewmodel.compose.viewModel
 import de.tillhub.inputengine.ExtraKeys
 import de.tillhub.inputengine.contract.PercentageInputRequest
-import de.tillhub.inputengine.formatting.PercentageFormatter
 import de.tillhub.inputengine.formatting.PercentageFormatterImpl
 import de.tillhub.inputengine.ui.percentage.PercentageInputScreen
 import de.tillhub.inputengine.ui.percentage.PercentageInputViewModel
@@ -16,7 +15,6 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 class PercentageInputActivity : ComponentActivity() {
-
     private val request: PercentageInputRequest by lazy {
         intent.getStringExtra(ExtraKeys.EXTRAS_REQUEST)?.let { requestJson ->
             Json.Default.decodeFromString<PercentageInputRequest>(requestJson)
@@ -29,9 +27,10 @@ class PercentageInputActivity : ComponentActivity() {
         setContent {
             PercentageInputScreen(
                 onResult = { result ->
-                    val resultIntent = Intent().apply {
-                        putExtra(ExtraKeys.EXTRAS_RESULT, Json.encodeToString(result))
-                    }
+                    val resultIntent =
+                        Intent().apply {
+                            putExtra(ExtraKeys.EXTRAS_RESULT, Json.encodeToString(result))
+                        }
                     setResult(RESULT_OK, resultIntent)
                     finish()
                 },
@@ -39,9 +38,11 @@ class PercentageInputActivity : ComponentActivity() {
                     setResult(RESULT_CANCELED)
                     finish()
                 },
-                viewModel = viewModel(
+                viewModel =
+                viewModel(
                     factory = PercentageInputViewModel.Factory,
-                    extras = MutableCreationExtras().apply {
+                    extras =
+                    MutableCreationExtras().apply {
                         set(PercentageInputViewModel.REQUEST_KEY, request)
                         set(PercentageInputViewModel.FORMATTER_KEY, PercentageFormatterImpl())
                     },

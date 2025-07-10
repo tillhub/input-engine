@@ -22,14 +22,14 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class PinInputContractTest {
-
     @get:Rule
     val composeRule = createAndroidComposeRule<ComponentActivity>()
 
-    private val request = PinInputRequest(
-        pin = "1234",
-        extras = mapOf("test" to "value"),
-    )
+    private val request =
+        PinInputRequest(
+            pin = "1234",
+            extras = mapOf("test" to "value"),
+        )
 
     @Test
     fun inputPinLaunchCanceled() {
@@ -37,29 +37,32 @@ class PinInputContractTest {
         var contract: PinInputContract? = null
 
         composeRule.setContent {
-            val activityResultRegistry: ActivityResultRegistry = object : ActivityResultRegistry() {
-                override fun <I, O> onLaunch(
-                    requestCode: Int,
-                    contract: ActivityResultContract<I, O>,
-                    input: I,
-                    options: ActivityOptionsCompat?,
-                ) {
-                    // Create proper ActivityResult with canceled result code
-                    val activityResult = ActivityResult(Activity.RESULT_CANCELED, null)
-                    @Suppress("UNCHECKED_CAST")
-                    dispatchResult(requestCode, activityResult as O)
+            val activityResultRegistry: ActivityResultRegistry =
+                object : ActivityResultRegistry() {
+                    override fun <I, O> onLaunch(
+                        requestCode: Int,
+                        contract: ActivityResultContract<I, O>,
+                        input: I,
+                        options: ActivityOptionsCompat?,
+                    ) {
+                        // Create proper ActivityResult with canceled result code
+                        val activityResult = ActivityResult(Activity.RESULT_CANCELED, null)
+                        @Suppress("UNCHECKED_CAST")
+                        dispatchResult(requestCode, activityResult as O)
+                    }
                 }
-            }
 
-            val registryOwner = object : androidx.activity.result.ActivityResultRegistryOwner {
-                override val activityResultRegistry: ActivityResultRegistry
-                    get() = activityResultRegistry
-            }
+            val registryOwner =
+                object : androidx.activity.result.ActivityResultRegistryOwner {
+                    override val activityResultRegistry: ActivityResultRegistry
+                        get() = activityResultRegistry
+                }
 
             CompositionLocalProvider(LocalActivityResultRegistryOwner provides registryOwner) {
-                contract = rememberPinInputLauncher {
-                    result = it
-                }
+                contract =
+                    rememberPinInputLauncher {
+                        result = it
+                    }
             }
         }
 
@@ -75,37 +78,42 @@ class PinInputContractTest {
         var result: PinInputResult? = null
         var contract: PinInputContract? = null
 
-        val successResult = PinInputResult.Success(
-            extras = mapOf("result" to "success"),
-        )
+        val successResult =
+            PinInputResult.Success(
+                extras = mapOf("result" to "success"),
+            )
 
         composeRule.setContent {
-            val activityResultRegistry: ActivityResultRegistry = object : ActivityResultRegistry() {
-                override fun <I, O> onLaunch(
-                    requestCode: Int,
-                    contract: ActivityResultContract<I, O>,
-                    input: I,
-                    options: ActivityOptionsCompat?,
-                ) {
-                    // Create proper ActivityResult with success result code and serialized data
-                    val resultIntent = Intent().apply {
-                        putExtra(ExtraKeys.EXTRAS_RESULT, Json.encodeToString(successResult))
+            val activityResultRegistry: ActivityResultRegistry =
+                object : ActivityResultRegistry() {
+                    override fun <I, O> onLaunch(
+                        requestCode: Int,
+                        contract: ActivityResultContract<I, O>,
+                        input: I,
+                        options: ActivityOptionsCompat?,
+                    ) {
+                        // Create proper ActivityResult with success result code and serialized data
+                        val resultIntent =
+                            Intent().apply {
+                                putExtra(ExtraKeys.EXTRAS_RESULT, Json.encodeToString(successResult))
+                            }
+                        val activityResult = ActivityResult(Activity.RESULT_OK, resultIntent)
+
+                        dispatchResult(requestCode, activityResult)
                     }
-                    val activityResult = ActivityResult(Activity.RESULT_OK, resultIntent)
-
-                    dispatchResult(requestCode, activityResult)
                 }
-            }
 
-            val registryOwner = object : androidx.activity.result.ActivityResultRegistryOwner {
-                override val activityResultRegistry: ActivityResultRegistry
-                    get() = activityResultRegistry
-            }
+            val registryOwner =
+                object : androidx.activity.result.ActivityResultRegistryOwner {
+                    override val activityResultRegistry: ActivityResultRegistry
+                        get() = activityResultRegistry
+                }
 
             CompositionLocalProvider(LocalActivityResultRegistryOwner provides registryOwner) {
-                contract = rememberPinInputLauncher {
-                    result = it
-                }
+                contract =
+                    rememberPinInputLauncher {
+                        result = it
+                    }
             }
         }
 

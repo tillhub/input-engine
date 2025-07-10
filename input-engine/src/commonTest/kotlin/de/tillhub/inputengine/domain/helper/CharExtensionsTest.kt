@@ -5,7 +5,6 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class CharExtensionsTest {
-
     @Test
     fun testLatinLowercaseLetters() {
         assertTrue('a'.isLatinLetter())

@@ -16,7 +16,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class NumberButtonTest {
-
     @Test
     fun initialButtonState() = runComposeUiTest {
         var onClickCount = 0

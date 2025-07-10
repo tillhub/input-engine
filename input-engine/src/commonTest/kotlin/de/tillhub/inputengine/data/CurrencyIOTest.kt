@@ -7,7 +7,6 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class CurrencyIOTest {
-
     @Test
     fun testEqualsAndHashCode() {
         assertEquals(expected = CurrencyIO.forCode("EUR"), actual = CurrencyIO.forCode("EUR"))
@@ -53,7 +52,10 @@ class CurrencyIOTest {
 
     @Test
     fun testToString() {
-        assertEquals(expected = "CurrencyIO(isoCode=EUR, defaultFractionDigits=2, numericCode=978)", actual = CurrencyIO.forCode("EUR").toString())
+        assertEquals(
+            expected = "CurrencyIO(isoCode=EUR, defaultFractionDigits=2, numericCode=978)",
+            actual = CurrencyIO.forCode("EUR").toString(),
+        )
     }
 
     @Test

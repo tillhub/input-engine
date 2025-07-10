@@ -16,7 +16,6 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 class PinInputActivity : ComponentActivity() {
-
     private val request: PinInputRequest by lazy {
         intent.getStringExtra(ExtraKeys.EXTRAS_REQUEST)?.let { requestJson ->
             Json.decodeFromString(requestJson)
@@ -31,9 +30,10 @@ class PinInputActivity : ComponentActivity() {
                 onResult = { result ->
                     when (result) {
                         is PinInputResult.Success -> {
-                            val resultIntent = Intent().apply {
-                                putExtra(ExtraKeys.EXTRAS_RESULT, Json.encodeToString(result))
-                            }
+                            val resultIntent =
+                                Intent().apply {
+                                    putExtra(ExtraKeys.EXTRAS_RESULT, Json.encodeToString(result))
+                                }
                             setResult(RESULT_OK, resultIntent)
                             finish()
                         }
@@ -44,9 +44,11 @@ class PinInputActivity : ComponentActivity() {
                         }
                     }
                 },
-                viewModel = viewModel(
+                viewModel =
+                viewModel(
                     factory = PinInputViewModel.Factory,
-                    extras = MutableCreationExtras().apply {
+                    extras =
+                    MutableCreationExtras().apply {
                         set(PinInputViewModel.REQUEST_KEY, request)
                     },
                 ),

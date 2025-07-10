@@ -14,7 +14,6 @@ data class IntegerWrapper(
 )
 
 class BigIntegerSerializerTest {
-
     private val json = Json { encodeDefaults = true }
 
     @Test

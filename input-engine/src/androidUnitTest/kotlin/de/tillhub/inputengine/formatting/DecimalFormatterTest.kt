@@ -6,12 +6,12 @@ import java.util.Locale
 import kotlin.test.assertEquals
 
 class DecimalFormatterTest {
-
     @Test
     fun decimalFormatterGermanTest() = runTest {
-        val formatterDe = DecimalFormatter.apply {
-            locale = Locale.GERMAN
-        }
+        val formatterDe =
+            DecimalFormatter.apply {
+                locale = Locale.GERMAN
+            }
 
         assertEquals(',', formatterDe.decimalSeparator)
         assertEquals('.', formatterDe.groupingSeparator)
@@ -19,9 +19,10 @@ class DecimalFormatterTest {
 
     @Test
     fun decimalFormatterUsTest() = runTest {
-        val formatterUs = DecimalFormatter.apply {
-            locale = Locale.US
-        }
+        val formatterUs =
+            DecimalFormatter.apply {
+                locale = Locale.US
+            }
 
         assertEquals('.', formatterUs.decimalSeparator)
         assertEquals(',', formatterUs.groupingSeparator)

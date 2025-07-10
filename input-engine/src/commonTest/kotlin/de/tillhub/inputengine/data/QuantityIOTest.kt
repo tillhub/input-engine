@@ -13,7 +13,6 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class QuantityIOTest {
-
     @Test
     fun testConstructors_Int() {
         assertEquals(10000.toBigInteger(), QuantityIO.of(1).value)

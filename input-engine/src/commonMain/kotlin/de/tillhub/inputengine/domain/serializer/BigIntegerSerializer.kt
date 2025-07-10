@@ -12,11 +12,12 @@ internal object BigIntegerSerializer : KSerializer<BigInteger> {
     override val descriptor: SerialDescriptor =
         PrimitiveSerialDescriptor("BigInteger", PrimitiveKind.STRING)
 
-    override fun serialize(encoder: Encoder, value: BigInteger) {
+    override fun serialize(
+        encoder: Encoder,
+        value: BigInteger,
+    ) {
         encoder.encodeString(value.toString())
     }
 
-    override fun deserialize(decoder: Decoder): BigInteger {
-        return BigInteger.parseString(decoder.decodeString())
-    }
+    override fun deserialize(decoder: Decoder): BigInteger = BigInteger.parseString(decoder.decodeString())
 }

@@ -13,26 +13,30 @@ import platform.UIKit.UIViewController
 class PinInputPresenter(
     private val onResult: (PinInputResult) -> Unit,
 ) {
-
     private var viewController: UIViewController? = null
 
     fun launch(request: PinInputRequest) {
-        val root = UIApplication.Companion.sharedApplication.keyWindow?.rootViewController ?: return
+        val root =
+            UIApplication.Companion.sharedApplication.keyWindow
+                ?.rootViewController ?: return
 
-        viewController = ComposeUIViewController {
-            PinInputScreen(
-                onResult = {
-                    onResult(it)
-                    dismiss()
-                },
-                viewModel = viewModel(
-                    factory = PinInputViewModel.Factory,
-                    extras = MutableCreationExtras().apply {
-                        set(PinInputViewModel.REQUEST_KEY, request)
+        viewController =
+            ComposeUIViewController {
+                PinInputScreen(
+                    onResult = {
+                        onResult(it)
+                        dismiss()
                     },
-                ),
-            )
-        }
+                    viewModel =
+                    viewModel(
+                        factory = PinInputViewModel.Factory,
+                        extras =
+                        MutableCreationExtras().apply {
+                            set(PinInputViewModel.REQUEST_KEY, request)
+                        },
+                    ),
+                )
+            }
 
         viewController?.let { vc ->
             root.presentViewController(vc, animated = true, completion = null)

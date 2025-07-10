@@ -1,6 +1,8 @@
 package de.tillhub.inputengine.domain
 
-enum class Digit(val value: Int) {
+enum class Digit(
+    val value: Int,
+) {
     ZERO(0),
     ONE(1),
     TWO(2),

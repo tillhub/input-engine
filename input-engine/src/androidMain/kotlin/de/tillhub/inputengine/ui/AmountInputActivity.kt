@@ -8,7 +8,6 @@ import androidx.lifecycle.viewmodel.MutableCreationExtras
 import androidx.lifecycle.viewmodel.compose.viewModel
 import de.tillhub.inputengine.ExtraKeys
 import de.tillhub.inputengine.contract.AmountInputRequest
-import de.tillhub.inputengine.formatting.MoneyFormatter
 import de.tillhub.inputengine.formatting.MoneyFormatterImpl
 import de.tillhub.inputengine.ui.amount.AmountInputScreen
 import de.tillhub.inputengine.ui.amount.AmountInputViewModel
@@ -16,7 +15,6 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 class AmountInputActivity : ComponentActivity() {
-
     private val request: AmountInputRequest by lazy {
         intent.getStringExtra(ExtraKeys.EXTRAS_REQUEST)?.let { requestJson ->
             Json.decodeFromString(requestJson)
@@ -28,9 +26,10 @@ class AmountInputActivity : ComponentActivity() {
         setContent {
             AmountInputScreen(
                 onResult = { result ->
-                    val resultIntent = Intent().apply {
-                        putExtra(ExtraKeys.EXTRAS_RESULT, Json.encodeToString(result))
-                    }
+                    val resultIntent =
+                        Intent().apply {
+                            putExtra(ExtraKeys.EXTRAS_RESULT, Json.encodeToString(result))
+                        }
                     setResult(RESULT_OK, resultIntent)
                     finish()
                 },
@@ -38,9 +37,11 @@ class AmountInputActivity : ComponentActivity() {
                     setResult(RESULT_CANCELED)
                     finish()
                 },
-                viewModel = viewModel(
+                viewModel =
+                viewModel(
                     factory = AmountInputViewModel.Factory,
-                    extras = MutableCreationExtras().apply {
+                    extras =
+                    MutableCreationExtras().apply {
                         set(AmountInputViewModel.REQUEST_KEY, request)
                         set(AmountInputViewModel.FORMATTER_KEY, MoneyFormatterImpl())
                     },

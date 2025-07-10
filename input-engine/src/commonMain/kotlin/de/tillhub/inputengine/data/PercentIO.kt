@@ -14,8 +14,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 class PercentIO private constructor(
     val value: Long,
-) : Comparable<PercentIO>, Number() {
-
+) : Number(),
+    Comparable<PercentIO> {
     override fun compareTo(other: PercentIO): Int = value.compareTo(other.value)
 
     override fun toByte(): Byte = value.toByte()
@@ -35,7 +35,9 @@ class PercentIO private constructor(
     fun isNotZero() = value != ZERO_VALUE
 
     override fun toString() = "PercentIO(value=$value)"
+
     override fun equals(other: Any?) = other is PercentIO && value == other.value
+
     override fun hashCode() = value.hashCode()
 
     companion object {
@@ -53,24 +55,21 @@ class PercentIO private constructor(
          */
         val ZERO: PercentIO = PercentIO(ZERO_VALUE)
 
-        fun of(number: Number): PercentIO {
-            return PercentIO(
-                when (number) {
-                    is Int -> number * I_100
-                    is Long -> number * I_100
-                    is Double -> (number * I_100).toLong()
-                    else -> number.toLong() * I_100
-                },
-            )
-        }
-        fun of(number: BigNumber<*>): PercentIO {
-            return PercentIO(
-                when (number) {
-                    is BigInteger -> number.longValue() * I_100
-                    is BigDecimal -> number.multiply(I_100.toBigDecimal()).longValue()
-                    else -> throw IllegalArgumentException("Percent $number is not supported type.")
-                },
-            )
-        }
+        fun of(number: Number): PercentIO = PercentIO(
+            when (number) {
+                is Int -> number * I_100
+                is Long -> number * I_100
+                is Double -> (number * I_100).toLong()
+                else -> number.toLong() * I_100
+            },
+        )
+
+        fun of(number: BigNumber<*>): PercentIO = PercentIO(
+            when (number) {
+                is BigInteger -> number.longValue() * I_100
+                is BigDecimal -> number.multiply(I_100.toBigDecimal()).longValue()
+                else -> throw IllegalArgumentException("Percent $number is not supported type.")
+            },
+        )
     }
 }

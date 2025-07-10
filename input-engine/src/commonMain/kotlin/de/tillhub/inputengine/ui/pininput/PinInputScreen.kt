@@ -67,7 +67,8 @@ internal fun PinInputScreen(
 
     AppTheme {
         Scaffold(
-            modifier = getModifierBasedOnDeviceType(
+            modifier =
+            getModifierBasedOnDeviceType(
                 isTablet = TabletScaffoldModifier,
                 isMobile = Modifier,
             ),
@@ -80,7 +81,8 @@ internal fun PinInputScreen(
             snackbarHost = { SnackbarHost(snackbarHostState) },
         ) { innerPadding ->
             Column(
-                modifier = Modifier
+                modifier =
+                Modifier
                     .padding(innerPadding)
                     .padding(vertical = 16.dp)
                     .fillMaxHeight(),

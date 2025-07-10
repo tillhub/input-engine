@@ -6,7 +6,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed class PercentageParam {
     @Serializable
-    data class Enable(val percent: PercentIO) : PercentageParam()
+    data class Enable(
+        val percent: PercentIO,
+    ) : PercentageParam()
 
     @Serializable
     data object Disable : PercentageParam()

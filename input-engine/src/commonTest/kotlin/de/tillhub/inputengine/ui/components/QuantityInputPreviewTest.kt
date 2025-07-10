@@ -16,13 +16,13 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class QuantityInputPreviewTest {
-
     @Test
     fun displaysInitialPercentageText() = runComposeUiTest {
         setContent {
             AppTheme {
                 QuantityInputPreview(
-                    quantity = QuantityInputData(
+                    quantity =
+                    QuantityInputData(
                         qty = QuantityIO.ZERO,
                         text = "0",
                         isValid = false,
@@ -51,7 +51,8 @@ class QuantityInputPreviewTest {
         setContent {
             AppTheme {
                 QuantityInputPreview(
-                    quantity = QuantityInputData(
+                    quantity =
+                    QuantityInputData(
                         qty = QuantityIO.ZERO,
                         text = "0",
                         isValid = false,
@@ -87,7 +88,8 @@ class QuantityInputPreviewTest {
         setContent {
             AppTheme {
                 QuantityInputPreview(
-                    quantity = QuantityInputData(
+                    quantity =
+                    QuantityInputData(
                         qty = QuantityIO.ZERO,
                         text = "2",
                         isValid = false,

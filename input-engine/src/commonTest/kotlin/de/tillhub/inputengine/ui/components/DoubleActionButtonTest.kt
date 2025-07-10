@@ -19,7 +19,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class DoubleActionButtonTest {
-
     @Test
     fun performsClick() = runComposeUiTest {
         var onClickCount = 0

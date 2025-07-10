@@ -34,8 +34,8 @@ internal class PercentageInputViewModel(
         formatter.format(it)
     }
 
-    private val _inputPercentIO = MutableStateFlow(PercentageInputData.EMPTY)
-    val percentageInput: StateFlow<PercentageInputData> = _inputPercentIO
+    private val _percentageInput = MutableStateFlow(PercentageInputData.EMPTY)
+    val percentageInput: StateFlow<PercentageInputData> = _percentageInput
 
     private var isInitValue = true
     private var maxPercent: PercentIO = when (request.percentageMax) {
@@ -79,24 +79,20 @@ internal class PercentageInputViewModel(
     }
 
     private fun setValue(percent: PercentIO) {
-        _inputPercentIO.value = PercentageInputData(
+        _percentageInput.value = PercentageInputData(
             percent = percent,
             text = formatter.format(percent),
             isValid = isValid(percent),
         )
     }
 
-    private fun isValid(percentIO: PercentIO): Boolean {
-        return if (request.allowsZero) {
-            isValueBetweenMinMax(percentIO)
-        } else {
-            percentIO.isNotZero() && isValueBetweenMinMax(percentIO)
-        }
+    private fun isValid(percentIO: PercentIO): Boolean = if (request.allowsZero) {
+        isValueBetweenMinMax(percentIO)
+    } else {
+        percentIO.isNotZero() && isValueBetweenMinMax(percentIO)
     }
 
-    private fun isValueBetweenMinMax(percent: PercentIO): Boolean {
-        return percent in minPercent..maxPercent
-    }
+    private fun isValueBetweenMinMax(percent: PercentIO): Boolean = percent in minPercent..maxPercent
 
     companion object {
         // Define a custom keys for our dependency

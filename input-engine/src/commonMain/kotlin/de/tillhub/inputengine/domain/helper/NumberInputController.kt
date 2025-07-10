@@ -28,27 +28,28 @@ internal class NumberInputControllerImpl(
 ) : NumberInputController {
     private var switchToMinorDigits = false
     private var switchToNegate = false
-    private val _majorDigits: MutableList<Digit> = mutableListOf(Digit.ZERO)
-    private val _minorDigits: MutableList<Digit> = mutableListOf()
 
+    private val majorDigits: MutableList<Digit> = mutableListOf(Digit.ZERO)
     override val minorDigits: List<Digit> get() = _minorDigits
+
+    private val _minorDigits: MutableList<Digit> = mutableListOf()
 
     override fun setValue(majorDigits: List<Digit>, minorDigits: List<Digit>, isNegative: Boolean) {
         this.switchToMinorDigits = minorDigits.isNotEmpty()
         this.switchToNegate = isNegative
-        this._majorDigits.clear()
-        this._majorDigits.addAll(majorDigits)
+        this.majorDigits.clear()
+        this.majorDigits.addAll(majorDigits)
         this._minorDigits.clear()
         this._minorDigits.addAll(minorDigits)
     }
 
     override fun setValue(number: Number) {
-        _majorDigits.clear()
+        majorDigits.clear()
         _minorDigits.clear()
 
         when (number) {
             is Int -> {
-                _majorDigits.addAll(DigitBuilder.digits(number.toBigInteger()))
+                majorDigits.addAll(DigitBuilder.digits(number.toBigInteger()))
             }
 
             is Double, is Float -> {
@@ -62,12 +63,12 @@ internal class NumberInputControllerImpl(
     }
 
     override fun setValue(number: BigNumber<*>) {
-        _majorDigits.clear()
+        majorDigits.clear()
         _minorDigits.clear()
 
         when (number) {
             is BigInteger -> {
-                _majorDigits.addAll(DigitBuilder.digits(number))
+                majorDigits.addAll(DigitBuilder.digits(number))
                 switchToNegate = number < 0.0
             }
 
@@ -84,7 +85,7 @@ internal class NumberInputControllerImpl(
         val integerPart = decimal.floor()
         val fractionalPart = decimal - integerPart
 
-        _majorDigits.addAll(DigitBuilder.digits(integerPart.toBigInteger()))
+        majorDigits.addAll(DigitBuilder.digits(integerPart.toBigInteger()))
 
         val scaledMinor = fractionalPart
             .roundToDigitPositionAfterDecimalPoint(
@@ -105,13 +106,13 @@ internal class NumberInputControllerImpl(
             }
         } else {
             when {
-                _majorDigits == listOf(Digit.ZERO) -> {
-                    _majorDigits.clear()
-                    _majorDigits.add(digit)
+                majorDigits == listOf(Digit.ZERO) -> {
+                    majorDigits.clear()
+                    majorDigits.add(digit)
                 }
 
-                _majorDigits.size < maxMajorDigits -> {
-                    _majorDigits.add(digit)
+                majorDigits.size < maxMajorDigits -> {
+                    majorDigits.add(digit)
                 }
             }
         }
@@ -123,7 +124,7 @@ internal class NumberInputControllerImpl(
                 switchToMinorDigits = _minorDigits.isNotEmpty()
             }
 
-            _majorDigits.isNotEmpty() -> _majorDigits.removeAt(_majorDigits.lastIndex)
+            majorDigits.isNotEmpty() -> majorDigits.removeAt(majorDigits.lastIndex)
         }
     }
 
@@ -138,35 +139,33 @@ internal class NumberInputControllerImpl(
         switchToNegate = !switchToNegate
     }
 
-    override fun value(): Number {
-        return if (_minorDigits.isEmpty()) {
-            val result = _majorDigits.fold(BigInteger.ZERO) { acc, digit ->
-                acc * BigInteger.TEN + digit.value.toBigInteger()
-            }.let { if (switchToNegate) it.negate() else it }
+    override fun value(): Number = if (_minorDigits.isEmpty()) {
+        val result = majorDigits.fold(BigInteger.ZERO) { acc, digit ->
+            acc * BigInteger.TEN + digit.value.toBigInteger()
+        }.let { if (switchToNegate) it.negate() else it }
 
-            result.longValue(false)
-        } else {
-            val totalDigits = _majorDigits + _minorDigits
-            val scale = _minorDigits.size
+        result.longValue(false)
+    } else {
+        val totalDigits = majorDigits + _minorDigits
+        val scale = _minorDigits.size
 
-            val combined = totalDigits.fold(BigDecimal.ZERO) { acc, digit ->
-                acc * BigDecimal.TEN + digit.value.toBigDecimal()
-            }
-
-            val scaled = combined
-                .divide(
-                    BigDecimal.TEN.pow(scale),
-                    decimalMode = DecimalMode(DEFAULT_DECIMAL_PRECISION),
-                )
-                .let { if (switchToNegate) it.negate() else it }
-
-            scaled.doubleValue(false)
+        val combined = totalDigits.fold(BigDecimal.ZERO) { acc, digit ->
+            acc * BigDecimal.TEN + digit.value.toBigDecimal()
         }
+
+        val scaled = combined
+            .divide(
+                BigDecimal.TEN.pow(scale),
+                decimalMode = DecimalMode(DEFAULT_DECIMAL_PRECISION),
+            )
+            .let { if (switchToNegate) it.negate() else it }
+
+        scaled.doubleValue(false)
     }
 
     override fun clear() {
-        _majorDigits.clear()
-        _majorDigits.add(Digit.ZERO)
+        majorDigits.clear()
+        majorDigits.add(Digit.ZERO)
         _minorDigits.clear()
         switchToMinorDigits = false
         switchToNegate = false

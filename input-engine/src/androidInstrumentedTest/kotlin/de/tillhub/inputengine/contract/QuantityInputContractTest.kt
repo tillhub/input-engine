@@ -23,15 +23,15 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class QuantityInputContractTest {
-
     @get:Rule
     val composeRule = createAndroidComposeRule<ComponentActivity>()
 
-    private val request = QuantityInputRequest(
-        quantity = QuantityIO.of(10),
-        allowsZero = true,
-        extras = mapOf("test" to "value"),
-    )
+    private val request =
+        QuantityInputRequest(
+            quantity = QuantityIO.of(10),
+            allowsZero = true,
+            extras = mapOf("test" to "value"),
+        )
 
     @Test
     fun inputQuantityLaunchCanceled() {
@@ -39,29 +39,32 @@ class QuantityInputContractTest {
         var contract: QuantityInputContract? = null
 
         composeRule.setContent {
-            val activityResultRegistry: ActivityResultRegistry = object : ActivityResultRegistry() {
-                override fun <I, O> onLaunch(
-                    requestCode: Int,
-                    contract: ActivityResultContract<I, O>,
-                    input: I,
-                    options: ActivityOptionsCompat?,
-                ) {
-                    // Create proper ActivityResult with canceled result code
-                    val activityResult = ActivityResult(Activity.RESULT_CANCELED, null)
-                    @Suppress("UNCHECKED_CAST")
-                    dispatchResult(requestCode, activityResult as O)
+            val activityResultRegistry: ActivityResultRegistry =
+                object : ActivityResultRegistry() {
+                    override fun <I, O> onLaunch(
+                        requestCode: Int,
+                        contract: ActivityResultContract<I, O>,
+                        input: I,
+                        options: ActivityOptionsCompat?,
+                    ) {
+                        // Create proper ActivityResult with canceled result code
+                        val activityResult = ActivityResult(Activity.RESULT_CANCELED, null)
+                        @Suppress("UNCHECKED_CAST")
+                        dispatchResult(requestCode, activityResult as O)
+                    }
                 }
-            }
 
-            val registryOwner = object : androidx.activity.result.ActivityResultRegistryOwner {
-                override val activityResultRegistry: ActivityResultRegistry
-                    get() = activityResultRegistry
-            }
+            val registryOwner =
+                object : androidx.activity.result.ActivityResultRegistryOwner {
+                    override val activityResultRegistry: ActivityResultRegistry
+                        get() = activityResultRegistry
+                }
 
             CompositionLocalProvider(LocalActivityResultRegistryOwner provides registryOwner) {
-                contract = rememberQuantityInputLauncher {
-                    result = it
-                }
+                contract =
+                    rememberQuantityInputLauncher {
+                        result = it
+                    }
             }
         }
 
@@ -77,38 +80,43 @@ class QuantityInputContractTest {
         var result: QuantityInputResult? = null
         var contract: QuantityInputContract? = null
 
-        val successResult = QuantityInputResult.Success(
-            quantity = QuantityIO.of(25),
-            extras = mapOf("result" to "success"),
-        )
+        val successResult =
+            QuantityInputResult.Success(
+                quantity = QuantityIO.of(25),
+                extras = mapOf("result" to "success"),
+            )
 
         composeRule.setContent {
-            val activityResultRegistry: ActivityResultRegistry = object : ActivityResultRegistry() {
-                override fun <I, O> onLaunch(
-                    requestCode: Int,
-                    contract: ActivityResultContract<I, O>,
-                    input: I,
-                    options: ActivityOptionsCompat?,
-                ) {
-                    // Create proper ActivityResult with success result code and serialized data
-                    val resultIntent = Intent().apply {
-                        putExtra(ExtraKeys.EXTRAS_RESULT, Json.encodeToString(successResult))
+            val activityResultRegistry: ActivityResultRegistry =
+                object : ActivityResultRegistry() {
+                    override fun <I, O> onLaunch(
+                        requestCode: Int,
+                        contract: ActivityResultContract<I, O>,
+                        input: I,
+                        options: ActivityOptionsCompat?,
+                    ) {
+                        // Create proper ActivityResult with success result code and serialized data
+                        val resultIntent =
+                            Intent().apply {
+                                putExtra(ExtraKeys.EXTRAS_RESULT, Json.encodeToString(successResult))
+                            }
+                        val activityResult = ActivityResult(Activity.RESULT_OK, resultIntent)
+
+                        dispatchResult(requestCode, activityResult)
                     }
-                    val activityResult = ActivityResult(Activity.RESULT_OK, resultIntent)
-
-                    dispatchResult(requestCode, activityResult)
                 }
-            }
 
-            val registryOwner = object : androidx.activity.result.ActivityResultRegistryOwner {
-                override val activityResultRegistry: ActivityResultRegistry
-                    get() = activityResultRegistry
-            }
+            val registryOwner =
+                object : androidx.activity.result.ActivityResultRegistryOwner {
+                    override val activityResultRegistry: ActivityResultRegistry
+                        get() = activityResultRegistry
+                }
 
             CompositionLocalProvider(LocalActivityResultRegistryOwner provides registryOwner) {
-                contract = rememberQuantityInputLauncher {
-                    result = it
-                }
+                contract =
+                    rememberQuantityInputLauncher {
+                        result = it
+                    }
             }
         }
 

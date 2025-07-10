@@ -7,7 +7,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class QuantityFormatterTest {
-
     @Test
     fun quantityFormatterTest() = runTest {
         val formatterDe = QuantityFormatterImpl(Locale.GERMAN)

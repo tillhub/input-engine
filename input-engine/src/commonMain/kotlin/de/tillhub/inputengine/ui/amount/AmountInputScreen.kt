@@ -34,7 +34,8 @@ internal fun AmountInputScreen(
 
     AppTheme {
         Scaffold(
-            modifier = getModifierBasedOnDeviceType(
+            modifier =
+            getModifierBasedOnDeviceType(
                 isTablet = TabletScaffoldModifier,
                 isMobile = Modifier,
             ),
@@ -46,7 +47,8 @@ internal fun AmountInputScreen(
             },
         ) { innerPadding ->
             Column(
-                modifier = Modifier
+                modifier =
+                Modifier
                     .padding(innerPadding)
                     .padding(top = 16.dp)
                     .fillMaxHeight(),

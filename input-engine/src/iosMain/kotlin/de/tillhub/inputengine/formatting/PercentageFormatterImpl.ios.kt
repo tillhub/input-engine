@@ -9,7 +9,7 @@ import platform.Foundation.currentLocale
 
 actual class PercentageFormatterImpl(
     private val locale: NSLocale = NSLocale.currentLocale,
-)  : PercentageFormatter {
+) : PercentageFormatter {
     private val formatter by lazy {
         NSNumberFormatter().apply {
             numberStyle = NSNumberFormatterPercentStyle
@@ -19,6 +19,5 @@ actual class PercentageFormatterImpl(
         }
     }
 
-    actual override fun format(percent: PercentIO): String =
-        formatter.stringFromNumber(NSNumber(percent.toRatio())) ?: "${percent.toRatio() * 100}%"
+    actual override fun format(percent: PercentIO): String = formatter.stringFromNumber(NSNumber(percent.toRatio())) ?: "${percent.toRatio() * 100}%"
 }

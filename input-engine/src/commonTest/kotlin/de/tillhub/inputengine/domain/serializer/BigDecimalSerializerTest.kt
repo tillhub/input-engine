@@ -14,7 +14,6 @@ data class DecimalWrapper(
 )
 
 class BigDecimalSerializerTest {
-
     private val json = Json { encodeDefaults = true }
 
     @Test

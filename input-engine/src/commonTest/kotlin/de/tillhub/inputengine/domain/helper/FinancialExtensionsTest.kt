@@ -8,7 +8,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class FinancialExtensionsTest {
-
     @Test
     fun testGetMajorDigits() {
         val quantity = QuantityIO.of(BigDecimal.parseString("12.34"))

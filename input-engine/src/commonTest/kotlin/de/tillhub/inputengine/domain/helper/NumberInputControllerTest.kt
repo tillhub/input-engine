@@ -19,7 +19,6 @@ import kotlin.test.assertEquals
  * and switching between integer and decimal input modes.
  */
 class NumberInputControllerTest {
-
     private lateinit var target: NumberInputController
 
     @BeforeTest
@@ -42,12 +41,20 @@ class NumberInputControllerTest {
     fun setValue() {
         // Test negative integer: digits [1,2] with negative sign = -12
         target.setValue(listOf(Digit.ONE, Digit.TWO), emptyList(), true)
-        assertEquals((-12).toBigInteger(), target.value().toBigInteger(), "Should create negative integer -12 from digits [1,2] with negative sign")
+        assertEquals(
+            (-12).toBigInteger(),
+            target.value().toBigInteger(),
+            "Should create negative integer -12 from digits [1,2] with negative sign",
+        )
 
         // Test positive decimal: digits [5,7] for integer, [9] for fraction = 57.9
         target.clear()
         target.setValue(listOf(Digit.FIVE, Digit.SEVEN), listOf(Digit.NINE), false)
-        assertEquals(57.9.toBigDecimal(), target.value().toBigDecimal(), "Should create positive decimal 57.9 from integer digits [5,7] and fractional digit [9]")
+        assertEquals(
+            57.9.toBigDecimal(),
+            target.value().toBigDecimal(),
+            "Should create positive decimal 57.9 from integer digits [5,7] and fractional digit [9]",
+        )
     }
 
     /**
@@ -170,7 +177,11 @@ class NumberInputControllerTest {
         target.addDigit(Digit.TWO)
 
         // Should now be 56.2 (digit 2 added to fractional part)
-        assertEquals(56.2.toBigDecimal(), target.value().toBigDecimal(), "Should add digit 2 to fractional part after switching to minor: 56 -> 56.2")
+        assertEquals(
+            56.2.toBigDecimal(),
+            target.value().toBigDecimal(),
+            "Should add digit 2 to fractional part after switching to minor: 56 -> 56.2",
+        )
     }
 
     /**

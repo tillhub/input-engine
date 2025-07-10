@@ -28,7 +28,8 @@ internal fun NumberButton(
         onClick = {
             onClick(NumpadKey.SingleDigit(Digit.from(number.value)))
         },
-        modifier = modifier
+        modifier =
+        modifier
             .aspectRatio(BUTTON_ASPECT_RATIO)
             .padding(6.dp),
         shape = RoundedCornerShape(2.dp),

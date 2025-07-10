@@ -25,27 +25,28 @@ import kotlin.test.assertNull
 
 @RunWith(AndroidJUnit4::class)
 class AmountInputActivityTest {
-
     @get:Rule
     val composeRule = createComposeRule()
 
     @Test
     fun launchesWithRequestAndSubmitsResult() {
-        val request = AmountInputRequest(
-            amount = 15.00.eur,
-            isZeroAllowed = true,
-            amountMin = MoneyParam.Enable(10.0.eur),
-            amountMax = MoneyParam.Disable,
-            hintAmount = MoneyParam.Disable,
-            extras = mapOf("source" to "42"),
-        )
+        val request =
+            AmountInputRequest(
+                amount = 15.00.eur,
+                isZeroAllowed = true,
+                amountMin = MoneyParam.Enable(10.0.eur),
+                amountMax = MoneyParam.Disable,
+                hintAmount = MoneyParam.Disable,
+                extras = mapOf("source" to "42"),
+            )
 
-        val intent = Intent(
-            ApplicationProvider.getApplicationContext(),
-            AmountInputActivity::class.java,
-        ).apply {
-            putExtra(ExtraKeys.EXTRAS_REQUEST, Json.encodeToString(request))
-        }
+        val intent =
+            Intent(
+                ApplicationProvider.getApplicationContext(),
+                AmountInputActivity::class.java,
+            ).apply {
+                putExtra(ExtraKeys.EXTRAS_REQUEST, Json.encodeToString(request))
+            }
 
         // Launch activity for result to capture the returned data
         val scenario = ActivityScenario.launchActivityForResult<AmountInputActivity>(intent)
@@ -80,21 +81,23 @@ class AmountInputActivityTest {
 
     @Test
     fun launchesWithRequestAndCancels() {
-        val request = AmountInputRequest(
-            amount = 25.50.eur,
-            isZeroAllowed = false,
-            amountMin = MoneyParam.Enable(1.0.eur),
-            amountMax = MoneyParam.Enable(100.0.eur),
-            hintAmount = MoneyParam.Enable(20.0.eur),
-            extras = mapOf("test" to "value", "id" to "123"),
-        )
+        val request =
+            AmountInputRequest(
+                amount = 25.50.eur,
+                isZeroAllowed = false,
+                amountMin = MoneyParam.Enable(1.0.eur),
+                amountMax = MoneyParam.Enable(100.0.eur),
+                hintAmount = MoneyParam.Enable(20.0.eur),
+                extras = mapOf("test" to "value", "id" to "123"),
+            )
 
-        val intent = Intent(
-            ApplicationProvider.getApplicationContext(),
-            AmountInputActivity::class.java,
-        ).apply {
-            putExtra(ExtraKeys.EXTRAS_REQUEST, Json.encodeToString(request))
-        }
+        val intent =
+            Intent(
+                ApplicationProvider.getApplicationContext(),
+                AmountInputActivity::class.java,
+            ).apply {
+                putExtra(ExtraKeys.EXTRAS_REQUEST, Json.encodeToString(request))
+            }
 
         val scenario = ActivityScenario.launchActivityForResult<AmountInputActivity>(intent)
 

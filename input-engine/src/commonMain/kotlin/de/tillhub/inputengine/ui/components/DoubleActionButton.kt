@@ -32,14 +32,16 @@ internal fun DoubleActionButton(
     onLongClick: () -> Unit,
     content: @Composable RowScope.() -> Unit,
 ) {
-    val colors: ButtonColors = ButtonDefaults.outlinedButtonColors(
-        containerColor = MaterialTheme.colorScheme.onPrimary,
-    )
+    val colors: ButtonColors =
+        ButtonDefaults.outlinedButtonColors(
+            containerColor = MaterialTheme.colorScheme.onPrimary,
+        )
     val containerColor = if (enabled) colors.containerColor else colors.disabledContainerColor
     val contentColor = if (enabled) colors.contentColor else colors.disabledContentColor
 
     Surface(
-        modifier = modifier
+        modifier =
+        modifier
             .semantics { role = Role.Button }
             .combinedClickable(
                 onClick = onClick,
@@ -64,8 +66,7 @@ internal fun DoubleActionButton(
                     .defaultMinSize(
                         minWidth = ButtonDefaults.MinWidth,
                         minHeight = ButtonDefaults.MinHeight,
-                    )
-                    .padding(ButtonDefaults.ContentPadding),
+                    ).padding(ButtonDefaults.ContentPadding),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
                 content = content,

@@ -24,20 +24,21 @@ import kotlin.test.assertNull
 
 @RunWith(AndroidJUnit4::class)
 class PercentageInputActivityTest {
-
     @get:Rule
     val composeRule = createComposeRule()
 
     @Test
     fun launchesWithRequestAndSubmitsResult() {
-        val request = PercentageInputRequest(
-            percent = PercentIO.of(10),
-            extras = mapOf("test" to "value"),
-        )
+        val request =
+            PercentageInputRequest(
+                percent = PercentIO.of(10),
+                extras = mapOf("test" to "value"),
+            )
 
-        val intent = Intent(ApplicationProvider.getApplicationContext(), PercentageInputActivity::class.java).apply {
-            putExtra(ExtraKeys.EXTRAS_REQUEST, Json.encodeToString(request))
-        }
+        val intent =
+            Intent(ApplicationProvider.getApplicationContext(), PercentageInputActivity::class.java).apply {
+                putExtra(ExtraKeys.EXTRAS_REQUEST, Json.encodeToString(request))
+            }
 
         // Launch activity for result to capture the returned data
         val scenario = ActivityScenario.launchActivityForResult<PercentageInputActivity>(intent)
@@ -69,14 +70,16 @@ class PercentageInputActivityTest {
 
     @Test
     fun launchesWithRequestAndCancels() {
-        val request = PercentageInputRequest(
-            percent = PercentIO.of(10),
-            extras = mapOf("test" to "value"),
-        )
+        val request =
+            PercentageInputRequest(
+                percent = PercentIO.of(10),
+                extras = mapOf("test" to "value"),
+            )
 
-        val intent = Intent(ApplicationProvider.getApplicationContext(), PercentageInputActivity::class.java).apply {
-            putExtra(ExtraKeys.EXTRAS_REQUEST, Json.encodeToString(request))
-        }
+        val intent =
+            Intent(ApplicationProvider.getApplicationContext(), PercentageInputActivity::class.java).apply {
+                putExtra(ExtraKeys.EXTRAS_REQUEST, Json.encodeToString(request))
+            }
 
         // Launch activity for result to capture the returned data
         val scenario = ActivityScenario.launchActivityForResult<PercentageInputActivity>(intent)

@@ -2,7 +2,7 @@ package de.tillhub.inputengine.formatting
 
 import de.tillhub.inputengine.data.QuantityIO
 
-interface QuantityFormatter {
+fun interface QuantityFormatter {
     fun format(quantity: QuantityIO): String
 }
 

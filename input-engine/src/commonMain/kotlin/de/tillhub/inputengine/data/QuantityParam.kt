@@ -6,7 +6,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed class QuantityParam {
     @Serializable
-    data class Enable(val value: QuantityIO) : QuantityParam()
+    data class Enable(
+        val value: QuantityIO,
+    ) : QuantityParam()
 
     @Serializable
     data object Disable : QuantityParam()

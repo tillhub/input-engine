@@ -2,7 +2,7 @@ package de.tillhub.inputengine.formatting
 
 import de.tillhub.inputengine.data.MoneyIO
 
-interface MoneyFormatter {
+fun interface MoneyFormatter {
     fun format(money: MoneyIO): String
 }
 

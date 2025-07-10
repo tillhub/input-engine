@@ -17,11 +17,14 @@ import kotlinx.serialization.Serializable
 class MoneyIO internal constructor(
     @Serializable(with = BigDecimalSerializer::class) val amount: BigDecimal,
     @Serializable val currency: CurrencyIO,
-) : Comparable<MoneyIO>, Number() {
-
+) : Number(),
+    Comparable<MoneyIO> {
     fun isZero() = amount.signum() == 0
+
     fun isNotZero() = !isZero()
+
     fun isNegative() = amount.signum() == -1
+
     fun isPositive(includingZero: Boolean = false) = if (includingZero) {
         amount.signum().let { it == 0 || it == 1 }
     } else {
@@ -41,7 +44,10 @@ class MoneyIO internal constructor(
 
     operator fun unaryMinus() = MoneyIO(amount.negate(), currency)
 
-    private fun <T> calculable(other: MoneyIO, body: () -> T): T {
+    private fun <T> calculable(
+        other: MoneyIO,
+        body: () -> T,
+    ): T {
         require(currency.isoCode == other.currency.isoCode) {
             "currency $currency differs from other currency: ${other.currency}"
         }
@@ -50,22 +56,18 @@ class MoneyIO internal constructor(
 
     override fun toByte(): Byte = amount.byteValue(exactRequired = false)
 
-    override fun toShort(): Short =
-        amount.moveDecimalPoint(currency.defaultFractionDigits).shortValue(exactRequired = false)
+    override fun toShort(): Short = amount.moveDecimalPoint(currency.defaultFractionDigits).shortValue(exactRequired = false)
 
-    override fun toInt(): Int =
-        amount.moveDecimalPoint(currency.defaultFractionDigits).intValue(exactRequired = false)
+    override fun toInt(): Int = amount.moveDecimalPoint(currency.defaultFractionDigits).intValue(exactRequired = false)
 
-    override fun toLong(): Long =
-        amount.moveDecimalPoint(currency.defaultFractionDigits).longValue(exactRequired = false)
+    override fun toLong(): Long = amount.moveDecimalPoint(currency.defaultFractionDigits).longValue(exactRequired = false)
 
-    override fun toFloat(): Float =
-        amount.moveDecimalPoint(currency.defaultFractionDigits).floatValue(exactRequired = false)
+    override fun toFloat(): Float = amount.moveDecimalPoint(currency.defaultFractionDigits).floatValue(exactRequired = false)
 
-    override fun toDouble(): Double =
-        amount.moveDecimalPoint(currency.defaultFractionDigits).doubleValue(exactRequired = false)
+    override fun toDouble(): Double = amount.moveDecimalPoint(currency.defaultFractionDigits).doubleValue(exactRequired = false)
 
     override fun toString() = "MoneyIO(amount=$amount, currency=$currency)"
+
     override fun equals(other: Any?) = other is MoneyIO &&
         amount == other.amount &&
         currency == other.currency
@@ -77,7 +79,6 @@ class MoneyIO internal constructor(
     }
 
     companion object {
-
         // MAX_VALUE_NORMAL for the Money class is 10 000 000 currency
         private val MAX_VALUE_DECIMAL: BigDecimal = 10000000.0.toBigDecimal()
 
@@ -86,46 +87,62 @@ class MoneyIO internal constructor(
 
         // Constructors
         fun zero(currency: CurrencyIO) = MoneyIO(BigDecimal.ZERO, currency)
+
         fun max(currency: CurrencyIO) = MoneyIO(MAX_VALUE_DECIMAL, currency)
+
         fun min(currency: CurrencyIO) = MoneyIO(MIN_VALUE_DECIMAL, currency)
 
-        fun of(amount: Number, currency: CurrencyIO): MoneyIO {
-            return MoneyIO(
-                when (amount) {
-                    is Int -> amount.toBigDecimal()
+        fun of(
+            amount: Number,
+            currency: CurrencyIO,
+        ): MoneyIO = MoneyIO(
+            when (amount) {
+                is Int ->
+                    amount
+                        .toBigDecimal()
                         .moveDecimalPoint(-currency.defaultFractionDigits)
 
-                    is Long -> amount.toBigDecimal()
+                is Long ->
+                    amount
+                        .toBigDecimal()
                         .moveDecimalPoint(-currency.defaultFractionDigits)
 
-                    is Double -> amount.toBigDecimal()
+                is Double ->
+                    amount
+                        .toBigDecimal()
                         .moveDecimalPoint(-currency.defaultFractionDigits)
 
-                    else -> throw IllegalArgumentException("Money $amount is not supported type.")
-                },
-                currency,
-            )
-        }
+                else -> throw IllegalArgumentException("Money $amount is not supported type.")
+            },
+            currency,
+        )
 
-        fun of(amount: BigNumber<*>, currency: CurrencyIO): MoneyIO {
-            return MoneyIO(
-                when (amount) {
-                    is BigDecimal -> amount.moveDecimalPoint(-currency.defaultFractionDigits)
-                    is BigInteger -> BigDecimal.fromBigInteger(amount)
+        fun of(
+            amount: BigNumber<*>,
+            currency: CurrencyIO,
+        ): MoneyIO = MoneyIO(
+            when (amount) {
+                is BigDecimal -> amount.moveDecimalPoint(-currency.defaultFractionDigits)
+                is BigInteger ->
+                    BigDecimal
+                        .fromBigInteger(amount)
                         .moveDecimalPoint(-currency.defaultFractionDigits)
 
-                    else -> throw IllegalArgumentException("Money $amount is not supported type.")
-                },
-                currency,
-            )
-        }
+                else -> throw IllegalArgumentException("Money $amount is not supported type.")
+            },
+            currency,
+        )
 
-        fun fromMajorUnits(amount: BigDecimal, currency: CurrencyIO): MoneyIO {
-            return MoneyIO(amount, currency)
-        }
+        fun fromMajorUnits(
+            amount: BigDecimal,
+            currency: CurrencyIO,
+        ): MoneyIO = MoneyIO(amount, currency)
 
         // Functions
-        fun append(it: MoneyIO, digit: Int): MoneyIO {
+        fun append(
+            it: MoneyIO,
+            digit: Int,
+        ): MoneyIO {
             val base = it.amount.moveDecimalPoint(MOVE_ONE_RIGHT)
             val digitMinorValue =
                 digit.toBigDecimal().moveDecimalPoint(-it.currency.defaultFractionDigits)
@@ -141,10 +158,11 @@ class MoneyIO internal constructor(
 
         fun removeLastDigit(it: MoneyIO): MoneyIO {
             val base = it.amount.moveDecimalPoint(MOVE_ONE_LEFT)
-            val scale = base.roundToDigitPositionAfterDecimalPoint(
-                digitPosition = it.currency.defaultFractionDigits.toLong(),
-                roundingMode = RoundingMode.TOWARDS_ZERO,
-            )
+            val scale =
+                base.roundToDigitPositionAfterDecimalPoint(
+                    digitPosition = it.currency.defaultFractionDigits.toLong(),
+                    roundingMode = RoundingMode.TOWARDS_ZERO,
+                )
             return MoneyIO(scale, it.currency)
         }
 

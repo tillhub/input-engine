@@ -28,7 +28,8 @@ internal fun textFieldTransparentColors() = TextFieldDefaults.colors(
     unfocusedIndicatorColor = Color.Transparent,
 )
 
-internal val TabletScaffoldModifier = Modifier
-    .width(380.dp)
-    .height(600.dp)
-    .clip(RoundedCornerShape(8.dp))
+internal val TabletScaffoldModifier =
+    Modifier
+        .width(380.dp)
+        .height(600.dp)
+        .clip(RoundedCornerShape(8.dp))

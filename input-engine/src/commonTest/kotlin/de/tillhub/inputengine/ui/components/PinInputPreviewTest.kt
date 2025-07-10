@@ -13,7 +13,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class PinInputPreviewTest {
-
     @Test
     fun displaysInitialPinText() = runComposeUiTest {
         setContent {

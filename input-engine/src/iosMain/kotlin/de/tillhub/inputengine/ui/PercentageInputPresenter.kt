@@ -14,31 +14,35 @@ import platform.UIKit.UIViewController
 class PercentageInputPresenter(
     private val onResult: (PercentageInputResult) -> Unit,
 ) {
-
     private var viewController: UIViewController? = null
 
     fun launch(request: PercentageInputRequest) {
-        val rootVC = UIApplication.Companion.sharedApplication.keyWindow?.rootViewController ?: return
+        val rootVC =
+            UIApplication.Companion.sharedApplication.keyWindow
+                ?.rootViewController ?: return
 
-        viewController = ComposeUIViewController {
-            PercentageInputScreen(
-                onResult = {
-                    onResult(it)
-                    dismiss()
-                },
-                onDismiss = {
-                    onResult(PercentageInputResult.Canceled)
-                    dismiss()
-                },
-                viewModel = viewModel(
-                    factory = PercentageInputViewModel.Factory,
-                    extras = MutableCreationExtras().apply {
-                        set(PercentageInputViewModel.REQUEST_KEY, request)
-                        set(PercentageInputViewModel.FORMATTER_KEY, PercentageFormatter())
+        viewController =
+            ComposeUIViewController {
+                PercentageInputScreen(
+                    onResult = {
+                        onResult(it)
+                        dismiss()
                     },
-                ),
-            )
-        }
+                    onDismiss = {
+                        onResult(PercentageInputResult.Canceled)
+                        dismiss()
+                    },
+                    viewModel =
+                    viewModel(
+                        factory = PercentageInputViewModel.Factory,
+                        extras =
+                        MutableCreationExtras().apply {
+                            set(PercentageInputViewModel.REQUEST_KEY, request)
+                            set(PercentageInputViewModel.FORMATTER_KEY, PercentageFormatter())
+                        },
+                    ),
+                )
+            }
 
         viewController?.let { vc ->
             rootVC.presentViewController(vc, animated = true, completion = null)

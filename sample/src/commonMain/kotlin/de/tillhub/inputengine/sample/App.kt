@@ -56,60 +56,70 @@ fun App() {
 
     val eur = CurrencyIO.forCode("EUR")
     val result = remember { mutableStateOf("No result") }
-    val amountInputLauncher = rememberAmountInputLauncher(
-        onResult = {
-            when (it) {
-                is AmountInputResult.Success -> {
-                    result.value = it.amount.toString() + "\n" + it.extras.toString()
+    val amountInputLauncher =
+        rememberAmountInputLauncher(
+            onResult = {
+                when (it) {
+                    is AmountInputResult.Success -> {
+                        result.value = it.amount.toString() + "\n" + it.extras.toString()
+                    }
+
+                    is AmountInputResult.Canceled -> Unit
                 }
+            },
+        )
 
-                is AmountInputResult.Canceled -> Unit
-            }
-        },
-    )
+    val percentageInputLauncher =
+        rememberPercentageInputLauncher(
+            onResult = {
+                result.value =
+                    when (it) {
+                        PercentageInputResult.Canceled -> "Percent action canceled"
+                        is PercentageInputResult.Success -> it.percent.value.toString()
+                    }
+            },
+        )
 
-    val percentageInputLauncher = rememberPercentageInputLauncher(
-        onResult = {
-            result.value = when (it) {
-                PercentageInputResult.Canceled -> "Percent action canceled"
-                is PercentageInputResult.Success -> it.percent.value.toString()
-            }
-        },
-    )
-
-    val pinInputLauncher = rememberPinInputLauncher(
-        onResult = {
-            result.value = when (it) {
-                PinInputResult.Canceled -> "Pin action canceled"
-                is PinInputResult.Success -> "PIN entry successful"
-            }
-        },
-    )
-    val quantityInputLauncher = rememberQuantityInputLauncher(
-        onResult = {
-            result.value = when (it) {
-                QuantityInputResult.Canceled -> "Quantity action canceled"
-                is QuantityInputResult.Success -> it.quantity.toString()
-            }
-        },
-    )
+    val pinInputLauncher =
+        rememberPinInputLauncher(
+            onResult = {
+                result.value =
+                    when (it) {
+                        PinInputResult.Canceled -> "Pin action canceled"
+                        is PinInputResult.Success -> "PIN entry successful"
+                    }
+            },
+        )
+    val quantityInputLauncher =
+        rememberQuantityInputLauncher(
+            onResult = {
+                result.value =
+                    when (it) {
+                        QuantityInputResult.Canceled -> "Quantity action canceled"
+                        is QuantityInputResult.Success -> it.quantity.toString()
+                    }
+            },
+        )
     InputEngineTheme {
         Box(
             contentAlignment = Alignment.TopCenter,
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxSize()
                 .padding(WindowInsets.systemBars.asPaddingValues())
                 .padding(16.dp),
         ) {
             Column {
                 Card(
-                    modifier = Modifier
+                    modifier =
+                    Modifier
                         .fillMaxWidth()
                         .padding(bottom = 24.dp),
                     elevation = CardDefaults.cardElevation(4.dp),
                 ) {
                     Text(
-                        modifier = Modifier
+                        modifier =
+                        Modifier
                             .fillMaxWidth()
                             .align(Alignment.CenterHorizontally)
                             .padding(16.dp)
@@ -135,50 +145,57 @@ fun App() {
             }
 
             when (currentScreen) {
-                InputScreen.Money -> LaunchedEffect(Unit) {
-                    amountInputLauncher.launchAmountInput(
-                        request = AmountInputRequest(
-                            amount = MoneyIO.of(100, eur),
-                            amountMin = MoneyParam.Enable(MoneyIO.of(-30_00, eur)),
-                            amountMax = MoneyParam.Enable(MoneyIO.of(50_00, eur)),
-                            extras = mapOf("extraArg" to "argument value"),
-                        ),
-                    )
-                    currentScreen = null
-                }
+                InputScreen.Money ->
+                    LaunchedEffect(Unit) {
+                        amountInputLauncher.launchAmountInput(
+                            request =
+                            AmountInputRequest(
+                                amount = MoneyIO.of(100, eur),
+                                amountMin = MoneyParam.Enable(MoneyIO.of(-30_00, eur)),
+                                amountMax = MoneyParam.Enable(MoneyIO.of(50_00, eur)),
+                                extras = mapOf("extraArg" to "argument value"),
+                            ),
+                        )
+                        currentScreen = null
+                    }
 
-                InputScreen.Percentage -> LaunchedEffect(Unit) {
-                    percentageInputLauncher.launchPercentageInput(
-                        request = PercentageInputRequest(
-                            percent = PercentIO.ZERO,
-                            percentageMin = PercentageParam.Enable(PercentIO.ZERO),
-                            percentageMax = PercentageParam.Enable(PercentIO.WHOLE),
-                            allowsZero = false,
-                        ),
-                    )
-                    currentScreen = null
-                }
+                InputScreen.Percentage ->
+                    LaunchedEffect(Unit) {
+                        percentageInputLauncher.launchPercentageInput(
+                            request =
+                            PercentageInputRequest(
+                                percent = PercentIO.ZERO,
+                                percentageMin = PercentageParam.Enable(PercentIO.ZERO),
+                                percentageMax = PercentageParam.Enable(PercentIO.WHOLE),
+                                allowsZero = false,
+                            ),
+                        )
+                        currentScreen = null
+                    }
 
-                InputScreen.Pin -> LaunchedEffect(Unit) {
-                    pinInputLauncher.launchPinInput(
-                        request = PinInputRequest(
-                            pin = "9876",
-                            extras = mapOf("argPin" to "hint for pin"),
-                        ),
-                    )
-                    currentScreen = null
-                }
+                InputScreen.Pin ->
+                    LaunchedEffect(Unit) {
+                        pinInputLauncher.launchPinInput(
+                            request =
+                            PinInputRequest(
+                                pin = "9876",
+                                extras = mapOf("argPin" to "hint for pin"),
+                            ),
+                        )
+                        currentScreen = null
+                    }
 
-                InputScreen.Quantity -> LaunchedEffect(Unit) {
-                    quantityInputLauncher.launchQuantityInput(
-                        QuantityInputRequest(
-                            quantity = QuantityIO.ZERO,
-                            minQuantity = QuantityParam.Enable(-QuantityIO.of(50)),
-                            maxQuantity = QuantityParam.Enable(QuantityIO.of(50)),
-                            hintQuantity = QuantityParam.Enable(QuantityIO.of(BigDecimal.TEN)),
-                        ),
-                    )
-                }
+                InputScreen.Quantity ->
+                    LaunchedEffect(Unit) {
+                        quantityInputLauncher.launchQuantityInput(
+                            QuantityInputRequest(
+                                quantity = QuantityIO.ZERO,
+                                minQuantity = QuantityParam.Enable(-QuantityIO.of(50)),
+                                maxQuantity = QuantityParam.Enable(QuantityIO.of(50)),
+                                hintQuantity = QuantityParam.Enable(QuantityIO.of(BigDecimal.TEN)),
+                            ),
+                        )
+                    }
 
                 else -> Unit
             }
@@ -202,5 +219,8 @@ fun InputSection(
 }
 
 enum class InputScreen {
-    Money, Pin, Quantity, Percentage
+    Money,
+    Pin,
+    Quantity,
+    Percentage,
 }

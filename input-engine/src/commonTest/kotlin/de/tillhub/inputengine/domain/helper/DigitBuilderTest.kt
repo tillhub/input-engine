@@ -7,7 +7,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 class DigitBuilderTest {
-
     @Test
     fun testDigits_PositiveNumbers() {
         assertEquals(

@@ -26,15 +26,12 @@ import kotlin.test.assertTrue
  * - Edge cases and constraint handling
  */
 class AmountInputViewModelTest {
-
     /**
      * Simple stub implementation of MoneyFormatter for testing.
      * Returns a predictable format: "{currency}{amount}" (e.g., "EUR1000" for €10.00)
      */
     private class TestMoneyFormatter : MoneyFormatter {
-        override fun format(money: MoneyIO): String {
-            return "${money.currency.isoCode}${money.toDouble()}"
-        }
+        override fun format(money: MoneyIO): String = "${money.currency.isoCode}${money.toDouble()}"
     }
 
     private lateinit var testFormatter: MoneyFormatter
@@ -53,10 +50,11 @@ class AmountInputViewModelTest {
     @Test
     fun initializesWithBasicRequest() = runTest {
         // Given: Basic request with just an amount
-        val request = AmountInputRequest(
-            amount = MoneyIO.of(10_00, eur), // €10.00
-            toolbarTitle = "Test Amount Input"
-        )
+        val request =
+            AmountInputRequest(
+                amount = MoneyIO.of(10_00, eur), // €10.00
+                toolbarTitle = "Test Amount Input",
+            )
 
         // When: Creating ViewModel
         val viewModel = AmountInputViewModel(request, testFormatter)
@@ -85,15 +83,16 @@ class AmountInputViewModelTest {
     @Test
     fun initializesWithComplexRequest() = runTest {
         // Given: Complex request with all parameters
-        val request = AmountInputRequest(
-            amount = MoneyIO.of(25_00, eur), // €25.00
-            isZeroAllowed = true,
-            toolbarTitle = "Complex Amount Input",
-            amountMin = MoneyParam.Enable(MoneyIO.of(5_00, eur)), // €5.00
-            amountMax = MoneyParam.Enable(MoneyIO.of(100_00, eur)), // €100.00
-            hintAmount = MoneyParam.Enable(MoneyIO.of(50_00, eur)), // €50.00
-            extras = mapOf("source" to "test", "id" to "123")
-        )
+        val request =
+            AmountInputRequest(
+                amount = MoneyIO.of(25_00, eur), // €25.00
+                isZeroAllowed = true,
+                toolbarTitle = "Complex Amount Input",
+                amountMin = MoneyParam.Enable(MoneyIO.of(5_00, eur)), // €5.00
+                amountMax = MoneyParam.Enable(MoneyIO.of(100_00, eur)), // €100.00
+                hintAmount = MoneyParam.Enable(MoneyIO.of(50_00, eur)), // €50.00
+                extras = mapOf("source" to "test", "id" to "123"),
+            )
 
         // When: Creating ViewModel
         val viewModel = AmountInputViewModel(request, testFormatter)
@@ -120,11 +119,12 @@ class AmountInputViewModelTest {
     @Test
     fun initializesWithPositiveOnlyRange() = runTest {
         // Given: Request with positive-only range
-        val request = AmountInputRequest(
-            amount = MoneyIO.of(15_00, eur),
-            amountMin = MoneyParam.Enable(MoneyIO.zero(eur)), // €0.00
-            amountMax = MoneyParam.Enable(MoneyIO.of(50_00, eur)) // €50.00
-        )
+        val request =
+            AmountInputRequest(
+                amount = MoneyIO.of(15_00, eur),
+                amountMin = MoneyParam.Enable(MoneyIO.zero(eur)), // €0.00
+                amountMax = MoneyParam.Enable(MoneyIO.of(50_00, eur)), // €50.00
+            )
 
         // When: Creating ViewModel
         val viewModel = AmountInputViewModel(request, testFormatter)
@@ -146,11 +146,12 @@ class AmountInputViewModelTest {
     @Test
     fun initializesWithNegativeOnlyRange() = runTest {
         // Given: Request with negative-only range
-        val request = AmountInputRequest(
-            amount = MoneyIO.of(-15_00, eur), // -€15.00
-            amountMin = MoneyParam.Enable(MoneyIO.of(-50_00, eur)), // -€50.00
-            amountMax = MoneyParam.Enable(MoneyIO.of(-5_00, eur)) // -€5.00
-        )
+        val request =
+            AmountInputRequest(
+                amount = MoneyIO.of(-15_00, eur), // -€15.00
+                amountMin = MoneyParam.Enable(MoneyIO.of(-50_00, eur)), // -€50.00
+                amountMax = MoneyParam.Enable(MoneyIO.of(-5_00, eur)), // -€5.00
+            )
 
         // When: Creating ViewModel
         val viewModel = AmountInputViewModel(request, testFormatter)
@@ -172,11 +173,12 @@ class AmountInputViewModelTest {
     @Test
     fun initializesWithInvalidConstraints() = runTest {
         // Given: Request with invalid constraints (min >= max)
-        val request = AmountInputRequest(
-            amount = MoneyIO.of(25_00, eur),
-            amountMin = MoneyParam.Enable(MoneyIO.of(50_00, eur)), // €50.00
-            amountMax = MoneyParam.Enable(MoneyIO.of(30_00, eur)) // €30.00 (invalid: min > max)
-        )
+        val request =
+            AmountInputRequest(
+                amount = MoneyIO.of(25_00, eur),
+                amountMin = MoneyParam.Enable(MoneyIO.of(50_00, eur)), // €50.00
+                amountMax = MoneyParam.Enable(MoneyIO.of(30_00, eur)), // €30.00 (invalid: min > max)
+            )
 
         // When: Creating ViewModel
         val viewModel = AmountInputViewModel(request, testFormatter)
@@ -275,11 +277,12 @@ class AmountInputViewModelTest {
     @Test
     fun handlesNegateInput() = runTest {
         // Given: ViewModel in BOTH mode with zero amount
-        val request = AmountInputRequest(
-            amount = MoneyIO.zero(eur),
-            amountMin = MoneyParam.Enable(MoneyIO.of(-50_00, eur)),
-            amountMax = MoneyParam.Enable(MoneyIO.of(50_00, eur))
-        )
+        val request =
+            AmountInputRequest(
+                amount = MoneyIO.zero(eur),
+                amountMin = MoneyParam.Enable(MoneyIO.of(-50_00, eur)),
+                amountMax = MoneyParam.Enable(MoneyIO.of(50_00, eur)),
+            )
         val viewModel = AmountInputViewModel(request, testFormatter)
 
         // When: Pressing negate then inputting digit 5
@@ -317,10 +320,11 @@ class AmountInputViewModelTest {
     @Test
     fun enforcesMaximumAmountConstraint() = runTest {
         // Given: ViewModel with max constraint of €50.00
-        val request = AmountInputRequest(
-            amount = MoneyIO.zero(eur),
-            amountMax = MoneyParam.Enable(MoneyIO.of(50_00, eur))
-        )
+        val request =
+            AmountInputRequest(
+                amount = MoneyIO.zero(eur),
+                amountMax = MoneyParam.Enable(MoneyIO.of(50_00, eur)),
+            )
         val viewModel = AmountInputViewModel(request, testFormatter)
 
         // When: Trying to input amount larger than max (inputting 9999 -> €99.99)
@@ -341,11 +345,12 @@ class AmountInputViewModelTest {
     @Test
     fun enforcesMinimumAmountConstraint() = runTest {
         // Given: ViewModel with min constraint of -€30.00 and max of €50.00
-        val request = AmountInputRequest(
-            amount = MoneyIO.zero(eur),
-            amountMin = MoneyParam.Enable(MoneyIO.of(-30_00, eur)),
-            amountMax = MoneyParam.Enable(MoneyIO.of(50_00, eur))
-        )
+        val request =
+            AmountInputRequest(
+                amount = MoneyIO.zero(eur),
+                amountMin = MoneyParam.Enable(MoneyIO.of(-30_00, eur)),
+                amountMax = MoneyParam.Enable(MoneyIO.of(50_00, eur)),
+            )
         val viewModel = AmountInputViewModel(request, testFormatter)
 
         // When: Trying to input very large negative amount
@@ -367,10 +372,11 @@ class AmountInputViewModelTest {
     @Test
     fun validatesZeroWhenAllowed() = runTest {
         // Given: ViewModel with zero allowed
-        val request = AmountInputRequest(
-            amount = MoneyIO.zero(eur),
-            isZeroAllowed = true
-        )
+        val request =
+            AmountInputRequest(
+                amount = MoneyIO.zero(eur),
+                isZeroAllowed = true,
+            )
         val viewModel = AmountInputViewModel(request, testFormatter)
 
         // Then: Verify zero amount is valid
@@ -402,10 +408,11 @@ class AmountInputViewModelTest {
     fun displaysHintAmountWhenZero() = runTest {
         // Given: ViewModel with hint amount configured
         val hintAmount = MoneyIO.of(25, eur)
-        val request = AmountInputRequest(
-            amount = MoneyIO.zero(eur),
-            hintAmount = MoneyParam.Enable(hintAmount)
-        )
+        val request =
+            AmountInputRequest(
+                amount = MoneyIO.zero(eur),
+                hintAmount = MoneyParam.Enable(hintAmount),
+            )
         val viewModel = AmountInputViewModel(request, testFormatter)
 
         // Then: Verify hint is displayed
@@ -500,13 +507,14 @@ class AmountInputViewModelTest {
     @Test
     fun handlesComplexInputSequenceWithConstraints() = runTest {
         // Given: ViewModel with constraints and initial amount
-        val request = AmountInputRequest(
-            amount = MoneyIO.of(5_00, eur),
-            isZeroAllowed = false,
-            amountMin = MoneyParam.Enable(MoneyIO.of(1_00, eur)), // €1.00
-            amountMax = MoneyParam.Enable(MoneyIO.of(99_00, eur)), // €99.00
-            extras = mapOf("test" to "complex")
-        )
+        val request =
+            AmountInputRequest(
+                amount = MoneyIO.of(5_00, eur),
+                isZeroAllowed = false,
+                amountMin = MoneyParam.Enable(MoneyIO.of(1_00, eur)), // €1.00
+                amountMax = MoneyParam.Enable(MoneyIO.of(99_00, eur)), // €99.00
+                extras = mapOf("test" to "complex"),
+            )
         val viewModel = AmountInputViewModel(request, testFormatter)
 
         // When: Performing complex input sequence

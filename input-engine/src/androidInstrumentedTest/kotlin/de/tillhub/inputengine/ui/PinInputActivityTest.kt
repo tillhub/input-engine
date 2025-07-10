@@ -23,21 +23,22 @@ import kotlin.test.assertNull
 
 @RunWith(AndroidJUnit4::class)
 class PinInputActivityTest {
-
     @get:Rule
     val composeRule = createComposeRule()
 
     @Test
     fun launchesWithRequestAndSubmitsResult() {
-        val request = PinInputRequest(
-            pin = "1234",
-            overridePinInput = true,
-            extras = mapOf("test" to "value"),
-        )
+        val request =
+            PinInputRequest(
+                pin = "1234",
+                overridePinInput = true,
+                extras = mapOf("test" to "value"),
+            )
 
-        val intent = Intent(ApplicationProvider.getApplicationContext(), PinInputActivity::class.java).apply {
-            putExtra(ExtraKeys.EXTRAS_REQUEST, Json.encodeToString(request))
-        }
+        val intent =
+            Intent(ApplicationProvider.getApplicationContext(), PinInputActivity::class.java).apply {
+                putExtra(ExtraKeys.EXTRAS_REQUEST, Json.encodeToString(request))
+            }
 
         // Launch activity for result to capture the returned data
         val scenario = ActivityScenario.launchActivityForResult<PinInputActivity>(intent)
@@ -68,15 +69,17 @@ class PinInputActivityTest {
 
     @Test
     fun launchesWithRequestAndCancels() {
-        val request = PinInputRequest(
-            pin = "1234",
-            overridePinInput = false,
-            extras = mapOf("test" to "value"),
-        )
+        val request =
+            PinInputRequest(
+                pin = "1234",
+                overridePinInput = false,
+                extras = mapOf("test" to "value"),
+            )
 
-        val intent = Intent(ApplicationProvider.getApplicationContext(), PinInputActivity::class.java).apply {
-            putExtra(ExtraKeys.EXTRAS_REQUEST, Json.encodeToString(request))
-        }
+        val intent =
+            Intent(ApplicationProvider.getApplicationContext(), PinInputActivity::class.java).apply {
+                putExtra(ExtraKeys.EXTRAS_REQUEST, Json.encodeToString(request))
+            }
 
         // Launch activity for result to capture the returned data
         val scenario = ActivityScenario.launchActivityForResult<PinInputActivity>(intent)

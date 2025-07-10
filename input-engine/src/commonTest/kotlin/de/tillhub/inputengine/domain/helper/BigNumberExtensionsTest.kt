@@ -8,7 +8,6 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class BigNumberExtensionsTest {
-
     @Test
     fun testPow10_BigInteger() {
         assertEquals(BigInteger.ONE, pow10(0))

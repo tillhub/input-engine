@@ -15,7 +15,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class SubmitButtonTest {
-
     @Test
     fun submitButtonTest() = runComposeUiTest {
         var clicks = 0

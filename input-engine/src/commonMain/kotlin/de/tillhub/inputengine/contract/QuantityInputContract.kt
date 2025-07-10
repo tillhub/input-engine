@@ -12,9 +12,7 @@ interface QuantityInputContract {
 }
 
 @Composable
-expect fun rememberQuantityInputLauncher(
-    onResult: (QuantityInputResult) -> Unit,
-): QuantityInputContract
+expect fun rememberQuantityInputLauncher(onResult: (QuantityInputResult) -> Unit): QuantityInputContract
 
 @Serializable
 data class QuantityInputRequest(

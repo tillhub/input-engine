@@ -7,7 +7,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class PercentageFormatterTest {
-
     @Test
     fun percentageFormatterTest() = runTest {
         val formatterDe = PercentageFormatterImpl(NSLocale(localeIdentifier = "de_DE"))

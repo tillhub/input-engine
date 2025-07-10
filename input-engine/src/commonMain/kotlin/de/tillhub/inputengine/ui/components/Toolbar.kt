@@ -27,7 +27,9 @@ internal fun Toolbar(
 ) {
     Column {
         TopAppBar(
-            colors = TopAppBarDefaults.topAppBarColors()
+            colors =
+            TopAppBarDefaults
+                .topAppBarColors()
                 .copy(containerColor = Color.White),
             title = {
                 Text(

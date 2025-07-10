@@ -10,7 +10,6 @@ import platform.Foundation.currentLocale
 actual class MoneyFormatterImpl(
     private val locale: NSLocale = NSLocale.currentLocale,
 ) : MoneyFormatter {
-
     private val currencyFormat by lazy {
         NSNumberFormatter().apply {
             numberStyle = NSNumberFormatterCurrencyStyle
@@ -18,10 +17,8 @@ actual class MoneyFormatterImpl(
         }
     }
 
-    actual override fun format(money: MoneyIO): String {
-        return with(currencyFormat) {
-            currencyCode = money.currency.isoCode
-            stringFromNumber(NSNumber(double = money.amount.doubleValue(exactRequired = false)))
-        } ?: "${money.amount} ${money.currency}"
-    }
+    actual override fun format(money: MoneyIO): String = with(currencyFormat) {
+        currencyCode = money.currency.isoCode
+        stringFromNumber(NSNumber(double = money.amount.doubleValue(exactRequired = false)))
+    } ?: "${money.amount} ${money.currency}"
 }

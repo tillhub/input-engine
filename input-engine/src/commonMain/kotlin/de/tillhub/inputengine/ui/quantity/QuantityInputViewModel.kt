@@ -40,8 +40,8 @@ internal class QuantityInputViewModel(
         formatter.format(it)
     }
 
-    private val _mutableDisplayDataFlow = MutableStateFlow(QuantityInputData.EMPTY)
-    val displayDataFlow: StateFlow<QuantityInputData> = _mutableDisplayDataFlow
+    private val _quantityInputFlow = MutableStateFlow(QuantityInputData.EMPTY)
+    val quantityInputFlow: StateFlow<QuantityInputData> = _quantityInputFlow
 
     private var nextKeyResetsCurrentValue = false
 
@@ -63,7 +63,7 @@ internal class QuantityInputViewModel(
     }
 
     fun decrease() {
-        val newValue = displayDataFlow.value.qty.nextSmaller(
+        val newValue = quantityInputFlow.value.qty.nextSmaller(
             allowsZero = request.allowsZero,
             allowsNegatives = minQuantity.isNegative(),
         )
@@ -74,7 +74,7 @@ internal class QuantityInputViewModel(
     }
 
     fun increase() {
-        val newValue = displayDataFlow.value.qty.nextLarger(
+        val newValue = quantityInputFlow.value.qty.nextLarger(
             maxQuantity = maxQuantity,
         )
         if (isValid(newValue)) {
@@ -133,7 +133,7 @@ internal class QuantityInputViewModel(
     private fun updateDisplayData(quantity: QuantityIO) {
         val formattedQuantity = formatQuantity(quantity)
 
-        _mutableDisplayDataFlow.value = QuantityInputData(
+        _quantityInputFlow.value = QuantityInputData(
             qty = quantity,
             text = formattedQuantity.first,
             isValid = isValid(quantity),
@@ -141,25 +141,19 @@ internal class QuantityInputViewModel(
         )
     }
 
-    private fun formatQuantity(qty: QuantityIO): Pair<String, Boolean> {
-        return if (request.hintQuantity is QuantityParam.Enable && qty.isZero()) {
-            formatter.format(request.hintQuantity.value) to true
-        } else {
-            formatter.format(qty) to false
-        }
+    private fun formatQuantity(qty: QuantityIO): Pair<String, Boolean> = if (request.hintQuantity is QuantityParam.Enable && qty.isZero()) {
+        formatter.format(request.hintQuantity.value) to true
+    } else {
+        formatter.format(qty) to false
     }
 
-    private fun isValid(quantity: QuantityIO): Boolean {
-        return if (request.allowsZero) {
-            isValueBetweenMinMax(quantity)
-        } else {
-            !quantity.isZero() && isValueBetweenMinMax(quantity)
-        }
+    private fun isValid(quantity: QuantityIO): Boolean = if (request.allowsZero) {
+        isValueBetweenMinMax(quantity)
+    } else {
+        !quantity.isZero() && isValueBetweenMinMax(quantity)
     }
 
-    private fun isValueBetweenMinMax(quantity: QuantityIO): Boolean {
-        return quantity in minQuantity..maxQuantity
-    }
+    private fun isValueBetweenMinMax(quantity: QuantityIO): Boolean = quantity in minQuantity..maxQuantity
 
     companion object {
         // Define a custom keys for our dependency

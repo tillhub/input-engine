@@ -58,9 +58,11 @@ internal fun QuantityInputPreview(
             ) {
                 if (maxQuantity is StringParam.Enable) {
                     Text(
-                        modifier = Modifier
+                        modifier =
+                        Modifier
                             .semantics { contentDescription = "Max allowed quantity" },
-                        text = stringResource(
+                        text =
+                        stringResource(
                             Res.string.max_value,
                             maxQuantity.value,
                         ),
@@ -70,9 +72,11 @@ internal fun QuantityInputPreview(
                 }
                 Text(
                     text = quantity.text,
-                    modifier = Modifier
+                    modifier =
+                    Modifier
                         .semantics { contentDescription = "Current quantity" },
-                    color = if (quantity.isHint) {
+                    color =
+                    if (quantity.isHint) {
                         MaterialTheme.colorScheme.hintColor
                     } else {
                         MaterialTheme.colorScheme.primary
@@ -81,9 +85,11 @@ internal fun QuantityInputPreview(
                 )
                 if (minQuantity is StringParam.Enable) {
                     Text(
-                        modifier = Modifier
+                        modifier =
+                        Modifier
                             .semantics { contentDescription = "Min allowed quantity" },
-                        text = stringResource(
+                        text =
+                        stringResource(
                             Res.string.min_value,
                             minQuantity.value,
                         ),

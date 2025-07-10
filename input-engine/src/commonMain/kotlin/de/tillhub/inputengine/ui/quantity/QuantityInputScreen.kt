@@ -26,11 +26,12 @@ internal fun QuantityInputScreen(
     onResult: (QuantityInputResult) -> Unit,
     viewModel: QuantityInputViewModel,
 ) {
-    val displayData by viewModel.displayDataFlow.collectAsState()
+    val displayData by viewModel.quantityInputFlow.collectAsState()
 
     AppTheme {
         Scaffold(
-            modifier = getModifierBasedOnDeviceType(
+            modifier =
+            getModifierBasedOnDeviceType(
                 isTablet = TabletScaffoldModifier,
                 isMobile = Modifier,
             ),
@@ -42,7 +43,8 @@ internal fun QuantityInputScreen(
             },
         ) { innerPadding ->
             Column(
-                modifier = Modifier
+                modifier =
+                Modifier
                     .padding(innerPadding)
                     .fillMaxHeight(),
                 verticalArrangement = Arrangement.SpaceBetween,

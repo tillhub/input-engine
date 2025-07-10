@@ -14,35 +14,39 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 @Composable
-actual fun rememberPercentageInputLauncher(
-    onResult: (PercentageInputResult) -> Unit,
-): PercentageInputContract {
+actual fun rememberPercentageInputLauncher(onResult: (PercentageInputResult) -> Unit): PercentageInputContract {
     val context = LocalContext.current
 
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult(),
-    ) { result ->
-        onResult(parsePercentageInputResult(result.resultCode, result.data?.extras))
-    }
+    val launcher =
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.StartActivityForResult(),
+        ) { result ->
+            onResult(parsePercentageInputResult(result.resultCode, result.data?.extras))
+        }
 
     return remember {
         object : PercentageInputContract {
             override fun launchPercentageInput(request: PercentageInputRequest) {
-                val intent = Intent(context, PercentageInputActivity::class.java).apply {
-                    putExtra(ExtraKeys.EXTRAS_REQUEST, Json.encodeToString(request))
-                }
+                val intent =
+                    Intent(context, PercentageInputActivity::class.java).apply {
+                        putExtra(ExtraKeys.EXTRAS_REQUEST, Json.encodeToString(request))
+                    }
                 launcher.launch(intent)
             }
         }
     }
 }
 
-private fun parsePercentageInputResult(resultCode: Int, extras: Bundle?): PercentageInputResult {
+private fun parsePercentageInputResult(
+    resultCode: Int,
+    extras: Bundle?,
+): PercentageInputResult {
     if (resultCode != Activity.RESULT_OK || extras == null) {
         return PercentageInputResult.Canceled
     }
 
-    return extras.getString(ExtraKeys.EXTRAS_RESULT)
+    return extras
+        .getString(ExtraKeys.EXTRAS_RESULT)
         ?.let { Json.decodeFromString<PercentageInputResult.Success>(it) }
         ?: PercentageInputResult.Canceled
 }

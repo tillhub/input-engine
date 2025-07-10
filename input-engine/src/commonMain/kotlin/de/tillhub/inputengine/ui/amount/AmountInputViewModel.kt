@@ -67,8 +67,8 @@ internal class AmountInputViewModel(
         }
     }
 
-    private val _inputCurrencyMoneyInput = MutableStateFlow(MoneyIO.zero(DEFAULT_CURRENCY))
-    internal val moneyInput: StateFlow<MoneyInputData> = _inputCurrencyMoneyInput.map {
+    private val inputCurrencyMoneyInput = MutableStateFlow(MoneyIO.zero(DEFAULT_CURRENCY))
+    internal val moneyInput: StateFlow<MoneyInputData> = inputCurrencyMoneyInput.map {
         val formattedAmount = formatAmount(it)
         MoneyInputData(
             money = when (amountInputMode) {
@@ -97,18 +97,18 @@ internal class AmountInputViewModel(
                 moneyMax = MoneyIO.max(request.amount.currency)
                 _uiMinValue.value = StringParam.Disable
                 _uiMaxValue.value = StringParam.Disable
-                _inputCurrencyMoneyInput.value = request.amount
+                inputCurrencyMoneyInput.value = request.amount
             }
 
             moneyMin.isZero() && moneyMax.isPositive() -> {
                 amountInputMode = AmountInputMode.POSITIVE
                 _uiMinValue.value = StringParam.Disable
-                _inputCurrencyMoneyInput.value = request.amount.abs()
+                inputCurrencyMoneyInput.value = request.amount.abs()
             }
 
             moneyMin.isPositive() && moneyMax.isPositive() -> {
                 amountInputMode = AmountInputMode.POSITIVE
-                _inputCurrencyMoneyInput.value = request.amount.abs()
+                inputCurrencyMoneyInput.value = request.amount.abs()
             }
 
             moneyMax.isZero() && moneyMin.isNegative() -> {
@@ -117,7 +117,7 @@ internal class AmountInputViewModel(
                 moneyMin = MoneyIO.zero(moneyMin.currency)
                 _uiMinValue.value = StringParam.Disable
                 _uiMaxValue.value = StringParam.Enable(formatter.format(moneyMax))
-                _inputCurrencyMoneyInput.value = request.amount.abs()
+                inputCurrencyMoneyInput.value = request.amount.abs()
             }
 
             moneyMin.isNegative() && moneyMax.isNegative() -> {
@@ -127,11 +127,11 @@ internal class AmountInputViewModel(
                 moneyMin = temp.abs()
                 _uiMinValue.value = StringParam.Enable(formatter.format(moneyMin))
                 _uiMaxValue.value = StringParam.Enable(formatter.format(moneyMax))
-                _inputCurrencyMoneyInput.value = request.amount.abs()
+                inputCurrencyMoneyInput.value = request.amount.abs()
             }
 
             else -> {
-                _inputCurrencyMoneyInput.value = request.amount
+                inputCurrencyMoneyInput.value = request.amount
             }
         }
     }
@@ -144,7 +144,7 @@ internal class AmountInputViewModel(
                 val baseValue = if (isInitValue) {
                     MoneyIO.zero(request.amount.currency)
                 } else {
-                    _inputCurrencyMoneyInput.value
+                    inputCurrencyMoneyInput.value
                 }
                 val newValue = if (negateNextDigit) {
                     MoneyIO.append(baseValue, key.digit.value).negate().also {
@@ -154,7 +154,7 @@ internal class AmountInputViewModel(
                     MoneyIO.append(baseValue, key.digit.value)
                 }
                 isInitValue = false
-                _inputCurrencyMoneyInput.value = if (moneyMin.isPositive()) {
+                inputCurrencyMoneyInput.value = if (moneyMin.isPositive()) {
                     minOf(newValue, moneyMax)
                 } else {
                     maxOf(minOf(newValue, moneyMax), moneyMin)
@@ -167,43 +167,37 @@ internal class AmountInputViewModel(
     }
 
     private fun negate() {
-        if (_inputCurrencyMoneyInput.value.isZero()) {
+        if (inputCurrencyMoneyInput.value.isZero()) {
             negateNextDigit = true
         }
-        _inputCurrencyMoneyInput.value = _inputCurrencyMoneyInput.value.negate()
+        inputCurrencyMoneyInput.value = inputCurrencyMoneyInput.value.negate()
     }
 
     private fun clear() {
-        _inputCurrencyMoneyInput.value = MoneyIO.zero(request.amount.currency)
+        inputCurrencyMoneyInput.value = MoneyIO.zero(request.amount.currency)
     }
 
     private fun delete() {
-        _inputCurrencyMoneyInput.value = MoneyIO.removeLastDigit(_inputCurrencyMoneyInput.value)
+        inputCurrencyMoneyInput.value = MoneyIO.removeLastDigit(inputCurrencyMoneyInput.value)
     }
 
-    private fun isValid(money: MoneyIO): Boolean {
-        return if (request.isZeroAllowed) {
-            isValueBetweenMinMax(money)
-        } else {
-            money.isNotZero() && isValueBetweenMinMax(money)
-        }
+    private fun isValid(money: MoneyIO): Boolean = if (request.isZeroAllowed) {
+        isValueBetweenMinMax(money)
+    } else {
+        money.isNotZero() && isValueBetweenMinMax(money)
     }
 
     /**
      * Returns a pair of [formattedAmount] and [isHint]
      * @see MoneyInputData
      */
-    private fun formatAmount(amount: MoneyIO): Pair<String, Boolean> {
-        return if (request.hintAmount is MoneyParam.Enable && amount.isZero()) {
-            formatter.format(request.hintAmount.amount) to true
-        } else {
-            formatter.format(amount) to false
-        }
+    private fun formatAmount(amount: MoneyIO): Pair<String, Boolean> = if (request.hintAmount is MoneyParam.Enable && amount.isZero()) {
+        formatter.format(request.hintAmount.amount) to true
+    } else {
+        formatter.format(amount) to false
     }
 
-    private fun isValueBetweenMinMax(money: MoneyIO): Boolean {
-        return money in moneyMin..moneyMax
-    }
+    private fun isValueBetweenMinMax(money: MoneyIO): Boolean = money in moneyMin..moneyMax
 
     companion object {
         // Define a custom keys for our dependency

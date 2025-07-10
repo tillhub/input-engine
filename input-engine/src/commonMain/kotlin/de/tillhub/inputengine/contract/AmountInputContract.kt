@@ -12,9 +12,7 @@ interface AmountInputContract {
 }
 
 @Composable
-expect fun rememberAmountInputLauncher(
-    onResult: (AmountInputResult) -> Unit,
-): AmountInputContract
+expect fun rememberAmountInputLauncher(onResult: (AmountInputResult) -> Unit): AmountInputContract
 
 @Serializable
 data class AmountInputRequest(

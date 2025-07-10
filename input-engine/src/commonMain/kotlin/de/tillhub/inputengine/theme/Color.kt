@@ -16,7 +16,8 @@ val MagneticGrey = Color(0xFFA7ABB1)
 val ColorScheme.hintColor: Color
     get() = MagneticGrey
 
-val colors = lightColorScheme(
-    primary = OrbitalBlue,
-    onPrimary = Tint,
-)
+val colors =
+    lightColorScheme(
+        primary = OrbitalBlue,
+        onPrimary = Tint,
+    )

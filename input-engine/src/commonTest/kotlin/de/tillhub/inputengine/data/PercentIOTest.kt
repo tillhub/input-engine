@@ -8,7 +8,6 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class PercentIOTest {
-
     @Test
     fun testConstructors_Int() {
         assertEquals(PercentIO.ZERO, PercentIO.of(0))

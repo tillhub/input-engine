@@ -14,7 +14,6 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class MoneyIOTest {
-
     @Test
     fun testIntConstructors() {
         assertEquals(1.56.toBigDecimal(), MoneyIO.of(156, EUR).amount)

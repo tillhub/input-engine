@@ -11,7 +11,6 @@ import de.tillhub.inputengine.theme.AppTheme
 import kotlin.test.Test
 
 class PercentageInputPreviewTest {
-
     @Test
     fun displaysInitialPercentageText() = runComposeUiTest {
         setContent {

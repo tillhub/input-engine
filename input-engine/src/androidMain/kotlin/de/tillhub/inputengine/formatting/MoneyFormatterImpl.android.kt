@@ -13,10 +13,8 @@ actual class MoneyFormatterImpl(
         NumberFormat.getCurrencyInstance(locale)
     }
 
-    actual override fun format(money: MoneyIO): String {
-        return with(currencyFormat) {
-            this.currency = Currency.getInstance(money.currency.isoCode)
-            format(money.amount.toJavaBigDecimal())
-        }
+    actual override fun format(money: MoneyIO): String = with(currencyFormat) {
+        this.currency = Currency.getInstance(money.currency.isoCode)
+        format(money.amount.toJavaBigDecimal())
     }
 }

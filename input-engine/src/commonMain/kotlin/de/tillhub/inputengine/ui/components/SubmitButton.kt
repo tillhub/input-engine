@@ -26,16 +26,19 @@ internal fun SubmitButton(
 ) {
     Button(
         enabled = isEnable,
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxWidth(),
         shape = RectangleShape,
         onClick = onClick,
-        colors = ButtonDefaults.buttonColors(
+        colors =
+        ButtonDefaults.buttonColors(
             containerColor = if (isEnable) OrbitalBlue else MagneticGrey,
         ),
     ) {
         Text(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .padding(vertical = 8.dp)
                 .semantics { contentDescription = "Submit button label" },
             style = MaterialTheme.typography.headlineSmall,

@@ -16,6 +16,5 @@ actual class QuantityFormatterImpl(
         }
     }
 
-    actual override fun format(quantity: QuantityIO): String =
-        formatter.format(quantity.getDecimal().toJavaBigDecimal())
+    actual override fun format(quantity: QuantityIO): String = formatter.format(quantity.getDecimal().toJavaBigDecimal())
 }

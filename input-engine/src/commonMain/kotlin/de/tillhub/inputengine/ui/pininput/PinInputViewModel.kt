@@ -25,10 +25,10 @@ internal class PinInputViewModel(
 
     private val _pinInputState: MutableStateFlow<PinInputState> =
         MutableStateFlow(PinInputState.AwaitingInput)
-    internal val pinInputState: StateFlow<PinInputState> = _pinInputState
+    val pinInputState: StateFlow<PinInputState> = _pinInputState
 
-    private val _pinInputChars = MutableStateFlow(emptyList<Char>())
-    val enteredPin: StateFlow<String> = _pinInputChars.map { chars ->
+    private val pinInputChars = MutableStateFlow(emptyList<Char>())
+    val enteredPin: StateFlow<String> = pinInputChars.map { chars ->
         chars.joinToString("").apply {
             validateStringInput(this)
         }
@@ -47,15 +47,15 @@ internal class PinInputViewModel(
     fun input(key: NumpadKey) {
         when (key) {
             NumpadKey.Clear -> {
-                _pinInputChars.value = emptyList()
+                pinInputChars.value = emptyList()
             }
 
             NumpadKey.Delete -> {
-                _pinInputChars.value = _pinInputChars.value.toMutableList().dropLast(1)
+                pinInputChars.value = pinInputChars.value.toMutableList().dropLast(1)
             }
 
             is NumpadKey.SingleDigit -> {
-                _pinInputChars.value = _pinInputChars.value.toMutableList()
+                pinInputChars.value = pinInputChars.value.toMutableList()
                     .apply { add(key.digit.value.digitToChar()) }
             }
 
@@ -80,13 +80,9 @@ internal class PinInputViewModel(
         }
     }
 
-    private fun isPinValid(pinInput: CharSequence): Boolean {
-        return request.pin == pinInput
-    }
+    private fun isPinValid(pinInput: CharSequence): Boolean = request.pin == pinInput
 
-    private fun isPinFormatValid(pin: String): Boolean {
-        return pin.isNotEmpty() && pin.all { it.isDigit() }
-    }
+    private fun isPinFormatValid(pin: String): Boolean = pin.isNotEmpty() && pin.all { it.isDigit() }
 
     companion object {
         // Define a custom keys for our dependency

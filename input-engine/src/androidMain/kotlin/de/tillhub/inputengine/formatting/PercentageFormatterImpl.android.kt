@@ -14,7 +14,5 @@ actual class PercentageFormatterImpl(
         }
     }
 
-    actual override fun format(
-        percent: PercentIO,
-    ): String = formatter.format(percent.toRatio())
+    actual override fun format(percent: PercentIO): String = formatter.format(percent.toRatio())
 }

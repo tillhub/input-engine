@@ -5,7 +5,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 class DigitTest {
-
     @Test
     fun testFrom_validValues() {
         assertEquals(Digit.ZERO, Digit.from(0))
@@ -22,17 +21,19 @@ class DigitTest {
 
     @Test
     fun testFrom_invalidBelowRange() {
-        val exception = assertFailsWith<IllegalArgumentException> {
-            Digit.from(-1)
-        }
+        val exception =
+            assertFailsWith<IllegalArgumentException> {
+                Digit.from(-1)
+            }
         assertEquals("Digit only supports values from 0 to 9, but was: -1", exception.message)
     }
 
     @Test
     fun testFrom_invalidAboveRange() {
-        val exception = assertFailsWith<IllegalArgumentException> {
-            Digit.from(10)
-        }
+        val exception =
+            assertFailsWith<IllegalArgumentException> {
+                Digit.from(10)
+            }
         assertEquals("Digit only supports values from 0 to 9, but was: 10", exception.message)
     }
 }

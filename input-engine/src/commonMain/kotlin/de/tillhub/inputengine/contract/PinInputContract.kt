@@ -10,9 +10,7 @@ interface PinInputContract {
 }
 
 @Composable
-expect fun rememberPinInputLauncher(
-    onResult: (PinInputResult) -> Unit,
-): PinInputContract
+expect fun rememberPinInputLauncher(onResult: (PinInputResult) -> Unit): PinInputContract
 
 @Serializable
 data class PinInputRequest(
@@ -25,7 +23,9 @@ data class PinInputRequest(
 @Serializable
 sealed class PinInputResult {
     @Serializable
-    data class Success(val extras: Map<String, String>) : PinInputResult()
+    data class Success(
+        val extras: Map<String, String>,
+    ) : PinInputResult()
 
     @Serializable
     data object Canceled : PinInputResult()

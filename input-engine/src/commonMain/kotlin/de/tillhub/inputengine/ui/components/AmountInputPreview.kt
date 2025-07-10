@@ -26,7 +26,8 @@ internal fun AmountInputPreview(
 ) {
     if (amountMax is StringParam.Enable) {
         Text(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxWidth()
                 .wrapContentWidth(Alignment.CenterHorizontally)
                 .semantics { contentDescription = "Max allowed amount" },
@@ -38,14 +39,16 @@ internal fun AmountInputPreview(
     }
 
     Text(
-        modifier = Modifier
+        modifier =
+        Modifier
             .fillMaxWidth()
             .wrapContentWidth(Alignment.CenterHorizontally)
             .semantics { contentDescription = "Current amount" },
         style = MaterialTheme.typography.displaySmall,
         maxLines = 1,
         text = amount.text,
-        color = if (amount.isHint) {
+        color =
+        if (amount.isHint) {
             MaterialTheme.colorScheme.hintColor
         } else {
             MaterialTheme.colorScheme.primary
@@ -54,7 +57,8 @@ internal fun AmountInputPreview(
 
     if (amountMin is StringParam.Enable) {
         Text(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .fillMaxWidth()
                 .wrapContentWidth(Alignment.CenterHorizontally)
                 .semantics { contentDescription = "Min allowed amount" },

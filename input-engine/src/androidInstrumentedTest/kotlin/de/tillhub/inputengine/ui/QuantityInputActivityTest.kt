@@ -25,21 +25,22 @@ import kotlin.test.assertNull
 
 @RunWith(AndroidJUnit4::class)
 class QuantityInputActivityTest {
-
     @get:Rule
     val composeRule = createComposeRule()
 
     @Test
     fun launchesWithRequestAndSubmitsResult() {
-        val request = QuantityInputRequest(
-            quantity = QuantityIO.of(5),
-            allowsZero = true,
-            extras = mapOf("test" to "value"),
-        )
+        val request =
+            QuantityInputRequest(
+                quantity = QuantityIO.of(5),
+                allowsZero = true,
+                extras = mapOf("test" to "value"),
+            )
 
-        val intent = Intent(ApplicationProvider.getApplicationContext(), QuantityInputActivity::class.java).apply {
-            putExtra(ExtraKeys.EXTRAS_REQUEST, Json.encodeToString(request))
-        }
+        val intent =
+            Intent(ApplicationProvider.getApplicationContext(), QuantityInputActivity::class.java).apply {
+                putExtra(ExtraKeys.EXTRAS_REQUEST, Json.encodeToString(request))
+            }
 
         // Launch activity for result to capture the returned data
         val scenario = ActivityScenario.launchActivityForResult<QuantityInputActivity>(intent)
@@ -71,17 +72,19 @@ class QuantityInputActivityTest {
 
     @Test
     fun launchesWithRequestAndCancels() {
-        val request = QuantityInputRequest(
-            quantity = QuantityIO.of(10),
-            allowsZero = false,
-            minQuantity = QuantityParam.Enable(QuantityIO.of(1)),
-            maxQuantity = QuantityParam.Enable(QuantityIO.of(100)),
-            extras = mapOf("test" to "value", "complex" to "request"),
-        )
+        val request =
+            QuantityInputRequest(
+                quantity = QuantityIO.of(10),
+                allowsZero = false,
+                minQuantity = QuantityParam.Enable(QuantityIO.of(1)),
+                maxQuantity = QuantityParam.Enable(QuantityIO.of(100)),
+                extras = mapOf("test" to "value", "complex" to "request"),
+            )
 
-        val intent = Intent(ApplicationProvider.getApplicationContext(), QuantityInputActivity::class.java).apply {
-            putExtra(ExtraKeys.EXTRAS_REQUEST, Json.encodeToString(request))
-        }
+        val intent =
+            Intent(ApplicationProvider.getApplicationContext(), QuantityInputActivity::class.java).apply {
+                putExtra(ExtraKeys.EXTRAS_REQUEST, Json.encodeToString(request))
+            }
 
         // Launch activity for result to capture the returned data
         val scenario = ActivityScenario.launchActivityForResult<QuantityInputActivity>(intent)

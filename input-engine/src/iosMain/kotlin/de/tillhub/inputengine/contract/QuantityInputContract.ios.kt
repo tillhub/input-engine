@@ -5,9 +5,7 @@ import androidx.compose.runtime.remember
 import de.tillhub.inputengine.ui.QuantityInputPresenter
 
 @Composable
-actual fun rememberQuantityInputLauncher(
-    onResult: (QuantityInputResult) -> Unit,
-): QuantityInputContract = remember {
+actual fun rememberQuantityInputLauncher(onResult: (QuantityInputResult) -> Unit): QuantityInputContract = remember {
     val presenter = QuantityInputPresenter(onResult)
 
     object : QuantityInputContract {

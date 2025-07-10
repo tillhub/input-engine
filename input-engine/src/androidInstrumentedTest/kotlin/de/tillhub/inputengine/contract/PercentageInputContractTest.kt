@@ -21,7 +21,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
 class PercentageInputContractTest {
-
     @get:Rule
     val composeRule = createAndroidComposeRule<ComponentActivity>()
 
@@ -31,29 +30,32 @@ class PercentageInputContractTest {
         var contract: PercentageInputContract? = null
 
         composeRule.setContent {
-            val activityResultRegistry: ActivityResultRegistry = object : ActivityResultRegistry() {
-                override fun <I, O> onLaunch(
-                    requestCode: Int,
-                    contract: ActivityResultContract<I, O>,
-                    input: I,
-                    options: ActivityOptionsCompat?,
-                ) {
-                    // Simulate a canceled result (Activity.RESULT_CANCELED)
-                    val activityResult = ActivityResult(Activity.RESULT_CANCELED, null)
+            val activityResultRegistry: ActivityResultRegistry =
+                object : ActivityResultRegistry() {
+                    override fun <I, O> onLaunch(
+                        requestCode: Int,
+                        contract: ActivityResultContract<I, O>,
+                        input: I,
+                        options: ActivityOptionsCompat?,
+                    ) {
+                        // Simulate a canceled result (Activity.RESULT_CANCELED)
+                        val activityResult = ActivityResult(Activity.RESULT_CANCELED, null)
 
-                    dispatchResult(requestCode, activityResult)
+                        dispatchResult(requestCode, activityResult)
+                    }
                 }
-            }
 
-            val registryOwner = object : ActivityResultRegistryOwner {
-                override val activityResultRegistry: ActivityResultRegistry
-                    get() = activityResultRegistry
-            }
+            val registryOwner =
+                object : ActivityResultRegistryOwner {
+                    override val activityResultRegistry: ActivityResultRegistry
+                        get() = activityResultRegistry
+                }
 
             CompositionLocalProvider(LocalActivityResultRegistryOwner provides registryOwner) {
-                contract = rememberPercentageInputLauncher {
-                    result = it
-                }
+                contract =
+                    rememberPercentageInputLauncher {
+                        result = it
+                    }
             }
         }
 
@@ -76,35 +78,40 @@ class PercentageInputContractTest {
         var contract: PercentageInputContract? = null
 
         composeRule.setContent {
-            val activityResultRegistry: ActivityResultRegistry = object : ActivityResultRegistry() {
-                override fun <I, O> onLaunch(
-                    requestCode: Int,
-                    contract: ActivityResultContract<I, O>,
-                    input: I,
-                    options: ActivityOptionsCompat?,
-                ) {
-                    val response = PercentageInputResult.Success(
-                        percent = PercentIO.of(10),
-                        extras = mapOf("test" to "value"),
-                    )
-                    val data = Intent().apply {
-                        putExtra(ExtraKeys.EXTRAS_RESULT, Json.encodeToString(response))
+            val activityResultRegistry: ActivityResultRegistry =
+                object : ActivityResultRegistry() {
+                    override fun <I, O> onLaunch(
+                        requestCode: Int,
+                        contract: ActivityResultContract<I, O>,
+                        input: I,
+                        options: ActivityOptionsCompat?,
+                    ) {
+                        val response =
+                            PercentageInputResult.Success(
+                                percent = PercentIO.of(10),
+                                extras = mapOf("test" to "value"),
+                            )
+                        val data =
+                            Intent().apply {
+                                putExtra(ExtraKeys.EXTRAS_RESULT, Json.encodeToString(response))
+                            }
+                        val activityResult = ActivityResult(Activity.RESULT_OK, data)
+
+                        dispatchResult(requestCode, activityResult)
                     }
-                    val activityResult = ActivityResult(Activity.RESULT_OK, data)
-
-                    dispatchResult(requestCode, activityResult)
                 }
-            }
 
-            val registryOwner = object : ActivityResultRegistryOwner {
-                override val activityResultRegistry: ActivityResultRegistry
-                    get() = activityResultRegistry
-            }
+            val registryOwner =
+                object : ActivityResultRegistryOwner {
+                    override val activityResultRegistry: ActivityResultRegistry
+                        get() = activityResultRegistry
+                }
 
             CompositionLocalProvider(LocalActivityResultRegistryOwner provides registryOwner) {
-                contract = rememberPercentageInputLauncher {
-                    result = it
-                }
+                contract =
+                    rememberPercentageInputLauncher {
+                        result = it
+                    }
             }
         }
 

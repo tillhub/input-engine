@@ -32,7 +32,8 @@ internal fun PercentageInputScreen(
 
     AppTheme {
         Scaffold(
-            modifier = getModifierBasedOnDeviceType(
+            modifier =
+            getModifierBasedOnDeviceType(
                 isTablet = TabletScaffoldModifier,
                 isMobile = Modifier,
             ),
@@ -44,7 +45,8 @@ internal fun PercentageInputScreen(
             },
         ) { innerPadding ->
             Column(
-                modifier = Modifier
+                modifier =
+                Modifier
                     .padding(innerPadding)
                     .padding(top = 16.dp)
                     .fillMaxHeight(),

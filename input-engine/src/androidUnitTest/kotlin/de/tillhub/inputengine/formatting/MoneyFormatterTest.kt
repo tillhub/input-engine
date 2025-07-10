@@ -8,7 +8,6 @@ import java.util.Locale
 import kotlin.test.assertEquals
 
 class MoneyFormatterTest {
-
     @Test
     fun moneyFormatterTest() = runTest {
         val formatterDe = MoneyFormatterImpl(Locale.GERMAN)

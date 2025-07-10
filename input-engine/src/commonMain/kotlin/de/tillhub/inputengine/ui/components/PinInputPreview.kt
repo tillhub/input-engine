@@ -33,12 +33,14 @@ fun PinInputPreview(
     Box(modifier = Modifier.fillMaxWidth()) {
         OutlinedTextField(
             readOnly = true,
-            modifier = Modifier
+            modifier =
+            Modifier
                 .align(Alignment.Center)
                 .testTag("Pin placeholder"),
             value = pinText,
             onValueChange = { },
-            textStyle = TextStyle.Default.copy(
+            textStyle =
+            TextStyle.Default.copy(
                 color = OrbitalBlue,
                 fontSize = 64.sp,
                 textAlign = TextAlign.Center,
@@ -46,10 +48,12 @@ fun PinInputPreview(
             maxLines = 1,
             placeholder = {
                 Text(
-                    modifier = Modifier
+                    modifier =
+                    Modifier
                         .fillMaxWidth()
                         .semantics { contentDescription = "Pin hint text" },
-                    style = TextStyle.Default.copy(
+                    style =
+                    TextStyle.Default.copy(
                         color = HintGray,
                         fontSize = 64.sp,
                         textAlign = TextAlign.Center,
@@ -62,12 +66,12 @@ fun PinInputPreview(
         )
         if (overridePinInput) {
             Text(
-                modifier = Modifier
+                modifier =
+                Modifier
                     .align(Alignment.BottomCenter)
                     .clickable {
                         onOverride()
-                    }
-                    .semantics { contentDescription = "Override pin" },
+                    }.semantics { contentDescription = "Override pin" },
                 textAlign = TextAlign.End,
                 maxLines = 1,
                 style = MaterialTheme.typography.bodyMedium,

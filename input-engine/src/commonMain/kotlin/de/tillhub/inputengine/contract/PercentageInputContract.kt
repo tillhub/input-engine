@@ -12,9 +12,7 @@ interface PercentageInputContract {
 }
 
 @Composable
-expect fun rememberPercentageInputLauncher(
-    onResult: (PercentageInputResult) -> Unit,
-): PercentageInputContract
+expect fun rememberPercentageInputLauncher(onResult: (PercentageInputResult) -> Unit): PercentageInputContract
 
 @Serializable
 data class PercentageInputRequest(

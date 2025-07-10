@@ -12,7 +12,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ToolbarTest {
-
     @Test
     fun toolbarTest() = runComposeUiTest {
         var onBackClickCount = 0

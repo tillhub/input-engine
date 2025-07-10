@@ -13,13 +13,13 @@ import de.tillhub.inputengine.ui.amount.MoneyInputData
 import kotlin.test.Test
 
 class AmountInputPreviewTest {
-
     @Test
     fun displaysInitialAmountText() = runComposeUiTest {
         setContent {
             AppTheme {
                 AmountInputPreview(
-                    amount = MoneyInputData(
+                    amount =
+                    MoneyInputData(
                         money = 0.eur,
                         text = "0.00 €",
                         isValid = false,
@@ -41,7 +41,8 @@ class AmountInputPreviewTest {
         setContent {
             AppTheme {
                 AmountInputPreview(
-                    amount = MoneyInputData(
+                    amount =
+                    MoneyInputData(
                         money = 0.eur,
                         text = "Enter amount",
                         isValid = false,
@@ -59,7 +60,8 @@ class AmountInputPreviewTest {
         setContent {
             AppTheme {
                 AmountInputPreview(
-                    amount = MoneyInputData(
+                    amount =
+                    MoneyInputData(
                         money = 50.eur,
                         text = "50.00 €",
                         isValid = true,
