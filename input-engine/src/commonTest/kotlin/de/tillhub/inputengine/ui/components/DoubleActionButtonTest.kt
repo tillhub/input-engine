@@ -22,7 +22,6 @@ class DoubleActionButtonTest {
 
     @Test
     fun performsClick() = runComposeUiTest {
-
         var onClickCount = 0
         var onLongClickCount = 0
 
@@ -50,7 +49,6 @@ class DoubleActionButtonTest {
 
     @Test
     fun performsLongClick() = runComposeUiTest {
-
         var onClickCount = 0
         var onLongClickCount = 0
 
@@ -100,7 +98,7 @@ class DoubleActionButtonTest {
 
         // Try to click the disabled button
         onNodeWithTag("doubleActionButton").performClick()
-        
+
         // Try to long click the disabled button
         onNodeWithTag("doubleActionButton").performTouchInput {
             longClick()

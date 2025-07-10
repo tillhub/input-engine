@@ -33,8 +33,8 @@ class AmountInputPresenter(private val onResult: (AmountInputResult) -> Unit) {
                     extras = MutableCreationExtras().apply {
                         set(AmountInputViewModel.REQUEST_KEY, request)
                         set(AmountInputViewModel.FORMATTER_KEY, MoneyFormatter())
-                    }
-                )
+                    },
+                ),
             )
         }
 

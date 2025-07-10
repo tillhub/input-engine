@@ -22,7 +22,7 @@ class PinInputPreviewTest {
                     pinText = "1234",
                     hintText = "****",
                     overridePinInput = false,
-                    onOverride = {}
+                    onOverride = {},
                 )
             }
         }
@@ -42,7 +42,7 @@ class PinInputPreviewTest {
                     pinText = "",
                     hintText = "****",
                     overridePinInput = false,
-                    onOverride = {}
+                    onOverride = {},
                 )
             }
         }
@@ -60,7 +60,7 @@ class PinInputPreviewTest {
                     pinText = "12",
                     hintText = "****",
                     overridePinInput = false,
-                    onOverride = {}
+                    onOverride = {},
                 )
             }
         }
@@ -82,7 +82,7 @@ class PinInputPreviewTest {
                     overridePinInput = true,
                     onOverride = {
                         overrideCount++
-                    }
+                    },
                 )
             }
         }
@@ -91,7 +91,7 @@ class PinInputPreviewTest {
         onNodeWithTag("Pin placeholder").assertExists()
         onNodeWithContentDescription("Override pin").assertExists()
         onNodeWithContentDescription("Override pin").performClick()
-        
+
         assertEquals(1, overrideCount, "onOverride should be called once")
     }
 }

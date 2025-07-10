@@ -8,7 +8,7 @@ import platform.Foundation.NSNumberFormatterPercentStyle
 import platform.Foundation.currentLocale
 
 actual class PercentageFormatter(
-    private val locale: NSLocale = NSLocale.currentLocale
+    private val locale: NSLocale = NSLocale.currentLocale,
 ) {
     private val formatter by lazy {
         NSNumberFormatter().apply {

@@ -31,8 +31,8 @@ class QuantityInputPresenter(
                     extras = MutableCreationExtras().apply {
                         set(QuantityInputViewModel.REQUEST_KEY, request)
                         set(QuantityInputViewModel.FORMATTER_KEY, QuantityFormatter())
-                    }
-                )
+                    },
+                ),
             )
         }
 

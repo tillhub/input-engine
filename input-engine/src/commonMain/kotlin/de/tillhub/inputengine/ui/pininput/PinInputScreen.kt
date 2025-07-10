@@ -20,12 +20,12 @@ import de.tillhub.inputengine.resources.Res
 import de.tillhub.inputengine.resources.allStringResources
 import de.tillhub.inputengine.resources.pin_correct
 import de.tillhub.inputengine.resources.pin_wrong
+import de.tillhub.inputengine.theme.AppTheme
+import de.tillhub.inputengine.theme.TabletScaffoldModifier
 import de.tillhub.inputengine.ui.components.NumberKeyboard
 import de.tillhub.inputengine.ui.components.PinInputPreview
 import de.tillhub.inputengine.ui.components.Toolbar
 import de.tillhub.inputengine.ui.components.getModifierBasedOnDeviceType
-import de.tillhub.inputengine.theme.AppTheme
-import de.tillhub.inputengine.theme.TabletScaffoldModifier
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 

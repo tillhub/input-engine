@@ -12,7 +12,6 @@ import de.tillhub.inputengine.ExtraKeys
 import de.tillhub.inputengine.ui.PinInputActivity
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.jetbrains.annotations.VisibleForTesting
 
 @Composable
 actual fun rememberPinInputLauncher(
@@ -38,8 +37,8 @@ actual fun rememberPinInputLauncher(
     }
 }
 
-@VisibleForTesting
-internal fun parsePinInputResult(resultCode: Int, extras: Bundle?): PinInputResult {
+
+private fun parsePinInputResult(resultCode: Int, extras: Bundle?): PinInputResult {
     if (resultCode != Activity.RESULT_OK || extras == null) {
         return PinInputResult.Canceled
     }

@@ -8,8 +8,8 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.runComposeUiTest
 import de.tillhub.inputengine.domain.StringParam
 import de.tillhub.inputengine.eur
-import de.tillhub.inputengine.ui.amount.MoneyInputData
 import de.tillhub.inputengine.theme.AppTheme
+import de.tillhub.inputengine.ui.amount.MoneyInputData
 import kotlin.test.Test
 
 class AmountInputPreviewTest {
@@ -26,7 +26,7 @@ class AmountInputPreviewTest {
                         isHint = true,
                     ),
                     amountMin = StringParam.Disable,
-                    amountMax = StringParam.Disable
+                    amountMax = StringParam.Disable,
                 )
             }
         }
@@ -46,7 +46,7 @@ class AmountInputPreviewTest {
                         text = "Enter amount",
                         isValid = false,
                         isHint = true,
-                    )
+                    ),
                 )
             }
         }
@@ -66,7 +66,7 @@ class AmountInputPreviewTest {
                         isHint = false,
                     ),
                     amountMin = StringParam.Enable("10.00 €"),
-                    amountMax = StringParam.Enable("100.00 €")
+                    amountMax = StringParam.Enable("100.00 €"),
                 )
             }
         }

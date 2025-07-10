@@ -20,7 +20,6 @@ class NumberKeyboardTest {
 
     @Test
     fun testDefaultState() = runComposeUiTest {
-
         setContent {
             AppTheme {
                 NumberKeyboard(
@@ -45,7 +44,6 @@ class NumberKeyboardTest {
 
     @Test
     fun testShowNegative() = runComposeUiTest {
-
         setContent {
             AppTheme {
                 NumberKeyboard(
@@ -61,7 +59,6 @@ class NumberKeyboardTest {
 
     @Test
     fun testDecimalSeparator() = runComposeUiTest {
-
         setContent {
             AppTheme {
                 NumberKeyboard(
@@ -78,7 +75,6 @@ class NumberKeyboardTest {
 
     @Test
     fun testShowDecimalAndNegative() = runComposeUiTest {
-
         setContent {
             AppTheme {
                 NumberKeyboard(
@@ -95,9 +91,8 @@ class NumberKeyboardTest {
 
     @Test
     fun testNumpadKey() = runCustomComposeUiTest(
-        size = Size(1024.0f, 1024.0f)
+        size = Size(1024.0f, 1024.0f),
     ) {
-
         val events = mutableListOf<NumpadKey>()
 
         setContent {
@@ -132,6 +127,8 @@ class NumberKeyboardTest {
 //                NumpadKey.SingleDigit(Digit.EIGHT),
 //                NumpadKey.SingleDigit(Digit.NINE),
             ),
-            events.toList(), "onClick should be called with correct NumpadKey")
+            events.toList(),
+            "onClick should be called with correct NumpadKey",
+        )
     }
 }

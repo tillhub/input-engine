@@ -10,9 +10,9 @@ import de.tillhub.inputengine.contract.AmountInputRequest
 import de.tillhub.inputengine.data.CurrencyIO
 import de.tillhub.inputengine.data.MoneyIO
 import de.tillhub.inputengine.data.MoneyParam
+import de.tillhub.inputengine.domain.NumpadKey
 import de.tillhub.inputengine.domain.StringParam
 import de.tillhub.inputengine.formatting.MoneyFormatter
-import de.tillhub.inputengine.domain.NumpadKey
 import de.tillhub.inputengine.ui.amount.MoneyInputData.Companion.DEFAULT_CURRENCY
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -47,7 +47,7 @@ internal class AmountInputViewModel(
         MoneyParam.Disable -> MoneyIO.max(request.amount.currency)
         is MoneyParam.Enable -> {
             _uiMaxValue.value = StringParam.Enable(
-                formatter.format(request.amountMax.amount)
+                formatter.format(request.amountMax.amount),
             )
             request.amountMax.amount
         }
@@ -61,7 +61,7 @@ internal class AmountInputViewModel(
         MoneyParam.Disable -> MoneyIO.min(request.amount.currency)
         is MoneyParam.Enable -> {
             _uiMinValue.value = StringParam.Enable(
-                formatter.format(request.amountMin.amount)
+                formatter.format(request.amountMin.amount),
             )
             request.amountMin.amount
         }
@@ -78,7 +78,7 @@ internal class AmountInputViewModel(
             },
             text = formattedAmount.first,
             isValid = isValid(it),
-            isHint = formattedAmount.second
+            isHint = formattedAmount.second,
         )
     }.stateIn(
         scope = viewModelScope,
@@ -182,8 +182,11 @@ internal class AmountInputViewModel(
     }
 
     private fun isValid(money: MoneyIO): Boolean {
-        return if (request.isZeroAllowed) isValueBetweenMinMax(money)
-        else money.isNotZero() && isValueBetweenMinMax(money)
+        return if (request.isZeroAllowed) {
+            isValueBetweenMinMax(money)
+        } else {
+            money.isNotZero() && isValueBetweenMinMax(money)
+        }
     }
 
     /**
@@ -211,7 +214,7 @@ internal class AmountInputViewModel(
             initializer {
                 val request = this[REQUEST_KEY] as AmountInputRequest
                 val formatter = this[FORMATTER_KEY] as MoneyFormatter
-                AmountInputViewModel(request,formatter)
+                AmountInputViewModel(request, formatter)
             }
         }
     }

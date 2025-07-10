@@ -6,9 +6,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.lifecycle.viewmodel.MutableCreationExtras
 import androidx.lifecycle.viewmodel.compose.viewModel
+import de.tillhub.inputengine.ExtraKeys
 import de.tillhub.inputengine.contract.PinInputRequest
 import de.tillhub.inputengine.contract.PinInputResult
-import de.tillhub.inputengine.ExtraKeys
 import de.tillhub.inputengine.ui.pininput.PinInputScreen
 import de.tillhub.inputengine.ui.pininput.PinInputViewModel
 import kotlinx.serialization.decodeFromString
@@ -49,7 +49,7 @@ class PinInputActivity : ComponentActivity() {
                     extras = MutableCreationExtras().apply {
                         set(PinInputViewModel.REQUEST_KEY, request)
                     },
-                )
+                ),
             )
         }
     }

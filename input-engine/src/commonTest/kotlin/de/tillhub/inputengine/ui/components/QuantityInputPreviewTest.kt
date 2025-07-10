@@ -26,12 +26,12 @@ class QuantityInputPreviewTest {
                         qty = QuantityIO.ZERO,
                         text = "0",
                         isValid = false,
-                        isHint = false
+                        isHint = false,
                     ),
                     minQuantity = StringParam.Disable,
                     maxQuantity = StringParam.Disable,
                     decrease = {},
-                    increase = {}
+                    increase = {},
                 )
             }
         }
@@ -45,7 +45,6 @@ class QuantityInputPreviewTest {
 
     @Test
     fun decreaseButtonClicked() = runComposeUiTest {
-
         var increaseCount = 0
         var decreaseCount = 0
 
@@ -56,7 +55,7 @@ class QuantityInputPreviewTest {
                         qty = QuantityIO.ZERO,
                         text = "0",
                         isValid = false,
-                        isHint = false
+                        isHint = false,
                     ),
                     minQuantity = StringParam.Enable("0"),
                     maxQuantity = StringParam.Enable("10"),
@@ -65,7 +64,7 @@ class QuantityInputPreviewTest {
                     },
                     increase = {
                         increaseCount++
-                    }
+                    },
                 )
             }
         }
@@ -82,7 +81,6 @@ class QuantityInputPreviewTest {
 
     @Test
     fun increaseButtonClicked() = runComposeUiTest {
-
         var increaseCount = 0
         var decreaseCount = 0
 
@@ -93,7 +91,7 @@ class QuantityInputPreviewTest {
                         qty = QuantityIO.ZERO,
                         text = "2",
                         isValid = false,
-                        isHint = false
+                        isHint = false,
                     ),
                     minQuantity = StringParam.Enable("0"),
                     maxQuantity = StringParam.Enable("10"),
@@ -102,7 +100,7 @@ class QuantityInputPreviewTest {
                     },
                     increase = {
                         increaseCount++
-                    }
+                    },
                 )
             }
         }

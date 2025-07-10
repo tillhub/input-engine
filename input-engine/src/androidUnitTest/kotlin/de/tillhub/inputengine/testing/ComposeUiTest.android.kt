@@ -7,10 +7,10 @@ import androidx.compose.ui.test.runComposeUiTest
 actual fun runCustomComposeUiTest(
     effectContext: kotlin.coroutines.CoroutineContext,
     size: Size,
-    block: androidx.compose.ui.test.ComposeUiTest.() -> Unit
+    block: androidx.compose.ui.test.ComposeUiTest.() -> Unit,
 ) {
     runComposeUiTest(
         effectContext = effectContext,
-        block = block
+        block = block,
     )
 }

@@ -21,10 +21,10 @@ import de.tillhub.inputengine.resources.ic_minus
 import de.tillhub.inputengine.resources.ic_plus
 import de.tillhub.inputengine.resources.max_value
 import de.tillhub.inputengine.resources.min_value
-import de.tillhub.inputengine.ui.quantity.QuantityInputData
 import de.tillhub.inputengine.theme.MagneticGrey
 import de.tillhub.inputengine.theme.OrbitalBlue
 import de.tillhub.inputengine.theme.hintColor
+import de.tillhub.inputengine.ui.quantity.QuantityInputData
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -44,7 +44,7 @@ internal fun QuantityInputPreview(
         ) {
             IconButton(
                 modifier = Modifier.semantics { contentDescription = "Button decrease" },
-                onClick = decrease
+                onClick = decrease,
             ) {
                 Icon(
                     painter = painterResource(Res.drawable.ic_minus),
@@ -94,7 +94,7 @@ internal fun QuantityInputPreview(
             }
             IconButton(
                 modifier = Modifier.semantics { contentDescription = "Button increase" },
-                onClick = increase
+                onClick = increase,
             ) {
                 Icon(
                     painter = painterResource(Res.drawable.ic_plus),

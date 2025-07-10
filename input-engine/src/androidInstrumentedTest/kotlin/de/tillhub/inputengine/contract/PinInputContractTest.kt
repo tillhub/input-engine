@@ -28,7 +28,7 @@ class PinInputContractTest {
 
     private val request = PinInputRequest(
         pin = "1234",
-        extras = mapOf("test" to "value")
+        extras = mapOf("test" to "value"),
     )
 
     @Test
@@ -42,7 +42,7 @@ class PinInputContractTest {
                     requestCode: Int,
                     contract: ActivityResultContract<I, O>,
                     input: I,
-                    options: ActivityOptionsCompat?
+                    options: ActivityOptionsCompat?,
                 ) {
                     // Create proper ActivityResult with canceled result code
                     val activityResult = ActivityResult(Activity.RESULT_CANCELED, null)
@@ -76,7 +76,7 @@ class PinInputContractTest {
         var contract: PinInputContract? = null
 
         val successResult = PinInputResult.Success(
-            extras = mapOf("result" to "success")
+            extras = mapOf("result" to "success"),
         )
 
         composeRule.setContent {
@@ -85,7 +85,7 @@ class PinInputContractTest {
                     requestCode: Int,
                     contract: ActivityResultContract<I, O>,
                     input: I,
-                    options: ActivityOptionsCompat?
+                    options: ActivityOptionsCompat?,
                 ) {
                     // Create proper ActivityResult with success result code and serialized data
                     val resultIntent = Intent().apply {

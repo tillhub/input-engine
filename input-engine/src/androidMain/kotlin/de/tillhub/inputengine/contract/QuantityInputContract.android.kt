@@ -8,12 +8,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
-import de.tillhub.inputengine.data.QuantityIO
 import de.tillhub.inputengine.ExtraKeys
 import de.tillhub.inputengine.ui.QuantityInputActivity
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.jetbrains.annotations.VisibleForTesting
 
 @Composable
 actual fun rememberQuantityInputLauncher(
@@ -39,11 +37,8 @@ actual fun rememberQuantityInputLauncher(
     }
 }
 
-@VisibleForTesting
-internal fun parseQuantityInputResult(
-    resultCode: Int,
-    extras: Bundle?,
-): QuantityInputResult {
+
+private fun parseQuantityInputResult(resultCode: Int, extras: Bundle?): QuantityInputResult {
     if (resultCode != Activity.RESULT_OK || extras == null) {
         return QuantityInputResult.Canceled
     }

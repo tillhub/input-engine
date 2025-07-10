@@ -18,7 +18,6 @@ class SubmitButtonTest {
 
     @Test
     fun submitButtonTest() = runComposeUiTest {
-
         var clicks = 0
 
         setContent {
@@ -28,7 +27,7 @@ class SubmitButtonTest {
                     modifier = Modifier.testTag("submitButton"),
                     onClick = {
                         clicks++
-                    }
+                    },
                 )
             }
         }

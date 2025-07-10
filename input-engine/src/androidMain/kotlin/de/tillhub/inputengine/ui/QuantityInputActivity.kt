@@ -6,10 +6,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.lifecycle.viewmodel.MutableCreationExtras
 import androidx.lifecycle.viewmodel.compose.viewModel
+import de.tillhub.inputengine.ExtraKeys
 import de.tillhub.inputengine.contract.QuantityInputRequest
 import de.tillhub.inputengine.contract.QuantityInputResult
 import de.tillhub.inputengine.formatting.QuantityFormatter
-import de.tillhub.inputengine.ExtraKeys
 import de.tillhub.inputengine.ui.quantity.QuantityInputScreen
 import de.tillhub.inputengine.ui.quantity.QuantityInputViewModel
 import kotlinx.serialization.encodeToString
@@ -46,7 +46,7 @@ class QuantityInputActivity : ComponentActivity() {
                         set(QuantityInputViewModel.REQUEST_KEY, request)
                         set(QuantityInputViewModel.FORMATTER_KEY, QuantityFormatter())
                     },
-                )
+                ),
             )
         }
     }

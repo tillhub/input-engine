@@ -9,7 +9,7 @@ import platform.Foundation.currentLocale
 import platform.Foundation.numberWithDouble
 
 actual class QuantityFormatter(
-    private val locale: NSLocale = NSLocale.currentLocale
+    private val locale: NSLocale = NSLocale.currentLocale,
 ) {
     private val formatter by lazy {
         NSNumberFormatter().apply {
@@ -24,5 +24,4 @@ actual class QuantityFormatter(
         val doubleValue = NSNumber.numberWithDouble(quantity.getDecimal().doubleValue(false))
         return formatter.stringFromNumber(doubleValue) ?: doubleValue.toString()
     }
-
 }

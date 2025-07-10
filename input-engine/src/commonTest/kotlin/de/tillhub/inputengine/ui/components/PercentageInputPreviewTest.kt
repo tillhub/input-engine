@@ -19,7 +19,7 @@ class PercentageInputPreviewTest {
                 PercentageInputPreview(
                     percentText = "0%",
                     percentageMin = StringParam.Disable,
-                    percentageMax = StringParam.Disable
+                    percentageMax = StringParam.Disable,
                 )
             }
         }
@@ -36,7 +36,7 @@ class PercentageInputPreviewTest {
                 PercentageInputPreview(
                     percentText = "20%",
                     percentageMin = StringParam.Enable("10%"),
-                    percentageMax = StringParam.Enable("100%")
+                    percentageMax = StringParam.Enable("100%"),
                 )
             }
         }

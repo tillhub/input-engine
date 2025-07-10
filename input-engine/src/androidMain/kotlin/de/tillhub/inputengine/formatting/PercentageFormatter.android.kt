@@ -5,7 +5,7 @@ import java.text.NumberFormat
 import java.util.Locale
 
 actual class PercentageFormatter(
-    private val locale: Locale = Locale.getDefault()
+    private val locale: Locale = Locale.getDefault(),
 ) {
     private val formatter: NumberFormat by lazy {
         NumberFormat.getPercentInstance(locale).apply {

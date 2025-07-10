@@ -35,8 +35,8 @@ class PercentageInputPresenter(
                     extras = MutableCreationExtras().apply {
                         set(PercentageInputViewModel.REQUEST_KEY, request)
                         set(PercentageInputViewModel.FORMATTER_KEY, PercentageFormatter())
-                    }
-                )
+                    },
+                ),
             )
         }
 

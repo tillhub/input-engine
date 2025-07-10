@@ -33,7 +33,7 @@ internal fun DoubleActionButton(
     content: @Composable RowScope.() -> Unit,
 ) {
     val colors: ButtonColors = ButtonDefaults.outlinedButtonColors(
-        containerColor = MaterialTheme.colorScheme.onPrimary
+        containerColor = MaterialTheme.colorScheme.onPrimary,
     )
     val containerColor = if (enabled) colors.containerColor else colors.disabledContainerColor
     val contentColor = if (enabled) colors.contentColor else colors.disabledContentColor

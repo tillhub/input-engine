@@ -2,6 +2,7 @@ package de.tillhub.inputengine.contract
 
 import android.app.Activity
 import android.content.Intent
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.LocalActivityResultRegistryOwner
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultRegistry
@@ -9,7 +10,6 @@ import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.core.app.ActivityOptionsCompat
-import androidx.activity.ComponentActivity
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import de.tillhub.inputengine.ExtraKeys
 import de.tillhub.inputengine.data.QuantityIO
@@ -30,7 +30,7 @@ class QuantityInputContractTest {
     private val request = QuantityInputRequest(
         quantity = QuantityIO.of(10),
         allowsZero = true,
-        extras = mapOf("test" to "value")
+        extras = mapOf("test" to "value"),
     )
 
     @Test
@@ -44,7 +44,7 @@ class QuantityInputContractTest {
                     requestCode: Int,
                     contract: ActivityResultContract<I, O>,
                     input: I,
-                    options: ActivityOptionsCompat?
+                    options: ActivityOptionsCompat?,
                 ) {
                     // Create proper ActivityResult with canceled result code
                     val activityResult = ActivityResult(Activity.RESULT_CANCELED, null)
@@ -79,7 +79,7 @@ class QuantityInputContractTest {
 
         val successResult = QuantityInputResult.Success(
             quantity = QuantityIO.of(25),
-            extras = mapOf("result" to "success")
+            extras = mapOf("result" to "success"),
         )
 
         composeRule.setContent {
@@ -88,7 +88,7 @@ class QuantityInputContractTest {
                     requestCode: Int,
                     contract: ActivityResultContract<I, O>,
                     input: I,
-                    options: ActivityOptionsCompat?
+                    options: ActivityOptionsCompat?,
                 ) {
                     // Create proper ActivityResult with success result code and serialized data
                     val resultIntent = Intent().apply {

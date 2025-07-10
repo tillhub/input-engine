@@ -8,7 +8,7 @@ import platform.Foundation.NSNumberFormatterCurrencyStyle
 import platform.Foundation.currentLocale
 
 actual class MoneyFormatter(
-    private val locale: NSLocale = NSLocale.currentLocale
+    private val locale: NSLocale = NSLocale.currentLocale,
 ) {
 
     private val currencyFormat by lazy {

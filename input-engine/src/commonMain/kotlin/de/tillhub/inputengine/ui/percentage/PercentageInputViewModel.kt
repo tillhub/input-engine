@@ -8,12 +8,12 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import de.tillhub.inputengine.contract.PercentageInputRequest
 import de.tillhub.inputengine.data.PercentIO
 import de.tillhub.inputengine.data.PercentageParam
-import de.tillhub.inputengine.domain.StringParam
 import de.tillhub.inputengine.data.mapToStringParam
-import de.tillhub.inputengine.formatting.PercentageFormatter
+import de.tillhub.inputengine.domain.NumpadKey
+import de.tillhub.inputengine.domain.StringParam
 import de.tillhub.inputengine.domain.helper.NumberInputController
 import de.tillhub.inputengine.domain.helper.NumberInputControllerImpl
-import de.tillhub.inputengine.domain.NumpadKey
+import de.tillhub.inputengine.formatting.PercentageFormatter
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -109,7 +109,7 @@ internal class PercentageInputViewModel(
                 val formatter = this[FORMATTER_KEY] as PercentageFormatter
                 PercentageInputViewModel(
                     request = request,
-                    formatter = formatter
+                    formatter = formatter,
                 )
             }
         }

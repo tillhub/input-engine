@@ -13,9 +13,9 @@ import de.tillhub.inputengine.domain.StringParam
 import de.tillhub.inputengine.resources.Res
 import de.tillhub.inputengine.resources.max_value
 import de.tillhub.inputengine.resources.min_value
-import de.tillhub.inputengine.ui.amount.MoneyInputData
 import de.tillhub.inputengine.theme.SoyuzGrey
 import de.tillhub.inputengine.theme.hintColor
+import de.tillhub.inputengine.ui.amount.MoneyInputData
 import org.jetbrains.compose.resources.stringResource
 
 @Composable

@@ -7,15 +7,15 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import de.tillhub.inputengine.contract.QuantityInputRequest
 import de.tillhub.inputengine.data.QuantityIO
-import de.tillhub.inputengine.domain.helper.getMajorDigits
-import de.tillhub.inputengine.domain.helper.getMinorDigits
 import de.tillhub.inputengine.data.QuantityParam
-import de.tillhub.inputengine.domain.StringParam
 import de.tillhub.inputengine.data.mapToStringParam
-import de.tillhub.inputengine.formatting.QuantityFormatter
+import de.tillhub.inputengine.domain.NumpadKey
+import de.tillhub.inputengine.domain.StringParam
 import de.tillhub.inputengine.domain.helper.NumberInputController
 import de.tillhub.inputengine.domain.helper.NumberInputControllerImpl
-import de.tillhub.inputengine.domain.NumpadKey
+import de.tillhub.inputengine.domain.helper.getMajorDigits
+import de.tillhub.inputengine.domain.helper.getMinorDigits
+import de.tillhub.inputengine.formatting.QuantityFormatter
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -44,7 +44,6 @@ internal class QuantityInputViewModel(
     val displayDataFlow: StateFlow<QuantityInputData> = _mutableDisplayDataFlow
 
     private var nextKeyResetsCurrentValue = false
-
 
     private var minQuantity: QuantityIO = when (request.minQuantity) {
         QuantityParam.Disable -> QuantityIO.MIN_VALUE

@@ -10,5 +10,5 @@ import kotlin.coroutines.EmptyCoroutineContext
 expect fun runCustomComposeUiTest(
     effectContext: CoroutineContext = EmptyCoroutineContext,
     size: Size = Size(1024.0f, 768.0f),
-    block: ComposeUiTest.() -> Unit
+    block: ComposeUiTest.() -> Unit,
 )

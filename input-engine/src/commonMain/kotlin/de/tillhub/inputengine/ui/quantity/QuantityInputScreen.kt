@@ -12,13 +12,13 @@ import androidx.compose.ui.Modifier
 import de.tillhub.inputengine.contract.QuantityInputResult
 import de.tillhub.inputengine.resources.Res
 import de.tillhub.inputengine.resources.allStringResources
+import de.tillhub.inputengine.theme.AppTheme
+import de.tillhub.inputengine.theme.TabletScaffoldModifier
 import de.tillhub.inputengine.ui.components.NumberKeyboard
 import de.tillhub.inputengine.ui.components.QuantityInputPreview
 import de.tillhub.inputengine.ui.components.SubmitButton
 import de.tillhub.inputengine.ui.components.Toolbar
 import de.tillhub.inputengine.ui.components.getModifierBasedOnDeviceType
-import de.tillhub.inputengine.theme.AppTheme
-import de.tillhub.inputengine.theme.TabletScaffoldModifier
 import org.jetbrains.compose.resources.stringResource
 
 @Composable

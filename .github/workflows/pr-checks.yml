@@ -1,12 +1,13 @@
 name: Android CI - PR checks
 
 on:
-    pull_request
+  pull_request:
+    branches-ignore: [ "master" ]
 
 jobs:
-    basic-tests:
-        name: Run code analysis and unit tests
-        runs-on: ubuntu-latest
+    pr-checks:
+        name: Run full PR check
+        runs-on: tillhub-org-runner
 
         steps:
             - name: Checking out branch
@@ -22,7 +23,7 @@ jobs:
             - name: Setup Android SDK
               uses: android-actions/setup-android@v3
 
-            - name: Run Detekt Code Analysis
+            - name: Run Spotless Code Analysis
               run: ./gradlew spotlessCheck
 
             - name: Run Unit tests

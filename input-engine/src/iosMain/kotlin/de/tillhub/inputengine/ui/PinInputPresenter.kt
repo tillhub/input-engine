@@ -29,8 +29,8 @@ class PinInputPresenter(
                     factory = PinInputViewModel.Factory,
                     extras = MutableCreationExtras().apply {
                         set(PinInputViewModel.REQUEST_KEY, request)
-                    }
-                )
+                    },
+                ),
             )
         }
 

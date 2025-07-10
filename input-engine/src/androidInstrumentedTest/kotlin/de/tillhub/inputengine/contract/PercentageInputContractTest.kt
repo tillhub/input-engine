@@ -36,7 +36,7 @@ class PercentageInputContractTest {
                     requestCode: Int,
                     contract: ActivityResultContract<I, O>,
                     input: I,
-                    options: ActivityOptionsCompat?
+                    options: ActivityOptionsCompat?,
                 ) {
                     // Simulate a canceled result (Activity.RESULT_CANCELED)
                     val activityResult = ActivityResult(Activity.RESULT_CANCELED, null)
@@ -62,7 +62,7 @@ class PercentageInputContractTest {
 
             // Test that the contract can be used to launch a request
             contract.launchPercentageInput(
-                PercentageInputRequest()
+                PercentageInputRequest(),
             )
 
             // Verify the result callback was invoked with Canceled result
@@ -81,11 +81,11 @@ class PercentageInputContractTest {
                     requestCode: Int,
                     contract: ActivityResultContract<I, O>,
                     input: I,
-                    options: ActivityOptionsCompat?
+                    options: ActivityOptionsCompat?,
                 ) {
                     val response = PercentageInputResult.Success(
                         percent = PercentIO.of(10),
-                        extras = mapOf("test" to "value")
+                        extras = mapOf("test" to "value"),
                     )
                     val data = Intent().apply {
                         putExtra(ExtraKeys.EXTRAS_RESULT, Json.encodeToString(response))
@@ -113,14 +113,18 @@ class PercentageInputContractTest {
 
             // Test that the contract can be used to launch a request
             contract.launchPercentageInput(
-                PercentageInputRequest()
+                PercentageInputRequest(),
             )
 
             // Verify the result callback was invoked with Canceled result
-            assertEquals(PercentageInputResult.Success(
-                percent = PercentIO.of(10),
-                extras = mapOf("test" to "value")
-            ), result, "Result callback should be invoked with Success result")
+            assertEquals(
+                PercentageInputResult.Success(
+                    percent = PercentIO.of(10),
+                    extras = mapOf("test" to "value"),
+                ),
+                result,
+                "Result callback should be invoked with Success result",
+            )
         }
     }
 }

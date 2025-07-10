@@ -19,7 +19,6 @@ class NumberButtonTest {
 
     @Test
     fun initialButtonState() = runComposeUiTest {
-
         var onClickCount = 0
 
         setContent {

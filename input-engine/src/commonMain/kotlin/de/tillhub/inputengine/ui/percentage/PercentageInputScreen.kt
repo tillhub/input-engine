@@ -13,20 +13,20 @@ import androidx.compose.ui.unit.dp
 import de.tillhub.inputengine.contract.PercentageInputResult
 import de.tillhub.inputengine.resources.Res
 import de.tillhub.inputengine.resources.allStringResources
+import de.tillhub.inputengine.theme.AppTheme
+import de.tillhub.inputengine.theme.TabletScaffoldModifier
 import de.tillhub.inputengine.ui.components.NumberKeyboard
 import de.tillhub.inputengine.ui.components.PercentageInputPreview
 import de.tillhub.inputengine.ui.components.SubmitButton
 import de.tillhub.inputengine.ui.components.Toolbar
 import de.tillhub.inputengine.ui.components.getModifierBasedOnDeviceType
-import de.tillhub.inputengine.theme.AppTheme
-import de.tillhub.inputengine.theme.TabletScaffoldModifier
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun PercentageInputScreen(
     onResult: (PercentageInputResult.Success) -> Unit,
     onDismiss: () -> Unit,
-    viewModel: PercentageInputViewModel
+    viewModel: PercentageInputViewModel,
 ) {
     val displayData by viewModel.percentageInput.collectAsState()
 
@@ -63,7 +63,7 @@ internal fun PercentageInputScreen(
                     onResult(
                         PercentageInputResult.Success(
                             percent = displayData.percent,
-                            extras = viewModel.responseExtras
+                            extras = viewModel.responseExtras,
                         ),
                     )
                 }

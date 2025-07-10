@@ -65,13 +65,13 @@ class AmountInputActivityTest {
         // Verify the activity result
         scenario.result.let { result ->
             assertEquals(Activity.RESULT_OK, result.resultCode)
-            
+
             val resultIntent = result.resultData
             assertNotNull(resultIntent)
-            
+
             val resultJson = resultIntent.getStringExtra(ExtraKeys.EXTRAS_RESULT)
             assertNotNull(resultJson)
-            
+
             val amountInputResult = Json.decodeFromString<AmountInputResult.Success>(resultJson)
             assertEquals(15.00.eur, amountInputResult.amount)
             assertEquals(mapOf("source" to "42"), amountInputResult.extras)
@@ -110,7 +110,7 @@ class AmountInputActivityTest {
         // Verify the activity result is CANCELED (not success)
         scenario.result.let { result ->
             assertEquals(Activity.RESULT_CANCELED, result.resultCode)
-            
+
             // When canceled, there should be no result data
             val resultIntent = result.resultData
             assertNull(resultIntent)

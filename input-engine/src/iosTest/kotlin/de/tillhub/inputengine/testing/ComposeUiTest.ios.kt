@@ -10,11 +10,11 @@ import kotlin.coroutines.CoroutineContext
 actual fun runCustomComposeUiTest(
     effectContext: CoroutineContext,
     size: Size,
-    block: ComposeUiTest.() -> Unit
+    block: ComposeUiTest.() -> Unit,
 ) {
     runSkikoComposeUiTest(
         effectContext = effectContext,
         size = size,
-        block = block
+        block = block,
     )
 }

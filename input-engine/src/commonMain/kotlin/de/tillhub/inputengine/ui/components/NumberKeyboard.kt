@@ -16,8 +16,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.tillhub.inputengine.domain.Digit
-import de.tillhub.inputengine.formatting.DecimalFormatter
 import de.tillhub.inputengine.domain.NumpadKey
+import de.tillhub.inputengine.formatting.DecimalFormatter
 import de.tillhub.inputengine.resources.Res
 import de.tillhub.inputengine.resources.numpad_button_clear
 import de.tillhub.inputengine.resources.numpad_button_delete
@@ -56,7 +56,7 @@ internal fun NumberKeyboard(
                     contentDescription = "Number button 7"
                 },
                 number = Digit.SEVEN,
-                onClick = onClick
+                onClick = onClick,
             )
             NumberButton(
                 modifier = Modifier.weight(1f).semantics {

@@ -7,7 +7,7 @@ import java.util.Currency
 import java.util.Locale
 
 actual class MoneyFormatter(
-    private val locale: Locale = Locale.getDefault()
+    private val locale: Locale = Locale.getDefault(),
 ) {
     private val currencyFormat by lazy {
         NumberFormat.getCurrencyInstance(locale)

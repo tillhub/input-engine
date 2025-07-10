@@ -15,7 +15,6 @@ class ToolbarTest {
 
     @Test
     fun toolbarTest() = runComposeUiTest {
-
         var onBackClickCount = 0
 
         setContent {
@@ -24,7 +23,7 @@ class ToolbarTest {
                     title = "Title",
                     onBackClick = {
                         onBackClickCount++
-                    }
+                    },
                 )
             }
         }
