@@ -10,8 +10,8 @@ class PercentageFormatterTest {
 
     @Test
     fun percentageFormatterTest() = runTest {
-        val formatterDe = PercentageFormatter(Locale.GERMAN)
-        val formatterUs = PercentageFormatter(Locale.US)
+        val formatterDe = PercentageFormatterImpl(Locale.GERMAN)
+        val formatterUs = PercentageFormatterImpl(Locale.US)
 
         assertEquals("56 %", formatterDe.format(PercentIO.of(56)))
         assertEquals("5,6 %", formatterDe.format(PercentIO.of(5.6)))

@@ -10,8 +10,8 @@ class QuantityFormatterTest {
 
     @Test
     fun quantityFormatterTest() = runTest {
-        val formatterDe = QuantityFormatter(NSLocale(localeIdentifier = "de_DE"))
-        val formatterUs = QuantityFormatter(NSLocale(localeIdentifier = "en_US"))
+        val formatterDe: QuantityFormatter = QuantityFormatterImpl(NSLocale(localeIdentifier = "de_DE"))
+        val formatterUs: QuantityFormatter = QuantityFormatterImpl(NSLocale(localeIdentifier = "en_US"))
 
         assertEquals("10", formatterDe.format(QuantityIO.of(10)))
         assertEquals("10", formatterDe.format(QuantityIO.of(10.0)))

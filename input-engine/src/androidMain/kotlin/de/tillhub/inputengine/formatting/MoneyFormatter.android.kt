@@ -6,14 +6,14 @@ import java.text.NumberFormat
 import java.util.Currency
 import java.util.Locale
 
-actual class MoneyFormatter(
+actual class MoneyFormatterImpl(
     private val locale: Locale = Locale.getDefault(),
-) {
+) : MoneyFormatter {
     private val currencyFormat by lazy {
         NumberFormat.getCurrencyInstance(locale)
     }
 
-    actual fun format(money: MoneyIO): String {
+    actual override fun format(money: MoneyIO): String {
         return with(currencyFormat) {
             this.currency = Currency.getInstance(money.currency.isoCode)
             format(money.amount.toJavaBigDecimal())

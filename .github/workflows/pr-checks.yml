@@ -7,7 +7,7 @@ on:
 jobs:
     pr-checks:
         name: Run full PR check
-        runs-on: tillhub-org-runner
+        runs-on: ubuntu-latest
 
         steps:
             - name: Checking out branch

@@ -5,9 +5,9 @@ import de.tillhub.inputengine.data.QuantityIO
 import java.text.NumberFormat
 import java.util.Locale
 
-actual class QuantityFormatter(
+actual class QuantityFormatterImpl(
     private val locale: Locale = Locale.getDefault(),
-) {
+) : QuantityFormatter {
     private val formatter: NumberFormat by lazy {
         NumberFormat.getInstance(locale).apply {
             isGroupingUsed = true
@@ -16,6 +16,6 @@ actual class QuantityFormatter(
         }
     }
 
-    actual fun format(quantity: QuantityIO): String =
+    actual override fun format(quantity: QuantityIO): String =
         formatter.format(quantity.getDecimal().toJavaBigDecimal())
 }

@@ -9,6 +9,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import de.tillhub.inputengine.ExtraKeys
 import de.tillhub.inputengine.contract.AmountInputRequest
 import de.tillhub.inputengine.formatting.MoneyFormatter
+import de.tillhub.inputengine.formatting.MoneyFormatterImpl
 import de.tillhub.inputengine.ui.amount.AmountInputScreen
 import de.tillhub.inputengine.ui.amount.AmountInputViewModel
 import kotlinx.serialization.encodeToString
@@ -41,7 +42,7 @@ class AmountInputActivity : ComponentActivity() {
                     factory = AmountInputViewModel.Factory,
                     extras = MutableCreationExtras().apply {
                         set(AmountInputViewModel.REQUEST_KEY, request)
-                        set(AmountInputViewModel.FORMATTER_KEY, MoneyFormatter())
+                        set(AmountInputViewModel.FORMATTER_KEY, MoneyFormatterImpl())
                     },
                 ),
             )

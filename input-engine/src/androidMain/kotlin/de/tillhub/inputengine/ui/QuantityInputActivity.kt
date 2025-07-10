@@ -10,6 +10,7 @@ import de.tillhub.inputengine.ExtraKeys
 import de.tillhub.inputengine.contract.QuantityInputRequest
 import de.tillhub.inputengine.contract.QuantityInputResult
 import de.tillhub.inputengine.formatting.QuantityFormatter
+import de.tillhub.inputengine.formatting.QuantityFormatterImpl
 import de.tillhub.inputengine.ui.quantity.QuantityInputScreen
 import de.tillhub.inputengine.ui.quantity.QuantityInputViewModel
 import kotlinx.serialization.encodeToString
@@ -44,7 +45,7 @@ class QuantityInputActivity : ComponentActivity() {
                     factory = QuantityInputViewModel.Factory,
                     extras = MutableCreationExtras().apply {
                         set(QuantityInputViewModel.REQUEST_KEY, request)
-                        set(QuantityInputViewModel.FORMATTER_KEY, QuantityFormatter())
+                        set(QuantityInputViewModel.FORMATTER_KEY, QuantityFormatterImpl())
                     },
                 ),
             )

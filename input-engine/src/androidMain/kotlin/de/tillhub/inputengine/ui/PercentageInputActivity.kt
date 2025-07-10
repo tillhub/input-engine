@@ -9,6 +9,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import de.tillhub.inputengine.ExtraKeys
 import de.tillhub.inputengine.contract.PercentageInputRequest
 import de.tillhub.inputengine.formatting.PercentageFormatter
+import de.tillhub.inputengine.formatting.PercentageFormatterImpl
 import de.tillhub.inputengine.ui.percentage.PercentageInputScreen
 import de.tillhub.inputengine.ui.percentage.PercentageInputViewModel
 import kotlinx.serialization.encodeToString
@@ -42,7 +43,7 @@ class PercentageInputActivity : ComponentActivity() {
                     factory = PercentageInputViewModel.Factory,
                     extras = MutableCreationExtras().apply {
                         set(PercentageInputViewModel.REQUEST_KEY, request)
-                        set(PercentageInputViewModel.FORMATTER_KEY, PercentageFormatter())
+                        set(PercentageInputViewModel.FORMATTER_KEY, PercentageFormatterImpl())
                     },
                 ),
             )

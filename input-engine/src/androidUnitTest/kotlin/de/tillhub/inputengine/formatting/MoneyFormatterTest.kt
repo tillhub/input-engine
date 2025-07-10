@@ -11,8 +11,8 @@ class MoneyFormatterTest {
 
     @Test
     fun moneyFormatterTest() = runTest {
-        val formatterDe = MoneyFormatter(Locale.GERMAN)
-        val formatterUs = MoneyFormatter(Locale.US)
+        val formatterDe = MoneyFormatterImpl(Locale.GERMAN)
+        val formatterUs = MoneyFormatterImpl(Locale.US)
 
         assertEquals("10,00 €", formatterDe.format(10.eur))
         assertEquals("10,00 $", formatterDe.format(10.usd))

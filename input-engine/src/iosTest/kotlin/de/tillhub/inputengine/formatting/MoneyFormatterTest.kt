@@ -11,8 +11,8 @@ class MoneyFormatterTest {
 
     @Test
     fun moneyFormatterTest() = runTest {
-        val formatterDe = MoneyFormatter(NSLocale(localeIdentifier = "de_DE"))
-        val formatterUs = MoneyFormatter(NSLocale(localeIdentifier = "en_US"))
+        val formatterDe = MoneyFormatterImpl(NSLocale(localeIdentifier = "de_DE"))
+        val formatterUs = MoneyFormatterImpl(NSLocale(localeIdentifier = "en_US"))
 
         assertEquals("10,00 €", formatterDe.format(10.eur))
         assertEquals("10,00 $", formatterDe.format(10.usd))
