@@ -48,10 +48,7 @@ fun PinInputPreview(
             maxLines = 1,
             placeholder = {
                 Text(
-                    modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .semantics { contentDescription = "Pin hint text" },
+                    modifier = Modifier.fillMaxWidth(),
                     style =
                     TextStyle.Default.copy(
                         color = HintGray,

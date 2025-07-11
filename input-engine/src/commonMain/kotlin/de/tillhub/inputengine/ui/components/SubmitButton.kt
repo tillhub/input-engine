@@ -28,7 +28,8 @@ internal fun SubmitButton(
         enabled = isEnable,
         modifier =
         modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .semantics { contentDescription = "Submit button" },
         shape = RectangleShape,
         onClick = onClick,
         colors =

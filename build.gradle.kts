@@ -1,3 +1,4 @@
+
 plugins {
     alias(libs.plugins.androidApplication) apply false
     alias(libs.plugins.androidLibrary) apply false
@@ -5,6 +6,7 @@ plugins {
     alias(libs.plugins.composeCompiler) apply false
     alias(libs.plugins.kotlinMultiplatform) apply false
     alias(libs.plugins.spotless) apply false
+    alias(libs.plugins.mokkery) apply false
 }
 
 subprojects {
