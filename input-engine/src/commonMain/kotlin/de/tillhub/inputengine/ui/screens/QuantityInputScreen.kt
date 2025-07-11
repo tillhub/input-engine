@@ -1,4 +1,4 @@
-package de.tillhub.inputengine.ui.amount
+package de.tillhub.inputengine.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,28 +9,30 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import de.tillhub.inputengine.contract.AmountInputResult
+import de.tillhub.inputengine.contract.QuantityInputResult
+import de.tillhub.inputengine.domain.StringParam
 import de.tillhub.inputengine.resources.Res
-import de.tillhub.inputengine.resources.allStringResources
+import de.tillhub.inputengine.resources.numpad_title_quantity
 import de.tillhub.inputengine.theme.AppTheme
 import de.tillhub.inputengine.theme.TabletScaffoldModifier
-import de.tillhub.inputengine.ui.components.AmountInputPreview
+import de.tillhub.inputengine.ui.QuantityInputViewModel
 import de.tillhub.inputengine.ui.components.NumberKeyboard
+import de.tillhub.inputengine.ui.components.QuantityInputPreview
 import de.tillhub.inputengine.ui.components.SubmitButton
 import de.tillhub.inputengine.ui.components.Toolbar
 import de.tillhub.inputengine.ui.components.getModifierBasedOnDeviceType
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-internal fun AmountInputScreen(
-    onResult: (AmountInputResult.Success) -> Unit,
-    onDismiss: () -> Unit,
-    viewModel: AmountInputViewModel,
+internal fun QuantityInputScreen(
+    onResult: (QuantityInputResult) -> Unit,
+    viewModel: QuantityInputViewModel,
 ) {
-    val amountMin by viewModel.uiMinValue.collectAsState()
-    val amountMax by viewModel.uiMaxValue.collectAsState()
-    val amount by viewModel.moneyInput.collectAsState()
+    val title = when (val title = viewModel.toolbarTitle) {
+        StringParam.Disable -> stringResource(Res.string.numpad_title_quantity)
+        is StringParam.Enable -> title.value
+    }
+    val displayData by viewModel.quantityInputFlow.collectAsState()
 
     AppTheme {
         Scaffold(
@@ -41,8 +43,8 @@ internal fun AmountInputScreen(
             ),
             topBar = {
                 Toolbar(
-                    title = stringResource(Res.allStringResources.getValue(viewModel.toolbarTitle)),
-                    onBackClick = onDismiss,
+                    title = title,
+                    onBackClick = { onResult(QuantityInputResult.Canceled) },
                 )
             },
         ) { innerPadding ->
@@ -50,26 +52,27 @@ internal fun AmountInputScreen(
                 modifier =
                 Modifier
                     .padding(innerPadding)
-                    .padding(top = 16.dp)
                     .fillMaxHeight(),
                 verticalArrangement = Arrangement.SpaceBetween,
             ) {
-                AmountInputPreview(
-                    amount = amount,
-                    amountMin = amountMin,
-                    amountMax = amountMax,
+                QuantityInputPreview(
+                    quantity = displayData,
+                    minQuantity = viewModel.minStringParam,
+                    maxQuantity = viewModel.maxStringParam,
+                    increase = viewModel::increase,
+                    decrease = viewModel::decrease,
                 )
+
                 NumberKeyboard(
-                    onClick = viewModel::input,
-                    showNegative = viewModel.amountInputMode == AmountInputMode.BOTH,
-                    modifier = Modifier,
+                    showDecimalSeparator = viewModel.allowDecimal,
+                    showNegative = viewModel.allowNegative,
+                    onClick = viewModel::processKey,
                 )
-                SubmitButton(
-                    isEnable = amount.isValid,
-                ) {
+
+                SubmitButton(displayData.isValid) {
                     onResult(
-                        AmountInputResult.Success(
-                            amount = amount.money,
+                        QuantityInputResult.Success(
+                            quantity = displayData.qty,
                             extras = viewModel.responseExtras,
                         ),
                     )

@@ -1,4 +1,4 @@
-package de.tillhub.inputengine.ui.pininput
+package de.tillhub.inputengine.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,12 +16,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import de.tillhub.inputengine.contract.PinInputResult
 import de.tillhub.inputengine.domain.NumpadKey
+import de.tillhub.inputengine.domain.StringParam
 import de.tillhub.inputengine.resources.Res
-import de.tillhub.inputengine.resources.allStringResources
+import de.tillhub.inputengine.resources.numpad_title_pin
 import de.tillhub.inputengine.resources.pin_correct
 import de.tillhub.inputengine.resources.pin_wrong
 import de.tillhub.inputengine.theme.AppTheme
 import de.tillhub.inputengine.theme.TabletScaffoldModifier
+import de.tillhub.inputengine.ui.PinInputState
+import de.tillhub.inputengine.ui.PinInputViewModel
 import de.tillhub.inputengine.ui.components.NumberKeyboard
 import de.tillhub.inputengine.ui.components.PinInputPreview
 import de.tillhub.inputengine.ui.components.Toolbar
@@ -37,6 +40,10 @@ internal fun PinInputScreen(
     val errorMessage = stringResource(Res.string.pin_wrong)
     val correctPin = stringResource(Res.string.pin_correct)
 
+    val title = when (val title = viewModel.toolbarTitle) {
+        StringParam.Disable -> stringResource(Res.string.numpad_title_pin)
+        is StringParam.Enable -> title.value
+    }
     val enteredPin by viewModel.enteredPin.collectAsState()
     val pinInputState by viewModel.pinInputState.collectAsState()
 
@@ -74,7 +81,7 @@ internal fun PinInputScreen(
             ),
             topBar = {
                 Toolbar(
-                    title = stringResource(Res.allStringResources.getValue(viewModel.toolbarTitle)),
+                    title = title,
                     onBackClick = { onResult(PinInputResult.Canceled) },
                 )
             },

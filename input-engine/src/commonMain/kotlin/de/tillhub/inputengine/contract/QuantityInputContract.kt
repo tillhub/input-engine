@@ -3,8 +3,7 @@ package de.tillhub.inputengine.contract
 import androidx.compose.runtime.Composable
 import de.tillhub.inputengine.data.QuantityIO
 import de.tillhub.inputengine.data.QuantityParam
-import de.tillhub.inputengine.resources.Res
-import de.tillhub.inputengine.resources.numpad_title_quantity
+import de.tillhub.inputengine.domain.StringParam
 import kotlinx.serialization.Serializable
 
 interface QuantityInputContract {
@@ -18,7 +17,7 @@ expect fun rememberQuantityInputLauncher(onResult: (QuantityInputResult) -> Unit
 data class QuantityInputRequest(
     val quantity: QuantityIO = QuantityIO.ZERO,
     val allowsZero: Boolean = false,
-    val toolbarTitle: String = Res.string.numpad_title_quantity.key,
+    val toolbarTitle: StringParam = StringParam.Disable,
     val allowDecimal: Boolean = true,
     val minQuantity: QuantityParam = QuantityParam.Disable,
     val maxQuantity: QuantityParam = QuantityParam.Disable,

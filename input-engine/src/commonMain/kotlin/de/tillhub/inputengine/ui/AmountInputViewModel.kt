@@ -1,4 +1,4 @@
-package de.tillhub.inputengine.ui.amount
+package de.tillhub.inputengine.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -13,7 +13,7 @@ import de.tillhub.inputengine.data.MoneyParam
 import de.tillhub.inputengine.domain.NumpadKey
 import de.tillhub.inputengine.domain.StringParam
 import de.tillhub.inputengine.formatting.MoneyFormatter
-import de.tillhub.inputengine.ui.amount.MoneyInputData.Companion.DEFAULT_CURRENCY
+import de.tillhub.inputengine.ui.MoneyInputData.Companion.DEFAULT_CURRENCY
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -25,7 +25,7 @@ internal class AmountInputViewModel(
     private val formatter: MoneyFormatter,
 ) : ViewModel() {
 
-    val toolbarTitle: String get() = request.toolbarTitle
+    val toolbarTitle: StringParam get() = request.toolbarTitle
     val responseExtras: Map<String, String> get() = request.extras
 
     private val _uiMinValue: MutableStateFlow<StringParam> = MutableStateFlow(StringParam.Disable)

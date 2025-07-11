@@ -1,4 +1,4 @@
-package de.tillhub.inputengine.ui.percentage
+package de.tillhub.inputengine.ui
 
 import de.tillhub.inputengine.contract.PercentageInputRequest
 import de.tillhub.inputengine.data.PercentIO
@@ -47,16 +47,35 @@ class PercentageInputViewModelTest {
         val viewModel = PercentageInputViewModel(request, testFormatter)
 
         // Then: Verify initial state
-        assertEquals("", viewModel.toolbarTitle, "Should use default toolbar title")
+        assertEquals(
+            StringParam.Disable,
+            viewModel.toolbarTitle,
+            "Should use default toolbar title",
+        )
         assertEquals(emptyMap(), viewModel.responseExtras, "Should have empty extras")
         assertFalse(viewModel.allowDecimal, "Should not allow decimal by default")
-        assertEquals(StringParam.Disable, viewModel.maxStringParam, "Should have disabled max param")
-        assertEquals(StringParam.Disable, viewModel.minStringParam, "Should have disabled min param")
+        assertEquals(
+            StringParam.Disable,
+            viewModel.maxStringParam,
+            "Should have disabled max param",
+        )
+        assertEquals(
+            StringParam.Disable,
+            viewModel.minStringParam,
+            "Should have disabled min param",
+        )
 
         val percentageInput = viewModel.percentageInput.first()
-        assertEquals(PercentIO.ZERO, percentageInput.percent, "Should start with zero percent")
+        assertEquals(
+            PercentIO.Companion.ZERO,
+            percentageInput.percent,
+            "Should start with zero percent",
+        )
         assertEquals("0.0%", percentageInput.text, "Should display formatted zero percent")
-        assertFalse(percentageInput.isValid, "Zero should be invalid by default (allowsZero = false)")
+        assertFalse(
+            percentageInput.isValid,
+            "Zero should be invalid by default (allowsZero = false)",
+        )
     }
 
     /**
@@ -66,14 +85,14 @@ class PercentageInputViewModelTest {
     @Test
     fun initializesWithCustomRequest() = runTest {
         // Given: Custom request with all parameters
-        val initialPercent = PercentIO.of(15.5)
-        val minPercent = PercentIO.of(5.0)
-        val maxPercent = PercentIO.of(50.0)
+        val initialPercent = PercentIO.Companion.of(15.5)
+        val minPercent = PercentIO.Companion.of(5.0)
+        val maxPercent = PercentIO.Companion.of(50.0)
         val request =
             PercentageInputRequest(
                 percent = initialPercent,
                 allowsZero = true,
-                toolbarTitle = "Custom Title",
+                toolbarTitle = StringParam.Enable("Custom Title"),
                 allowDecimal = true,
                 percentageMin = PercentageParam.Enable(minPercent),
                 percentageMax = PercentageParam.Enable(maxPercent),
@@ -82,16 +101,39 @@ class PercentageInputViewModelTest {
         val viewModel = PercentageInputViewModel(request, testFormatter)
 
         // Then: Verify all properties are set correctly
-        assertEquals("Custom Title", viewModel.toolbarTitle, "Should use custom toolbar title")
-        assertEquals(mapOf("key1" to "value1", "key2" to "value2"), viewModel.responseExtras, "Should preserve extras")
+        assertEquals(
+            StringParam.Enable("Custom Title"),
+            viewModel.toolbarTitle,
+            "Should use custom toolbar title",
+        )
+        assertEquals(
+            mapOf("key1" to "value1", "key2" to "value2"),
+            viewModel.responseExtras,
+            "Should preserve extras",
+        )
         assertTrue(viewModel.allowDecimal, "Should allow decimal when specified")
-        assertEquals(StringParam.Enable("50.0%"), viewModel.maxStringParam, "Should have enabled max param with formatted value")
-        assertEquals(StringParam.Enable("5.0%"), viewModel.minStringParam, "Should have enabled min param with formatted value")
+        assertEquals(
+            StringParam.Enable("50.0%"),
+            viewModel.maxStringParam,
+            "Should have enabled max param with formatted value",
+        )
+        assertEquals(
+            StringParam.Enable("5.0%"),
+            viewModel.minStringParam,
+            "Should have enabled min param with formatted value",
+        )
 
         val percentageInput = viewModel.percentageInput.first()
-        assertEquals(initialPercent, percentageInput.percent, "Should start with specified initial percent")
+        assertEquals(
+            initialPercent,
+            percentageInput.percent,
+            "Should start with specified initial percent",
+        )
         assertEquals("15.5%", percentageInput.text, "Should display formatted initial percent")
-        assertTrue(percentageInput.isValid, "Initial percent should be valid (within min/max range)")
+        assertTrue(
+            percentageInput.isValid,
+            "Initial percent should be valid (within min/max range)",
+        )
     }
 
     /**
@@ -109,7 +151,7 @@ class PercentageInputViewModelTest {
 
         // Then: Verify state is updated
         val percentageInput = viewModel.percentageInput.first()
-        assertEquals(PercentIO.of(5), percentageInput.percent, "Should update to 5%")
+        assertEquals(PercentIO.Companion.of(5), percentageInput.percent, "Should update to 5%")
         assertEquals("5.0%", percentageInput.text, "Should display formatted 5%")
         assertTrue(percentageInput.isValid, "5% should be valid")
     }
@@ -130,7 +172,7 @@ class PercentageInputViewModelTest {
 
         // Then: Verify state is updated to 25%
         val percentageInput = viewModel.percentageInput.first()
-        assertEquals(PercentIO.of(25), percentageInput.percent, "Should update to 25%")
+        assertEquals(PercentIO.Companion.of(25), percentageInput.percent, "Should update to 25%")
         assertEquals("25.0%", percentageInput.text, "Should display formatted 25%")
         assertTrue(percentageInput.isValid, "25% should be valid")
     }
@@ -152,7 +194,7 @@ class PercentageInputViewModelTest {
 
         // Then: Verify decimal percentage is created
         val percentageInput = viewModel.percentageInput.first()
-        assertEquals(PercentIO.of(1.5), percentageInput.percent, "Should update to 1.5%")
+        assertEquals(PercentIO.Companion.of(1.5), percentageInput.percent, "Should update to 1.5%")
         assertEquals("1.5%", percentageInput.text, "Should display formatted 1.5%")
         assertTrue(percentageInput.isValid, "1.5% should be valid")
     }
@@ -164,7 +206,8 @@ class PercentageInputViewModelTest {
     @Test
     fun handlesClearInput() = runTest {
         // Given: ViewModel with some initial value
-        val request = PercentageInputRequest(percent = PercentIO.of(25), allowsZero = true)
+        val request =
+            PercentageInputRequest(percent = PercentIO.Companion.of(25), allowsZero = true)
         val viewModel = PercentageInputViewModel(request, testFormatter)
 
         // When: Clear input
@@ -172,7 +215,7 @@ class PercentageInputViewModelTest {
 
         // Then: Verify state is reset to zero
         val percentageInput = viewModel.percentageInput.first()
-        assertEquals(PercentIO.ZERO, percentageInput.percent, "Should reset to 0%")
+        assertEquals(PercentIO.Companion.ZERO, percentageInput.percent, "Should reset to 0%")
         assertEquals("0.0%", percentageInput.text, "Should display formatted 0%")
         assertTrue(percentageInput.isValid, "0% should be valid when allowsZero = true")
     }
@@ -196,7 +239,11 @@ class PercentageInputViewModelTest {
 
         // Then: Verify last digit is removed (25% -> 2%)
         val percentageInput = viewModel.percentageInput.first()
-        assertEquals(PercentIO.of(2), percentageInput.percent, "Should update to 2% after deleting last digit")
+        assertEquals(
+            PercentIO.Companion.of(2),
+            percentageInput.percent,
+            "Should update to 2% after deleting last digit",
+        )
         assertEquals("2.0%", percentageInput.text, "Should display formatted 2%")
         assertTrue(percentageInput.isValid, "2% should be valid")
     }
@@ -208,7 +255,7 @@ class PercentageInputViewModelTest {
     @Test
     fun ignoresNegateInput() = runTest {
         // Given: ViewModel with some value
-        val initialPercent = PercentIO.of(15)
+        val initialPercent = PercentIO.Companion.of(15)
         val request = PercentageInputRequest(percent = initialPercent, allowsZero = true)
         val viewModel = PercentageInputViewModel(request, testFormatter)
 
@@ -217,7 +264,11 @@ class PercentageInputViewModelTest {
 
         // Then: Verify value remains unchanged
         val percentageInput = viewModel.percentageInput.first()
-        assertEquals(initialPercent, percentageInput.percent, "Should remain unchanged after negate")
+        assertEquals(
+            initialPercent,
+            percentageInput.percent,
+            "Should remain unchanged after negate",
+        )
         assertEquals("15.0%", percentageInput.text, "Should still display 15%")
         assertTrue(percentageInput.isValid, "15% should still be valid")
     }
@@ -229,7 +280,7 @@ class PercentageInputViewModelTest {
     @Test
     fun enforcesMaximumPercentageConstraint() = runTest {
         // Given: ViewModel with maximum percentage of 50%
-        val maxPercent = PercentIO.of(50)
+        val maxPercent = PercentIO.Companion.of(50)
         val request =
             PercentageInputRequest(
                 percentageMax = PercentageParam.Enable(maxPercent),
@@ -255,7 +306,7 @@ class PercentageInputViewModelTest {
     @Test
     fun validatesMinimumPercentageConstraint() = runTest {
         // Given: ViewModel with minimum percentage of 10%
-        val minPercent = PercentIO.of(10)
+        val minPercent = PercentIO.Companion.of(10)
         val request =
             PercentageInputRequest(
                 percentageMin = PercentageParam.Enable(minPercent),
@@ -268,7 +319,7 @@ class PercentageInputViewModelTest {
 
         // Then: Verify value is invalid
         val percentageInput = viewModel.percentageInput.first()
-        assertEquals(PercentIO.of(5), percentageInput.percent, "Should have 5% value")
+        assertEquals(PercentIO.Companion.of(5), percentageInput.percent, "Should have 5% value")
         assertEquals("5.0%", percentageInput.text, "Should display formatted 5%")
         assertFalse(percentageInput.isValid, "5% should be invalid (below minimum 10%)")
     }
@@ -288,7 +339,7 @@ class PercentageInputViewModelTest {
 
         // Then: Verify zero is invalid
         val percentageInput = viewModel.percentageInput.first()
-        assertEquals(PercentIO.ZERO, percentageInput.percent, "Should have 0% value")
+        assertEquals(PercentIO.Companion.ZERO, percentageInput.percent, "Should have 0% value")
         assertEquals("0.0%", percentageInput.text, "Should display formatted 0%")
         assertFalse(percentageInput.isValid, "0% should be invalid when allowsZero = false")
     }
@@ -308,7 +359,7 @@ class PercentageInputViewModelTest {
 
         // Then: Verify zero is valid
         val percentageInput = viewModel.percentageInput.first()
-        assertEquals(PercentIO.ZERO, percentageInput.percent, "Should have 0% value")
+        assertEquals(PercentIO.Companion.ZERO, percentageInput.percent, "Should have 0% value")
         assertEquals("0.0%", percentageInput.text, "Should display formatted 0%")
         assertTrue(percentageInput.isValid, "0% should be valid when allowsZero = true")
     }
@@ -320,8 +371,8 @@ class PercentageInputViewModelTest {
     @Test
     fun validatesPercentageWithinRange() = runTest {
         // Given: ViewModel with min 10% and max 50%
-        val minPercent = PercentIO.of(10)
-        val maxPercent = PercentIO.of(50)
+        val minPercent = PercentIO.Companion.of(10)
+        val maxPercent = PercentIO.Companion.of(50)
         val request =
             PercentageInputRequest(
                 percentageMin = PercentageParam.Enable(minPercent),
@@ -336,7 +387,7 @@ class PercentageInputViewModelTest {
 
         // Then: Verify percentage is valid
         val percentageInput = viewModel.percentageInput.first()
-        assertEquals(PercentIO.of(25), percentageInput.percent, "Should have 25% value")
+        assertEquals(PercentIO.Companion.of(25), percentageInput.percent, "Should have 25% value")
         assertEquals("25.0%", percentageInput.text, "Should display formatted 25%")
         assertTrue(percentageInput.isValid, "25% should be valid (within 10%-50% range)")
     }
@@ -348,7 +399,7 @@ class PercentageInputViewModelTest {
     @Test
     fun replacesInitialValueOnFirstDigitInput() = runTest {
         // Given: ViewModel with initial value of 30%
-        val initialPercent = PercentIO.of(30)
+        val initialPercent = PercentIO.Companion.of(30)
         val request = PercentageInputRequest(percent = initialPercent, allowsZero = true)
         val viewModel = PercentageInputViewModel(request, testFormatter)
 
@@ -361,7 +412,11 @@ class PercentageInputViewModelTest {
 
         // Then: Verify initial value is replaced, not appended
         val percentageInput = viewModel.percentageInput.first()
-        assertEquals(PercentIO.of(7), percentageInput.percent, "Should replace initial value with 7%")
+        assertEquals(
+            PercentIO.Companion.of(7),
+            percentageInput.percent,
+            "Should replace initial value with 7%",
+        )
         assertEquals("7.0%", percentageInput.text, "Should display formatted 7%")
         assertTrue(percentageInput.isValid, "7% should be valid")
     }
@@ -373,7 +428,8 @@ class PercentageInputViewModelTest {
     @Test
     fun appendsSubsequentDigitsAfterInitialReplacement() = runTest {
         // Given: ViewModel with initial value
-        val request = PercentageInputRequest(percent = PercentIO.of(30), allowsZero = true)
+        val request =
+            PercentageInputRequest(percent = PercentIO.Companion.of(30), allowsZero = true)
         val viewModel = PercentageInputViewModel(request, testFormatter)
 
         // When: Input multiple digits (first should replace, second should append)
@@ -382,7 +438,11 @@ class PercentageInputViewModelTest {
 
         // Then: Verify digits are combined correctly (75%, not just 5%)
         val percentageInput = viewModel.percentageInput.first()
-        assertEquals(PercentIO.of(75), percentageInput.percent, "Should combine digits to 75%")
+        assertEquals(
+            PercentIO.Companion.of(75),
+            percentageInput.percent,
+            "Should combine digits to 75%",
+        )
         assertEquals("75.0%", percentageInput.text, "Should display formatted 75%")
         assertTrue(percentageInput.isValid, "75% should be valid")
     }
@@ -406,7 +466,7 @@ class PercentageInputViewModelTest {
 
         // Then: Verify complex decimal percentage
         val percentageInput = viewModel.percentageInput.first()
-        assertEquals(PercentIO.of(12.75), percentageInput.percent, "Should create 12.75%")
+        assertEquals(PercentIO.Companion.of(12.75), percentageInput.percent, "Should create 12.75%")
         assertEquals("12.75%", percentageInput.text, "Should display formatted 12.75%")
         assertTrue(percentageInput.isValid, "12.75% should be valid")
     }
@@ -418,7 +478,7 @@ class PercentageInputViewModelTest {
     @Test
     fun handlesMaximumPercentageBoundary() = runTest {
         // Given: ViewModel with maximum of exactly 100%
-        val maxPercent = PercentIO.WHOLE // 100%
+        val maxPercent = PercentIO.Companion.WHOLE // 100%
         val request =
             PercentageInputRequest(
                 percentageMax = PercentageParam.Enable(maxPercent),
@@ -433,7 +493,11 @@ class PercentageInputViewModelTest {
 
         // Then: Verify 100% is accepted and valid
         val percentageInput = viewModel.percentageInput.first()
-        assertEquals(PercentIO.WHOLE, percentageInput.percent, "Should accept exactly 100%")
+        assertEquals(
+            PercentIO.Companion.WHOLE,
+            percentageInput.percent,
+            "Should accept exactly 100%",
+        )
         assertEquals("100.0%", percentageInput.text, "Should display formatted 100%")
         assertTrue(percentageInput.isValid, "100% should be valid at boundary")
     }
@@ -449,12 +513,17 @@ class PercentageInputViewModelTest {
             object : PercentageFormatter {
                 override fun format(percent: PercentIO): String = "Value: ${percent.toDouble()}%"
             }
-        val request = PercentageInputRequest(percent = PercentIO.of(42.5), allowsZero = true)
+        val request =
+            PercentageInputRequest(percent = PercentIO.Companion.of(42.5), allowsZero = true)
         val viewModel = PercentageInputViewModel(request, customFormatter)
 
         // Then: Verify custom formatter output is used
         val percentageInput = viewModel.percentageInput.first()
-        assertEquals(PercentIO.of(42.5), percentageInput.percent, "Should have correct percentage value")
+        assertEquals(
+            PercentIO.Companion.of(42.5),
+            percentageInput.percent,
+            "Should have correct percentage value",
+        )
         assertEquals("Value: 42.5%", percentageInput.text, "Should use custom formatter output")
         assertTrue(percentageInput.isValid, "42.5% should be valid")
     }
@@ -479,6 +548,10 @@ class PercentageInputViewModelTest {
         assertEquals(extras, viewModel.responseExtras, "Should preserve all response extras")
         assertEquals("abc123", viewModel.responseExtras["sessionId"], "Should preserve sessionId")
         assertEquals("user456", viewModel.responseExtras["userId"], "Should preserve userId")
-        assertEquals("percentage_input", viewModel.responseExtras["context"], "Should preserve context")
+        assertEquals(
+            "percentage_input",
+            viewModel.responseExtras["context"],
+            "Should preserve context",
+        )
     }
 }

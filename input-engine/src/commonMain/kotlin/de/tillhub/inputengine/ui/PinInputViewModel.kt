@@ -1,4 +1,4 @@
-package de.tillhub.inputengine.ui.pininput
+package de.tillhub.inputengine.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -8,6 +8,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import de.tillhub.inputengine.contract.PinInputRequest
 import de.tillhub.inputengine.domain.NumpadKey
+import de.tillhub.inputengine.domain.StringParam
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -18,7 +19,7 @@ internal class PinInputViewModel(
     private val request: PinInputRequest,
 ) : ViewModel() {
 
-    val toolbarTitle: String get() = request.toolbarTitle
+    val toolbarTitle: StringParam get() = request.toolbarTitle
     val responseExtras: Map<String, String> get() = request.extras
     val overridePinInput: Boolean get() = request.overridePinInput
     val hint: String = "•".repeat(request.pin.length)

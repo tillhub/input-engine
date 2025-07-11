@@ -10,8 +10,7 @@ import de.tillhub.inputengine.ExtraKeys
 import de.tillhub.inputengine.contract.QuantityInputRequest
 import de.tillhub.inputengine.contract.QuantityInputResult
 import de.tillhub.inputengine.formatting.QuantityFormatterImpl
-import de.tillhub.inputengine.ui.quantity.QuantityInputScreen
-import de.tillhub.inputengine.ui.quantity.QuantityInputViewModel
+import de.tillhub.inputengine.ui.screens.QuantityInputScreen
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 

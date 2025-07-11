@@ -9,9 +9,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import de.tillhub.inputengine.ExtraKeys
 import de.tillhub.inputengine.contract.PinInputRequest
 import de.tillhub.inputengine.contract.PinInputResult
-import de.tillhub.inputengine.ui.pininput.PinInputScreen
-import de.tillhub.inputengine.ui.pininput.PinInputViewModel
-import kotlinx.serialization.decodeFromString
+import de.tillhub.inputengine.ui.screens.PinInputScreen
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 

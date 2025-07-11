@@ -5,9 +5,8 @@ import androidx.lifecycle.viewmodel.MutableCreationExtras
 import androidx.lifecycle.viewmodel.compose.viewModel
 import de.tillhub.inputengine.contract.QuantityInputRequest
 import de.tillhub.inputengine.contract.QuantityInputResult
-import de.tillhub.inputengine.formatting.QuantityFormatter
-import de.tillhub.inputengine.ui.quantity.QuantityInputScreen
-import de.tillhub.inputengine.ui.quantity.QuantityInputViewModel
+import de.tillhub.inputengine.formatting.QuantityFormatterImpl
+import de.tillhub.inputengine.ui.screens.QuantityInputScreen
 import platform.UIKit.UIApplication
 import platform.UIKit.UIViewController
 
@@ -34,7 +33,7 @@ class QuantityInputPresenter(
                         extras =
                         MutableCreationExtras().apply {
                             set(QuantityInputViewModel.REQUEST_KEY, request)
-                            set(QuantityInputViewModel.FORMATTER_KEY, QuantityFormatter())
+                            set(QuantityInputViewModel.FORMATTER_KEY, QuantityFormatterImpl())
                         },
                     ),
                 )

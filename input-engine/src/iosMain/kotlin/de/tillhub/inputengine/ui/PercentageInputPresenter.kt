@@ -5,9 +5,8 @@ import androidx.lifecycle.viewmodel.MutableCreationExtras
 import androidx.lifecycle.viewmodel.compose.viewModel
 import de.tillhub.inputengine.contract.PercentageInputRequest
 import de.tillhub.inputengine.contract.PercentageInputResult
-import de.tillhub.inputengine.formatting.PercentageFormatter
-import de.tillhub.inputengine.ui.percentage.PercentageInputScreen
-import de.tillhub.inputengine.ui.percentage.PercentageInputViewModel
+import de.tillhub.inputengine.formatting.PercentageFormatterImpl
+import de.tillhub.inputengine.ui.screens.PercentageInputScreen
 import platform.UIKit.UIApplication
 import platform.UIKit.UIViewController
 
@@ -38,7 +37,7 @@ class PercentageInputPresenter(
                         extras =
                         MutableCreationExtras().apply {
                             set(PercentageInputViewModel.REQUEST_KEY, request)
-                            set(PercentageInputViewModel.FORMATTER_KEY, PercentageFormatter())
+                            set(PercentageInputViewModel.FORMATTER_KEY, PercentageFormatterImpl())
                         },
                     ),
                 )

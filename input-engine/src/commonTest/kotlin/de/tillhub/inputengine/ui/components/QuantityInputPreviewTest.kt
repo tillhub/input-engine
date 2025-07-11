@@ -11,7 +11,7 @@ import androidx.compose.ui.test.runComposeUiTest
 import de.tillhub.inputengine.data.QuantityIO
 import de.tillhub.inputengine.domain.StringParam
 import de.tillhub.inputengine.theme.AppTheme
-import de.tillhub.inputengine.ui.quantity.QuantityInputData
+import de.tillhub.inputengine.ui.QuantityInputData
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

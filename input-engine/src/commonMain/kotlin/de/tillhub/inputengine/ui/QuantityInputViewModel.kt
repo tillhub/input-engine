@@ -1,4 +1,4 @@
-package de.tillhub.inputengine.ui.quantity
+package de.tillhub.inputengine.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -25,7 +25,7 @@ internal class QuantityInputViewModel(
     private val inputController: NumberInputController = NumberInputControllerImpl(maxMajorDigits = 5),
 ) : ViewModel() {
 
-    val toolbarTitle: String get() = request.toolbarTitle
+    val toolbarTitle: StringParam get() = request.toolbarTitle
     val responseExtras: Map<String, String> get() = request.extras
     val allowDecimal: Boolean get() = request.allowDecimal
     val allowNegative: Boolean get() = when (val minQty = request.minQuantity) {
@@ -33,10 +33,10 @@ internal class QuantityInputViewModel(
         is QuantityParam.Enable -> minQty.value.isNegative()
     }
 
-    val maxStringParam: StringParam get() = request.maxQuantity.mapToStringParam {
+    val maxStringParam: StringParam = request.maxQuantity.mapToStringParam {
         formatter.format(it)
     }
-    val minStringParam: StringParam get() = request.minQuantity.mapToStringParam {
+    val minStringParam: StringParam = request.minQuantity.mapToStringParam {
         formatter.format(it)
     }
 
@@ -55,10 +55,6 @@ internal class QuantityInputViewModel(
     }
 
     init {
-        if (minQuantity >= maxQuantity) {
-            minQuantity = QuantityIO.MIN_VALUE
-            maxQuantity = QuantityIO.MAX_VALUE
-        }
         setValue(request.quantity)
     }
 

@@ -17,11 +17,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -52,8 +49,6 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 @Preview
 fun App() {
-    var currentScreen by remember { mutableStateOf<InputScreen?>(null) }
-
     val eur = CurrencyIO.forCode("EUR")
     val result = remember { mutableStateOf("No result") }
     val amountInputLauncher =
@@ -131,73 +126,52 @@ fun App() {
                 }
 
                 InputSection("Money Input") {
-                    currentScreen = InputScreen.Money
+                    amountInputLauncher.launchAmountInput(
+                        request =
+                        AmountInputRequest(
+                            amount = MoneyIO.of(100, eur),
+                            amountMin = MoneyParam.Enable(MoneyIO.of(-30_00, eur)),
+                            amountMax = MoneyParam.Enable(MoneyIO.of(50_00, eur)),
+                            extras = mapOf("extraArg" to "argument value"),
+                        ),
+                    )
                 }
                 Spacer(modifier = Modifier.height(16.dp))
 
-                InputSection("Pin Input") { currentScreen = InputScreen.Pin }
+                InputSection("Pin Input") {
+                    pinInputLauncher.launchPinInput(
+                        request =
+                        PinInputRequest(
+                            pin = "9876",
+                            extras = mapOf("argPin" to "hint for pin"),
+                        ),
+                    )
+                }
                 Spacer(modifier = Modifier.height(16.dp))
 
-                InputSection("Quantity Input") { currentScreen = InputScreen.Quantity }
+                InputSection("Quantity Input") {
+                    quantityInputLauncher.launchQuantityInput(
+                        QuantityInputRequest(
+                            quantity = QuantityIO.ZERO,
+                            minQuantity = QuantityParam.Enable(QuantityIO.ZERO),
+                            maxQuantity = QuantityParam.Enable(QuantityIO.of(50)),
+                            hintQuantity = QuantityParam.Enable(QuantityIO.of(BigDecimal.TEN)),
+                        ),
+                    )
+                }
                 Spacer(modifier = Modifier.height(16.dp))
 
-                InputSection("Percentage Input") { currentScreen = InputScreen.Percentage }
-            }
-
-            when (currentScreen) {
-                InputScreen.Money ->
-                    LaunchedEffect(Unit) {
-                        amountInputLauncher.launchAmountInput(
-                            request =
-                            AmountInputRequest(
-                                amount = MoneyIO.of(100, eur),
-                                amountMin = MoneyParam.Enable(MoneyIO.of(-30_00, eur)),
-                                amountMax = MoneyParam.Enable(MoneyIO.of(50_00, eur)),
-                                extras = mapOf("extraArg" to "argument value"),
-                            ),
-                        )
-                        currentScreen = null
-                    }
-
-                InputScreen.Percentage ->
-                    LaunchedEffect(Unit) {
-                        percentageInputLauncher.launchPercentageInput(
-                            request =
-                            PercentageInputRequest(
-                                percent = PercentIO.ZERO,
-                                percentageMin = PercentageParam.Enable(PercentIO.ZERO),
-                                percentageMax = PercentageParam.Enable(PercentIO.WHOLE),
-                                allowsZero = false,
-                            ),
-                        )
-                        currentScreen = null
-                    }
-
-                InputScreen.Pin ->
-                    LaunchedEffect(Unit) {
-                        pinInputLauncher.launchPinInput(
-                            request =
-                            PinInputRequest(
-                                pin = "9876",
-                                extras = mapOf("argPin" to "hint for pin"),
-                            ),
-                        )
-                        currentScreen = null
-                    }
-
-                InputScreen.Quantity ->
-                    LaunchedEffect(Unit) {
-                        quantityInputLauncher.launchQuantityInput(
-                            QuantityInputRequest(
-                                quantity = QuantityIO.ZERO,
-                                minQuantity = QuantityParam.Enable(-QuantityIO.of(50)),
-                                maxQuantity = QuantityParam.Enable(QuantityIO.of(50)),
-                                hintQuantity = QuantityParam.Enable(QuantityIO.of(BigDecimal.TEN)),
-                            ),
-                        )
-                    }
-
-                else -> Unit
+                InputSection("Percentage Input") {
+                    percentageInputLauncher.launchPercentageInput(
+                        request =
+                        PercentageInputRequest(
+                            percent = PercentIO.ZERO,
+                            percentageMin = PercentageParam.Enable(PercentIO.ZERO),
+                            percentageMax = PercentageParam.Enable(PercentIO.WHOLE),
+                            allowsZero = false,
+                        ),
+                    )
+                }
             }
         }
     }
@@ -216,11 +190,4 @@ fun InputSection(
             Text(text = label)
         }
     }
-}
-
-enum class InputScreen {
-    Money,
-    Pin,
-    Quantity,
-    Percentage,
 }

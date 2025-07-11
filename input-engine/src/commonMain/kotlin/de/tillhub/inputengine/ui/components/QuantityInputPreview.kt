@@ -24,7 +24,7 @@ import de.tillhub.inputengine.resources.min_value
 import de.tillhub.inputengine.theme.MagneticGrey
 import de.tillhub.inputengine.theme.OrbitalBlue
 import de.tillhub.inputengine.theme.hintColor
-import de.tillhub.inputengine.ui.quantity.QuantityInputData
+import de.tillhub.inputengine.ui.QuantityInputData
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 

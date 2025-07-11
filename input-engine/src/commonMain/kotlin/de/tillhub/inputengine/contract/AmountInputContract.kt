@@ -3,8 +3,7 @@ package de.tillhub.inputengine.contract
 import androidx.compose.runtime.Composable
 import de.tillhub.inputengine.data.MoneyIO
 import de.tillhub.inputengine.data.MoneyParam
-import de.tillhub.inputengine.resources.Res
-import de.tillhub.inputengine.resources.numpad_title_amount
+import de.tillhub.inputengine.domain.StringParam
 import kotlinx.serialization.Serializable
 
 interface AmountInputContract {
@@ -18,7 +17,7 @@ expect fun rememberAmountInputLauncher(onResult: (AmountInputResult) -> Unit): A
 data class AmountInputRequest(
     val amount: MoneyIO,
     val isZeroAllowed: Boolean = false,
-    val toolbarTitle: String = Res.string.numpad_title_amount.key,
+    val toolbarTitle: StringParam = StringParam.Disable,
     val amountMin: MoneyParam = MoneyParam.Disable,
     val amountMax: MoneyParam = MoneyParam.Disable,
     val hintAmount: MoneyParam = MoneyParam.Disable,

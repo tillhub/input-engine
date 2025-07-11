@@ -9,8 +9,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import de.tillhub.inputengine.ExtraKeys
 import de.tillhub.inputengine.contract.PercentageInputRequest
 import de.tillhub.inputengine.formatting.PercentageFormatterImpl
-import de.tillhub.inputengine.ui.percentage.PercentageInputScreen
-import de.tillhub.inputengine.ui.percentage.PercentageInputViewModel
+import de.tillhub.inputengine.ui.screens.PercentageInputScreen
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 

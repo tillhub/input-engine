@@ -9,8 +9,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import de.tillhub.inputengine.ExtraKeys
 import de.tillhub.inputengine.contract.AmountInputRequest
 import de.tillhub.inputengine.formatting.MoneyFormatterImpl
-import de.tillhub.inputengine.ui.amount.AmountInputScreen
-import de.tillhub.inputengine.ui.amount.AmountInputViewModel
+import de.tillhub.inputengine.ui.screens.AmountInputScreen
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 

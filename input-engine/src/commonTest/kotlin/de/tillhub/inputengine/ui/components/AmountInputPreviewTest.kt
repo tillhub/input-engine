@@ -9,7 +9,7 @@ import androidx.compose.ui.test.runComposeUiTest
 import de.tillhub.inputengine.domain.StringParam
 import de.tillhub.inputengine.eur
 import de.tillhub.inputengine.theme.AppTheme
-import de.tillhub.inputengine.ui.amount.MoneyInputData
+import de.tillhub.inputengine.ui.MoneyInputData
 import kotlin.test.Test
 
 class AmountInputPreviewTest {

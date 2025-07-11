@@ -1,4 +1,4 @@
-package de.tillhub.inputengine.ui.percentage
+package de.tillhub.inputengine.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -23,7 +23,7 @@ internal class PercentageInputViewModel(
     private val inputController: NumberInputController = NumberInputControllerImpl(maxMajorDigits = 3),
 ) : ViewModel() {
 
-    val toolbarTitle: String get() = request.toolbarTitle
+    val toolbarTitle: StringParam get() = request.toolbarTitle
     val responseExtras: Map<String, String> get() = request.extras
     val allowDecimal: Boolean get() = request.allowDecimal
 

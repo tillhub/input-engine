@@ -1,4 +1,4 @@
-package de.tillhub.inputengine.ui.percentage
+package de.tillhub.inputengine.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,25 +10,34 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import de.tillhub.inputengine.contract.PercentageInputResult
+import de.tillhub.inputengine.contract.AmountInputResult
+import de.tillhub.inputengine.domain.StringParam
 import de.tillhub.inputengine.resources.Res
-import de.tillhub.inputengine.resources.allStringResources
+import de.tillhub.inputengine.resources.numpad_title_amount
 import de.tillhub.inputengine.theme.AppTheme
 import de.tillhub.inputengine.theme.TabletScaffoldModifier
+import de.tillhub.inputengine.ui.AmountInputMode
+import de.tillhub.inputengine.ui.AmountInputViewModel
+import de.tillhub.inputengine.ui.components.AmountInputPreview
 import de.tillhub.inputengine.ui.components.NumberKeyboard
-import de.tillhub.inputengine.ui.components.PercentageInputPreview
 import de.tillhub.inputengine.ui.components.SubmitButton
 import de.tillhub.inputengine.ui.components.Toolbar
 import de.tillhub.inputengine.ui.components.getModifierBasedOnDeviceType
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-internal fun PercentageInputScreen(
-    onResult: (PercentageInputResult.Success) -> Unit,
+internal fun AmountInputScreen(
+    onResult: (AmountInputResult.Success) -> Unit,
     onDismiss: () -> Unit,
-    viewModel: PercentageInputViewModel,
+    viewModel: AmountInputViewModel,
 ) {
-    val displayData by viewModel.percentageInput.collectAsState()
+    val title = when (val title = viewModel.toolbarTitle) {
+        StringParam.Disable -> stringResource(Res.string.numpad_title_amount)
+        is StringParam.Enable -> title.value
+    }
+    val amountMin by viewModel.uiMinValue.collectAsState()
+    val amountMax by viewModel.uiMaxValue.collectAsState()
+    val amount by viewModel.moneyInput.collectAsState()
 
     AppTheme {
         Scaffold(
@@ -39,7 +48,7 @@ internal fun PercentageInputScreen(
             ),
             topBar = {
                 Toolbar(
-                    title = stringResource(Res.allStringResources.getValue(viewModel.toolbarTitle)),
+                    title = title,
                     onBackClick = onDismiss,
                 )
             },
@@ -52,19 +61,22 @@ internal fun PercentageInputScreen(
                     .fillMaxHeight(),
                 verticalArrangement = Arrangement.SpaceBetween,
             ) {
-                PercentageInputPreview(
-                    percentText = displayData.text,
-                    percentageMin = viewModel.minStringParam,
-                    percentageMax = viewModel.maxStringParam,
+                AmountInputPreview(
+                    amount = amount,
+                    amountMin = amountMin,
+                    amountMax = amountMax,
                 )
                 NumberKeyboard(
                     onClick = viewModel::input,
-                    showDecimalSeparator = viewModel.allowDecimal,
+                    showNegative = viewModel.amountInputMode == AmountInputMode.BOTH,
+                    modifier = Modifier,
                 )
-                SubmitButton(displayData.isValid) {
+                SubmitButton(
+                    isEnable = amount.isValid,
+                ) {
                     onResult(
-                        PercentageInputResult.Success(
-                            percent = displayData.percent,
+                        AmountInputResult.Success(
+                            amount = amount.money,
                             extras = viewModel.responseExtras,
                         ),
                     )

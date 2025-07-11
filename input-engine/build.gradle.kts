@@ -106,7 +106,7 @@ android {
         unitTests {
             all {
                 // We want to exclude all UI tests from the unit tests
-                it.exclude("**/inputengine/ui/**")
+                it.exclude("**/inputengine/ui/components/**")
             }
         }
     }

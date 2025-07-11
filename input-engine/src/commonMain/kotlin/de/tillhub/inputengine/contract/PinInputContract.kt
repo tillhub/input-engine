@@ -1,8 +1,7 @@
 package de.tillhub.inputengine.contract
 
 import androidx.compose.runtime.Composable
-import de.tillhub.inputengine.resources.Res
-import de.tillhub.inputengine.resources.numpad_title_pin
+import de.tillhub.inputengine.domain.StringParam
 import kotlinx.serialization.Serializable
 
 interface PinInputContract {
@@ -15,7 +14,7 @@ expect fun rememberPinInputLauncher(onResult: (PinInputResult) -> Unit): PinInpu
 @Serializable
 data class PinInputRequest(
     val pin: String,
-    val toolbarTitle: String = Res.string.numpad_title_pin.key,
+    val toolbarTitle: StringParam = StringParam.Disable,
     val overridePinInput: Boolean = false,
     val extras: Map<String, String> = emptyMap(),
 )
