@@ -1,13 +1,16 @@
 package de.tillhub.inputengine.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import de.tillhub.inputengine.contract.QuantityInputResult
 import de.tillhub.inputengine.domain.StringParam
@@ -35,47 +38,52 @@ internal fun QuantityInputScreen(
     val displayData by viewModel.quantityInputFlow.collectAsState()
 
     AppTheme {
-        Scaffold(
-            modifier =
-            getModifierBasedOnDeviceType(
-                isTablet = TabletScaffoldModifier,
-                isMobile = Modifier,
-            ),
-            topBar = {
-                Toolbar(
-                    title = title,
-                    onBackClick = { onResult(QuantityInputResult.Canceled) },
-                )
-            },
-        ) { innerPadding ->
-            Column(
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center,
+        ) {
+            Scaffold(
                 modifier =
-                Modifier
-                    .padding(innerPadding)
-                    .fillMaxHeight(),
-                verticalArrangement = Arrangement.SpaceBetween,
-            ) {
-                QuantityInputPreview(
-                    quantity = displayData,
-                    minQuantity = viewModel.minStringParam,
-                    maxQuantity = viewModel.maxStringParam,
-                    increase = viewModel::increase,
-                    decrease = viewModel::decrease,
-                )
-
-                NumberKeyboard(
-                    showDecimalSeparator = viewModel.allowDecimal,
-                    showNegative = viewModel.allowNegative,
-                    onClick = viewModel::processKey,
-                )
-
-                SubmitButton(displayData.isValid) {
-                    onResult(
-                        QuantityInputResult.Success(
-                            quantity = displayData.qty,
-                            extras = viewModel.responseExtras,
-                        ),
+                getModifierBasedOnDeviceType(
+                    isTablet = TabletScaffoldModifier,
+                    isMobile = Modifier,
+                ),
+                topBar = {
+                    Toolbar(
+                        title = title,
+                        onBackClick = { onResult(QuantityInputResult.Canceled) },
                     )
+                },
+            ) { innerPadding ->
+                Column(
+                    modifier =
+                    Modifier
+                        .padding(innerPadding)
+                        .fillMaxHeight(),
+                    verticalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    QuantityInputPreview(
+                        quantity = displayData,
+                        minQuantity = viewModel.minStringParam,
+                        maxQuantity = viewModel.maxStringParam,
+                        increase = viewModel::increase,
+                        decrease = viewModel::decrease,
+                    )
+
+                    NumberKeyboard(
+                        showDecimalSeparator = viewModel.allowDecimal,
+                        showNegative = viewModel.allowNegative,
+                        onClick = viewModel::processKey,
+                    )
+
+                    SubmitButton(displayData.isValid) {
+                        onResult(
+                            QuantityInputResult.Success(
+                                quantity = displayData.qty,
+                                extras = viewModel.responseExtras,
+                            ),
+                        )
+                    }
                 }
             }
         }

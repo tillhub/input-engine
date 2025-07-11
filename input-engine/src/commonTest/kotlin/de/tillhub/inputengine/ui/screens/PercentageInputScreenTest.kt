@@ -72,8 +72,8 @@ class PercentageInputScreenTest {
         verify {
             test.onResult(
                 result = PercentageInputResult.Success(
-                    percent = PercentIO.of(25)
-                )
+                    percent = PercentIO.of(25),
+                ),
             )
         }
     }

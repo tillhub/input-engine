@@ -1,8 +1,10 @@
 package de.tillhub.inputengine.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -12,6 +14,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import de.tillhub.inputengine.contract.PinInputResult
@@ -73,35 +76,40 @@ internal fun PinInputScreen(
     }
 
     AppTheme {
-        Scaffold(
-            modifier =
-            getModifierBasedOnDeviceType(
-                isTablet = TabletScaffoldModifier,
-                isMobile = Modifier,
-            ),
-            topBar = {
-                Toolbar(
-                    title = title,
-                    onBackClick = { onResult(PinInputResult.Canceled) },
-                )
-            },
-            snackbarHost = { SnackbarHost(snackbarHostState) },
-        ) { innerPadding ->
-            Column(
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center,
+        ) {
+            Scaffold(
                 modifier =
-                Modifier
-                    .padding(innerPadding)
-                    .padding(vertical = 16.dp)
-                    .fillMaxHeight(),
-                verticalArrangement = Arrangement.SpaceBetween,
-            ) {
-                PinInputPreview(
-                    pinText = enteredPin,
-                    hintText = viewModel.hint,
-                    overridePinInput = viewModel.overridePinInput,
-                    onOverride = { onResult(PinInputResult.Success(viewModel.responseExtras)) },
-                )
-                NumberKeyboard(onClick = viewModel::input)
+                getModifierBasedOnDeviceType(
+                    isTablet = TabletScaffoldModifier,
+                    isMobile = Modifier,
+                ),
+                topBar = {
+                    Toolbar(
+                        title = title,
+                        onBackClick = { onResult(PinInputResult.Canceled) },
+                    )
+                },
+                snackbarHost = { SnackbarHost(snackbarHostState) },
+            ) { innerPadding ->
+                Column(
+                    modifier =
+                    Modifier
+                        .padding(innerPadding)
+                        .padding(vertical = 16.dp)
+                        .fillMaxHeight(),
+                    verticalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    PinInputPreview(
+                        pinText = enteredPin,
+                        hintText = viewModel.hint,
+                        overridePinInput = viewModel.overridePinInput,
+                        onOverride = { onResult(PinInputResult.Success(viewModel.responseExtras)) },
+                    )
+                    NumberKeyboard(onClick = viewModel::input)
+                }
             }
         }
     }

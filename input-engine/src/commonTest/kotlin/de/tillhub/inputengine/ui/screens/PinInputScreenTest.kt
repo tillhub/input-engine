@@ -39,7 +39,7 @@ class PinInputScreenTest {
         )
 
         val viewModel = PinInputViewModel(
-            request = request
+            request = request,
         )
 
         setContent {
@@ -74,7 +74,7 @@ class PinInputScreenTest {
         )
 
         val viewModel = PinInputViewModel(
-            request = request
+            request = request,
         )
 
         setContent {

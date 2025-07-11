@@ -72,7 +72,7 @@ class QuantityInputScreenTest {
             test.onResult(
                 QuantityInputResult.Success(
                     quantity = QuantityIO.of(2),
-                )
+                ),
             )
         }
     }
