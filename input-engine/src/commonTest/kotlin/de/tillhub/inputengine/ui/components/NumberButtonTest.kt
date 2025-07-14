@@ -1,35 +1,40 @@
+@file:OptIn(ExperimentalTestApi::class)
+
 package de.tillhub.inputengine.ui.components
 
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
-import de.tillhub.inputengine.financial.data.Digit
-import de.tillhub.inputengine.helper.NumpadKey
-import dev.mokkery.MockMode
-import dev.mokkery.mock
-import dev.mokkery.verify
+import de.tillhub.inputengine.domain.Digit
+import de.tillhub.inputengine.theme.AppTheme
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
-@OptIn(ExperimentalTestApi::class)
 class NumberButtonTest {
-
     @Test
-    fun testNumberButtonClick_sendsCorrectDigit() = runComposeUiTest {
-        val onClickMock = mock<(NumpadKey) -> Unit>(mode = MockMode.autofill)
+    fun initialButtonState() = runComposeUiTest {
+        var onClickCount = 0
 
         setContent {
-            NumberButton(
-                number = Digit.from(7),
-                onClick = onClickMock,
-            )
+            AppTheme {
+                NumberButton(
+                    modifier = Modifier.testTag("numberButton"),
+                    number = Digit.ONE,
+                ) {
+                    onClickCount++
+                }
+            }
         }
 
-        onNodeWithText("7").assertIsDisplayed()
-        onNodeWithContentDescription("Number 7").performClick()
+        onNodeWithText("1").assertIsDisplayed()
 
-        verify { onClickMock(NumpadKey.SingleDigit(Digit.from(7))) }
+        onNodeWithTag("numberButton").performClick()
+
+        assertEquals(1, onClickCount, "onClick should be called once")
     }
 }

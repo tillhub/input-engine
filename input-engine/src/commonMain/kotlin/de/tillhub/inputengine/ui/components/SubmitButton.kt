@@ -14,8 +14,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import de.tillhub.inputengine.resources.Res
 import de.tillhub.inputengine.resources.numpad_button_submit
-import de.tillhub.inputengine.ui.theme.MagneticGrey
-import de.tillhub.inputengine.ui.theme.OrbitalBlue
+import de.tillhub.inputengine.theme.MagneticGrey
+import de.tillhub.inputengine.theme.OrbitalBlue
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -26,18 +26,23 @@ internal fun SubmitButton(
 ) {
     Button(
         enabled = isEnable,
-        modifier = modifier
+        modifier =
+        modifier
             .fillMaxWidth()
-            .semantics { contentDescription = "submitButton" },
+            .semantics { contentDescription = "Submit button" },
         shape = RectangleShape,
         onClick = onClick,
-        colors = ButtonDefaults.buttonColors(
+        colors =
+        ButtonDefaults.buttonColors(
             containerColor = if (isEnable) OrbitalBlue else MagneticGrey,
         ),
     ) {
         Text(
+            modifier =
+            Modifier
+                .padding(vertical = 8.dp)
+                .semantics { contentDescription = "Submit button label" },
             style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.padding(vertical = 8.dp),
             text = stringResource(resource = Res.string.numpad_button_submit),
         )
     }

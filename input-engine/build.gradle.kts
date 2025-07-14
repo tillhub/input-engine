@@ -1,8 +1,10 @@
 import org.jetbrains.compose.ExperimentalComposeLibrary
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidKotlinMultiplatformLibrary)
+    alias(libs.plugins.androidLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinSerialization)
@@ -10,22 +12,18 @@ plugins {
 }
 
 kotlin {
-    // Enable expect/actual class support
     compilerOptions {
+        // removes warnings for expect/actual classes
         freeCompilerArgs.add("-Xexpect-actual-classes")
     }
 
-    androidLibrary {
-        namespace = Configs.APPLICATION_ID
-        compileSdk = Configs.COMPILE_SDK
-        minSdk = Configs.MIN_SDK
-        experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
+    androidTarget {
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        instrumentedTestVariant.sourceSetTree.set(KotlinSourceSetTree.test)
 
-        @Suppress("UnstableApiUsage")
-        withDeviceTestBuilder {
-            sourceSetTreeName = "test"
-        }.configure {
-            instrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        dependencies {
+            androidTestImplementation(libs.androidx.ui.test.junit4.android)
+            androidTestImplementation(libs.androidx.ui.test.manifest)
         }
     }
 
@@ -38,12 +36,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                // Project modules
-                api(project(":input-engine:financial"))
-                implementation(project(":input-engine:formatter"))
-
                 // Kotlin
-                implementation(libs.kotlin.stdlib)
                 implementation(libs.kotlinx.serialization.json)
                 implementation(libs.kotlin.bignum)
 
@@ -65,12 +58,18 @@ kotlin {
 
         commonTest {
             dependencies {
-                implementation(libs.kotlin.test)
-                implementation(libs.kotlinx.coroutines.test)
+                implementation(kotlin("test"))
 
                 @OptIn(ExperimentalComposeLibrary::class)
                 implementation(compose.uiTest)
             }
+        }
+
+        iosTest.dependencies {
+            implementation(kotlin("test"))
+
+            @OptIn(ExperimentalComposeLibrary::class)
+            implementation(compose.uiTest)
         }
 
         androidMain {
@@ -81,21 +80,37 @@ kotlin {
                 implementation(libs.kotlinx.serialization.json)
             }
         }
+    }
+}
 
-        getByName("androidDeviceTest") {
-            dependencies {
-                implementation(libs.androidx.core)
-                implementation(libs.androidx.junit)
-                implementation(libs.androidx.runner)
-                implementation(libs.androidx.ui.test.junit4)
-                implementation(libs.compose.ui.test.manifest)
-                implementation(libs.kotlinx.serialization.json)
-            }
+android {
+    namespace = Configs.APPLICATION_ID
+    compileSdk = Configs.COMPILE_SDK
+    defaultConfig {
+        minSdk = Configs.MIN_SDK
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+    }
+    compileOptions {
+        sourceCompatibility = Configs.JAVA_VERSION
+        targetCompatibility = Configs.JAVA_VERSION
+    }
+    dependencies {
+        debugImplementation(compose.uiTooling)
+    }
 
-        iosMain {
-            dependencies {
-                // Add iOS-specific dependencies here if needed
+    testOptions {
+        unitTests {
+            all {
+                // We want to exclude all UI tests from the unit tests
+                it.exclude(
+                    "**/inputengine/ui/components/**",
+                    "**/inputengine/ui/screens/**",
+                )
             }
         }
     }

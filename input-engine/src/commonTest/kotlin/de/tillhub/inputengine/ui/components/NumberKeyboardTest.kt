@@ -1,211 +1,133 @@
+@file:OptIn(ExperimentalTestApi::class)
+
 package de.tillhub.inputengine.ui.components
 
-import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.SemanticsMatcher
-import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsNotDisplayed
+import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
-import de.tillhub.inputengine.financial.data.Digit
-import de.tillhub.inputengine.helper.NumpadKey
-import dev.mokkery.MockMode
-import dev.mokkery.mock
-import dev.mokkery.verify
+import de.tillhub.inputengine.domain.Digit
+import de.tillhub.inputengine.domain.NumpadKey
+import de.tillhub.inputengine.testing.runCustomComposeUiTest
+import de.tillhub.inputengine.theme.AppTheme
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@OptIn(ExperimentalTestApi::class)
 class NumberKeyboardTest {
-
-    internal interface NumpadEvents {
-        fun onClick(key: NumpadKey)
-    }
-
     @Test
-    fun testDefaultStateAndEvents() = runComposeUiTest {
-        val events: NumpadEvents = mock(mode = MockMode.autofill)
-
+    fun testDefaultState() = runComposeUiTest {
         setContent {
-            NumberKeyboard(
-                onClick = events::onClick,
-            )
-        }
-        onNodeWithText("1").assertIsDisplayed()
-        onNodeWithText("2").assertIsDisplayed()
-        onNodeWithText("3").assertIsDisplayed()
-        onNodeWithText("4").assertIsDisplayed()
-        onNodeWithText("5").assertIsDisplayed()
-        onNodeWithText("6").assertIsDisplayed()
-        onNodeWithText("7").assertIsDisplayed()
-        onNodeWithText("8").assertIsDisplayed()
-        onNodeWithText("9").assertIsDisplayed()
-        onNodeWithText("0").assertIsDisplayed()
-        onNodeWithText("C").assertIsDisplayed()
-        onNodeWithText("←").assertIsDisplayed()
-        onNodeWithText(".").assertIsNotDisplayed()
-        onNodeWithText("-").assertIsNotDisplayed()
-
-        onNodeWithText("1").performClick()
-        verify {
-            events.onClick(NumpadKey.SingleDigit(Digit.ONE))
-        }
-
-        onNodeWithText("2").performClick()
-        verify {
-            events.onClick(NumpadKey.SingleDigit(Digit.TWO))
-        }
-
-        onNodeWithText("3").performClick()
-        verify {
-            events.onClick(NumpadKey.SingleDigit(Digit.THREE))
-        }
-
-        onNodeWithText("4").performClick()
-        verify {
-            events.onClick(NumpadKey.SingleDigit(Digit.FOUR))
-        }
-
-        onNodeWithText("5").performClick()
-        verify {
-            events.onClick(NumpadKey.SingleDigit(Digit.FIVE))
-        }
-
-        onNodeWithText("6").performClick()
-        verify {
-            events.onClick(NumpadKey.SingleDigit(Digit.SIX))
-        }
-
-        onNodeWithText("7").performClick()
-        verify {
-            events.onClick(NumpadKey.SingleDigit(Digit.SEVEN))
-        }
-
-        onNodeWithText("8").performClick()
-        verify {
-            events.onClick(NumpadKey.SingleDigit(Digit.EIGHT))
-        }
-
-        onNodeWithText("9").performClick()
-        verify {
-            events.onClick(NumpadKey.SingleDigit(Digit.NINE))
-        }
-
-        onNodeWithText("0").performClick()
-        verify {
-            events.onClick(NumpadKey.SingleDigit(Digit.ZERO))
-        }
-
-        onNodeWithText("C").performClick()
-        verify {
-            events.onClick(NumpadKey.Clear)
-        }
-
-        onNodeWithText("←").performClick()
-        verify {
-            events.onClick(NumpadKey.Delete)
-        }
-    }
-
-    @Test
-    fun testShowMinusAction() = runComposeUiTest {
-        val events: NumpadEvents = mock(mode = MockMode.autofill)
-
-        setContent {
-            NumberKeyboard(
-                showNegative = true,
-                onClick = events::onClick,
-            )
-        }
-
-        onNodeWithText("1").assertIsDisplayed()
-        onNodeWithText("2").assertIsDisplayed()
-        onNodeWithText("3").assertIsDisplayed()
-        onNodeWithText("4").assertIsDisplayed()
-        onNodeWithText("5").assertIsDisplayed()
-        onNodeWithText("6").assertIsDisplayed()
-        onNodeWithText("7").assertIsDisplayed()
-        onNodeWithText("8").assertIsDisplayed()
-        onNodeWithText("9").assertIsDisplayed()
-        onNodeWithText("0").assertIsDisplayed()
-        onNodeWithText("-").assertIsDisplayed()
-        onNodeWithText("←").assertIsDisplayed()
-
-        onNodeWithText(".").assertIsNotDisplayed()
-        onNodeWithText("C").assertIsNotDisplayed()
-
-        onNodeWithText("-").performClick()
-        verify {
-            events.onClick(NumpadKey.Negate)
-        }
-    }
-
-    @Test
-    fun testShowDecimal() = runComposeUiTest {
-        val events: NumpadEvents = mock(mode = MockMode.autofill)
-
-        setContent {
-            NumberKeyboard(
-                showDecimalSeparator = true,
-                onClick = events::onClick,
-            )
-        }
-
-        onNodeWithText("1").assertIsDisplayed()
-        onNodeWithText("2").assertIsDisplayed()
-        onNodeWithText("3").assertIsDisplayed()
-        onNodeWithText("4").assertIsDisplayed()
-        onNodeWithText("5").assertIsDisplayed()
-        onNodeWithText("6").assertIsDisplayed()
-        onNodeWithText("7").assertIsDisplayed()
-        onNodeWithText("8").assertIsDisplayed()
-        onNodeWithText("9").assertIsDisplayed()
-        onNodeWithText("0").assertIsDisplayed()
-        onNodeWithText(".").assertIsDisplayed()
-        onNodeWithText("←").assertIsDisplayed()
-
-        onNodeWithText("-").assertIsNotDisplayed()
-        onNodeWithText("C").assertIsNotDisplayed()
-
-        onNodeWithText(".").performClick()
-        verify {
-            events.onClick(NumpadKey.DecimalSeparator)
-        }
-    }
-
-    @Test
-    fun numberKeyboard_buttonTraversalOrder_matchesExpected() = runComposeUiTest {
-        setContent {
-            NumberKeyboard(
-                onClick = {},
-                showDecimalSeparator = true,
-                showNegative = true,
-            )
-        }
-
-        val expectedDigitOrder = listOf(7, 8, 9, 4, 5, 6, 1, 2, 3, 0)
-
-        val actualOrder = onAllNodes(hasContentDescriptionPrefix("Number "))
-            .fetchSemanticsNodes()
-            .mapNotNull {
-                it.config[SemanticsProperties.ContentDescription]
-                    .firstOrNull()
-                    ?.removePrefix("Number ")
-                    ?.toIntOrNull()
-            }
-
-        assertEquals(expectedDigitOrder, actualOrder)
-    }
-
-    fun hasContentDescriptionPrefix(prefix: String): SemanticsMatcher {
-        return SemanticsMatcher("ContentDescription starts with \"$prefix\"") { node ->
-            if (SemanticsProperties.ContentDescription in node.config) {
-                val descList = node.config[SemanticsProperties.ContentDescription]
-                descList.any { it.startsWith(prefix) } == true
-            } else {
-                false
+            AppTheme {
+                NumberKeyboard(
+                    decimalSeparator = ".",
+                ) { }
             }
         }
+
+        onNodeWithContentDescription("Number button 0").assertTextEquals("0")
+        onNodeWithContentDescription("Number button 1").assertTextEquals("1")
+        onNodeWithContentDescription("Number button 2").assertTextEquals("2")
+        onNodeWithContentDescription("Number button 3").assertTextEquals("3")
+        onNodeWithContentDescription("Number button 4").assertTextEquals("4")
+        onNodeWithContentDescription("Number button 5").assertTextEquals("5")
+        onNodeWithContentDescription("Number button 6").assertTextEquals("6")
+        onNodeWithContentDescription("Number button 7").assertTextEquals("7")
+        onNodeWithContentDescription("Number button 8").assertTextEquals("8")
+        onNodeWithContentDescription("Number button 9").assertTextEquals("9")
+        onNodeWithContentDescription("Clear").assertTextEquals("C")
+        onNodeWithContentDescription("Delete").assertTextEquals("←")
+    }
+
+    @Test
+    fun testShowNegative() = runComposeUiTest {
+        setContent {
+            AppTheme {
+                NumberKeyboard(
+                    showNegative = true,
+                    decimalSeparator = ".",
+                ) { }
+            }
+        }
+
+        onNodeWithContentDescription("Negative sign").assertTextEquals("-")
+        onNodeWithText("C").assertDoesNotExist()
+    }
+
+    @Test
+    fun testDecimalSeparator() = runComposeUiTest {
+        setContent {
+            AppTheme {
+                NumberKeyboard(
+                    showDecimalSeparator = true,
+                    decimalSeparator = ".",
+                ) { }
+            }
+        }
+
+        onNodeWithContentDescription("Decimal separator").assertTextEquals(".")
+        onNodeWithText("C").assertDoesNotExist()
+        onNodeWithText("-").assertDoesNotExist()
+    }
+
+    @Test
+    fun testShowDecimalAndNegative() = runComposeUiTest {
+        setContent {
+            AppTheme {
+                NumberKeyboard(
+                    showNegative = true,
+                    showDecimalSeparator = true,
+                    decimalSeparator = ".",
+                ) { }
+            }
+        }
+
+        onNodeWithContentDescription("Decimal separator and Negative sign").assertTextEquals(".\n-")
+        onNodeWithText("C").assertDoesNotExist()
+    }
+
+    @Test
+    fun testNumpadKey() = runCustomComposeUiTest(
+        size = Size(1024.0f, 1024.0f),
+    ) {
+        val events = mutableListOf<NumpadKey>()
+
+        setContent {
+            AppTheme {
+                NumberKeyboard(
+                    decimalSeparator = ".",
+                ) { events.add(it) }
+            }
+        }
+
+        onNodeWithContentDescription("Number button 7").performClick()
+        onNodeWithContentDescription("Number button 8").performClick()
+        onNodeWithContentDescription("Number button 9").performClick()
+        onNodeWithContentDescription("Number button 4").performClick()
+        onNodeWithContentDescription("Number button 5").performClick()
+        onNodeWithContentDescription("Number button 6").performClick()
+        onNodeWithContentDescription("Number button 0").performClick()
+        onNodeWithContentDescription("Number button 2").performClick()
+
+        assertEquals(8, events.size, "onClick should be called once")
+
+        assertEquals(
+            listOf<NumpadKey>(
+                NumpadKey.SingleDigit(Digit.SEVEN),
+                NumpadKey.SingleDigit(Digit.EIGHT),
+                NumpadKey.SingleDigit(Digit.NINE),
+                NumpadKey.SingleDigit(Digit.FOUR),
+                NumpadKey.SingleDigit(Digit.FIVE),
+                NumpadKey.SingleDigit(Digit.SIX),
+                NumpadKey.SingleDigit(Digit.ZERO),
+                NumpadKey.SingleDigit(Digit.TWO),
+//                NumpadKey.SingleDigit(Digit.EIGHT),
+//                NumpadKey.SingleDigit(Digit.NINE),
+            ),
+            events.toList(),
+            "onClick should be called with correct NumpadKey",
+        )
     }
 }

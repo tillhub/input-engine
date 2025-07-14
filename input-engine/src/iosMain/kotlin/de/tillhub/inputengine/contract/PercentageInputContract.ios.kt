@@ -2,12 +2,10 @@ package de.tillhub.inputengine.contract
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import de.tillhub.inputengine.ui.percentage.PercentageInputPresenter
+import de.tillhub.inputengine.ui.PercentageInputPresenter
 
 @Composable
-actual fun rememberPercentageInputLauncher(
-    onResult: (PercentageInputResult) -> Unit,
-): PercentageInputContract = remember {
+actual fun rememberPercentageInputLauncher(onResult: (PercentageInputResult) -> Unit): PercentageInputContract = remember {
     val presenter = PercentageInputPresenter(onResult)
 
     object : PercentageInputContract {

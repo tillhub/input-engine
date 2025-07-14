@@ -8,45 +8,45 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
-import de.tillhub.inputengine.helper.ExtraKeys
-import de.tillhub.inputengine.ui.pin.PinInputActivity
+import de.tillhub.inputengine.ExtraKeys
+import de.tillhub.inputengine.ui.PinInputActivity
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.jetbrains.annotations.VisibleForTesting
 
 @Composable
-actual fun rememberPinInputLauncher(
-    onResult: (PinInputResult) -> Unit,
-): PinInputContract {
+actual fun rememberPinInputLauncher(onResult: (PinInputResult) -> Unit): PinInputContract {
     val context = LocalContext.current
 
-    val launcher = rememberLauncherForActivityResult(
-        ActivityResultContracts.StartActivityForResult(),
-    ) { result ->
-        onResult(parsePinInputResult(result.resultCode, result.data?.extras))
-    }
+    val launcher =
+        rememberLauncherForActivityResult(
+            ActivityResultContracts.StartActivityForResult(),
+        ) { result ->
+            onResult(parsePinInputResult(result.resultCode, result.data?.extras))
+        }
 
     return remember {
         object : PinInputContract {
             override fun launchPinInput(request: PinInputRequest) {
-                val intent = Intent(context, PinInputActivity::class.java).also {
-                    it.putExtra(ExtraKeys.EXTRA_REQUEST, Json.encodeToString(request))
-                }
+                val intent =
+                    Intent(context, PinInputActivity::class.java).also {
+                        it.putExtra(ExtraKeys.EXTRAS_REQUEST, Json.encodeToString(request))
+                    }
                 launcher.launch(intent)
             }
         }
     }
 }
 
-@VisibleForTesting
-internal fun parsePinInputResult(resultCode: Int, extras: Bundle?): PinInputResult {
+private fun parsePinInputResult(
+    resultCode: Int,
+    extras: Bundle?,
+): PinInputResult {
     if (resultCode != Activity.RESULT_OK || extras == null) {
         return PinInputResult.Canceled
     }
 
-    val dataMap = extras.keySet().associateWith { key ->
-        extras.getString(key).orEmpty()
-    }
-
-    return PinInputResult.Success(dataMap)
+    return extras
+        .getString(ExtraKeys.EXTRAS_RESULT)
+        ?.let { Json.decodeFromString<PinInputResult.Success>(it) }
+        ?: PinInputResult.Canceled
 }

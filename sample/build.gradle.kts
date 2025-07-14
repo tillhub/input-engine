@@ -74,9 +74,6 @@ kotlin {
             // Math
             implementation(libs.kotlin.bignum)
         }
-        commonTest.dependencies {
-            implementation(libs.kotlin.test)
-        }
     }
 }
 compose.resources {

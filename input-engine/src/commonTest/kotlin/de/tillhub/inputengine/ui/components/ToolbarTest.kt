@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalTestApi::class)
+
 package de.tillhub.inputengine.ui.components
 
 import androidx.compose.ui.test.ExperimentalTestApi
@@ -5,28 +7,29 @@ import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
-import dev.mokkery.MockMode
-import dev.mokkery.mock
-import dev.mokkery.verify
+import de.tillhub.inputengine.theme.AppTheme
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
-@OptIn(ExperimentalTestApi::class)
 class ToolbarTest {
-
     @Test
-    fun testToolbar() = runComposeUiTest {
-        val onClickMock = mock<() -> Unit>(mode = MockMode.autofill)
+    fun toolbarTest() = runComposeUiTest {
+        var onBackClickCount = 0
 
         setContent {
-            Toolbar(
-                title = "Toolbar title",
-                onClick = onClickMock,
-            )
+            AppTheme {
+                Toolbar(
+                    title = "Title",
+                    onBackClick = {
+                        onBackClickCount++
+                    },
+                )
+            }
         }
 
-        onNodeWithContentDescription("toolbarTitle").assertTextEquals("Toolbar title")
-        onNodeWithContentDescription("toolbarIcon").performClick()
+        onNodeWithContentDescription("Toolbar title").assertTextEquals("Title")
+        onNodeWithContentDescription("Toolbar back button").performClick()
 
-        verify { onClickMock() }
+        assertEquals(1, onBackClickCount, "onBackClick should be called once")
     }
 }

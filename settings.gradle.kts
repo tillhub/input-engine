@@ -18,6 +18,3 @@ dependencyResolutionManagement {
 rootProject.name = "Tillhub_Input_Engine"
 include(":sample")
 include(":input-engine")
-include(":input-engine:formatter")
-include(":input-engine:financial")
-
