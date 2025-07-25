@@ -1,9 +1,9 @@
 package de.tillhub.inputengine.theme
 
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ButtonDefaults.buttonElevation
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -17,15 +17,6 @@ val shape = Shapes(
 )
 
 @Composable
-internal fun buttonElevation() = buttonElevation(
-    defaultElevation = 3.dp,
-    pressedElevation = 1.dp,
-    disabledElevation = 1.dp,
-    hoveredElevation = 2.dp,
-    focusedElevation = 2.dp,
-)
-
-@Composable
 internal fun textFieldTransparentColors() = TextFieldDefaults.colors(
     unfocusedContainerColor = Color.Transparent,
     focusedContainerColor = Color.Transparent,
@@ -36,5 +27,6 @@ internal fun textFieldTransparentColors() = TextFieldDefaults.colors(
 internal val TabletScaffoldModifier =
     Modifier
         .width(380.dp)
-        .height(600.dp)
-        .clip(RoundedCornerShape(8.dp))
+        .fillMaxHeight()
+        .padding(vertical = 24.dp)
+        .clip(shape.medium)
