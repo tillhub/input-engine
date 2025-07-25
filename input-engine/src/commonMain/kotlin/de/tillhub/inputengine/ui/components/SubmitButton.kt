@@ -8,15 +8,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import de.tillhub.inputengine.resources.Res
 import de.tillhub.inputengine.resources.numpad_button_submit
-import de.tillhub.inputengine.theme.MagneticGrey
-import de.tillhub.inputengine.theme.OrbitalBlue
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 internal fun SubmitButton(
@@ -26,24 +24,28 @@ internal fun SubmitButton(
 ) {
     Button(
         enabled = isEnable,
-        modifier =
-        modifier
+        modifier = modifier
             .fillMaxWidth()
             .semantics { contentDescription = "Submit button" },
-        shape = RectangleShape,
+        shape = MaterialTheme.shapes.medium,
         onClick = onClick,
-        colors =
-        ButtonDefaults.buttonColors(
-            containerColor = if (isEnable) OrbitalBlue else MagneticGrey,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
         ),
     ) {
         Text(
             modifier =
             Modifier
-                .padding(vertical = 8.dp)
+                .padding(vertical = 16.dp, horizontal = 24.dp)
                 .semantics { contentDescription = "Submit button label" },
-            style = MaterialTheme.typography.headlineSmall,
+            style = MaterialTheme.typography.labelMedium,
             text = stringResource(resource = Res.string.numpad_button_submit),
         )
     }
+}
+
+@Preview
+@Composable
+private fun SubmitButtonPreview() {
+    SubmitButtonPreview()
 }

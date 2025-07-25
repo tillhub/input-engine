@@ -63,9 +63,9 @@ class PercentageInputScreenTest {
 
         onNodeWithContentDescription("Toolbar title").assertTextEquals("Test Percentage Input")
 
-        onNodeWithContentDescription("Max allowed percentage").assertTextEquals("max. 90%")
+        onNodeWithContentDescription("Max allowed percentage").assertTextEquals("Max. 90%")
         onNodeWithContentDescription("Current percentage").assertTextEquals("25%")
-        onNodeWithContentDescription("Min allowed percentage").assertTextEquals("min. 1%")
+        onNodeWithContentDescription("Min allowed percentage").assertTextEquals("Min. 1%")
 
         onNodeWithContentDescription("Submit button").performClick()
 

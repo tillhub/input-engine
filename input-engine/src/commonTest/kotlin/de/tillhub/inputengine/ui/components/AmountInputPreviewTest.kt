@@ -73,8 +73,8 @@ class AmountInputPreviewTest {
             }
         }
 
-        onNodeWithContentDescription("Max allowed amount").assertTextEquals("max. 100.00 €")
+        onNodeWithContentDescription("Max allowed amount").assertTextEquals("Max. 100.00 €")
         onNodeWithContentDescription("Current amount").assertTextEquals("50.00 €")
-        onNodeWithContentDescription("Min allowed amount").assertTextEquals("min. 10.00 €")
+        onNodeWithContentDescription("Min allowed amount").assertTextEquals("Min. 10.00 €")
     }
 }

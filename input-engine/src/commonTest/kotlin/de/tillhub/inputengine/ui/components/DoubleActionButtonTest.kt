@@ -14,7 +14,7 @@ import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.runComposeUiTest
 import androidx.compose.ui.unit.sp
 import de.tillhub.inputengine.theme.AppTheme
-import de.tillhub.inputengine.theme.GalacticBlue
+import de.tillhub.inputengine.theme.OrbitalBlue
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -34,7 +34,7 @@ class DoubleActionButtonTest {
                     Text(
                         text = "leftActionText",
                         fontSize = 14.sp,
-                        color = GalacticBlue,
+                        color = OrbitalBlue,
                     )
                 }
             }
@@ -61,7 +61,7 @@ class DoubleActionButtonTest {
                     Text(
                         text = "leftActionText",
                         fontSize = 14.sp,
-                        color = GalacticBlue,
+                        color = OrbitalBlue,
                     )
                 }
             }

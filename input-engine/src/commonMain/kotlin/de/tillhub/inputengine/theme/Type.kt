@@ -1,115 +1,50 @@
 package de.tillhub.inputengine.theme
 
 import androidx.compose.material3.Typography
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import de.tillhub.inputengine.resources.Inter_VariableFont
+import de.tillhub.inputengine.resources.Res
+import org.jetbrains.compose.resources.Font
 
-internal val typography =
-    Typography(
-        displayLarge =
-        TextStyle(
-            fontWeight = FontWeight.Light,
-            fontSize = 57.sp,
-            lineHeight = 64.sp,
-            letterSpacing = (-0.25).sp,
-        ),
-        displayMedium =
-        TextStyle(
-            fontWeight = FontWeight.Light,
-            fontSize = 45.sp,
-            lineHeight = 52.sp,
-            letterSpacing = 0.sp,
-        ),
-        displaySmall =
-        TextStyle(
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 36.sp,
-            lineHeight = 44.sp,
-            letterSpacing = 0.sp,
-        ),
-        headlineLarge =
-        TextStyle(
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 32.sp,
-            lineHeight = 40.sp,
-            letterSpacing = 0.sp,
-        ),
-        headlineMedium =
-        TextStyle(
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 28.sp,
-            lineHeight = 36.sp,
-            letterSpacing = 0.sp,
-        ),
-        headlineSmall =
-        TextStyle(
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 24.sp,
-            lineHeight = 32.sp,
-            letterSpacing = 0.sp,
-        ),
-        titleLarge =
-        TextStyle(
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 22.sp,
-            lineHeight = 28.sp,
-            letterSpacing = 0.sp,
-        ),
-        titleMedium =
-        TextStyle(
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 16.sp,
-            lineHeight = 24.sp,
-            letterSpacing = 0.1.sp,
-        ),
-        titleSmall =
-        TextStyle(
-            fontWeight = FontWeight.Bold,
-            fontSize = 14.sp,
-            lineHeight = 20.sp,
-            letterSpacing = 0.1.sp,
-        ),
-        bodyLarge =
-        TextStyle(
-            fontWeight = FontWeight.Normal,
-            fontSize = 16.sp,
-            lineHeight = 24.sp,
-            letterSpacing = 0.5.sp,
-        ),
-        bodyMedium =
-        TextStyle(
-            fontWeight = FontWeight.Medium,
-            fontSize = 14.sp,
-            lineHeight = 20.sp,
-            letterSpacing = 0.25.sp,
-        ),
-        bodySmall =
-        TextStyle(
-            fontWeight = FontWeight.Bold,
-            fontSize = 12.sp,
-            lineHeight = 16.sp,
-            letterSpacing = 0.4.sp,
-        ),
-        labelLarge =
-        TextStyle(
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 14.sp,
-            lineHeight = 20.sp,
-            letterSpacing = 0.1.sp,
-        ),
-        labelMedium =
-        TextStyle(
-            fontWeight = FontWeight.Medium,
-            fontSize = 12.sp,
-            lineHeight = 16.sp,
-            letterSpacing = 0.5.sp,
-        ),
-        labelSmall =
-        TextStyle(
-            fontWeight = FontWeight.Medium,
-            fontSize = 11.sp,
-            lineHeight = 16.sp,
-            letterSpacing = 0.5.sp,
-        ),
-    )
+@Composable
+internal fun typography() = Typography(
+    displayLarge = TextStyle(
+        fontSize = 40.sp,
+        lineHeight = 40.sp,
+        fontFamily = FontFamily(Font(Res.font.Inter_VariableFont, FontWeight.Bold)),
+        fontWeight = FontWeight(700),
+        textAlign = TextAlign.Center,
+    ),
+    titleLarge = TextStyle(
+        fontSize = 18.sp,
+        lineHeight = 24.sp,
+        fontFamily = FontFamily(Font(Res.font.Inter_VariableFont, FontWeight.Bold)),
+        fontWeight = FontWeight(600),
+    ),
+
+    labelLarge = TextStyle(
+        fontSize = 20.sp,
+        lineHeight = 24.sp,
+        fontFamily = FontFamily(Font(Res.font.Inter_VariableFont, FontWeight.Bold)),
+        fontWeight = FontWeight(600),
+    ),
+    labelMedium = TextStyle(
+        fontSize = 18.sp,
+        lineHeight = 24.sp,
+        fontFamily = FontFamily(Font(Res.font.Inter_VariableFont, FontWeight.Medium)),
+        fontWeight = FontWeight(600),
+        letterSpacing = 0.15.sp,
+    ),
+    labelSmall = TextStyle(
+        fontSize = 12.sp,
+        lineHeight = 16.sp,
+        fontFamily = FontFamily(Font(Res.font.Inter_VariableFont)),
+        fontWeight = FontWeight(400),
+        letterSpacing = 0.04.sp,
+    ),
+)

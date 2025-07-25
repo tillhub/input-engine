@@ -4,6 +4,7 @@ package de.tillhub.inputengine.ui.components
 
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
@@ -38,7 +39,7 @@ class NumberKeyboardTest {
         onNodeWithContentDescription("Number button 8").assertTextEquals("8")
         onNodeWithContentDescription("Number button 9").assertTextEquals("9")
         onNodeWithContentDescription("Clear").assertTextEquals("C")
-        onNodeWithContentDescription("Delete").assertTextEquals("←")
+        onNodeWithContentDescription("Delete").assertIsDisplayed()
     }
 
     @Test

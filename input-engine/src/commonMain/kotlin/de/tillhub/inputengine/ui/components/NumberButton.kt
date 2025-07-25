@@ -1,22 +1,14 @@
 package de.tillhub.inputengine.ui.components
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import de.tillhub.inputengine.domain.Digit
 import de.tillhub.inputengine.domain.NumpadKey
-import de.tillhub.inputengine.theme.GalacticBlue
-import de.tillhub.inputengine.theme.LunarGray
-import de.tillhub.inputengine.theme.Tint
-import de.tillhub.inputengine.theme.buttonElevation
 
 @Composable
 internal fun NumberButton(
@@ -24,25 +16,23 @@ internal fun NumberButton(
     number: Digit,
     onClick: (NumpadKey) -> Unit,
 ) {
-    OutlinedButton(
+    Button(
         onClick = {
             onClick(NumpadKey.SingleDigit(Digit.from(number.value)))
         },
-        modifier =
-        modifier
-            .aspectRatio(BUTTON_ASPECT_RATIO)
-            .padding(6.dp),
-        shape = RoundedCornerShape(2.dp),
-        border = BorderStroke(width = 1.0.dp, color = LunarGray),
-        elevation = buttonElevation(),
-        colors = ButtonDefaults.outlinedButtonColors(containerColor = Tint),
+        modifier = modifier.aspectRatio(BUTTON_ASPECT_RATIO),
+        shape = MaterialTheme.shapes.medium,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+        ),
     ) {
         Text(
             text = number.value.toString(),
-            fontSize = 14.sp,
-            color = GalacticBlue,
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.onSecondaryContainer,
         )
     }
 }
 
-const val BUTTON_ASPECT_RATIO = 1.25f
+const val BUTTON_ASPECT_RATIO = 1.43f

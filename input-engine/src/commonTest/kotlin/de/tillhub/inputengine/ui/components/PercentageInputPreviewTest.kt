@@ -40,8 +40,8 @@ class PercentageInputPreviewTest {
             }
         }
 
-        onNodeWithContentDescription("Max allowed percentage").assertTextEquals("max. 100%")
+        onNodeWithContentDescription("Max allowed percentage").assertTextEquals("Max. 100%")
         onNodeWithContentDescription("Current percentage").assertTextEquals("20%")
-        onNodeWithContentDescription("Min allowed percentage").assertTextEquals("min. 10%")
+        onNodeWithContentDescription("Min allowed percentage").assertTextEquals("Min. 10%")
     }
 }

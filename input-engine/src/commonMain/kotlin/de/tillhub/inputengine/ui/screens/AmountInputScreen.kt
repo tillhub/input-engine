@@ -64,19 +64,20 @@ internal fun AmountInputScreen(
                     modifier =
                     Modifier
                         .padding(innerPadding)
-                        .padding(top = 16.dp)
+                        .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
                         .fillMaxHeight(),
-                    verticalArrangement = Arrangement.SpaceBetween,
+                    verticalArrangement = Arrangement.Bottom,
                 ) {
                     AmountInputPreview(
+                        modifier = Modifier.weight(1f),
                         amount = amount,
                         amountMin = amountMin,
                         amountMax = amountMax,
                     )
                     NumberKeyboard(
+                        modifier = Modifier.padding(vertical = 24.dp),
                         onClick = viewModel::input,
                         showNegative = viewModel.amountInputMode == AmountInputMode.BOTH,
-                        modifier = Modifier,
                     )
                     SubmitButton(
                         isEnable = amount.isValid,

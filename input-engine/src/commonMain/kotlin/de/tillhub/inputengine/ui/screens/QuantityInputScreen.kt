@@ -12,6 +12,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import de.tillhub.inputengine.contract.QuantityInputResult
 import de.tillhub.inputengine.domain.StringParam
 import de.tillhub.inputengine.resources.Res
@@ -59,10 +60,12 @@ internal fun QuantityInputScreen(
                     modifier =
                     Modifier
                         .padding(innerPadding)
+                        .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
                         .fillMaxHeight(),
-                    verticalArrangement = Arrangement.SpaceBetween,
+                    verticalArrangement = Arrangement.Bottom,
                 ) {
                     QuantityInputPreview(
+                        modifier = Modifier.weight(1f),
                         quantity = displayData,
                         minQuantity = viewModel.minStringParam,
                         maxQuantity = viewModel.maxStringParam,
@@ -71,6 +74,7 @@ internal fun QuantityInputScreen(
                     )
 
                     NumberKeyboard(
+                        modifier = Modifier.padding(vertical = 24.dp),
                         showDecimalSeparator = viewModel.allowDecimal,
                         showNegative = viewModel.allowNegative,
                         onClick = viewModel::processKey,

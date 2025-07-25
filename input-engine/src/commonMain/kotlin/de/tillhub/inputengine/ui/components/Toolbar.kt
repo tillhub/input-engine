@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -15,7 +14,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -28,9 +26,9 @@ internal fun Toolbar(
     Column {
         TopAppBar(
             colors =
-            TopAppBarDefaults
-                .topAppBarColors()
-                .copy(containerColor = Color.White),
+            TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.background,
+            ),
             title = {
                 Text(
                     modifier = Modifier.semantics { contentDescription = "Toolbar title" },
@@ -50,7 +48,6 @@ internal fun Toolbar(
                 }
             },
         )
-        HorizontalDivider()
     }
 }
 

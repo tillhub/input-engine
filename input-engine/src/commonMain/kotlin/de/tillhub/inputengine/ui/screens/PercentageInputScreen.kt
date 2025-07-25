@@ -61,16 +61,18 @@ internal fun PercentageInputScreen(
                     modifier =
                     Modifier
                         .padding(innerPadding)
-                        .padding(top = 16.dp)
+                        .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
                         .fillMaxHeight(),
-                    verticalArrangement = Arrangement.SpaceBetween,
+                    verticalArrangement = Arrangement.Bottom,
                 ) {
                     PercentageInputPreview(
+                        modifier = Modifier.weight(1f),
                         percentText = displayData.text,
                         percentageMin = viewModel.minStringParam,
                         percentageMax = viewModel.maxStringParam,
                     )
                     NumberKeyboard(
+                        modifier = Modifier.padding(vertical = 24.dp),
                         onClick = viewModel::input,
                         showDecimalSeparator = viewModel.allowDecimal,
                     )

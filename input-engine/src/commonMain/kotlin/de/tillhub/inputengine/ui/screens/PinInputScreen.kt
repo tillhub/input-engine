@@ -98,17 +98,21 @@ internal fun PinInputScreen(
                     modifier =
                     Modifier
                         .padding(innerPadding)
-                        .padding(vertical = 16.dp)
+                        .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
                         .fillMaxHeight(),
-                    verticalArrangement = Arrangement.SpaceBetween,
+                    verticalArrangement = Arrangement.Bottom,
                 ) {
                     PinInputPreview(
+                        modifier = Modifier.weight(1f),
                         pinText = enteredPin,
                         hintText = viewModel.hint,
                         overridePinInput = viewModel.overridePinInput,
                         onOverride = { onResult(PinInputResult.Success(viewModel.responseExtras)) },
                     )
-                    NumberKeyboard(onClick = viewModel::input)
+                    NumberKeyboard(
+                        modifier = Modifier.padding(vertical = 24.dp),
+                        onClick = viewModel::input,
+                    )
                 }
             }
         }

@@ -64,9 +64,9 @@ class AmountInputScreenTest {
 
         onNodeWithContentDescription("Toolbar title").assertTextEquals("Test Amount Input")
 
-        onNodeWithContentDescription("Max allowed amount").assertTextEquals("max. EUR1000.0")
+        onNodeWithContentDescription("Max allowed amount").assertTextEquals("Max. EUR1000.0")
         onNodeWithContentDescription("Current amount").assertTextEquals("EUR500.0")
-        onNodeWithContentDescription("Min allowed amount").assertTextEquals("min. EUR100.0")
+        onNodeWithContentDescription("Min allowed amount").assertTextEquals("Min. EUR100.0")
 
         onNodeWithContentDescription("Submit button").performClick()
 

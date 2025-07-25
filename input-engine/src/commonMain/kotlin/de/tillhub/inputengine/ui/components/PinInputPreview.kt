@@ -12,48 +12,39 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.sp
 import de.tillhub.inputengine.resources.Res
 import de.tillhub.inputengine.resources.pin_enter
-import de.tillhub.inputengine.theme.HintGray
 import de.tillhub.inputengine.theme.OrbitalBlue
+import de.tillhub.inputengine.theme.hintColor
 import de.tillhub.inputengine.theme.textFieldTransparentColors
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun PinInputPreview(
+    modifier: Modifier = Modifier,
     pinText: String,
     hintText: String,
     overridePinInput: Boolean,
     onOverride: () -> Unit,
 ) {
-    Box(modifier = Modifier.fillMaxWidth()) {
+    Box(
+        modifier = modifier.fillMaxWidth(),
+        contentAlignment = Alignment.Center,
+    ) {
         OutlinedTextField(
             readOnly = true,
-            modifier =
-            Modifier
-                .align(Alignment.Center)
-                .testTag("Pin placeholder"),
+            modifier = Modifier.testTag("Pin placeholder"),
             value = pinText,
             onValueChange = { },
-            textStyle =
-            TextStyle.Default.copy(
-                color = OrbitalBlue,
-                fontSize = 64.sp,
-                textAlign = TextAlign.Center,
-            ),
+            textStyle = MaterialTheme.typography.displayLarge,
             maxLines = 1,
             placeholder = {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    style =
-                    TextStyle.Default.copy(
-                        color = HintGray,
-                        fontSize = 64.sp,
-                        textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.displayLarge.copy(
+                        color = MaterialTheme.colorScheme.hintColor,
                     ),
                     text = hintText,
                 )

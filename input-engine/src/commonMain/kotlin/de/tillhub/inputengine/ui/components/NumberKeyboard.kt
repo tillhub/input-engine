@@ -3,26 +3,28 @@ package de.tillhub.inputengine.ui.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import de.tillhub.inputengine.domain.Digit
 import de.tillhub.inputengine.domain.NumpadKey
 import de.tillhub.inputengine.formatting.DecimalFormatter
 import de.tillhub.inputengine.resources.Res
+import de.tillhub.inputengine.resources.ic_delete
 import de.tillhub.inputengine.resources.numpad_button_clear
-import de.tillhub.inputengine.resources.numpad_button_delete
 import de.tillhub.inputengine.resources.numpad_button_negative
-import de.tillhub.inputengine.theme.GalacticBlue
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -48,10 +50,7 @@ internal fun NumberKeyboard(
         verticalArrangement = Arrangement.SpaceAround,
     ) {
         Row(
-            modifier =
-            Modifier
-                .padding(top = 16.dp, start = 24.dp, end = 24.dp)
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
         ) {
             NumberButton(
                 modifier =
@@ -61,6 +60,7 @@ internal fun NumberKeyboard(
                 number = Digit.SEVEN,
                 onClick = onClick,
             )
+            Spacer(modifier = Modifier.width(8.dp))
             NumberButton(
                 modifier =
                 Modifier.weight(1f).semantics {
@@ -69,6 +69,7 @@ internal fun NumberKeyboard(
                 number = Digit.EIGHT,
                 onClick = onClick,
             )
+            Spacer(modifier = Modifier.width(8.dp))
             NumberButton(
                 modifier =
                 Modifier.weight(1f).semantics {
@@ -78,11 +79,9 @@ internal fun NumberKeyboard(
                 onClick = onClick,
             )
         }
+        Spacer(modifier = Modifier.height(8.dp))
         Row(
-            modifier =
-            Modifier
-                .padding(start = 24.dp, end = 24.dp)
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
         ) {
             NumberButton(
                 modifier =
@@ -92,6 +91,7 @@ internal fun NumberKeyboard(
                 number = Digit.FOUR,
                 onClick = onClick,
             )
+            Spacer(modifier = Modifier.width(8.dp))
             NumberButton(
                 modifier =
                 Modifier.weight(1f).semantics {
@@ -100,6 +100,7 @@ internal fun NumberKeyboard(
                 number = Digit.FIVE,
                 onClick = onClick,
             )
+            Spacer(modifier = Modifier.width(8.dp))
             NumberButton(
                 modifier =
                 Modifier.weight(1f).semantics {
@@ -109,12 +110,9 @@ internal fun NumberKeyboard(
                 onClick = onClick,
             )
         }
-
+        Spacer(modifier = Modifier.height(8.dp))
         Row(
-            modifier =
-            Modifier
-                .padding(start = 24.dp, end = 24.dp)
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
         ) {
             NumberButton(
                 modifier =
@@ -124,6 +122,7 @@ internal fun NumberKeyboard(
                 number = Digit.ONE,
                 onClick = onClick,
             )
+            Spacer(modifier = Modifier.width(8.dp))
             NumberButton(
                 modifier =
                 Modifier.weight(1f).semantics {
@@ -132,6 +131,7 @@ internal fun NumberKeyboard(
                 number = Digit.TWO,
                 onClick = onClick,
             )
+            Spacer(modifier = Modifier.width(8.dp))
             NumberButton(
                 modifier =
                 Modifier.weight(1f).semantics {
@@ -141,19 +141,15 @@ internal fun NumberKeyboard(
                 onClick = onClick,
             )
         }
-
+        Spacer(modifier = Modifier.height(8.dp))
         Row(
-            modifier =
-            Modifier
-                .padding(start = 24.dp, end = 24.dp)
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
         ) {
             DoubleActionButton(
                 modifier =
                 Modifier
                     .weight(1f)
-                    .aspectRatio(BUTTON_ASPECT_RATIO)
-                    .padding(6.dp),
+                    .aspectRatio(BUTTON_ASPECT_RATIO),
                 onClick = {
                     when {
                         showDecimalSeparator -> onClick(NumpadKey.DecimalSeparator)
@@ -175,11 +171,11 @@ internal fun NumberKeyboard(
                         contentDescription = leftActionContentDescription
                     },
                     text = leftActionText,
-                    fontSize = 14.sp,
-                    color = GalacticBlue,
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer,
                 )
             }
-
+            Spacer(modifier = Modifier.width(8.dp))
             NumberButton(
                 modifier =
                 Modifier.weight(1f).semantics {
@@ -188,25 +184,19 @@ internal fun NumberKeyboard(
                 number = Digit.ZERO,
                 onClick = onClick,
             )
-
+            Spacer(modifier = Modifier.width(8.dp))
             DoubleActionButton(
                 onClick = { onClick(NumpadKey.Delete) },
                 onLongClick = { onClick(NumpadKey.Clear) },
                 modifier =
                 Modifier
                     .weight(1f)
-                    .aspectRatio(BUTTON_ASPECT_RATIO)
-                    .padding(6.dp),
+                    .aspectRatio(BUTTON_ASPECT_RATIO),
             ) {
-                Text(
-                    modifier =
-                    Modifier.semantics {
-                        contentDescription = "Delete"
-                    },
-                    text = stringResource(resource = Res.string.numpad_button_delete),
-                    fontSize = 24.sp,
-                    color = GalacticBlue,
-                    fontWeight = FontWeight.Bold,
+                Icon(
+                    painter = painterResource(Res.drawable.ic_delete),
+                    contentDescription = "Delete",
+                    tint = MaterialTheme.colorScheme.onSecondaryContainer,
                 )
             }
         }

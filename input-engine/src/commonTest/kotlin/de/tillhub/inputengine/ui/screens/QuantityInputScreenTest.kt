@@ -62,9 +62,9 @@ class QuantityInputScreenTest {
 
         onNodeWithContentDescription("Toolbar title").assertTextEquals("Test Quantity Input")
 
-        onNodeWithContentDescription("Max allowed quantity").assertTextEquals("max. 10")
+        onNodeWithContentDescription("Max allowed quantity").assertTextEquals("Max. 10")
         onNodeWithContentDescription("Current quantity").assertTextEquals("2")
-        onNodeWithContentDescription("Min allowed quantity").assertTextEquals("min. 1")
+        onNodeWithContentDescription("Min allowed quantity").assertTextEquals("Min. 1")
 
         onNodeWithContentDescription("Submit button").performClick()
 

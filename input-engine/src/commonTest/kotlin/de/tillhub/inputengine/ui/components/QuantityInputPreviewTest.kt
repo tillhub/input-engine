@@ -70,9 +70,9 @@ class QuantityInputPreviewTest {
             }
         }
 
-        onNodeWithContentDescription("Max allowed quantity").assertTextEquals("max. 10")
+        onNodeWithContentDescription("Max allowed quantity").assertTextEquals("Max. 10")
         onNodeWithContentDescription("Current quantity").assertTextEquals("0")
-        onNodeWithContentDescription("Min allowed quantity").assertTextEquals("min. 0")
+        onNodeWithContentDescription("Min allowed quantity").assertTextEquals("Min. 0")
 
         onNodeWithContentDescription("Button decrease").performClick()
 
@@ -107,9 +107,9 @@ class QuantityInputPreviewTest {
             }
         }
 
-        onNodeWithContentDescription("Max allowed quantity").assertTextEquals("max. 10")
+        onNodeWithContentDescription("Max allowed quantity").assertTextEquals("Max. 10")
         onNodeWithContentDescription("Current quantity").assertTextEquals("2")
-        onNodeWithContentDescription("Min allowed quantity").assertTextEquals("min. 0")
+        onNodeWithContentDescription("Min allowed quantity").assertTextEquals("Min. 0")
 
         onNodeWithContentDescription("Button increase").performClick()
 

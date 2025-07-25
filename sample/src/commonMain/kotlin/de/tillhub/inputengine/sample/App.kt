@@ -129,9 +129,10 @@ fun App() {
                     amountInputLauncher.launchAmountInput(
                         request =
                         AmountInputRequest(
-                            amount = MoneyIO.of(100, eur),
-                            amountMin = MoneyParam.Enable(MoneyIO.of(-30_00, eur)),
+                            amount = MoneyIO.of(0, eur),
+//                            amountMin = MoneyParam.Enable(MoneyIO.of(-30_00, eur)),
                             amountMax = MoneyParam.Enable(MoneyIO.of(50_00, eur)),
+                            hintAmount = MoneyParam.Enable(MoneyIO.of(0, eur)),
                             extras = mapOf("extraArg" to "argument value"),
                         ),
                     )
