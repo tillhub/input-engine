@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.mokkery)
+    alias(libs.plugins.maven.publish)
 }
 
 kotlin {
@@ -20,6 +21,8 @@ kotlin {
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         instrumentedTestVariant.sourceSetTree.set(KotlinSourceSetTree.test)
+
+        publishLibraryVariants("release")
 
         dependencies {
             androidTestImplementation(libs.androidx.ui.test.junit4.android)
@@ -119,4 +122,60 @@ android {
 compose.resources {
     packageOfResClass = "de.tillhub.inputengine.resources"
     generateResClass = auto
+}
+
+mavenPublishing {
+    // Define coordinates for the published artifact
+    coordinates(
+        groupId = "io.github.tillhub",
+        artifactId = "input-engine",
+        version =
+            libs.versions.input.engine
+                .get(),
+    )
+
+    // Configure POM metadata for the published artifact
+    pom {
+        name.set("Input Engine")
+        description.set("Kotlin MultiPlatform Library which allows easy customisable UI inputs for money, quantity, percentage & PIN.")
+        inceptionYear.set("2025")
+        url.set("https://github.com/tillhub/input-engine")
+
+        licenses {
+            license {
+                name.set("MIT")
+                url.set("https://opensource.org/licenses/MIT")
+            }
+        }
+
+        // Specify developers information
+        developers {
+            developer {
+                id.set("djordjeh")
+                name.set("Đorđe Hrnjez")
+                email.set("dorde.hrnjez@unzer.com")
+            }
+            developer {
+                id.set("SloInfinity")
+                name.set("Martin Sirok")
+                email.set("m.sirok.ext@unzer.com")
+            }
+            developer {
+                id.set("shekar-allam")
+                name.set("Chandrashekar Allam")
+                email.set("chandrashekar.allam@unzer.com")
+            }
+        }
+
+        // Specify SCM information
+        scm {
+            url.set("https://github.com/tillhub/input-engine")
+        }
+    }
+
+    // Configure publishing to Maven Central
+    publishToMavenCentral()
+
+    // Enable GPG signing for all publications
+    signAllPublications()
 }
