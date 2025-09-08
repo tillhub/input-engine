@@ -129,7 +129,9 @@ mavenPublishing {
     coordinates(
         groupId = "io.github.tillhub",
         artifactId = "input-engine",
-        version = libs.versions.input.engine.get()
+        version =
+            libs.versions.input.engine
+                .get(),
     )
 
     // Configure POM metadata for the published artifact
