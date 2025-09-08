@@ -156,6 +156,7 @@ mavenPublishing {
             developer {
                 id.set("SloInfinity")
                 name.set("Martin Sirok")
+                email.set("m.sirok.ext@unzer.com")
             }
             developer {
                 id.set("shekar-allam")
