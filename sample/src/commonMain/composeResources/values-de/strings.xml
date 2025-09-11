@@ -1,0 +1,4 @@
+<resources>
+    <string name="pin_wrong">Falsche Pin</string>
+    <string name="pin_correct">PIN-Eingabe erfolgreich</string>
+</resources>

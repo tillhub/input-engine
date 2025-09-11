@@ -1,56 +1,105 @@
 
 [![](https://jitpack.io/v/tillhub/input-engine.svg)](https://jitpack.io/#tillhub/input-engine)
-[![API](https://img.shields.io/badge/API-24%2B-green.svg?style=flat)](https://android-arsenal.com/api?level-11) 
-# Input Engine
+[![API](https://img.shields.io/badge/API-24%2B-green.svg?style=flat)](https://android-arsenal.com/api?level=24)
 
-Android UI Library which allows easy customisable UI inputs for money, quantity, percentage & PIN.
-# How to setup
+# Input Engine – Kotlin Multiplatform
 
-**Step 1.** Add the JitPack repository to your `settings.gradle` file:
+**Input Engine** is a Kotlin Multiplatform UI Library that enables easy and customizable UI inputs for:
+
+- 💰 Money
+- 📈 Percentage
+- 🔢 Quantity
+- 🔐 PIN
+
+Now supports **both Android and iOS** via KMP shared code.
+
+---
+
+## 🔧 Setup
+
+### 📦 Android (via JitPack)
+
+**Step 1.** Add the JitPack repository to your root `settings.gradle`:
 
 ```groovy
 dependencyResolutionManagement {
     repositories {
-        ...
         mavenCentral()
         maven { url 'https://jitpack.io' }
     }
 }
 ```
 
-**Step 2.** Add the dependency to your app `build.gradle`:
+**Step 2.** Add the dependency to your `build.gradle`:
+
 ```groovy
 dependencies {
     implementation 'com.github.tillhub:input-engine:x.x.x'
 }
 ```
-# Usage
 
-Register a callback for an activity result.
+---
 
-In UI component like Activity or Fragment first register one of Input contracts:
-* `AmountInputContract` - use for amount (money) input
-* `PercentageInputContract` - use for percentage input
-* `QuantityInputContract` - use for quantity input
-* `PinInputContract` - use for PIN verification
+### 🍏 iOS
+
+**Step 1.** Add the XCFramework to your Xcode project:
+
+- Clone the repo and run:
+  ```bash
+  ./gradlew :input-engine:assembleXCFramework
+  ```
+- Drag `InputEngineKit.xcframework` into your Xcode project
+- Link it under "Frameworks, Libraries, and Embedded Content"
+
+**Step 2.** Import and use in Swift:
+
+```swift
+import InputEngineKit
+
+let contract = AmountInputContract()
+// Use Kotlin/Native bridge to integrate with shared logic
+```
+
+> ✅ Compatible with both SwiftUI and UIKit.
+
+---
+
+## 🚀 Usage
+
+### Android Example
+
+In your Activity or Fragment:
 
 ```kotlin
 val getAmount = registerForActivityResult(AmountInputContract()) {
-    // Handle the returned AmountInputResult response
-}
-
-override fun onCreate(savedInstanceState: Bundle?) {
-    // ...
-
-    val amountButton = findViewById<Button>(R.id.amount_button)
-
-    amountButton.setOnClickListener {
-        // Pass in AmountInputRequest as the input
-        getAmount.launch(AmountInputRequest(...))
+    when (it) {
+        is AmountInputResult.Success -> {
+            val amount = it.amount
+            // Handle the returned amount
+        }
+        AmountInputResult.Canceled -> {
+            // Handle cancellation
+        }
     }
 }
+
+amountButton.setOnClickListener {
+    getAmount.launch(AmountInputRequest(...))
+}
 ```
-Result is sealed class which has two outcomes, success or canceled.
+
+---
+
+## 🎯 Supported Input Contracts
+
+| Contract                   | Description                          |
+|----------------------------|--------------------------------------|
+| `AmountInputContract`      | Input for currency / money values    |
+| `PercentageInputContract`  | Input for percentage values          |
+| `QuantityInputContract`    | Input for decimal/integer quantities |
+| `PinInputContract`         | Secure PIN entry                     |
+
+All result contracts follow the sealed structure:
 
 ```kotlin
 sealed class AmountInputResult {
@@ -59,15 +108,19 @@ sealed class AmountInputResult {
 }
 ```
 
-## Credits
+---
+
+## 👥 Contributors
 
 - [Đorđe Hrnjez](https://github.com/djordjeh)
 - [Martin Širok](https://github.com/SloInfinity)
 - [Chandrashekar Allam](https://github.com/shekar-allam)
 
-## License
+---
 
-```licence
+## 🪪 License
+
+```text
 MIT License
 
 Copyright (c) 2024 Tillhub GmbH
