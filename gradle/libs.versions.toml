@@ -1,87 +1,39 @@
 [versions]
-# Define the dependency versions
-agp = "8.4.2"
-kotlin = "1.9.22"
-core = "1.13.1"
-lifecycle = "2.8.7"
-
-activity-compose = "1.9.3"
-compose-bom = "2024.10.01"
-
-detekt = "1.23.6"
-
-junit = "4.13.2"
-mockk = "1.13.8"
-kotest = "5.8.0"
-junitVersion = "1.2.1"
+input-engine = "2.0.1"
+activityKtx = "1.10.1"
+agp = "8.11.1"
+androidx-activity = "1.10.1"
+androidx-lifecycle = "2.9.1"
+composeMultiplatform = "1.8.2"
+kotlin = "2.2.0"
+kotlin-bignum = "0.3.10"
+kotlinxSerializationJson = "1.9.0"
+lifecycleViewmodelCompose = "2.9.1"
+spotless = "7.1.0"
+uiTestJunit4 = "1.8.3"
+mokkery = "2.9.0"
+maven-publish = "0.34.0"
 
 [libraries]
-# Define the libraries
-androidx-core = { group = "androidx.core", name = "core-ktx", version.ref = "core" }
-androidx-lifecycle-common = { group = "androidx.lifecycle", name = "lifecycle-common", version.ref = "lifecycle" }
-androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime", version.ref = "lifecycle" }
-androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
-androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycle" }
-
-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
-compose-ui = { group = "androidx.compose.ui", name = "ui" }
-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
-compose-ui-tooling = { group = "androidx.compose.ui" , name = "ui-tooling"}
-compose-ui-tooling-preview = { group = "androidx.compose.ui" , name = "ui-tooling-preview"}
-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
-
-# Unit testing
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
-mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "mockk" }
-mockk-agent-jvm = { group = "io.mockk", name = "mockk-agent-jvm", version.ref = "mockk" }
-kotest-runner = { group = "io.kotest", name = "kotest-runner-junit5-jvm", version.ref = "kotest" }
-kotest-assertions = { group = "io.kotest", name = "kotest-assertions-core-jvm", version.ref = "kotest" }
-kotest-property = { group = "io.kotest", name = "kotest-property-jvm", version.ref = "kotest" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
+androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activityKtx" }
+androidx-lifecycle-runtimeCompose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-viewmodel = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
+kotlin-bignum = { module = "com.ionspin.kotlin:bignum", version.ref = "kotlin-bignum" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
 
 # Android testing
-androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+androidx-ui-test-junit4-android = { group = "androidx.compose.ui", name = "ui-test-junit4-android", version.ref = "uiTestJunit4" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-
-# Dependencies of the included build-logic
-detekt-formatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt" }
-detekt-libraries = { group = "io.gitlab.arturbosch.detekt", name = "detekt-rules-libraries", version.ref = "detekt" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
-kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
-detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
-
-[bundles]
-compose = [
-    "activity-compose",
-    "compose-ui",
-    "compose-material3",
-    "compose-ui-graphics",
-    "compose-ui-tooling",
-    "compose-ui-tooling-preview",
-]
-ui = [
-    "androidx-core",
-]
-lifecycle = [
-    "androidx-lifecycle-common",
-    "androidx-lifecycle-runtime",
-    "androidx-lifecycle-runtime-ktx"
-]
-testing = [
-    "junit",
-    "mockk",
-    "mockk-agent-jvm",
-    "kotest-runner",
-    "kotest-assertions",
-    "kotest-property",
-]
-testing-android = [
-    "androidx-junit",
-    "mockk-android",
-    "androidx-ui-test-junit4"
-]
+composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
+maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "maven-publish" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+mokkery = { id = "dev.mokkery", version.ref = "mokkery" }

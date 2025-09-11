@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="numpad_title_amount">Amount</string>
+    <string name="numpad_title_quantity">Quantity</string>
+    <string name="numpad_title_pin">Pin</string>
+    <string name="numpad_title_percentage">Percentage</string>
+    <string name="pin_hint" translatable="false">••••</string>
+    <string name="pin_wrong">Wrong PIN</string>
+    <string name="pin_correct">PIN entry successful</string>
+    <string name="pin_enter" translatable="false">ENTER PIN</string>
+    <string name="min_value">Min. %1$s</string>
+    <string name="max_value">Max. %1$s</string>
+
+    <!-- Numpad -->
+    <string name="numpad_button_clear" translatable="false">C</string>
+    <string name="numpad_button_negative" translatable="false">-</string>
+    <string name="numpad_button_delete" translatable="false">←</string>
+    <string name="numpad_button_submit">Submit</string>
+</resources>
