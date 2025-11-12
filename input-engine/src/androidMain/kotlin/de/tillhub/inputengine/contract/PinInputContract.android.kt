@@ -37,7 +37,7 @@ actual fun rememberPinInputLauncher(onResult: (PinInputResult) -> Unit): PinInpu
     }
 }
 
-private fun parsePinInputResult(
+internal fun parsePinInputResult(
     resultCode: Int,
     extras: Bundle?,
 ): PinInputResult {

@@ -37,7 +37,7 @@ actual fun rememberQuantityInputLauncher(onResult: (QuantityInputResult) -> Unit
     }
 }
 
-private fun parseQuantityInputResult(
+internal fun parseQuantityInputResult(
     resultCode: Int,
     extras: Bundle?,
 ): QuantityInputResult {
