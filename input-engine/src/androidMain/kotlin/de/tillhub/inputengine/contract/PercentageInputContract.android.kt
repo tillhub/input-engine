@@ -37,7 +37,7 @@ actual fun rememberPercentageInputLauncher(onResult: (PercentageInputResult) -> 
     }
 }
 
-private fun parsePercentageInputResult(
+internal fun parsePercentageInputResult(
     resultCode: Int,
     extras: Bundle?,
 ): PercentageInputResult {

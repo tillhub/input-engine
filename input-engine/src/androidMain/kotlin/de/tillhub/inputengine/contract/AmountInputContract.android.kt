@@ -37,7 +37,7 @@ actual fun rememberAmountInputLauncher(onResult: (AmountInputResult) -> Unit): A
     }
 }
 
-private fun parseAmountInputResult(
+internal fun parseAmountInputResult(
     resultCode: Int,
     extras: Bundle?,
 ): AmountInputResult {
