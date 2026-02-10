@@ -75,7 +75,7 @@ internal fun AmountInputScreen(
                         amountMax = amountMax,
                     )
                     NumberKeyboard(
-                        modifier = Modifier.padding(vertical = 24.dp),
+                        modifier = Modifier.padding(vertical = 8.dp),
                         onClick = viewModel::input,
                         showNegative = viewModel.amountInputMode == AmountInputMode.BOTH,
                     )

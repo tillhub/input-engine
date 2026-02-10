@@ -3,7 +3,6 @@ package de.tillhub.inputengine.ui.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -11,7 +10,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.dp
 import de.tillhub.inputengine.domain.StringParam
 import de.tillhub.inputengine.resources.Res
 import de.tillhub.inputengine.resources.max_value
@@ -33,7 +31,7 @@ internal fun AmountInputPreview(
         verticalArrangement = Arrangement.Center,
     ) {
         Text(
-            modifier = Modifier.padding(16.dp).semantics { contentDescription = "Current amount" },
+            modifier = Modifier.semantics { contentDescription = "Current amount" },
             style = MaterialTheme.typography.displayLarge,
             maxLines = 1,
             text = amount.text,
@@ -47,7 +45,7 @@ internal fun AmountInputPreview(
 
         if (amountMin is StringParam.Enable) {
             Text(
-                modifier = Modifier.padding(bottom = 8.dp).semantics { contentDescription = "Min allowed amount" },
+                modifier = Modifier.semantics { contentDescription = "Min allowed amount" },
                 style = MaterialTheme.typography.labelSmall,
                 maxLines = 1,
                 text = stringResource(Res.string.min_value, amountMin.value),

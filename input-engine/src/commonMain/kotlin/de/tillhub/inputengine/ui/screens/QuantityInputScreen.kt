@@ -74,7 +74,7 @@ internal fun QuantityInputScreen(
                     )
 
                     NumberKeyboard(
-                        modifier = Modifier.padding(vertical = 24.dp),
+                        modifier = Modifier.padding(vertical = 8.dp),
                         showDecimalSeparator = viewModel.allowDecimal,
                         showNegative = viewModel.allowNegative,
                         onClick = viewModel::processKey,
