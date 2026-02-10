@@ -113,7 +113,6 @@ internal fun PinInputScreen(
                         modifier = Modifier.padding(top = 24.dp),
                         onClick = viewModel::input,
                     )
-//                    Spacer(modifier = Modifier.height(64.dp))
                 }
             }
         }
