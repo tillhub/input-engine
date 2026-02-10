@@ -72,7 +72,7 @@ internal fun PercentageInputScreen(
                         percentageMax = viewModel.maxStringParam,
                     )
                     NumberKeyboard(
-                        modifier = Modifier.padding(vertical = 24.dp),
+                        modifier = Modifier.padding(vertical = 8.dp),
                         onClick = viewModel::input,
                         showDecimalSeparator = viewModel.allowDecimal,
                     )

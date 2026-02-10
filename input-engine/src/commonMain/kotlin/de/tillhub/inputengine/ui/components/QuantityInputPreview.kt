@@ -64,7 +64,7 @@ internal fun QuantityInputPreview(
             }
             Text(
                 text = quantity.text,
-                modifier = Modifier.padding(16.dp).semantics { contentDescription = "Current quantity" },
+                modifier = Modifier.padding(horizontal = 16.dp).semantics { contentDescription = "Current quantity" },
                 style = MaterialTheme.typography.displayLarge,
                 color =
                 if (quantity.isHint) {
@@ -92,7 +92,7 @@ internal fun QuantityInputPreview(
 
         if (minQuantity is StringParam.Enable) {
             Text(
-                modifier = Modifier.padding(bottom = 8.dp).semantics { contentDescription = "Min allowed quantity" },
+                modifier = Modifier.semantics { contentDescription = "Min allowed quantity" },
                 text = stringResource(Res.string.min_value, minQuantity.value),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSecondary,
