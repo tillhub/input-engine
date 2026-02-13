@@ -80,6 +80,7 @@ kotlin {
                 implementation(compose.preview)
                 implementation(libs.androidx.activity.compose)
                 implementation(libs.androidx.activity.ktx)
+                implementation(libs.androidx.appcompat)
                 implementation(libs.kotlinx.serialization.json)
             }
         }

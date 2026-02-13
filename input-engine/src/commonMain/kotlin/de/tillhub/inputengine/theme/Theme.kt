@@ -1,12 +1,11 @@
 package de.tillhub.inputengine.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 
 @Composable
 internal fun AppTheme(
-    useDarkTheme: Boolean = isSystemInDarkTheme(),
+    useDarkTheme: Boolean = isNightMode(),
     content: @Composable () -> Unit,
 ) {
     val colors = if (!useDarkTheme) {
@@ -22,3 +21,6 @@ internal fun AppTheme(
         content = content,
     )
 }
+
+@Composable
+internal expect fun isNightMode(): Boolean
