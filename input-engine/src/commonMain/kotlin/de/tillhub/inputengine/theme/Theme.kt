@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 
 @Composable
 internal fun AppTheme(
-    useDarkTheme: Boolean = isNightMode(),
+    useDarkTheme: Boolean = false,
     content: @Composable () -> Unit,
 ) {
     val colors = if (!useDarkTheme) {
@@ -21,6 +21,3 @@ internal fun AppTheme(
         content = content,
     )
 }
-
-@Composable
-internal expect fun isNightMode(): Boolean
