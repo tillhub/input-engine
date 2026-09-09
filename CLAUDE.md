@@ -4,182 +4,146 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Input Engine is a Kotlin Multiplatform UI Library that provides customizable input screens for money amounts, percentages, quantities, and PIN entry. It supports both Android and iOS platforms using shared Compose Multiplatform UI code.
+Input Engine is a Kotlin Multiplatform library (Android + iOS) that provides full-screen numpad input screens for
+money amounts, percentages, quantities and PIN entry. UI is Compose Multiplatform in `commonMain`; each platform only
+contributes a launcher (Android Activity / iOS `UIViewController` presenter) and number formatters.
 
-## Build Commands
+Published to Maven Central as `io.github.tillhub:input-engine`. README.md is the consumer-facing documentation and
+documents the public API in detail; keep it in sync when changing requests, results or value types.
 
-### Building and Testing
-
-```bash
-# Build the entire project
-./gradlew build
-
-# Build only the input-engine library
-./gradlew :input-engine:build
-
-# Run unit tests (Android)
-./gradlew testDebug
-
-# Run Android instrumented tests (requires emulator or device)
-./gradlew :input-engine:connectedAndroidTest
-
-# Build sample app
-./gradlew :sample:assemble
-```
-
-### Code Quality
+## Commands
 
 ```bash
-# Check code formatting (ktlint)
-./gradlew spotlessCheck
-
-# Auto-fix formatting issues
-./gradlew spotlessApply
-
-# Run Android lint
-./gradlew lint
-./gradlew lintFix  # Apply safe suggestions
+./gradlew build                                   # build all modules
+./gradlew spotlessCheck                           # ktlint (CI gate); ./gradlew spotlessApply to fix
+./gradlew testDebug                               # unit tests: commonTest + androidUnitTest (what PR CI runs)
+./gradlew testDebug --tests "*MoneyFormatterTest" # single test class
+./gradlew testDebug --tests "*.formatting.*"      # package
+./gradlew :input-engine:iosSimulatorArm64Test     # iOS unit tests (commonTest + iosTest, needs Xcode)
+./gradlew :input-engine:connectedAndroidTest      # instrumented tests (emulator/device; runs on develop CI)
+./gradlew :sample:installDebug                    # sample Android app
+./gradlew lint                                    # Android lint
 ```
 
-### iOS Development
+iOS framework: there is **no** `assembleXCFramework` task. Per-target frameworks come from
+`:input-engine:linkReleaseFrameworkIosArm64` / `linkReleaseFrameworkIosSimulatorArm64` (output in
+`input-engine/build/bin/<target>/releaseFramework/input-engineKit.framework`). The `iosApp` Xcode project embeds the
+`sample` module via `:sample:embedAndSignAppleFrameworkForXcode`.
 
-```bash
-# Build XCFramework for iOS integration
-./gradlew :input-engine:assembleXCFramework
-```
+Publishing: `./gradlew publishAndReleaseToMavenCentral --no-configuration-cache` (configuration cache is on globally in
+`gradle.properties` and must be disabled for this task). CI does this when a version tag is pushed, see below.
 
-Note: iOS builds require Xcode and macOS. The XCFramework will be generated in `input-engine/build/`.
+## Tests
 
-### Publishing
-
-```bash
-# Publish to Maven Central (requires credentials)
-./gradlew publishAndReleaseToMavenCentral --no-configuration-cache
-```
+- Compose UI tests live in `commonTest` under `ui/components/**` and `ui/screens/**`. They are **excluded from
+  `testDebug`** (see `testOptions.unitTests` in `input-engine/build.gradle.kts`) and only run as Android instrumented
+  tests or iOS native tests. ViewModel, data and domain tests in `commonTest` do run on the JVM.
+- UI tests use `runCustomComposeUiTest` (`testing/ComposeUiTest.kt`), an `expect` with an `actual` in each of
+  `androidUnitTest`, `androidInstrumentedTest` and `iosTest`. Add an `actual` if a new test source set is introduced.
+- `commonTest/MoneyDsl.kt` provides `100.0.eur`, `5.usd`, `EUR`, `USD` helpers; `Number.eur` treats the receiver as
+  major units.
+- Mokkery is used only in the `ui/screens` tests to mock formatters.
+- Formatter tests are platform-specific (`androidUnitTest/formatting`, `iosTest/formatting`) because output depends on
+  `NumberFormat` / `NSNumberFormatter`.
 
 ## Architecture
 
-### Multiplatform Structure
+### Request → Screen → Result flow
 
-The codebase follows standard Kotlin Multiplatform conventions with these source sets:
+Each input type (Amount, Percentage, Quantity, Pin) has the same four pieces:
 
-- **`commonMain/`** - Shared business logic, UI components (Compose Multiplatform), and contracts
-- **`androidMain/`** - Android-specific implementations (Activities, Activity Result Contracts)
-- **`iosMain/`** - iOS-specific implementations (Presenters, UIViewController bridges)
-- **`commonTest/`, `androidUnitTest/`, `iosTest/`** - Platform-specific tests
+1. `commonMain/contract/<X>InputContract.kt`: `@Serializable` `<X>InputRequest`, sealed `<X>InputResult`
+   (`Success` / `Canceled`), the `<X>InputContract` launcher interface, and
+   `@Composable expect fun remember<X>InputLauncher(onResult)`.
+2. `commonMain/ui/<X>InputViewModel.kt` (internal): all input logic. Built via `viewModelFactory` with
+   `CreationExtras` keys `REQUEST_KEY` and (except Pin) `FORMATTER_KEY`.
+3. `commonMain/ui/screens/<X>InputScreen.kt` (internal): Compose UI wrapped in `AppTheme`, takes the ViewModel plus
+   `onResult` / `onDismiss` callbacks.
+4. Platform host:
+   - **Android** `androidMain/ui/<X>InputActivity.kt`: reads the request as JSON from the Intent extra
+     `ExtraKeys.EXTRAS_REQUEST`, returns `Success` as JSON in `ExtraKeys.EXTRAS_RESULT` with `RESULT_OK`, or
+     `RESULT_CANCELED`. `androidMain/contract/<X>InputContract.android.kt` implements the `actual` launcher with
+     `rememberLauncherForActivityResult` and exposes an internal `parse<X>InputResult(resultCode, extras)`.
+   - **iOS** `iosMain/ui/<X>InputPresenter.kt`: wraps the screen in `ComposeUIViewController` and presents it on
+     `UIApplication.sharedApplication.keyWindow?.rootViewController` (silently no-ops if there is none). The `actual`
+     launcher in `iosMain/contract/` just delegates to the presenter. No serialization on iOS.
 
-### Key Package Structure
+`androidMain/contract/legacy/` holds plain `ActivityResultContract` classes for non-Compose consumers. They reuse the
+same Activities and the shared `parse*InputResult` functions, so a change to the Intent protocol must keep both paths
+working. Do not remove them without coordination.
 
-- **`contract/`** - Platform-agnostic input contracts with `expect`/`actual` implementations
-  - Common interfaces define the contract (e.g., `AmountInputContract`)
-  - Android uses Activity Result API
-  - iOS uses Presenter pattern with `ComposeUIViewController`
-  - Legacy Android contracts exist in `androidMain/contract/legacy/` for backward compatibility
+Activities are declared in `androidMain/AndroidManifest.xml` as non-exported; a new input type needs an entry there.
 
-- **`data/`** - Data models and I/O types
-  - `MoneyIO`, `PercentIO`, `QuantityIO` - Serializable data transfer objects
-  - `MoneyParam`, `PercentageParam`, `QuantityParam` - Configuration parameters (Enable/Disable sealed classes)
-  - `CurrencyIO` - Currency representation
+### Input logic
 
-- **`domain/`** - Domain logic and utilities
-  - `NumpadKey`, `Digit` - Input handling abstractions
-  - `StringParam` - Sealed class for optional string parameters
-  - `helper/` - Business logic helpers
+- **Amount** appends digits cash-register style via `MoneyIO.append` (value shifts left by one digit, new digit fills
+  the smallest currency unit). It never uses the decimal separator. `AmountInputViewModel.setupAmountConstraints`
+  normalizes min/max into an `AmountInputMode` (POSITIVE / NEGATIVE / BOTH); in NEGATIVE mode bounds are flipped to
+  positive internally and the result is negated on output. `min >= max` disables both bounds.
+- **Percentage** and **Quantity** type into `domain/helper/NumberInputController` (major digits, minor digits, negate
+  flag, `value()` returns `Long` or `Double`), then convert with `PercentIO.of` / `QuantityIO.of`. Percentage uses
+  `maxMajorDigits = 3`, Quantity `5`. Out-of-range input clears the controller and snaps to the bound (Percentage
+  clamps only to max while typing; Quantity clamps to both min and max).
+- **Quantity** stepper (`increase` / `decrease`) uses `QuantityIO.nextLarger` / `nextSmaller`, which round fractional
+  values to the next whole number and respect `allowsZero` / negative min.
+- **Pin** compares the typed digits to `request.pin`. Same-length mismatch shows a snackbar and clears; match returns
+  `Success(extras)` without the PIN. Empty or non-digit `pin` yields `Canceled` immediately.
+- Hints: `hintAmount` / `hintQuantity` are shown (as `isHint = true`) only while the current value is zero.
 
-- **`formatting/`** - Platform-specific number formatters
-  - Common interfaces with `expect`/`actual` implementations
-  - Uses native platform formatting (Android: `NumberFormat`, iOS: `NSNumberFormatter`)
+### Value types (`data/`)
 
-- **`ui/`** - Compose Multiplatform UI layer
-  - `screens/` - Full-screen composables (`AmountInputScreen`, `QuantityInputScreen`, etc.)
-  - `components/` - Reusable UI components (`NumberButton`, `Toolbar`, etc.)
-  - ViewModels in `commonMain` using `androidx.lifecycle`
-  - Android Activities bridge to ViewModels
-  - iOS Presenters use `ComposeUIViewController` to display screens
+`MoneyIO`, `PercentIO`, `QuantityIO` extend `Number` and `Comparable`, have internal/private constructors and factory
+`of(...)` overloads for both Kotlin numbers and `com.ionspin.kotlin.bignum` types. Scaling conventions:
 
-- **`theme/`** - Compose theming and styling
+- `MoneyIO.of(Int|Long|Double, currency)` interprets the number as **minor units** (`100` → 1.00 EUR);
+  `fromMajorUnits(BigDecimal, currency)` does not scale. `amount` is stored in major units. Range ±10 000 000.
+- `PercentIO.value` is a `Long` scaled by 100 (`5600` = 56 %). `WHOLE` = 100 %.
+- `QuantityIO.value` is a `BigInteger` scaled by 10 000 (`FRACTIONS = 4`). Range ±10 000.
+- `CurrencyIO` is a fixed ISO 4217 table; use `forCode` / `forCodeOrNull`.
 
-### Contract Pattern
+Optional parameters are sealed `Enable(value)` / `Disable` wrappers (`MoneyParam`, `PercentageParam`,
+`QuantityParam`, `StringParam`) rather than nullables so they serialize with kotlinx.serialization. BigDecimal /
+BigInteger fields use the custom serializers in `domain/serializer/`.
 
-The library uses a contract-based API where each input type has:
+### expect/actual pairs
 
-1. **Request** - Input parameters (e.g., `AmountInputRequest`)
-2. **Result** - Sealed class with `Success` or `Canceled` (e.g., `AmountInputResult`)
-3. **Contract** - Platform-specific launcher interface
+Changing any of these requires touching `commonMain`, `androidMain` and `iosMain`:
+`remember*InputLauncher`, `MoneyFormatterImpl`, `PercentageFormatterImpl`, `QuantityFormatterImpl`,
+`DecimalFormatter` (locale decimal/grouping separators, used for the keyboard's separator key label). The compiler flag
+`-Xexpect-actual-classes` is enabled for these.
 
-Example flow:
-- Android: Uses `rememberLauncherForActivityResult` to launch Activities
-- iOS: Uses `AmountInputPresenter` to present `ComposeUIViewController`
-- Both platforms share the same Compose UI screens and ViewModels
+### Theme and layout
 
-### ViewModel Factory Pattern
+- `theme/AppTheme` is always invoked with the default `useDarkTheme = false`, so screens render the light scheme
+  regardless of system setting. This was decided deliberately in PR #30 (dark mode hotfix); do not wire
+  `isSystemInDarkTheme()` back in without asking.
+- `ui/components/TabletExtensions.kt`: window width ≥ 600 dp switches the Scaffold to `TabletScaffoldModifier`
+  (380 dp wide centered card).
+- Compose resources (`composeResources/`) generate `de.tillhub.inputengine.resources.Res`; strings exist in English
+  and German (`values-de`). Font is Inter.
 
-ViewModels are created using factory pattern with `CreationExtras`:
-- Request data and formatters are passed via `CreationExtras`
-- iOS uses `MutableCreationExtras` in Presenters
-- Android Activities retrieve extras from Intent
+## Build configuration
 
-## Configuration
+- Library version is `input-engine` in `gradle/libs.versions.toml`. `buildSrc/Configs.kt` `VERSION_NAME` /
+  `VERSION_CODE` are for the sample app only. SDK levels and Java version also come from `Configs`.
+- Spotless/ktlint is applied to all subprojects from the root `build.gradle.kts`, with
+  `ktlint_function_naming_ignore_when_annotated_with = Composable`.
+- Root project name is `Tillhub_Input_Engine`; modules are `:input-engine` (library) and `:sample` (KMP demo app,
+  Android application + iOS framework `ComposeApp` consumed by `iosApp/`).
 
-### Build Configuration
+## Git workflow and CI
 
-- **Application ID**: `de.tillhub.inputengine`
-- **Min SDK**: 24 (Android 7.0)
-- **Compile SDK**: 35
-- **Java Version**: 17
-- **iOS Framework Name**: `input-engineKit`
-- **Maven Coordinates**: `io.github.tillhub:input-engine`
+The workflows are intentionally identical to the other engine repos (payment-engine, print-engine, scan-engine);
+change them in lockstep.
 
-### Gradle Plugins
+- `pr-checks.yml`: every pull request runs `spotlessCheck` + `testDebug`.
+- `master.yml`: push to `master` runs the same checks plus `:input-engine:connectedAndroidTest` on an API 30 emulator.
+- `release.yml`: pushing a tag matching `X.Y.Z` publishes to Maven Central (macOS runner, Xcode for iOS targets). It
+  first asserts the tag equals the `input-engine` version in `gradle/libs.versions.toml` and fails otherwise.
+- `checkmarx-one-scan.yaml`: Unzer Checkmarx security scan on PRs and `master`, via the shared
+  `unzercorp/unzer-tech-toolbox` workflow.
 
-- Kotlin Multiplatform
-- Android Library
-- Compose Multiplatform & Compose Compiler
-- Kotlinx Serialization
-- Mokkery (for mocking in tests)
-- Spotless (code formatting with ktlint)
-- Maven Publishing
+Release procedure: bump `input-engine` in `libs.versions.toml`, merge to `master`, then tag that commit with the same
+version (`git tag 2.1.4 && git push origin 2.1.4`). Merging alone no longer publishes.
 
-## Testing
-
-### Test Exclusions
-
-UI tests are excluded from unit test runs (configured in `input-engine/build.gradle.kts`):
-- `**/inputengine/ui/components/**`
-- `**/inputengine/ui/screens/**`
-
-These are run separately as instrumented tests on Android or as iOS UI tests.
-
-### Running Specific Tests
-
-```bash
-# Run tests for a specific formatter
-./gradlew testDebug --tests "*MoneyFormatterTest"
-
-# Run all formatting tests
-./gradlew testDebug --tests "*.formatting.*"
-```
-
-## CI/CD Workflows
-
-- **PR Checks** (`pr-checks.yml`): Runs `spotlessCheck` and `testDebug` on pull requests
-- **Develop Branch** (`develop.yml`): Runs Android instrumented tests on emulator
-- **Master Branch** (`publish.yml`): Publishes to Maven Central (macOS runner required for iOS compilation)
-
-## Important Notes
-
-### Serialization
-
-All request/result classes use `kotlinx.serialization` with `@Serializable` annotations. Android passes serialized JSON through Intent extras; iOS passes objects directly through ViewModels.
-
-### Expect/Actual Pattern
-
-Platform-specific implementations are marked with `expect` (common) and `actual` (platform-specific):
-- Contracts (`rememberAmountInputLauncher`, etc.)
-- Formatters (`MoneyFormatterImpl`, `DecimalFormatter`, etc.)
-
-When modifying these, ensure both Android and iOS implementations are updated.
-
-### Legacy Support
-
-Android maintains legacy Activity Result Contracts in `androidMain/contract/legacy/` for apps that haven't migrated to the Compose-based API. Do not remove these without coordination.
+Code owner: `@tillhub/unifiedpos-android-cm`.
